@@ -1,0 +1,229 @@
+[
+  {
+    "index": 0,
+    "target": 1,
+    "generation": 1,
+    "old_node": "node0",
+    "new_node": "node1",
+    "committed_before_fault": 23,
+    "restored_step": 49,
+    "first_joint_step": 51,
+    "full_state_audit": false,
+    "first_joint_hashes_match": null,
+    "healthy_pids_unchanged": true,
+    "healthy_progress": true,
+    "lighthouse_alive": true,
+    "retired_children": [],
+    "fault_time": 1793638976.8209574,
+    "request_time": 1793638979.392682,
+    "backup_mode": "cold",
+    "preparation_seconds": 3.0994415283203125e-06,
+    "standby_resources": [],
+    "loaded_time": 1793638998.452596,
+    "idle_resources": {
+      "cpu_clock_ticks_per_second": 100,
+      "gpu_error": null,
+      "gpus": [
+        {
+          "index": 0,
+          "memory_used_mib": 4,
+          "power_draw_w": 124.55,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 1,
+          "memory_used_mib": 531,
+          "power_draw_w": 119.72,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 2,
+          "memory_used_mib": 531,
+          "power_draw_w": 124.5,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 3,
+          "memory_used_mib": 531,
+          "power_draw_w": 126.94,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 4,
+          "memory_used_mib": 531,
+          "power_draw_w": 126.22,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 5,
+          "memory_used_mib": 531,
+          "power_draw_w": 125.25,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 6,
+          "memory_used_mib": 531,
+          "power_draw_w": 122.67,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 7,
+          "memory_used_mib": 531,
+          "power_draw_w": 120.71,
+          "utilization_gpu_percent": 0
+        }
+      ],
+      "processes": {
+        "count": 0,
+        "cpu_stime_ticks_sum": 0,
+        "cpu_utime_ticks_sum": 0,
+        "skipped_races_or_unreadable": 0,
+        "states": {},
+        "vmrss_kib_sum": 0,
+        "vmrss_missing_count": 0
+      },
+      "sample_time": 1793638975.7423165,
+      "session": "v1_backup_timing_cold_03"
+    },
+    "prepared_resources": {
+      "cpu_clock_ticks_per_second": 100,
+      "gpu_error": null,
+      "gpus": [
+        {
+          "index": 0,
+          "memory_used_mib": 4,
+          "power_draw_w": 124.52,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 1,
+          "memory_used_mib": 531,
+          "power_draw_w": 119.72,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 2,
+          "memory_used_mib": 531,
+          "power_draw_w": 124.52,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 3,
+          "memory_used_mib": 531,
+          "power_draw_w": 126.93,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 4,
+          "memory_used_mib": 531,
+          "power_draw_w": 126.19,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 5,
+          "memory_used_mib": 531,
+          "power_draw_w": 125.24,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 6,
+          "memory_used_mib": 531,
+          "power_draw_w": 122.65,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 7,
+          "memory_used_mib": 531,
+          "power_draw_w": 120.81,
+          "utilization_gpu_percent": 0
+        }
+      ],
+      "processes": {
+        "count": 0,
+        "cpu_stime_ticks_sum": 0,
+        "cpu_utime_ticks_sum": 0,
+        "skipped_races_or_unreadable": 0,
+        "states": {},
+        "vmrss_kib_sum": 0,
+        "vmrss_missing_count": 0
+      },
+      "sample_time": 1793638976.06305,
+      "session": "v1_backup_timing_cold_03"
+    },
+    "recovered_resources": {
+      "cpu_clock_ticks_per_second": 100,
+      "gpu_error": null,
+      "gpus": [
+        {
+          "index": 0,
+          "memory_used_mib": 4320,
+          "power_draw_w": 138.22,
+          "utilization_gpu_percent": 100
+        },
+        {
+          "index": 1,
+          "memory_used_mib": 4855,
+          "power_draw_w": 132.04,
+          "utilization_gpu_percent": 67
+        },
+        {
+          "index": 2,
+          "memory_used_mib": 4959,
+          "power_draw_w": 136.97,
+          "utilization_gpu_percent": 98
+        },
+        {
+          "index": 3,
+          "memory_used_mib": 4959,
+          "power_draw_w": 140.01,
+          "utilization_gpu_percent": 94
+        },
+        {
+          "index": 4,
+          "memory_used_mib": 5273,
+          "power_draw_w": 142.09,
+          "utilization_gpu_percent": 41
+        },
+        {
+          "index": 5,
+          "memory_used_mib": 5273,
+          "power_draw_w": 139.71,
+          "utilization_gpu_percent": 93
+        },
+        {
+          "index": 6,
+          "memory_used_mib": 5197,
+          "power_draw_w": 137.55,
+          "utilization_gpu_percent": 36
+        },
+        {
+          "index": 7,
+          "memory_used_mib": 5165,
+          "power_draw_w": 138.63,
+          "utilization_gpu_percent": 74
+        }
+      ],
+      "processes": {
+        "count": 10,
+        "cpu_stime_ticks_sum": 3506,
+        "cpu_utime_ticks_sum": 7800,
+        "skipped_races_or_unreadable": 0,
+        "states": {
+          "R": 4,
+          "S": 6
+        },
+        "vmrss_kib_sum": 26943044,
+        "vmrss_missing_count": 0
+      },
+      "sample_time": 1793639000.0917394,
+      "session": "v1_backup_timing_cold_03"
+    },
+    "ready_time": 1793638995.9473667,
+    "recovery_request_time": 1793638996.9314408,
+    "state_loaded_time": 1793638998.4506094,
+    "joint_time": 1793638999.5012228,
+    "fault_to_joint_seconds": 22.680265426635742,
+    "request_to_loaded_seconds": 19.059913873672485,
+    "recovery_request_to_loaded_seconds": 1.5191686153411865
+  }
+]

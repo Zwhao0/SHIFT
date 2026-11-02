@@ -1,0 +1,39 @@
+{
+  "mode": "flat",
+  "target_steps": 40,
+  "train_args": [
+    "--backend",
+    "nccl",
+    "--bucket-size",
+    "67108864",
+    "--bucket-hook",
+    "--communication-timeout",
+    "2",
+    "--max-seconds",
+    "600",
+    "--measure-step",
+    "--warmup-before-join",
+    "--mode",
+    "flat",
+    "--seq-len",
+    "512"
+  ],
+  "nccl_library": null,
+  "python": "/workspace/SHIFT/runtime/torch214/bin/python",
+  "restart_policy": "immediate",
+  "env": {
+    "NCCL_NET": "IB",
+    "NCCL_IB_DISABLE": "0",
+    "NCCL_IB_HCA": "=mlx5_0:1,mlx5_1:1,mlx5_2:1,mlx5_3:1",
+    "NCCL_IB_GID_INDEX": "3",
+    "NCCL_DEBUG": "WARN",
+    "NCCL_DEBUG_SUBSYS": "INIT,NET"
+  },
+  "fast_launch": false,
+  "persistent_cpu_launcher": false,
+  "recycle_after_worker_fault": true,
+  "heartbeat_timeout_ms": 500,
+  "join_timeout_ms": 200,
+  "quorum_tick_ms": 50,
+  "single_gpu_visibility": false
+}

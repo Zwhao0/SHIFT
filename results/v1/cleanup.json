@@ -1,0 +1,30 @@
+{
+  "pass_all": true,
+  "time_utc": "2026-11-02T17:35:38.779187+00:00",
+  "nodes": {
+    "node0": {
+      "states": {
+        "S": 1,
+        "R": 1
+      },
+      "non_init_live": [],
+      "zombies": []
+    },
+    "node1": {
+      "states": {
+        "S": 1,
+        "R": 1
+      },
+      "non_init_live": [],
+      "zombies": []
+    },
+    "node3": {
+      "states": {
+        "S": 1,
+        "R": 1
+      },
+      "non_init_live": [],
+      "zombies": []
+    }
+  }
+}

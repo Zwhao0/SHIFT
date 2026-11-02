@@ -1,0 +1,661 @@
+{
+  "common_route_keys": 368,
+  "diagnostic_valid": true,
+  "interpretation": "The one-replica replay interleaves both replica inputs: route call ordinals 0/2 map to original rid0 microbatches 0/1; 1/3 map to rid1. Valid only if all 368 ordered hashes and 16 sample plans reproduce. Then sorted top-k differences indicate membership changes; ordered-only differences indicate selection order changes. This is a diagnostic replay, not a trajectory or performance substitute.",
+  "membership_change_count": 2,
+  "membership_examples": [
+    {
+      "flat_ordered": "c78c23b792186b8778b27c4cadb32cedcecb17baef527083caf2114015db827f",
+      "flat_sorted": "bfc9369100fda8557ed9d060dc03be3500f9b898f2ab56260865d2c2e0c590d2",
+      "layer": "decoder.layers.6.mlp.gate",
+      "ordinal": 1,
+      "rank": 0,
+      "rid": 1,
+      "shift_ordered": "06997afc6e9028a6739af527de0725e6da56ddbe73ee7f761f4b4327c77cadd0",
+      "shift_sorted": "4b35c88ae151272967e34d31abbc5ffe9d12972c6b7c9936fa43c4b5c6017e07"
+    },
+    {
+      "flat_ordered": "c78c23b792186b8778b27c4cadb32cedcecb17baef527083caf2114015db827f",
+      "flat_sorted": "bfc9369100fda8557ed9d060dc03be3500f9b898f2ab56260865d2c2e0c590d2",
+      "layer": "decoder.layers.6.mlp.gate",
+      "ordinal": 1,
+      "rank": 1,
+      "rid": 1,
+      "shift_ordered": "06997afc6e9028a6739af527de0725e6da56ddbe73ee7f761f4b4327c77cadd0",
+      "shift_sorted": "4b35c88ae151272967e34d31abbc5ffe9d12972c6b7c9936fa43c4b5c6017e07"
+    }
+  ],
+  "order_only_count": 30,
+  "order_only_examples": [
+    {
+      "flat_ordered": "0bf856e1d3684ff8f857c056facd60ef204fb3ff6e83bb059e19c06a48bc0cfd",
+      "flat_sorted": "3d57674546fa83ef20ae8326da8439a33188f80a2be195d3bc448169b9524a36",
+      "layer": "decoder.layers.11.mlp.gate",
+      "ordinal": 1,
+      "rank": 0,
+      "rid": 0,
+      "shift_ordered": "21dd11ff204c16c82ee8f692e8d8a44d0605477e72201e769a149bbd66cab84e",
+      "shift_sorted": "3d57674546fa83ef20ae8326da8439a33188f80a2be195d3bc448169b9524a36"
+    },
+    {
+      "flat_ordered": "0bf856e1d3684ff8f857c056facd60ef204fb3ff6e83bb059e19c06a48bc0cfd",
+      "flat_sorted": "3d57674546fa83ef20ae8326da8439a33188f80a2be195d3bc448169b9524a36",
+      "layer": "decoder.layers.11.mlp.gate",
+      "ordinal": 1,
+      "rank": 1,
+      "rid": 0,
+      "shift_ordered": "21dd11ff204c16c82ee8f692e8d8a44d0605477e72201e769a149bbd66cab84e",
+      "shift_sorted": "3d57674546fa83ef20ae8326da8439a33188f80a2be195d3bc448169b9524a36"
+    },
+    {
+      "flat_ordered": "8719de890a876b7b665d5538ef4e5611073ae0f9b47db57672f9dbc85e5cf822",
+      "flat_sorted": "b36558e9efa6a5d2c6d158d446b803ec0ae5628c2a391998f314cce23658fbf3",
+      "layer": "decoder.layers.9.mlp.gate",
+      "ordinal": 0,
+      "rank": 2,
+      "rid": 0,
+      "shift_ordered": "b11ef4f561be534a207eb71635d284e9cb25c29bb1147bb07e4b77724611eeb6",
+      "shift_sorted": "b36558e9efa6a5d2c6d158d446b803ec0ae5628c2a391998f314cce23658fbf3"
+    },
+    {
+      "flat_ordered": "8719de890a876b7b665d5538ef4e5611073ae0f9b47db57672f9dbc85e5cf822",
+      "flat_sorted": "b36558e9efa6a5d2c6d158d446b803ec0ae5628c2a391998f314cce23658fbf3",
+      "layer": "decoder.layers.9.mlp.gate",
+      "ordinal": 0,
+      "rank": 3,
+      "rid": 0,
+      "shift_ordered": "b11ef4f561be534a207eb71635d284e9cb25c29bb1147bb07e4b77724611eeb6",
+      "shift_sorted": "b36558e9efa6a5d2c6d158d446b803ec0ae5628c2a391998f314cce23658fbf3"
+    },
+    {
+      "flat_ordered": "ea33a0b0f136e70e1cbbcf1847336d08b5febfe60a6c217c3f7fc87bd5f2a554",
+      "flat_sorted": "845e594b056c568821c675a3fb89abb16ca4fbf81f0324e4e094f64c71274966",
+      "layer": "decoder.layers.0.mlp.gate",
+      "ordinal": 0,
+      "rank": 6,
+      "rid": 0,
+      "shift_ordered": "8a94b336990f2c3a3bd82c660d5284b0c96a7a5380b80a4ce24e5474c63ea730",
+      "shift_sorted": "845e594b056c568821c675a3fb89abb16ca4fbf81f0324e4e094f64c71274966"
+    },
+    {
+      "flat_ordered": "6250afef694ad2f8b6acbf46604be54d93ebd09456182e0a6f81568bc6f17345",
+      "flat_sorted": "d45646141115c1c15d2544a1f22634973c5e4709b82c9f2e31049fd1689c2765",
+      "layer": "decoder.layers.7.mlp.gate",
+      "ordinal": 1,
+      "rank": 6,
+      "rid": 0,
+      "shift_ordered": "4b334947d1ae25775ffc3c1867c3647f6e9e4ac904251685560b3b41b955ada3",
+      "shift_sorted": "d45646141115c1c15d2544a1f22634973c5e4709b82c9f2e31049fd1689c2765"
+    },
+    {
+      "flat_ordered": "ea33a0b0f136e70e1cbbcf1847336d08b5febfe60a6c217c3f7fc87bd5f2a554",
+      "flat_sorted": "845e594b056c568821c675a3fb89abb16ca4fbf81f0324e4e094f64c71274966",
+      "layer": "decoder.layers.0.mlp.gate",
+      "ordinal": 0,
+      "rank": 7,
+      "rid": 0,
+      "shift_ordered": "8a94b336990f2c3a3bd82c660d5284b0c96a7a5380b80a4ce24e5474c63ea730",
+      "shift_sorted": "845e594b056c568821c675a3fb89abb16ca4fbf81f0324e4e094f64c71274966"
+    },
+    {
+      "flat_ordered": "6250afef694ad2f8b6acbf46604be54d93ebd09456182e0a6f81568bc6f17345",
+      "flat_sorted": "d45646141115c1c15d2544a1f22634973c5e4709b82c9f2e31049fd1689c2765",
+      "layer": "decoder.layers.7.mlp.gate",
+      "ordinal": 1,
+      "rank": 7,
+      "rid": 0,
+      "shift_ordered": "4b334947d1ae25775ffc3c1867c3647f6e9e4ac904251685560b3b41b955ada3",
+      "shift_sorted": "d45646141115c1c15d2544a1f22634973c5e4709b82c9f2e31049fd1689c2765"
+    },
+    {
+      "flat_ordered": "ab600aaf4fcbabcc4d677ea73079b2a634cd55b1116cd1356dd21ce1f1c9eb52",
+      "flat_sorted": "e232c3107b67763131713bf493a7037858022b080fa733531a5be3b32e61cc23",
+      "layer": "decoder.layers.11.mlp.gate",
+      "ordinal": 1,
+      "rank": 0,
+      "rid": 1,
+      "shift_ordered": "2e7c5584d6bd3e5853c4fdb1b6304610cb71ab0773ba2bb1c45ef6fd63085242",
+      "shift_sorted": "e232c3107b67763131713bf493a7037858022b080fa733531a5be3b32e61cc23"
+    },
+    {
+      "flat_ordered": "42d4570e431ea5cd302301ce24850088f44cdf39c7017d5edce666362c7aad62",
+      "flat_sorted": "f8fac0ecff45b73283a548257329ba750a22859055fe3222f05d8cb3b8684f52",
+      "layer": "decoder.layers.4.mlp.gate",
+      "ordinal": 0,
+      "rank": 0,
+      "rid": 1,
+      "shift_ordered": "a4137a3c7d18b1bd39a91177507ad2ce085ff94a214a2c1e5ffce034d41be8b9",
+      "shift_sorted": "f8fac0ecff45b73283a548257329ba750a22859055fe3222f05d8cb3b8684f52"
+    },
+    {
+      "flat_ordered": "ddf79b976afaf1b054faf1911f6f8fe472da60df41f933c8504be11897666820",
+      "flat_sorted": "3bdc88239d551eaf6780d63dc7a1bf7721b80fed1871652d475e8323d156c1b6",
+      "layer": "decoder.layers.5.mlp.gate",
+      "ordinal": 1,
+      "rank": 0,
+      "rid": 1,
+      "shift_ordered": "28e872701b99063466c8fd5edf450b4760c5c27597d3ef2a316ba3a4323607c3",
+      "shift_sorted": "3bdc88239d551eaf6780d63dc7a1bf7721b80fed1871652d475e8323d156c1b6"
+    },
+    {
+      "flat_ordered": "ab600aaf4fcbabcc4d677ea73079b2a634cd55b1116cd1356dd21ce1f1c9eb52",
+      "flat_sorted": "e232c3107b67763131713bf493a7037858022b080fa733531a5be3b32e61cc23",
+      "layer": "decoder.layers.11.mlp.gate",
+      "ordinal": 1,
+      "rank": 1,
+      "rid": 1,
+      "shift_ordered": "2e7c5584d6bd3e5853c4fdb1b6304610cb71ab0773ba2bb1c45ef6fd63085242",
+      "shift_sorted": "e232c3107b67763131713bf493a7037858022b080fa733531a5be3b32e61cc23"
+    },
+    {
+      "flat_ordered": "42d4570e431ea5cd302301ce24850088f44cdf39c7017d5edce666362c7aad62",
+      "flat_sorted": "f8fac0ecff45b73283a548257329ba750a22859055fe3222f05d8cb3b8684f52",
+      "layer": "decoder.layers.4.mlp.gate",
+      "ordinal": 0,
+      "rank": 1,
+      "rid": 1,
+      "shift_ordered": "a4137a3c7d18b1bd39a91177507ad2ce085ff94a214a2c1e5ffce034d41be8b9",
+      "shift_sorted": "f8fac0ecff45b73283a548257329ba750a22859055fe3222f05d8cb3b8684f52"
+    },
+    {
+      "flat_ordered": "ddf79b976afaf1b054faf1911f6f8fe472da60df41f933c8504be11897666820",
+      "flat_sorted": "3bdc88239d551eaf6780d63dc7a1bf7721b80fed1871652d475e8323d156c1b6",
+      "layer": "decoder.layers.5.mlp.gate",
+      "ordinal": 1,
+      "rank": 1,
+      "rid": 1,
+      "shift_ordered": "28e872701b99063466c8fd5edf450b4760c5c27597d3ef2a316ba3a4323607c3",
+      "shift_sorted": "3bdc88239d551eaf6780d63dc7a1bf7721b80fed1871652d475e8323d156c1b6"
+    },
+    {
+      "flat_ordered": "b4f3e2582e9d7b1fbc9a736b553798638652a74c59c65272d1ad73c0ba049419",
+      "flat_sorted": "2bdf77ad4f69f35f8e57929d662c0243d0e38a381f4b8cb3922b6b1b9f7f0547",
+      "layer": "decoder.layers.1.mlp.gate",
+      "ordinal": 0,
+      "rank": 4,
+      "rid": 1,
+      "shift_ordered": "809bb1efc84f372ead0283156fe305b88989f836e7f3f3340ff0a6c1bb38f231",
+      "shift_sorted": "2bdf77ad4f69f35f8e57929d662c0243d0e38a381f4b8cb3922b6b1b9f7f0547"
+    },
+    {
+      "flat_ordered": "caa583cfb8b6fedc51f78a847d17f993ec2aed44cdf2a8ed91df42549020a1d5",
+      "flat_sorted": "56a97c6101855a35ae8c9f21beaa5abd8185c2538e70e3d054d15e96853088e9",
+      "layer": "decoder.layers.1.mlp.gate",
+      "ordinal": 1,
+      "rank": 4,
+      "rid": 1,
+      "shift_ordered": "4c702f16145b71bd7bac8c26246d1e175e394bc4237be12f4d1e9eab84991fe5",
+      "shift_sorted": "56a97c6101855a35ae8c9f21beaa5abd8185c2538e70e3d054d15e96853088e9"
+    },
+    {
+      "flat_ordered": "0e035e34295c3906de8c61a233d0f2fa1c1e845ef3e4832d0638462e9bc9bccd",
+      "flat_sorted": "72414b85faea2c4161008c4e44639b8d36365d8cb0aaa1d9015c8c253257f964",
+      "layer": "decoder.layers.10.mlp.gate",
+      "ordinal": 1,
+      "rank": 4,
+      "rid": 1,
+      "shift_ordered": "f90ef053a13d419aadcb1b1cc7e0dc457279ddf518ed07d8f82bcad6db8283c2",
+      "shift_sorted": "72414b85faea2c4161008c4e44639b8d36365d8cb0aaa1d9015c8c253257f964"
+    },
+    {
+      "flat_ordered": "b25799688405ec35d44fd14c311173e1cca28a70ceaaf6bdcde0a1aca4e5f3ac",
+      "flat_sorted": "189bcc27f0d8365d787667baa936c7922a52d815b2c942cf13c2bda481d2ad04",
+      "layer": "decoder.layers.4.mlp.gate",
+      "ordinal": 1,
+      "rank": 4,
+      "rid": 1,
+      "shift_ordered": "e923af6df074b661cab6e72389805f8c6ae658664685cc9a072087169da94f53",
+      "shift_sorted": "189bcc27f0d8365d787667baa936c7922a52d815b2c942cf13c2bda481d2ad04"
+    },
+    {
+      "flat_ordered": "95805e3edc00dcf2d8861efe862454419cb20953a1cbf03ac3d65bd8ba640638",
+      "flat_sorted": "33e4d4698af0503bb7cc2a957f90dbb360afb25713c61a7e347d22ee4ecb8347",
+      "layer": "decoder.layers.6.mlp.gate",
+      "ordinal": 1,
+      "rank": 4,
+      "rid": 1,
+      "shift_ordered": "01e508f85e3cd61779270e1e9e513498024d1e8d1b29d0920821d2d436aad532",
+      "shift_sorted": "33e4d4698af0503bb7cc2a957f90dbb360afb25713c61a7e347d22ee4ecb8347"
+    },
+    {
+      "flat_ordered": "b4f3e2582e9d7b1fbc9a736b553798638652a74c59c65272d1ad73c0ba049419",
+      "flat_sorted": "2bdf77ad4f69f35f8e57929d662c0243d0e38a381f4b8cb3922b6b1b9f7f0547",
+      "layer": "decoder.layers.1.mlp.gate",
+      "ordinal": 0,
+      "rank": 5,
+      "rid": 1,
+      "shift_ordered": "809bb1efc84f372ead0283156fe305b88989f836e7f3f3340ff0a6c1bb38f231",
+      "shift_sorted": "2bdf77ad4f69f35f8e57929d662c0243d0e38a381f4b8cb3922b6b1b9f7f0547"
+    }
+  ],
+  "replay_requirements": {
+    "flat": {
+      "missing_ordered_hash": 0,
+      "missing_sorted_hash": 0,
+      "ordered_hash_matches": 368,
+      "ordered_reproduction_pass": true,
+      "replay_routes": 368,
+      "route_keys_match": true,
+      "sample_ids_by_rank": {
+        "rid0/rank0": {
+          "match": true,
+          "original": [
+            16,
+            20
+          ],
+          "replay_commit3_interleave": [
+            16,
+            20
+          ]
+        },
+        "rid0/rank1": {
+          "match": true,
+          "original": [
+            16,
+            20
+          ],
+          "replay_commit3_interleave": [
+            16,
+            20
+          ]
+        },
+        "rid0/rank2": {
+          "match": true,
+          "original": [
+            17,
+            21
+          ],
+          "replay_commit3_interleave": [
+            17,
+            21
+          ]
+        },
+        "rid0/rank3": {
+          "match": true,
+          "original": [
+            17,
+            21
+          ],
+          "replay_commit3_interleave": [
+            17,
+            21
+          ]
+        },
+        "rid0/rank4": {
+          "match": true,
+          "original": [
+            16,
+            20
+          ],
+          "replay_commit3_interleave": [
+            16,
+            20
+          ]
+        },
+        "rid0/rank5": {
+          "match": true,
+          "original": [
+            16,
+            20
+          ],
+          "replay_commit3_interleave": [
+            16,
+            20
+          ]
+        },
+        "rid0/rank6": {
+          "match": true,
+          "original": [
+            17,
+            21
+          ],
+          "replay_commit3_interleave": [
+            17,
+            21
+          ]
+        },
+        "rid0/rank7": {
+          "match": true,
+          "original": [
+            17,
+            21
+          ],
+          "replay_commit3_interleave": [
+            17,
+            21
+          ]
+        },
+        "rid1/rank0": {
+          "match": true,
+          "original": [
+            18,
+            22
+          ],
+          "replay_commit3_interleave": [
+            18,
+            22
+          ]
+        },
+        "rid1/rank1": {
+          "match": true,
+          "original": [
+            18,
+            22
+          ],
+          "replay_commit3_interleave": [
+            18,
+            22
+          ]
+        },
+        "rid1/rank2": {
+          "match": true,
+          "original": [
+            19,
+            23
+          ],
+          "replay_commit3_interleave": [
+            19,
+            23
+          ]
+        },
+        "rid1/rank3": {
+          "match": true,
+          "original": [
+            19,
+            23
+          ],
+          "replay_commit3_interleave": [
+            19,
+            23
+          ]
+        },
+        "rid1/rank4": {
+          "match": true,
+          "original": [
+            18,
+            22
+          ],
+          "replay_commit3_interleave": [
+            18,
+            22
+          ]
+        },
+        "rid1/rank5": {
+          "match": true,
+          "original": [
+            18,
+            22
+          ],
+          "replay_commit3_interleave": [
+            18,
+            22
+          ]
+        },
+        "rid1/rank6": {
+          "match": true,
+          "original": [
+            19,
+            23
+          ],
+          "replay_commit3_interleave": [
+            19,
+            23
+          ]
+        },
+        "rid1/rank7": {
+          "match": true,
+          "original": [
+            19,
+            23
+          ],
+          "replay_commit3_interleave": [
+            19,
+            23
+          ]
+        }
+      },
+      "sample_ids_pass": true,
+      "source_routes": 368
+    },
+    "shift": {
+      "missing_ordered_hash": 0,
+      "missing_sorted_hash": 0,
+      "ordered_hash_matches": 368,
+      "ordered_reproduction_pass": true,
+      "replay_routes": 368,
+      "route_keys_match": true,
+      "sample_ids_by_rank": {
+        "rid0/rank0": {
+          "match": true,
+          "original": [
+            16,
+            20
+          ],
+          "replay_commit3_interleave": [
+            16,
+            20
+          ]
+        },
+        "rid0/rank1": {
+          "match": true,
+          "original": [
+            16,
+            20
+          ],
+          "replay_commit3_interleave": [
+            16,
+            20
+          ]
+        },
+        "rid0/rank2": {
+          "match": true,
+          "original": [
+            17,
+            21
+          ],
+          "replay_commit3_interleave": [
+            17,
+            21
+          ]
+        },
+        "rid0/rank3": {
+          "match": true,
+          "original": [
+            17,
+            21
+          ],
+          "replay_commit3_interleave": [
+            17,
+            21
+          ]
+        },
+        "rid0/rank4": {
+          "match": true,
+          "original": [
+            16,
+            20
+          ],
+          "replay_commit3_interleave": [
+            16,
+            20
+          ]
+        },
+        "rid0/rank5": {
+          "match": true,
+          "original": [
+            16,
+            20
+          ],
+          "replay_commit3_interleave": [
+            16,
+            20
+          ]
+        },
+        "rid0/rank6": {
+          "match": true,
+          "original": [
+            17,
+            21
+          ],
+          "replay_commit3_interleave": [
+            17,
+            21
+          ]
+        },
+        "rid0/rank7": {
+          "match": true,
+          "original": [
+            17,
+            21
+          ],
+          "replay_commit3_interleave": [
+            17,
+            21
+          ]
+        },
+        "rid1/rank0": {
+          "match": true,
+          "original": [
+            18,
+            22
+          ],
+          "replay_commit3_interleave": [
+            18,
+            22
+          ]
+        },
+        "rid1/rank1": {
+          "match": true,
+          "original": [
+            18,
+            22
+          ],
+          "replay_commit3_interleave": [
+            18,
+            22
+          ]
+        },
+        "rid1/rank2": {
+          "match": true,
+          "original": [
+            19,
+            23
+          ],
+          "replay_commit3_interleave": [
+            19,
+            23
+          ]
+        },
+        "rid1/rank3": {
+          "match": true,
+          "original": [
+            19,
+            23
+          ],
+          "replay_commit3_interleave": [
+            19,
+            23
+          ]
+        },
+        "rid1/rank4": {
+          "match": true,
+          "original": [
+            18,
+            22
+          ],
+          "replay_commit3_interleave": [
+            18,
+            22
+          ]
+        },
+        "rid1/rank5": {
+          "match": true,
+          "original": [
+            18,
+            22
+          ],
+          "replay_commit3_interleave": [
+            18,
+            22
+          ]
+        },
+        "rid1/rank6": {
+          "match": true,
+          "original": [
+            19,
+            23
+          ],
+          "replay_commit3_interleave": [
+            19,
+            23
+          ]
+        },
+        "rid1/rank7": {
+          "match": true,
+          "original": [
+            19,
+            23
+          ],
+          "replay_commit3_interleave": [
+            19,
+            23
+          ]
+        }
+      },
+      "sample_ids_pass": true,
+      "source_routes": 368
+    }
+  },
+  "replays": {
+    "flat": {
+      "cleanup_pass": true,
+      "errors": [],
+      "mode": "flat",
+      "session": "v1_route_replay_flat_01"
+    },
+    "shift": {
+      "cleanup_pass": true,
+      "errors": [],
+      "mode": "shift",
+      "session": "v1_route_replay_shift_01"
+    }
+  },
+  "source_input_checks": {
+    "flat": {
+      "commit2_hash_pairs_equal": 8,
+      "expected_hash_pairs": 8,
+      "expected_sample_plans": 16,
+      "expected_step2_routes": 368,
+      "pass": true,
+      "sample_plans": 16,
+      "seven_hash_fields": [
+        "cpu_rng",
+        "cuda_rng",
+        "model",
+        "optimizer",
+        "progress",
+        "python_rng",
+        "scheduler"
+      ],
+      "step2_routes": 368
+    },
+    "shift": {
+      "commit2_hash_pairs_equal": 8,
+      "expected_hash_pairs": 8,
+      "expected_sample_plans": 16,
+      "expected_step2_routes": 368,
+      "pass": true,
+      "sample_plans": 16,
+      "seven_hash_fields": [
+        "cpu_rng",
+        "cuda_rng",
+        "model",
+        "optimizer",
+        "progress",
+        "python_rng",
+        "scheduler"
+      ],
+      "step2_routes": 368
+    }
+  }
+}

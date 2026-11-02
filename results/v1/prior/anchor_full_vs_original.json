@@ -1,0 +1,612 @@
+{
+  "pass": true,
+  "steps": [
+    2
+  ],
+  "ranks": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "tolerances": {
+    "gradients": {
+      "atol": 1e-05,
+      "rtol": 0.001
+    },
+    "model": {
+      "atol": 1e-06,
+      "rtol": 0.0001
+    },
+    "optimizer": {
+      "atol": 1e-05,
+      "rtol": 0.001
+    },
+    "scheduler": {
+      "atol": 0.0,
+      "rtol": 0.0
+    }
+  },
+  "checks": {
+    "files_present": {
+      "pass": true,
+      "missing": []
+    },
+    "loads_succeeded": {
+      "pass": true,
+      "errors": []
+    },
+    "all_rank_step_comparisons_pass": {
+      "pass": true,
+      "failed_pairs": []
+    }
+  },
+  "byrank": {
+    "2": {
+      "0": {
+        "pass": true,
+        "checks": {
+          "payload_keys": true,
+          "gradients": true,
+          "model": true,
+          "optimizer": true,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 6.103515625e-05,
+              "max_rel": 0.07142857142857142,
+              "relative_l2": 4.1915024794456424e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "model": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 1.4901161193847656e-08,
+              "max_rel": 0.0007842726468254568,
+              "relative_l2": 4.1867921167646033e-10,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "optimizer": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 2235,
+              "elements": 249754857,
+              "max_abs": 6.103515625e-05,
+              "max_rel": 0.015740662277960515,
+              "relative_l2": 6.376275736353931e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": []
+      },
+      "1": {
+        "pass": true,
+        "checks": {
+          "payload_keys": true,
+          "gradients": true,
+          "model": true,
+          "optimizer": true,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 3.0517578125e-05,
+              "max_rel": 0.03225806451612903,
+              "relative_l2": 4.2236965383972775e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "model": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 2.3865140974521637e-08,
+              "max_rel": 0.0015685452936509137,
+              "relative_l2": 4.226847392563496e-10,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "optimizer": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 2235,
+              "elements": 249754857,
+              "max_abs": 2.288818359375e-05,
+              "max_rel": 0.01862645593320167,
+              "relative_l2": 4.36095658567165e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": []
+      },
+      "2": {
+        "pass": true,
+        "checks": {
+          "payload_keys": true,
+          "gradients": true,
+          "model": true,
+          "optimizer": true,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 6.103515625e-05,
+              "max_rel": 0.07142857142857142,
+              "relative_l2": 4.1905737263950015e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "model": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 1.4901161193847656e-08,
+              "max_rel": 0.0007842726468254568,
+              "relative_l2": 4.1883185757423914e-10,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "optimizer": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 2235,
+              "elements": 249754857,
+              "max_abs": 6.103515625e-05,
+              "max_rel": 0.015740662277960515,
+              "relative_l2": 6.376108688065021e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": []
+      },
+      "3": {
+        "pass": true,
+        "checks": {
+          "payload_keys": true,
+          "gradients": true,
+          "model": true,
+          "optimizer": true,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 3.0517578125e-05,
+              "max_rel": 0.03225806451612903,
+              "relative_l2": 4.2248685360168447e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "model": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 2.3865140974521637e-08,
+              "max_rel": 0.0015685452936509137,
+              "relative_l2": 4.2275998290678873e-10,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "optimizer": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 2235,
+              "elements": 249754857,
+              "max_abs": 2.288818359375e-05,
+              "max_rel": 0.01862645593320167,
+              "relative_l2": 4.3611811978920923e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": []
+      },
+      "4": {
+        "pass": true,
+        "checks": {
+          "payload_keys": true,
+          "gradients": true,
+          "model": true,
+          "optimizer": true,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 3.0517578125e-05,
+              "max_rel": 0.017857142857142856,
+              "relative_l2": 3.5734830025937883e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "model": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 1.1920928955078125e-07,
+              "max_rel": 0.0013819545532585409,
+              "relative_l2": 4.928373552869232e-10,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "optimizer": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 2088,
+              "elements": 255202488,
+              "max_abs": 3.0517578125e-05,
+              "max_rel": 0.006984901546047695,
+              "relative_l2": 4.07321926694171e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": []
+      },
+      "5": {
+        "pass": true,
+        "checks": {
+          "payload_keys": true,
+          "gradients": true,
+          "model": true,
+          "optimizer": true,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 1.1920928955078125e-07,
+              "max_rel": 0.023255813953488372,
+              "relative_l2": 3.1554806133167315e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "model": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 1.1920928955078125e-07,
+              "max_rel": 0.0015685452936509137,
+              "relative_l2": 5.110495720557261e-10,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "optimizer": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 2088,
+              "elements": 255202488,
+              "max_abs": 1.4901161193847656e-08,
+              "max_rel": 0.01862645593320167,
+              "relative_l2": 4.635792048135321e-09,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": []
+      },
+      "6": {
+        "pass": true,
+        "checks": {
+          "payload_keys": true,
+          "gradients": true,
+          "model": true,
+          "optimizer": true,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 3.0517578125e-05,
+              "max_rel": 0.017857142857142856,
+              "relative_l2": 3.573467372432647e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "model": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 1.1920928955078125e-07,
+              "max_rel": 0.0013819545532585409,
+              "relative_l2": 4.919912942270107e-10,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "optimizer": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 2088,
+              "elements": 255202488,
+              "max_abs": 3.0517578125e-05,
+              "max_rel": 0.006984901546047695,
+              "relative_l2": 4.0732161122523844e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": []
+      },
+      "7": {
+        "pass": true,
+        "checks": {
+          "payload_keys": true,
+          "gradients": true,
+          "model": true,
+          "optimizer": true,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 1.1920928955078125e-07,
+              "max_rel": 0.023255813953488372,
+              "relative_l2": 3.1431499805469413e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "model": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 1.1920928955078125e-07,
+              "max_rel": 0.0015685452936509137,
+              "relative_l2": 5.110734320094283e-10,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "optimizer": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 2088,
+              "elements": 255202488,
+              "max_abs": 1.4901161193847656e-08,
+              "max_rel": 0.01862645593320167,
+              "relative_l2": 4.635104849727002e-09,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": []
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "mode": "shift",
+  "target_steps": 1000000,
+  "train_args": [
+    "--audit-state",
+    "--hash-every",
+    "10",
+    "--max-seconds",
+    "1100",
+    "--sync-quorum",
+    "--backend",
+    "hybrid"
+  ],
+  "nccl_library": null,
+  "python": "/workspace/SHIFT/runtime/torch214/bin/python",
+  "duration_seconds": 600,
+  "planned_faults": 10,
+  "fault_interval_seconds": 60
+}

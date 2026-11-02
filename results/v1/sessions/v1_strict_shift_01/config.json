@@ -1,0 +1,43 @@
+{
+  "mode": "shift",
+  "target_steps": 3,
+  "audit_initial": true,
+  "train_args": [
+    "--mode",
+    "shift",
+    "--fp32",
+    "--reference-dump",
+    "--hash-every",
+    "1",
+    "--audit-state",
+    "--max-seconds",
+    "600",
+    "--backend",
+    "nccl",
+    "--bucket-size",
+    "67108864",
+    "--reference-anchor",
+    "/workspace/SHIFT/results/opt_reference_flat_ib64_20261102_01",
+    "--reference-ranks",
+    "0,1,2,3,4,5,6,7",
+    "--bucket-hook",
+    "--audit-routing",
+    "--sync-quorum",
+    "--fixed-batch",
+    "--strict-fp32"
+  ],
+  "nccl_library": null,
+  "python": "/workspace/SHIFT/runtime/torch214/bin/python",
+  "env": {
+    "NCCL_NET": "IB",
+    "NCCL_IB_DISABLE": "0",
+    "NCCL_IB_HCA": "=mlx5_0:1,mlx5_1:1,mlx5_2:1,mlx5_3:1",
+    "NCCL_IB_GID_INDEX": "3",
+    "NCCL_DEBUG": "WARN",
+    "NCCL_DEBUG_SUBSYS": "INIT,NET",
+    "NVIDIA_TF32_OVERRIDE": "0",
+    "TORCH_ALLOW_TF32_CUBLAS_OVERRIDE": "0"
+  },
+  "fast_launch": false,
+  "min_replicas": 2
+}

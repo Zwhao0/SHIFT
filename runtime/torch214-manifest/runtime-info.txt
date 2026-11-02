@@ -1,0 +1,7 @@
+Python: 3.12.3
+Platform: Linux-6.8.0-139-generic-x86_64-with-glibc2.39
+Machine: x86_64
+Torch: 2.14.1+cu130 (CUDA build 13.0)
+NCCL: (2, 30, 7)
+TorchFT: 0.2.0
+Transformers: 4.53.2

@@ -1,0 +1,2209 @@
+{
+  "extra_standby_communication": {
+    "basis": "standby gate waits before Manager construction; no bandwidth measurement is claimed",
+    "bytes": 0,
+    "scope": "structural, before ACTIVATE only"
+  },
+  "modes": {
+    "cold": {
+      "complete": true,
+      "expected_trials": 3,
+      "metrics": {
+        "detection_shrink_seconds": {
+          "count": 3,
+          "max": 3.046082019805908,
+          "median": 2.9024031162261963,
+          "min": 2.797872304916382,
+          "p95": 3.046082019805908
+        },
+        "fault_to_joint_seconds": {
+          "count": 3,
+          "max": 25.05518341064453,
+          "median": 22.680265426635742,
+          "min": 21.98376703262329,
+          "p95": 25.05518341064453
+        },
+        "healthy_max_adjacent_gap_preparation_seconds": {
+          "count": 0,
+          "max": null,
+          "median": null,
+          "min": null,
+          "p95": null
+        },
+        "healthy_max_adjacent_gap_seconds": {
+          "count": 3,
+          "max": 3.6501381397247314,
+          "median": 3.581082820892334,
+          "min": 3.5319936275482178,
+          "p95": 3.6501381397247314
+        },
+        "preparation_seconds": {
+          "count": 3,
+          "max": 3.814697265625e-06,
+          "median": 3.0994415283203125e-06,
+          "min": 3.0994415283203125e-06,
+          "p95": 3.814697265625e-06
+        },
+        "recovery_request_to_state_loaded_seconds": {
+          "count": 3,
+          "max": 1.6553659439086914,
+          "median": 1.5191686153411865,
+          "min": 1.124908685684204,
+          "p95": 1.6553659439086914
+        },
+        "request_to_ready_seconds": {
+          "count": 3,
+          "max": 18.880495071411133,
+          "median": 16.72589135169983,
+          "min": 16.55468463897705,
+          "p95": 18.880495071411133
+        },
+        "state_loaded_to_joint_seconds": {
+          "count": 3,
+          "max": 1.106135368347168,
+          "median": 1.0510339736938477,
+          "min": 1.0506134033203125,
+          "p95": 1.106135368347168
+        }
+      },
+      "trial_count": 3,
+      "trials": [
+        {
+          "detection_shrink": {
+            "generation": 0,
+            "healthy_rid": 0,
+            "ranks_found": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "reason": null
+          },
+          "metrics": {
+            "detection_shrink_seconds": 2.9024031162261963,
+            "fault_to_joint_seconds": 25.05518341064453,
+            "healthy_max_adjacent_gap_preparation_seconds": null,
+            "healthy_max_adjacent_gap_seconds": 3.6501381397247314,
+            "preparation_seconds": 3.0994415283203125e-06,
+            "recovery_request_to_state_loaded_seconds": 1.124908685684204,
+            "request_to_ready_seconds": 18.880495071411133,
+            "state_loaded_to_joint_seconds": 1.0510339736938477
+          },
+          "raw_reference": {
+            "fault_index": 0,
+            "ready_read_error": null,
+            "reconfigure_read_error": null,
+            "session_dir": "results/v1_backup_timing_cold_01"
+          },
+          "resources": {
+            "idle": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 0
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 0
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 0
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 0
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 0
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 0
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 0
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 0
+                }
+              ],
+              "processes": {
+                "count": 0,
+                "cpu_stime_ticks_sum": 0,
+                "cpu_utime_ticks_sum": 0,
+                "states": {},
+                "vmrss_kib_sum": 0
+              }
+            },
+            "prepared": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 0
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 0
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 0
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 0
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 0
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 0
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 0
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 0
+                }
+              ],
+              "processes": {
+                "count": 0,
+                "cpu_stime_ticks_sum": 0,
+                "cpu_utime_ticks_sum": 0,
+                "states": {},
+                "vmrss_kib_sum": 0
+              }
+            },
+            "prepared_minus_idle_process_counters": {
+              "count": 0,
+              "cpu_stime_ticks_sum": 0,
+              "cpu_utime_ticks_sum": 0,
+              "vmrss_kib_sum": 0
+            },
+            "recovered": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4325
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 4333
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 4433
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 4433
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 4745
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 4745
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 4669
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 4637
+                }
+              ],
+              "processes": {
+                "count": 10,
+                "cpu_stime_ticks_sum": 3826,
+                "cpu_utime_ticks_sum": 8133,
+                "states": {
+                  "R": 8,
+                  "S": 2
+                },
+                "vmrss_kib_sum": 26848728
+              }
+            },
+            "recovered_ready_cuda_allocated_bytes": {
+              "0": 568737280,
+              "1": 568737280,
+              "2": 568737280,
+              "3": 568737280,
+              "4": 582056448,
+              "5": 582056448,
+              "6": 582056448,
+              "7": 582056448
+            },
+            "standby_rows": []
+          },
+          "session": "v1_backup_timing_cold_01",
+          "standby_preparation_window": {
+            "duration_seconds": null,
+            "end": null,
+            "healthy_ranks_with_gap": 0,
+            "reason": "cold mode has no standby_prepared event",
+            "start": null,
+            "timestamp_note": "start is event time minus preparation_seconds; end is controller event time"
+          },
+          "trial": 1
+        },
+        {
+          "detection_shrink": {
+            "generation": 0,
+            "healthy_rid": 0,
+            "ranks_found": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "reason": null
+          },
+          "metrics": {
+            "detection_shrink_seconds": 3.046082019805908,
+            "fault_to_joint_seconds": 21.98376703262329,
+            "healthy_max_adjacent_gap_preparation_seconds": null,
+            "healthy_max_adjacent_gap_seconds": 3.581082820892334,
+            "preparation_seconds": 3.814697265625e-06,
+            "recovery_request_to_state_loaded_seconds": 1.6553659439086914,
+            "request_to_ready_seconds": 16.72589135169983,
+            "state_loaded_to_joint_seconds": 1.106135368347168
+          },
+          "raw_reference": {
+            "fault_index": 0,
+            "ready_read_error": null,
+            "reconfigure_read_error": null,
+            "session_dir": "results/v1_backup_timing_cold_02"
+          },
+          "resources": {
+            "idle": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 531
+                }
+              ],
+              "processes": {
+                "count": 0,
+                "cpu_stime_ticks_sum": 0,
+                "cpu_utime_ticks_sum": 0,
+                "states": {},
+                "vmrss_kib_sum": 0
+              }
+            },
+            "prepared": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 531
+                }
+              ],
+              "processes": {
+                "count": 0,
+                "cpu_stime_ticks_sum": 0,
+                "cpu_utime_ticks_sum": 0,
+                "states": {},
+                "vmrss_kib_sum": 0
+              }
+            },
+            "prepared_minus_idle_process_counters": {
+              "count": 0,
+              "cpu_stime_ticks_sum": 0,
+              "cpu_utime_ticks_sum": 0,
+              "vmrss_kib_sum": 0
+            },
+            "recovered": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4326
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 4861
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 4961
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 4961
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 5275
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 5275
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 5197
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 5165
+                }
+              ],
+              "processes": {
+                "count": 10,
+                "cpu_stime_ticks_sum": 3673,
+                "cpu_utime_ticks_sum": 8412,
+                "states": {
+                  "R": 4,
+                  "S": 6
+                },
+                "vmrss_kib_sum": 26885504
+              }
+            },
+            "recovered_ready_cuda_allocated_bytes": {
+              "0": 568737280,
+              "1": 568737280,
+              "2": 568737280,
+              "3": 568737280,
+              "4": 582056448,
+              "5": 582056448,
+              "6": 582056448,
+              "7": 582056448
+            },
+            "standby_rows": []
+          },
+          "session": "v1_backup_timing_cold_02",
+          "standby_preparation_window": {
+            "duration_seconds": null,
+            "end": null,
+            "healthy_ranks_with_gap": 0,
+            "reason": "cold mode has no standby_prepared event",
+            "start": null,
+            "timestamp_note": "start is event time minus preparation_seconds; end is controller event time"
+          },
+          "trial": 2
+        },
+        {
+          "detection_shrink": {
+            "generation": 0,
+            "healthy_rid": 0,
+            "ranks_found": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "reason": null
+          },
+          "metrics": {
+            "detection_shrink_seconds": 2.797872304916382,
+            "fault_to_joint_seconds": 22.680265426635742,
+            "healthy_max_adjacent_gap_preparation_seconds": null,
+            "healthy_max_adjacent_gap_seconds": 3.5319936275482178,
+            "preparation_seconds": 3.0994415283203125e-06,
+            "recovery_request_to_state_loaded_seconds": 1.5191686153411865,
+            "request_to_ready_seconds": 16.55468463897705,
+            "state_loaded_to_joint_seconds": 1.0506134033203125
+          },
+          "raw_reference": {
+            "fault_index": 0,
+            "ready_read_error": null,
+            "reconfigure_read_error": null,
+            "session_dir": "results/v1_backup_timing_cold_03"
+          },
+          "resources": {
+            "idle": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 531
+                }
+              ],
+              "processes": {
+                "count": 0,
+                "cpu_stime_ticks_sum": 0,
+                "cpu_utime_ticks_sum": 0,
+                "states": {},
+                "vmrss_kib_sum": 0
+              }
+            },
+            "prepared": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 531
+                }
+              ],
+              "processes": {
+                "count": 0,
+                "cpu_stime_ticks_sum": 0,
+                "cpu_utime_ticks_sum": 0,
+                "states": {},
+                "vmrss_kib_sum": 0
+              }
+            },
+            "prepared_minus_idle_process_counters": {
+              "count": 0,
+              "cpu_stime_ticks_sum": 0,
+              "cpu_utime_ticks_sum": 0,
+              "vmrss_kib_sum": 0
+            },
+            "recovered": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4320
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 4855
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 4959
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 4959
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 5273
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 5273
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 5197
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 5165
+                }
+              ],
+              "processes": {
+                "count": 10,
+                "cpu_stime_ticks_sum": 3506,
+                "cpu_utime_ticks_sum": 7800,
+                "states": {
+                  "R": 4,
+                  "S": 6
+                },
+                "vmrss_kib_sum": 26943044
+              }
+            },
+            "recovered_ready_cuda_allocated_bytes": {
+              "0": 568737280,
+              "1": 568737280,
+              "2": 568737280,
+              "3": 568737280,
+              "4": 582056448,
+              "5": 582056448,
+              "6": 582056448,
+              "7": 582056448
+            },
+            "standby_rows": []
+          },
+          "session": "v1_backup_timing_cold_03",
+          "standby_preparation_window": {
+            "duration_seconds": null,
+            "end": null,
+            "healthy_ranks_with_gap": 0,
+            "reason": "cold mode has no standby_prepared event",
+            "start": null,
+            "timestamp_note": "start is event time minus preparation_seconds; end is controller event time"
+          },
+          "trial": 3
+        }
+      ]
+    },
+    "cpu": {
+      "complete": true,
+      "expected_trials": 3,
+      "metrics": {
+        "detection_shrink_seconds": {
+          "count": 3,
+          "max": 3.3365986347198486,
+          "median": 3.1369359493255615,
+          "min": 3.0051207542419434,
+          "p95": 3.3365986347198486
+        },
+        "fault_to_joint_seconds": {
+          "count": 3,
+          "max": 20.640636205673218,
+          "median": 19.42654299736023,
+          "min": 19.37792181968689,
+          "p95": 20.640636205673218
+        },
+        "healthy_max_adjacent_gap_preparation_seconds": {
+          "count": 3,
+          "max": 0.9871294498443604,
+          "median": 0.9433920383453369,
+          "min": 0.7702300548553467,
+          "p95": 0.9871294498443604
+        },
+        "healthy_max_adjacent_gap_seconds": {
+          "count": 3,
+          "max": 3.8530397415161133,
+          "median": 3.6593644618988037,
+          "min": 3.5982816219329834,
+          "p95": 3.8530397415161133
+        },
+        "preparation_seconds": {
+          "count": 3,
+          "max": 4.146431922912598,
+          "median": 3.2496418952941895,
+          "min": 3.2477190494537354,
+          "p95": 4.146431922912598
+        },
+        "recovery_request_to_state_loaded_seconds": {
+          "count": 3,
+          "max": 1.736285924911499,
+          "median": 1.2872936725616455,
+          "min": 1.1462290287017822,
+          "p95": 1.736285924911499
+        },
+        "request_to_ready_seconds": {
+          "count": 3,
+          "max": 13.961970806121826,
+          "median": 13.876308679580688,
+          "min": 13.812210083007812,
+          "p95": 13.961970806121826
+        },
+        "state_loaded_to_joint_seconds": {
+          "count": 3,
+          "max": 1.0858192443847656,
+          "median": 1.062351942062378,
+          "min": 1.0561518669128418,
+          "p95": 1.0858192443847656
+        }
+      },
+      "trial_count": 3,
+      "trials": [
+        {
+          "detection_shrink": {
+            "generation": 0,
+            "healthy_rid": 0,
+            "ranks_found": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "reason": null
+          },
+          "metrics": {
+            "detection_shrink_seconds": 3.3365986347198486,
+            "fault_to_joint_seconds": 20.640636205673218,
+            "healthy_max_adjacent_gap_preparation_seconds": 0.9433920383453369,
+            "healthy_max_adjacent_gap_seconds": 3.6593644618988037,
+            "preparation_seconds": 4.146431922912598,
+            "recovery_request_to_state_loaded_seconds": 1.736285924911499,
+            "request_to_ready_seconds": 13.812210083007812,
+            "state_loaded_to_joint_seconds": 1.0858192443847656
+          },
+          "raw_reference": {
+            "fault_index": 0,
+            "ready_read_error": null,
+            "reconfigure_read_error": null,
+            "session_dir": "results/v1_backup_timing_cpu_01"
+          },
+          "resources": {
+            "idle": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 23
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 43
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 39
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 531
+                }
+              ],
+              "processes": {
+                "count": 0,
+                "cpu_stime_ticks_sum": 0,
+                "cpu_utime_ticks_sum": 0,
+                "states": {},
+                "vmrss_kib_sum": 0
+              }
+            },
+            "prepared": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 531
+                }
+              ],
+              "processes": {
+                "count": 10,
+                "cpu_stime_ticks_sum": 235,
+                "cpu_utime_ticks_sum": 1056,
+                "states": {
+                  "S": 10
+                },
+                "vmrss_kib_sum": 5322992
+              }
+            },
+            "prepared_minus_idle_process_counters": {
+              "count": 10,
+              "cpu_stime_ticks_sum": 235,
+              "cpu_utime_ticks_sum": 1056,
+              "vmrss_kib_sum": 5322992
+            },
+            "recovered": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4324
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 4859
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 4955
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 4955
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 5275
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 5275
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 5197
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 5165
+                }
+              ],
+              "processes": {
+                "count": 10,
+                "cpu_stime_ticks_sum": 3769,
+                "cpu_utime_ticks_sum": 8439,
+                "states": {
+                  "R": 4,
+                  "S": 6
+                },
+                "vmrss_kib_sum": 26879628
+              }
+            },
+            "recovered_ready_cuda_allocated_bytes": {
+              "0": 568737280,
+              "1": 568737280,
+              "2": 568737280,
+              "3": 568737280,
+              "4": 582056448,
+              "5": 582056448,
+              "6": 582056448,
+              "7": 582056448
+            },
+            "standby_rows": [
+              {
+                "cpu_maxrss_kib": 591360,
+                "cuda_allocated_bytes": 0,
+                "rank": 0
+              },
+              {
+                "cpu_maxrss_kib": 592896,
+                "cuda_allocated_bytes": 0,
+                "rank": 1
+              },
+              {
+                "cpu_maxrss_kib": 591360,
+                "cuda_allocated_bytes": 0,
+                "rank": 2
+              },
+              {
+                "cpu_maxrss_kib": 589824,
+                "cuda_allocated_bytes": 0,
+                "rank": 3
+              },
+              {
+                "cpu_maxrss_kib": 591360,
+                "cuda_allocated_bytes": 0,
+                "rank": 4
+              },
+              {
+                "cpu_maxrss_kib": 592896,
+                "cuda_allocated_bytes": 0,
+                "rank": 5
+              },
+              {
+                "cpu_maxrss_kib": 592896,
+                "cuda_allocated_bytes": 0,
+                "rank": 6
+              },
+              {
+                "cpu_maxrss_kib": 591360,
+                "cuda_allocated_bytes": 0,
+                "rank": 7
+              }
+            ]
+          },
+          "session": "v1_backup_timing_cpu_01",
+          "standby_preparation_window": {
+            "duration_seconds": 4.145921945571899,
+            "end": 1793638451.135705,
+            "healthy_ranks_with_gap": 8,
+            "reason": null,
+            "start": 1793638446.989783,
+            "timestamp_note": "start is event time minus preparation_seconds; end is controller event time"
+          },
+          "trial": 1
+        },
+        {
+          "detection_shrink": {
+            "generation": 0,
+            "healthy_rid": 0,
+            "ranks_found": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "reason": null
+          },
+          "metrics": {
+            "detection_shrink_seconds": 3.0051207542419434,
+            "fault_to_joint_seconds": 19.37792181968689,
+            "healthy_max_adjacent_gap_preparation_seconds": 0.9871294498443604,
+            "healthy_max_adjacent_gap_seconds": 3.5982816219329834,
+            "preparation_seconds": 3.2477190494537354,
+            "recovery_request_to_state_loaded_seconds": 1.2872936725616455,
+            "request_to_ready_seconds": 13.876308679580688,
+            "state_loaded_to_joint_seconds": 1.062351942062378
+          },
+          "raw_reference": {
+            "fault_index": 0,
+            "ready_read_error": null,
+            "reconfigure_read_error": null,
+            "session_dir": "results/v1_backup_timing_cpu_02"
+          },
+          "resources": {
+            "idle": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 531
+                }
+              ],
+              "processes": {
+                "count": 0,
+                "cpu_stime_ticks_sum": 0,
+                "cpu_utime_ticks_sum": 0,
+                "states": {},
+                "vmrss_kib_sum": 0
+              }
+            },
+            "prepared": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 531
+                }
+              ],
+              "processes": {
+                "count": 10,
+                "cpu_stime_ticks_sum": 235,
+                "cpu_utime_ticks_sum": 972,
+                "states": {
+                  "S": 10
+                },
+                "vmrss_kib_sum": 5318392
+              }
+            },
+            "prepared_minus_idle_process_counters": {
+              "count": 10,
+              "cpu_stime_ticks_sum": 235,
+              "cpu_utime_ticks_sum": 972,
+              "vmrss_kib_sum": 5318392
+            },
+            "recovered": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4324
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 4859
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 4951
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 4951
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 5275
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 5275
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 5201
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 5169
+                }
+              ],
+              "processes": {
+                "count": 10,
+                "cpu_stime_ticks_sum": 3668,
+                "cpu_utime_ticks_sum": 8003,
+                "states": {
+                  "R": 4,
+                  "S": 6
+                },
+                "vmrss_kib_sum": 26897076
+              }
+            },
+            "recovered_ready_cuda_allocated_bytes": {
+              "0": 568737280,
+              "1": 568737280,
+              "2": 568737280,
+              "3": 568737280,
+              "4": 582056448,
+              "5": 582056448,
+              "6": 582056448,
+              "7": 582056448
+            },
+            "standby_rows": [
+              {
+                "cpu_maxrss_kib": 588288,
+                "cuda_allocated_bytes": 0,
+                "rank": 0
+              },
+              {
+                "cpu_maxrss_kib": 588288,
+                "cuda_allocated_bytes": 0,
+                "rank": 1
+              },
+              {
+                "cpu_maxrss_kib": 589824,
+                "cuda_allocated_bytes": 0,
+                "rank": 2
+              },
+              {
+                "cpu_maxrss_kib": 589824,
+                "cuda_allocated_bytes": 0,
+                "rank": 3
+              },
+              {
+                "cpu_maxrss_kib": 589824,
+                "cuda_allocated_bytes": 0,
+                "rank": 4
+              },
+              {
+                "cpu_maxrss_kib": 591360,
+                "cuda_allocated_bytes": 0,
+                "rank": 5
+              },
+              {
+                "cpu_maxrss_kib": 594432,
+                "cuda_allocated_bytes": 0,
+                "rank": 6
+              },
+              {
+                "cpu_maxrss_kib": 592896,
+                "cuda_allocated_bytes": 0,
+                "rank": 7
+              }
+            ]
+          },
+          "session": "v1_backup_timing_cpu_02",
+          "standby_preparation_window": {
+            "duration_seconds": 3.2471089363098145,
+            "end": 1793638754.375673,
+            "healthy_ranks_with_gap": 8,
+            "reason": null,
+            "start": 1793638751.1285641,
+            "timestamp_note": "start is event time minus preparation_seconds; end is controller event time"
+          },
+          "trial": 2
+        },
+        {
+          "detection_shrink": {
+            "generation": 0,
+            "healthy_rid": 0,
+            "ranks_found": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "reason": null
+          },
+          "metrics": {
+            "detection_shrink_seconds": 3.1369359493255615,
+            "fault_to_joint_seconds": 19.42654299736023,
+            "healthy_max_adjacent_gap_preparation_seconds": 0.7702300548553467,
+            "healthy_max_adjacent_gap_seconds": 3.8530397415161133,
+            "preparation_seconds": 3.2496418952941895,
+            "recovery_request_to_state_loaded_seconds": 1.1462290287017822,
+            "request_to_ready_seconds": 13.961970806121826,
+            "state_loaded_to_joint_seconds": 1.0561518669128418
+          },
+          "raw_reference": {
+            "fault_index": 0,
+            "ready_read_error": null,
+            "reconfigure_read_error": null,
+            "session_dir": "results/v1_backup_timing_cpu_03"
+          },
+          "resources": {
+            "idle": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 531
+                }
+              ],
+              "processes": {
+                "count": 0,
+                "cpu_stime_ticks_sum": 0,
+                "cpu_utime_ticks_sum": 0,
+                "states": {},
+                "vmrss_kib_sum": 0
+              }
+            },
+            "prepared": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 531
+                }
+              ],
+              "processes": {
+                "count": 10,
+                "cpu_stime_ticks_sum": 241,
+                "cpu_utime_ticks_sum": 969,
+                "states": {
+                  "S": 10
+                },
+                "vmrss_kib_sum": 5322108
+              }
+            },
+            "prepared_minus_idle_process_counters": {
+              "count": 10,
+              "cpu_stime_ticks_sum": 241,
+              "cpu_utime_ticks_sum": 969,
+              "vmrss_kib_sum": 5322108
+            },
+            "recovered": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4326
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 4861
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 4957
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 4957
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 5275
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 5275
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 5201
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 5169
+                }
+              ],
+              "processes": {
+                "count": 10,
+                "cpu_stime_ticks_sum": 3740,
+                "cpu_utime_ticks_sum": 8091,
+                "states": {
+                  "R": 8,
+                  "S": 2
+                },
+                "vmrss_kib_sum": 26880888
+              }
+            },
+            "recovered_ready_cuda_allocated_bytes": {
+              "0": 568737280,
+              "1": 568737280,
+              "2": 568737280,
+              "3": 568737280,
+              "4": 582056448,
+              "5": 582056448,
+              "6": 582056448,
+              "7": 582056448
+            },
+            "standby_rows": [
+              {
+                "cpu_maxrss_kib": 588288,
+                "cuda_allocated_bytes": 0,
+                "rank": 0
+              },
+              {
+                "cpu_maxrss_kib": 589824,
+                "cuda_allocated_bytes": 0,
+                "rank": 1
+              },
+              {
+                "cpu_maxrss_kib": 591360,
+                "cuda_allocated_bytes": 0,
+                "rank": 2
+              },
+              {
+                "cpu_maxrss_kib": 592896,
+                "cuda_allocated_bytes": 0,
+                "rank": 3
+              },
+              {
+                "cpu_maxrss_kib": 589824,
+                "cuda_allocated_bytes": 0,
+                "rank": 4
+              },
+              {
+                "cpu_maxrss_kib": 588288,
+                "cuda_allocated_bytes": 0,
+                "rank": 5
+              },
+              {
+                "cpu_maxrss_kib": 599040,
+                "cuda_allocated_bytes": 0,
+                "rank": 6
+              },
+              {
+                "cpu_maxrss_kib": 594432,
+                "cuda_allocated_bytes": 0,
+                "rank": 7
+              }
+            ]
+          },
+          "session": "v1_backup_timing_cpu_03",
+          "standby_preparation_window": {
+            "duration_seconds": 3.24849009513855,
+            "end": 1793638829.345471,
+            "healthy_ranks_with_gap": 8,
+            "reason": null,
+            "start": 1793638826.0969808,
+            "timestamp_note": "start is event time minus preparation_seconds; end is controller event time"
+          },
+          "trial": 3
+        }
+      ]
+    },
+    "gpu": {
+      "complete": true,
+      "expected_trials": 3,
+      "metrics": {
+        "detection_shrink_seconds": {
+          "count": 3,
+          "max": 2.9733147621154785,
+          "median": 2.7856435775756836,
+          "min": 1.143477439880371,
+          "p95": 2.9733147621154785
+        },
+        "fault_to_joint_seconds": {
+          "count": 3,
+          "max": 6.850235939025879,
+          "median": 6.736640214920044,
+          "min": 6.319495677947998,
+          "p95": 6.850235939025879
+        },
+        "healthy_max_adjacent_gap_preparation_seconds": {
+          "count": 3,
+          "max": 1.0249359607696533,
+          "median": 0.9494237899780273,
+          "min": 0.9271829128265381,
+          "p95": 1.0249359607696533
+        },
+        "healthy_max_adjacent_gap_seconds": {
+          "count": 3,
+          "max": 3.6026816368103027,
+          "median": 3.51101016998291,
+          "min": 1.2294788360595703,
+          "p95": 3.6026816368103027
+        },
+        "preparation_seconds": {
+          "count": 3,
+          "max": 16.949875116348267,
+          "median": 16.79894208908081,
+          "min": 16.648514986038208,
+          "p95": 16.949875116348267
+        },
+        "recovery_request_to_state_loaded_seconds": {
+          "count": 3,
+          "max": 1.8018507957458496,
+          "median": 1.5874722003936768,
+          "min": 1.364180564880371,
+          "p95": 1.8018507957458496
+        },
+        "request_to_ready_seconds": {
+          "count": 3,
+          "max": 0.47464489936828613,
+          "median": 0.4652564525604248,
+          "min": 0.4435877799987793,
+          "p95": 0.47464489936828613
+        },
+        "state_loaded_to_joint_seconds": {
+          "count": 3,
+          "max": 1.1864376068115234,
+          "median": 1.081287145614624,
+          "min": 1.059978723526001,
+          "p95": 1.1864376068115234
+        }
+      },
+      "trial_count": 3,
+      "trials": [
+        {
+          "detection_shrink": {
+            "generation": 0,
+            "healthy_rid": 0,
+            "ranks_found": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "reason": null
+          },
+          "metrics": {
+            "detection_shrink_seconds": 2.9733147621154785,
+            "fault_to_joint_seconds": 6.736640214920044,
+            "healthy_max_adjacent_gap_preparation_seconds": 0.9494237899780273,
+            "healthy_max_adjacent_gap_seconds": 3.6026816368103027,
+            "preparation_seconds": 16.949875116348267,
+            "recovery_request_to_state_loaded_seconds": 1.8018507957458496,
+            "request_to_ready_seconds": 0.4435877799987793,
+            "state_loaded_to_joint_seconds": 1.081287145614624
+          },
+          "raw_reference": {
+            "fault_index": 0,
+            "ready_read_error": null,
+            "reconfigure_read_error": null,
+            "session_dir": "results/v1_backup_timing_gpu_01"
+          },
+          "resources": {
+            "idle": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 531
+                }
+              ],
+              "processes": {
+                "count": 0,
+                "cpu_stime_ticks_sum": 0,
+                "cpu_utime_ticks_sum": 0,
+                "states": {},
+                "vmrss_kib_sum": 0
+              }
+            },
+            "prepared": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 3162
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 3697
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 3743
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 3743
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 4399
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 4399
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 4391
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 4359
+                }
+              ],
+              "processes": {
+                "count": 10,
+                "cpu_stime_ticks_sum": 3336,
+                "cpu_utime_ticks_sum": 5605,
+                "states": {
+                  "S": 10
+                },
+                "vmrss_kib_sum": 25519260
+              }
+            },
+            "prepared_minus_idle_process_counters": {
+              "count": 10,
+              "cpu_stime_ticks_sum": 3336,
+              "cpu_utime_ticks_sum": 5605,
+              "vmrss_kib_sum": 25519260
+            },
+            "recovered": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4326
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 4861
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 4955
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 4955
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 5277
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 5277
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 5197
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 5165
+                }
+              ],
+              "processes": {
+                "count": 10,
+                "cpu_stime_ticks_sum": 3698,
+                "cpu_utime_ticks_sum": 8457,
+                "states": {
+                  "R": 4,
+                  "S": 6
+                },
+                "vmrss_kib_sum": 26871920
+              }
+            },
+            "recovered_ready_cuda_allocated_bytes": {
+              "0": 568737280,
+              "1": 568737280,
+              "2": 568737280,
+              "3": 568737280,
+              "4": 582056448,
+              "5": 582056448,
+              "6": 582056448,
+              "7": 582056448
+            },
+            "standby_rows": [
+              {
+                "cpu_maxrss_kib": 3086844,
+                "cuda_allocated_bytes": 568737280,
+                "rank": 0
+              },
+              {
+                "cpu_maxrss_kib": 3116904,
+                "cuda_allocated_bytes": 568737280,
+                "rank": 1
+              },
+              {
+                "cpu_maxrss_kib": 3088876,
+                "cuda_allocated_bytes": 568737280,
+                "rank": 2
+              },
+              {
+                "cpu_maxrss_kib": 3107628,
+                "cuda_allocated_bytes": 568737280,
+                "rank": 3
+              },
+              {
+                "cpu_maxrss_kib": 3080584,
+                "cuda_allocated_bytes": 582056448,
+                "rank": 4
+              },
+              {
+                "cpu_maxrss_kib": 3102132,
+                "cuda_allocated_bytes": 582056448,
+                "rank": 5
+              },
+              {
+                "cpu_maxrss_kib": 3089312,
+                "cuda_allocated_bytes": 582056448,
+                "rank": 6
+              },
+              {
+                "cpu_maxrss_kib": 3097108,
+                "cuda_allocated_bytes": 582056448,
+                "rank": 7
+              }
+            ]
+          },
+          "session": "v1_backup_timing_gpu_01",
+          "standby_preparation_window": {
+            "duration_seconds": 16.949191093444824,
+            "end": 1793638540.892409,
+            "healthy_ranks_with_gap": 8,
+            "reason": null,
+            "start": 1793638523.943218,
+            "timestamp_note": "start is event time minus preparation_seconds; end is controller event time"
+          },
+          "trial": 1
+        },
+        {
+          "detection_shrink": {
+            "generation": 0,
+            "healthy_rid": 0,
+            "ranks_found": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "reason": null
+          },
+          "metrics": {
+            "detection_shrink_seconds": 1.143477439880371,
+            "fault_to_joint_seconds": 6.850235939025879,
+            "healthy_max_adjacent_gap_preparation_seconds": 1.0249359607696533,
+            "healthy_max_adjacent_gap_seconds": 1.2294788360595703,
+            "preparation_seconds": 16.648514986038208,
+            "recovery_request_to_state_loaded_seconds": 1.5874722003936768,
+            "request_to_ready_seconds": 0.4652564525604248,
+            "state_loaded_to_joint_seconds": 1.1864376068115234
+          },
+          "raw_reference": {
+            "fault_index": 0,
+            "ready_read_error": null,
+            "reconfigure_read_error": null,
+            "session_dir": "results/v1_backup_timing_gpu_02"
+          },
+          "resources": {
+            "idle": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 531
+                }
+              ],
+              "processes": {
+                "count": 0,
+                "cpu_stime_ticks_sum": 0,
+                "cpu_utime_ticks_sum": 0,
+                "states": {},
+                "vmrss_kib_sum": 0
+              }
+            },
+            "prepared": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 3162
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 3697
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 3743
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 3743
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 4399
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 4399
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 4391
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 4359
+                }
+              ],
+              "processes": {
+                "count": 10,
+                "cpu_stime_ticks_sum": 3338,
+                "cpu_utime_ticks_sum": 5681,
+                "states": {
+                  "S": 10
+                },
+                "vmrss_kib_sum": 25606028
+              }
+            },
+            "prepared_minus_idle_process_counters": {
+              "count": 10,
+              "cpu_stime_ticks_sum": 3338,
+              "cpu_utime_ticks_sum": 5681,
+              "vmrss_kib_sum": 25606028
+            },
+            "recovered": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4324
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 4859
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 4949
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 4949
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 5275
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 5275
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 5195
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 5163
+                }
+              ],
+              "processes": {
+                "count": 10,
+                "cpu_stime_ticks_sum": 3769,
+                "cpu_utime_ticks_sum": 8487,
+                "states": {
+                  "R": 8,
+                  "S": 2
+                },
+                "vmrss_kib_sum": 26943244
+              }
+            },
+            "recovered_ready_cuda_allocated_bytes": {
+              "0": 568737280,
+              "1": 568737280,
+              "2": 568737280,
+              "3": 568737280,
+              "4": 582056448,
+              "5": 582056448,
+              "6": 582056448,
+              "7": 582056448
+            },
+            "standby_rows": [
+              {
+                "cpu_maxrss_kib": 3098880,
+                "cuda_allocated_bytes": 568737280,
+                "rank": 0
+              },
+              {
+                "cpu_maxrss_kib": 3101036,
+                "cuda_allocated_bytes": 568737280,
+                "rank": 1
+              },
+              {
+                "cpu_maxrss_kib": 3095748,
+                "cuda_allocated_bytes": 568737280,
+                "rank": 2
+              },
+              {
+                "cpu_maxrss_kib": 3104952,
+                "cuda_allocated_bytes": 568737280,
+                "rank": 3
+              },
+              {
+                "cpu_maxrss_kib": 3101192,
+                "cuda_allocated_bytes": 582056448,
+                "rank": 4
+              },
+              {
+                "cpu_maxrss_kib": 3107632,
+                "cuda_allocated_bytes": 582056448,
+                "rank": 5
+              },
+              {
+                "cpu_maxrss_kib": 3098272,
+                "cuda_allocated_bytes": 582056448,
+                "rank": 6
+              },
+              {
+                "cpu_maxrss_kib": 3116328,
+                "cuda_allocated_bytes": 582056448,
+                "rank": 7
+              }
+            ]
+          },
+          "session": "v1_backup_timing_gpu_02",
+          "standby_preparation_window": {
+            "duration_seconds": 16.647660970687866,
+            "end": 1793638617.8447292,
+            "healthy_ranks_with_gap": 8,
+            "reason": null,
+            "start": 1793638601.1970682,
+            "timestamp_note": "start is event time minus preparation_seconds; end is controller event time"
+          },
+          "trial": 2
+        },
+        {
+          "detection_shrink": {
+            "generation": 0,
+            "healthy_rid": 0,
+            "ranks_found": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "reason": null
+          },
+          "metrics": {
+            "detection_shrink_seconds": 2.7856435775756836,
+            "fault_to_joint_seconds": 6.319495677947998,
+            "healthy_max_adjacent_gap_preparation_seconds": 0.9271829128265381,
+            "healthy_max_adjacent_gap_seconds": 3.51101016998291,
+            "preparation_seconds": 16.79894208908081,
+            "recovery_request_to_state_loaded_seconds": 1.364180564880371,
+            "request_to_ready_seconds": 0.47464489936828613,
+            "state_loaded_to_joint_seconds": 1.059978723526001
+          },
+          "raw_reference": {
+            "fault_index": 0,
+            "ready_read_error": null,
+            "reconfigure_read_error": null,
+            "session_dir": "results/v1_backup_timing_gpu_03"
+          },
+          "resources": {
+            "idle": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 531
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 531
+                }
+              ],
+              "processes": {
+                "count": 0,
+                "cpu_stime_ticks_sum": 0,
+                "cpu_utime_ticks_sum": 0,
+                "states": {},
+                "vmrss_kib_sum": 0
+              }
+            },
+            "prepared": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 3162
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 3697
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 3743
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 3743
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 4399
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 4399
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 4391
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 4359
+                }
+              ],
+              "processes": {
+                "count": 10,
+                "cpu_stime_ticks_sum": 3373,
+                "cpu_utime_ticks_sum": 5622,
+                "states": {
+                  "S": 10
+                },
+                "vmrss_kib_sum": 25564260
+              }
+            },
+            "prepared_minus_idle_process_counters": {
+              "count": 10,
+              "cpu_stime_ticks_sum": 3373,
+              "cpu_utime_ticks_sum": 5622,
+              "vmrss_kib_sum": 25564260
+            },
+            "recovered": {
+              "gpus": [
+                {
+                  "index": 0,
+                  "memory_used_mib": 4324
+                },
+                {
+                  "index": 1,
+                  "memory_used_mib": 4859
+                },
+                {
+                  "index": 2,
+                  "memory_used_mib": 4953
+                },
+                {
+                  "index": 3,
+                  "memory_used_mib": 4953
+                },
+                {
+                  "index": 4,
+                  "memory_used_mib": 5277
+                },
+                {
+                  "index": 5,
+                  "memory_used_mib": 5277
+                },
+                {
+                  "index": 6,
+                  "memory_used_mib": 5195
+                },
+                {
+                  "index": 7,
+                  "memory_used_mib": 5163
+                }
+              ],
+              "processes": {
+                "count": 10,
+                "cpu_stime_ticks_sum": 3735,
+                "cpu_utime_ticks_sum": 8016,
+                "states": {
+                  "R": 7,
+                  "S": 3
+                },
+                "vmrss_kib_sum": 26906424
+              }
+            },
+            "recovered_ready_cuda_allocated_bytes": {
+              "0": 568737280,
+              "1": 568737280,
+              "2": 568737280,
+              "3": 568737280,
+              "4": 582056448,
+              "5": 582056448,
+              "6": 582056448,
+              "7": 582056448
+            },
+            "standby_rows": [
+              {
+                "cpu_maxrss_kib": 3101920,
+                "cuda_allocated_bytes": 568737280,
+                "rank": 0
+              },
+              {
+                "cpu_maxrss_kib": 3104160,
+                "cuda_allocated_bytes": 568737280,
+                "rank": 1
+              },
+              {
+                "cpu_maxrss_kib": 3100576,
+                "cuda_allocated_bytes": 568737280,
+                "rank": 2
+              },
+              {
+                "cpu_maxrss_kib": 3098760,
+                "cuda_allocated_bytes": 568737280,
+                "rank": 3
+              },
+              {
+                "cpu_maxrss_kib": 3091152,
+                "cuda_allocated_bytes": 582056448,
+                "rank": 4
+              },
+              {
+                "cpu_maxrss_kib": 3099528,
+                "cuda_allocated_bytes": 582056448,
+                "rank": 5
+              },
+              {
+                "cpu_maxrss_kib": 3086572,
+                "cuda_allocated_bytes": 582056448,
+                "rank": 6
+              },
+              {
+                "cpu_maxrss_kib": 3088480,
+                "cuda_allocated_bytes": 582056448,
+                "rank": 7
+              }
+            ]
+          },
+          "session": "v1_backup_timing_gpu_03",
+          "standby_preparation_window": {
+            "duration_seconds": 16.798219919204712,
+            "end": 1793638917.06222,
+            "healthy_ranks_with_gap": 8,
+            "reason": null,
+            "start": 1793638900.2640002,
+            "timestamp_note": "start is event time minus preparation_seconds; end is controller event time"
+          },
+          "trial": 3
+        }
+      ]
+    }
+  },
+  "standby_preparation_timing_note": "Window start is controller standby_prepared time minus preparation_seconds; this approximates start at event emission precision."
+}

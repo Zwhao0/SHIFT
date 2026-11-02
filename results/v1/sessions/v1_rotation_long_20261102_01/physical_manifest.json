@@ -1,0 +1,374 @@
+[
+  {
+    "rid": 0,
+    "generation": 0,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g0"
+  },
+  {
+    "rid": 0,
+    "generation": 1,
+    "physical_node": "node0",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g1"
+  },
+  {
+    "rid": 0,
+    "generation": 2,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g2"
+  },
+  {
+    "rid": 0,
+    "generation": 3,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g3"
+  },
+  {
+    "rid": 0,
+    "generation": 4,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g4"
+  },
+  {
+    "rid": 0,
+    "generation": 5,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g5"
+  },
+  {
+    "rid": 0,
+    "generation": 6,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g6"
+  },
+  {
+    "rid": 0,
+    "generation": 7,
+    "physical_node": "node0",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g7"
+  },
+  {
+    "rid": 0,
+    "generation": 8,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g8"
+  },
+  {
+    "rid": 0,
+    "generation": 9,
+    "physical_node": "node0",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g9"
+  },
+  {
+    "rid": 0,
+    "generation": 10,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g10"
+  },
+  {
+    "rid": 0,
+    "generation": 11,
+    "physical_node": "node0",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g11"
+  },
+  {
+    "rid": 0,
+    "generation": 12,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g12"
+  },
+  {
+    "rid": 0,
+    "generation": 13,
+    "physical_node": "node0",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g13"
+  },
+  {
+    "rid": 0,
+    "generation": 14,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g14"
+  },
+  {
+    "rid": 0,
+    "generation": 15,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g15"
+  },
+  {
+    "rid": 0,
+    "generation": 16,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g16"
+  },
+  {
+    "rid": 0,
+    "generation": 17,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g17"
+  },
+  {
+    "rid": 0,
+    "generation": 18,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g18"
+  },
+  {
+    "rid": 0,
+    "generation": 19,
+    "physical_node": "node0",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g19"
+  },
+  {
+    "rid": 0,
+    "generation": 20,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g20"
+  },
+  {
+    "rid": 0,
+    "generation": 21,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g21"
+  },
+  {
+    "rid": 0,
+    "generation": 22,
+    "physical_node": "node0",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g22"
+  },
+  {
+    "rid": 0,
+    "generation": 23,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g23"
+  },
+  {
+    "rid": 0,
+    "generation": 24,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g24"
+  },
+  {
+    "rid": 0,
+    "generation": 25,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g25"
+  },
+  {
+    "rid": 0,
+    "generation": 26,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g26"
+  },
+  {
+    "rid": 0,
+    "generation": 27,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g27"
+  },
+  {
+    "rid": 0,
+    "generation": 28,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g28"
+  },
+  {
+    "rid": 0,
+    "generation": 29,
+    "physical_node": "node0",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid0_g29"
+  },
+  {
+    "rid": 1,
+    "generation": 0,
+    "physical_node": "node0",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g0"
+  },
+  {
+    "rid": 1,
+    "generation": 1,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g1"
+  },
+  {
+    "rid": 1,
+    "generation": 2,
+    "physical_node": "node0",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g2"
+  },
+  {
+    "rid": 1,
+    "generation": 3,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g3"
+  },
+  {
+    "rid": 1,
+    "generation": 4,
+    "physical_node": "node0",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g4"
+  },
+  {
+    "rid": 1,
+    "generation": 5,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g5"
+  },
+  {
+    "rid": 1,
+    "generation": 6,
+    "physical_node": "node0",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g6"
+  },
+  {
+    "rid": 1,
+    "generation": 7,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g7"
+  },
+  {
+    "rid": 1,
+    "generation": 8,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g8"
+  },
+  {
+    "rid": 1,
+    "generation": 9,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g9"
+  },
+  {
+    "rid": 1,
+    "generation": 10,
+    "physical_node": "node0",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g10"
+  },
+  {
+    "rid": 1,
+    "generation": 11,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g11"
+  },
+  {
+    "rid": 1,
+    "generation": 12,
+    "physical_node": "node0",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g12"
+  },
+  {
+    "rid": 1,
+    "generation": 13,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g13"
+  },
+  {
+    "rid": 1,
+    "generation": 14,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g14"
+  },
+  {
+    "rid": 1,
+    "generation": 15,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g15"
+  },
+  {
+    "rid": 1,
+    "generation": 16,
+    "physical_node": "node0",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g16"
+  },
+  {
+    "rid": 1,
+    "generation": 17,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g17"
+  },
+  {
+    "rid": 1,
+    "generation": 18,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g18"
+  },
+  {
+    "rid": 1,
+    "generation": 19,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g19"
+  },
+  {
+    "rid": 1,
+    "generation": 20,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g20"
+  },
+  {
+    "rid": 1,
+    "generation": 21,
+    "physical_node": "node0",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g21"
+  },
+  {
+    "rid": 1,
+    "generation": 22,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g22"
+  },
+  {
+    "rid": 1,
+    "generation": 23,
+    "physical_node": "node0",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g23"
+  },
+  {
+    "rid": 1,
+    "generation": 24,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g24"
+  },
+  {
+    "rid": 1,
+    "generation": 25,
+    "physical_node": "node0",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g25"
+  },
+  {
+    "rid": 1,
+    "generation": 26,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g26"
+  },
+  {
+    "rid": 1,
+    "generation": 27,
+    "physical_node": "node0",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g27"
+  },
+  {
+    "rid": 1,
+    "generation": 28,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g28"
+  },
+  {
+    "rid": 1,
+    "generation": 29,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g29"
+  },
+  {
+    "rid": 1,
+    "generation": 30,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g30"
+  },
+  {
+    "rid": 1,
+    "generation": 31,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_rotation_long_20261102_01/rid1_g31"
+  }
+]

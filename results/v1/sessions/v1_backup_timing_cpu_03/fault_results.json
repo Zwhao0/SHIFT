@@ -1,0 +1,352 @@
+[
+  {
+    "index": 0,
+    "target": 1,
+    "generation": 1,
+    "old_node": "node0",
+    "new_node": "node1",
+    "committed_before_fault": 27,
+    "restored_step": 48,
+    "first_joint_step": 50,
+    "full_state_audit": false,
+    "first_joint_hashes_match": null,
+    "healthy_pids_unchanged": true,
+    "healthy_progress": true,
+    "lighthouse_alive": true,
+    "retired_children": [],
+    "fault_time": 1793638830.548764,
+    "request_time": 1793638833.0181508,
+    "backup_mode": "cpu",
+    "preparation_seconds": 3.2496418952941895,
+    "standby_resources": [
+      {
+        "cpu_maxrss_kib": 588288,
+        "cuda_allocated_bytes": 0,
+        "generation": 1,
+        "host_ip": "10.10.4.1",
+        "kind": "standby_ready",
+        "mode": "cpu",
+        "monotonic": 1854549.155990588,
+        "physical_node": "node1",
+        "pid": 84094,
+        "rank": 0,
+        "rid": 1,
+        "role_manifest": null,
+        "time": 1793638829.3887396
+      },
+      {
+        "cpu_maxrss_kib": 589824,
+        "cuda_allocated_bytes": 0,
+        "generation": 1,
+        "host_ip": "10.10.4.1",
+        "kind": "standby_ready",
+        "mode": "cpu",
+        "monotonic": 1854549.163535922,
+        "physical_node": "node1",
+        "pid": 84095,
+        "rank": 1,
+        "rid": 1,
+        "role_manifest": null,
+        "time": 1793638829.3962848
+      },
+      {
+        "cpu_maxrss_kib": 591360,
+        "cuda_allocated_bytes": 0,
+        "generation": 1,
+        "host_ip": "10.10.4.1",
+        "kind": "standby_ready",
+        "mode": "cpu",
+        "monotonic": 1854549.16349829,
+        "physical_node": "node1",
+        "pid": 84096,
+        "rank": 2,
+        "rid": 1,
+        "role_manifest": null,
+        "time": 1793638829.3962474
+      },
+      {
+        "cpu_maxrss_kib": 592896,
+        "cuda_allocated_bytes": 0,
+        "generation": 1,
+        "host_ip": "10.10.4.1",
+        "kind": "standby_ready",
+        "mode": "cpu",
+        "monotonic": 1854549.158554675,
+        "physical_node": "node1",
+        "pid": 84097,
+        "rank": 3,
+        "rid": 1,
+        "role_manifest": null,
+        "time": 1793638829.3913038
+      },
+      {
+        "cpu_maxrss_kib": 589824,
+        "cuda_allocated_bytes": 0,
+        "generation": 1,
+        "host_ip": "10.10.4.1",
+        "kind": "standby_ready",
+        "mode": "cpu",
+        "monotonic": 1854549.165248602,
+        "physical_node": "node1",
+        "pid": 84098,
+        "rank": 4,
+        "rid": 1,
+        "role_manifest": null,
+        "time": 1793638829.3979974
+      },
+      {
+        "cpu_maxrss_kib": 588288,
+        "cuda_allocated_bytes": 0,
+        "generation": 1,
+        "host_ip": "10.10.4.1",
+        "kind": "standby_ready",
+        "mode": "cpu",
+        "monotonic": 1854549.158081963,
+        "physical_node": "node1",
+        "pid": 84099,
+        "rank": 5,
+        "rid": 1,
+        "role_manifest": null,
+        "time": 1793638829.390831
+      },
+      {
+        "cpu_maxrss_kib": 599040,
+        "cuda_allocated_bytes": 0,
+        "generation": 1,
+        "host_ip": "10.10.4.1",
+        "kind": "standby_ready",
+        "mode": "cpu",
+        "monotonic": 1854549.167515019,
+        "physical_node": "node1",
+        "pid": 84100,
+        "rank": 6,
+        "rid": 1,
+        "role_manifest": null,
+        "time": 1793638829.4002643
+      },
+      {
+        "cpu_maxrss_kib": 594432,
+        "cuda_allocated_bytes": 0,
+        "generation": 1,
+        "host_ip": "10.10.4.1",
+        "kind": "standby_ready",
+        "mode": "cpu",
+        "monotonic": 1854549.159236053,
+        "physical_node": "node1",
+        "pid": 84101,
+        "rank": 7,
+        "rid": 1,
+        "role_manifest": null,
+        "time": 1793638829.3919852
+      }
+    ],
+    "loaded_time": 1793638848.920935,
+    "idle_resources": {
+      "cpu_clock_ticks_per_second": 100,
+      "gpu_error": null,
+      "gpus": [
+        {
+          "index": 0,
+          "memory_used_mib": 4,
+          "power_draw_w": 124.54,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 1,
+          "memory_used_mib": 531,
+          "power_draw_w": 119.72,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 2,
+          "memory_used_mib": 531,
+          "power_draw_w": 124.53,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 3,
+          "memory_used_mib": 531,
+          "power_draw_w": 126.86,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 4,
+          "memory_used_mib": 531,
+          "power_draw_w": 126.18,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 5,
+          "memory_used_mib": 531,
+          "power_draw_w": 125.27,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 6,
+          "memory_used_mib": 531,
+          "power_draw_w": 122.6,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 7,
+          "memory_used_mib": 531,
+          "power_draw_w": 120.67,
+          "utilization_gpu_percent": 0
+        }
+      ],
+      "processes": {
+        "count": 0,
+        "cpu_stime_ticks_sum": 0,
+        "cpu_utime_ticks_sum": 0,
+        "skipped_races_or_unreadable": 0,
+        "states": {},
+        "vmrss_kib_sum": 0,
+        "vmrss_missing_count": 0
+      },
+      "sample_time": 1793638826.171014,
+      "session": "v1_backup_timing_cpu_03"
+    },
+    "prepared_resources": {
+      "cpu_clock_ticks_per_second": 100,
+      "gpu_error": null,
+      "gpus": [
+        {
+          "index": 0,
+          "memory_used_mib": 4,
+          "power_draw_w": 124.56,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 1,
+          "memory_used_mib": 531,
+          "power_draw_w": 119.76,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 2,
+          "memory_used_mib": 531,
+          "power_draw_w": 124.55,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 3,
+          "memory_used_mib": 531,
+          "power_draw_w": 126.86,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 4,
+          "memory_used_mib": 531,
+          "power_draw_w": 126.2,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 5,
+          "memory_used_mib": 531,
+          "power_draw_w": 125.29,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 6,
+          "memory_used_mib": 531,
+          "power_draw_w": 122.6,
+          "utilization_gpu_percent": 0
+        },
+        {
+          "index": 7,
+          "memory_used_mib": 531,
+          "power_draw_w": 120.84,
+          "utilization_gpu_percent": 0
+        }
+      ],
+      "processes": {
+        "count": 10,
+        "cpu_stime_ticks_sum": 241,
+        "cpu_utime_ticks_sum": 969,
+        "skipped_races_or_unreadable": 0,
+        "states": {
+          "S": 10
+        },
+        "vmrss_kib_sum": 5322108,
+        "vmrss_missing_count": 0
+      },
+      "sample_time": 1793638829.741993,
+      "session": "v1_backup_timing_cpu_03"
+    },
+    "recovered_resources": {
+      "cpu_clock_ticks_per_second": 100,
+      "gpu_error": null,
+      "gpus": [
+        {
+          "index": 0,
+          "memory_used_mib": 4326,
+          "power_draw_w": 139.61,
+          "utilization_gpu_percent": 89
+        },
+        {
+          "index": 1,
+          "memory_used_mib": 4861,
+          "power_draw_w": 133.61,
+          "utilization_gpu_percent": 97
+        },
+        {
+          "index": 2,
+          "memory_used_mib": 4957,
+          "power_draw_w": 139.92,
+          "utilization_gpu_percent": 97
+        },
+        {
+          "index": 3,
+          "memory_used_mib": 4957,
+          "power_draw_w": 141.13,
+          "utilization_gpu_percent": 64
+        },
+        {
+          "index": 4,
+          "memory_used_mib": 5275,
+          "power_draw_w": 139.1,
+          "utilization_gpu_percent": 100
+        },
+        {
+          "index": 5,
+          "memory_used_mib": 5275,
+          "power_draw_w": 136.1,
+          "utilization_gpu_percent": 100
+        },
+        {
+          "index": 6,
+          "memory_used_mib": 5201,
+          "power_draw_w": 137.94,
+          "utilization_gpu_percent": 100
+        },
+        {
+          "index": 7,
+          "memory_used_mib": 5169,
+          "power_draw_w": 134.55,
+          "utilization_gpu_percent": 100
+        }
+      ],
+      "processes": {
+        "count": 10,
+        "cpu_stime_ticks_sum": 3740,
+        "cpu_utime_ticks_sum": 8091,
+        "skipped_races_or_unreadable": 0,
+        "states": {
+          "R": 8,
+          "S": 2
+        },
+        "vmrss_kib_sum": 26880888,
+        "vmrss_missing_count": 0
+      },
+      "sample_time": 1793638850.7527442,
+      "session": "v1_backup_timing_cpu_03"
+    },
+    "ready_time": 1793638846.9801216,
+    "recovery_request_time": 1793638847.772926,
+    "state_loaded_time": 1793638848.9191551,
+    "joint_time": 1793638849.975307,
+    "fault_to_joint_seconds": 19.42654299736023,
+    "request_to_loaded_seconds": 15.9027841091156,
+    "recovery_request_to_loaded_seconds": 1.1462290287017822
+  }
+]

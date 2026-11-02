@@ -1,0 +1,498 @@
+{
+  "session": "v1_trajectory_shift_01",
+  "source_node": "node0",
+  "destination_node": "node1",
+  "server_port": 31587,
+  "server_pid": null,
+  "server_cleanup_verified": true,
+  "server_started": false,
+  "resumed_existing": true,
+  "source_manifest_seconds": 40.41322252480313,
+  "total_seconds": 131.549217959,
+  "file_count": 24,
+  "bytes_total": 48502156464,
+  "by_step": {
+    "2": {
+      "file_count": 8,
+      "source_bytes": 16167385488,
+      "destination_bytes": 16167385488,
+      "source_hash_seconds": 13.519272615201771,
+      "destination_transfer_hash_seconds": 0.0,
+      "destination_existing_verify_seconds": 13.500538712833077
+    },
+    "3": {
+      "file_count": 8,
+      "source_bytes": 16167385488,
+      "destination_bytes": 16167385488,
+      "source_hash_seconds": 13.448281705379486,
+      "destination_transfer_hash_seconds": 0.0,
+      "destination_existing_verify_seconds": 12.714661130448803
+    },
+    "4": {
+      "file_count": 8,
+      "source_bytes": 16167385488,
+      "destination_bytes": 16167385488,
+      "source_hash_seconds": 13.442946475930512,
+      "destination_transfer_hash_seconds": 0.0,
+      "destination_existing_verify_seconds": 12.964314199984074
+    }
+  },
+  "files": [
+    {
+      "step": 2,
+      "rank": 0,
+      "name": "reference_step2_r0.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "e88c4d44c64975ad99695b558adc62de3ee0d268d7c6c12f0d3bc04e45e93dfc",
+        "size_bytes": 1999169755,
+        "hash_seconds": 1.6524522942490876,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "e88c4d44c64975ad99695b558adc62de3ee0d268d7c6c12f0d3bc04e45e93dfc",
+        "size_bytes": 1999169755,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.7116996741387993
+      }
+    },
+    {
+      "step": 2,
+      "rank": 1,
+      "name": "reference_step2_r1.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "1009f9f54e26afb4e9169dfa3b394b23e87290f85cad57a1c06d87ed9eab27e3",
+        "size_bytes": 1999169755,
+        "hash_seconds": 1.6832923558540642,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "1009f9f54e26afb4e9169dfa3b394b23e87290f85cad57a1c06d87ed9eab27e3",
+        "size_bytes": 1999169755,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.6724173249676824
+      }
+    },
+    {
+      "step": 2,
+      "rank": 2,
+      "name": "reference_step2_r2.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "e64868f42b5c6056bbcf22df3e0ee781078ed753b993c4fcbf2bad55f088fc93",
+        "size_bytes": 1999170459,
+        "hash_seconds": 1.6479086391627789,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "e64868f42b5c6056bbcf22df3e0ee781078ed753b993c4fcbf2bad55f088fc93",
+        "size_bytes": 1999170459,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.6653388570994139
+      }
+    },
+    {
+      "step": 2,
+      "rank": 3,
+      "name": "reference_step2_r3.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "75446de10f59ec54dd8cc623cf0cd14c9cc5b1db0c5ddc9ba7a042e2af6ce19e",
+        "size_bytes": 1999170459,
+        "hash_seconds": 1.6915879109874368,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "75446de10f59ec54dd8cc623cf0cd14c9cc5b1db0c5ddc9ba7a042e2af6ce19e",
+        "size_bytes": 1999170459,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.6617824989371002
+      }
+    },
+    {
+      "step": 2,
+      "rank": 4,
+      "name": "reference_step2_r4.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "02e587d4daf873d7db7edeebd4f0b425633dcf5fb94fdd8785d58b7ced078a72",
+        "size_bytes": 2042675913,
+        "hash_seconds": 1.7244193721562624,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "02e587d4daf873d7db7edeebd4f0b425633dcf5fb94fdd8785d58b7ced078a72",
+        "size_bytes": 2042675913,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.6969232119154185
+      }
+    },
+    {
+      "step": 2,
+      "rank": 5,
+      "name": "reference_step2_r5.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "fab365d48b9cf55dd06bf2b3327711f1696626aebbecc1033934db7d03fa97bf",
+        "size_bytes": 2042675913,
+        "hash_seconds": 1.6806690338999033,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "fab365d48b9cf55dd06bf2b3327711f1696626aebbecc1033934db7d03fa97bf",
+        "size_bytes": 2042675913,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.7206043829210103
+      }
+    },
+    {
+      "step": 2,
+      "rank": 6,
+      "name": "reference_step2_r6.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "0957069f7f9082566b577f2eda6b4d5562fd283d7a1b19427468df3fb197d712",
+        "size_bytes": 2042676617,
+        "hash_seconds": 1.7159659010358155,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "0957069f7f9082566b577f2eda6b4d5562fd283d7a1b19427468df3fb197d712",
+        "size_bytes": 2042676617,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.7142494418658316
+      }
+    },
+    {
+      "step": 2,
+      "rank": 7,
+      "name": "reference_step2_r7.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "2efd4108d350962bfa5d038011e884f85e401cced394387c3ceb10c37dff9f5f",
+        "size_bytes": 2042676617,
+        "hash_seconds": 1.7229771078564227,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "2efd4108d350962bfa5d038011e884f85e401cced394387c3ceb10c37dff9f5f",
+        "size_bytes": 2042676617,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.6575233209878206
+      }
+    },
+    {
+      "step": 3,
+      "rank": 0,
+      "name": "reference_step3_r0.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "88076f3d60d7d5daacd8f785f08ca1fc6b9752b25b372a6d043c1f54fa318c94",
+        "size_bytes": 1999169755,
+        "hash_seconds": 1.6334964958950877,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "88076f3d60d7d5daacd8f785f08ca1fc6b9752b25b372a6d043c1f54fa318c94",
+        "size_bytes": 1999169755,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.586903122952208
+      }
+    },
+    {
+      "step": 3,
+      "rank": 1,
+      "name": "reference_step3_r1.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "9bc086ba07f056797b4efcfb9f233f65bdafd74f7bf1858d3dc0722c2163fbca",
+        "size_bytes": 1999169755,
+        "hash_seconds": 1.6603573206812143,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "9bc086ba07f056797b4efcfb9f233f65bdafd74f7bf1858d3dc0722c2163fbca",
+        "size_bytes": 1999169755,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.576964169042185
+      }
+    },
+    {
+      "step": 3,
+      "rank": 2,
+      "name": "reference_step3_r2.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "68c998f0a58a6a2972f8b45c5d9495c551db1c7f5560b5655a1ece810a378828",
+        "size_bytes": 1999170459,
+        "hash_seconds": 1.6318800267763436,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "68c998f0a58a6a2972f8b45c5d9495c551db1c7f5560b5655a1ece810a378828",
+        "size_bytes": 1999170459,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.5729358380194753
+      }
+    },
+    {
+      "step": 3,
+      "rank": 3,
+      "name": "reference_step3_r3.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "9504347e70b4e98d5bc7f5c0e11afde579e07f29e8211ccc72211924930140ad",
+        "size_bytes": 1999170459,
+        "hash_seconds": 1.6865627360530198,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "9504347e70b4e98d5bc7f5c0e11afde579e07f29e8211ccc72211924930140ad",
+        "size_bytes": 1999170459,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.573177695972845
+      }
+    },
+    {
+      "step": 3,
+      "rank": 4,
+      "name": "reference_step3_r4.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "9aa4bdda7cb09c006f0bc871eeca5b2f2b1462738972493287e0b3b2a83f2bea",
+        "size_bytes": 2042675913,
+        "hash_seconds": 1.721895006019622,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "9aa4bdda7cb09c006f0bc871eeca5b2f2b1462738972493287e0b3b2a83f2bea",
+        "size_bytes": 2042675913,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.6035839030519128
+      }
+    },
+    {
+      "step": 3,
+      "rank": 5,
+      "name": "reference_step3_r5.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "862269aff499785672c66e509aff9263fc5858cde2e1d34b9e5f36f595a232f5",
+        "size_bytes": 2042675913,
+        "hash_seconds": 1.6692174286581576,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "862269aff499785672c66e509aff9263fc5858cde2e1d34b9e5f36f595a232f5",
+        "size_bytes": 2042675913,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.6002023480832577
+      }
+    },
+    {
+      "step": 3,
+      "rank": 6,
+      "name": "reference_step3_r6.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "662e7c3c53dec91f52a3e8287d72e82e4e447c991519e46ddf94a92b717df12d",
+        "size_bytes": 2042676617,
+        "hash_seconds": 1.7249553389847279,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "662e7c3c53dec91f52a3e8287d72e82e4e447c991519e46ddf94a92b717df12d",
+        "size_bytes": 2042676617,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.600375329144299
+      }
+    },
+    {
+      "step": 3,
+      "rank": 7,
+      "name": "reference_step3_r7.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "7a28a7211570d5b5b3a325bfad429597628c6b162aa813aa87845f538a2b95ee",
+        "size_bytes": 2042676617,
+        "hash_seconds": 1.7199173523113132,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "7a28a7211570d5b5b3a325bfad429597628c6b162aa813aa87845f538a2b95ee",
+        "size_bytes": 2042676617,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.6005187241826206
+      }
+    },
+    {
+      "step": 4,
+      "rank": 0,
+      "name": "reference_step4_r0.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "d9ad0dce170668aebcf89f469857ea329dd8d52745941e6eadfd72188ec6ae3b",
+        "size_bytes": 1999169755,
+        "hash_seconds": 1.6265244139358401,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "d9ad0dce170668aebcf89f469857ea329dd8d52745941e6eadfd72188ec6ae3b",
+        "size_bytes": 1999169755,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.5724759129807353
+      }
+    },
+    {
+      "step": 4,
+      "rank": 1,
+      "name": "reference_step4_r1.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "75f28a59a5ad0f718a09ddc2aaaffb871ffe4c0c0b8adb8eea9c7c29c308a820",
+        "size_bytes": 1999169755,
+        "hash_seconds": 1.6903775590471923,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "75f28a59a5ad0f718a09ddc2aaaffb871ffe4c0c0b8adb8eea9c7c29c308a820",
+        "size_bytes": 1999169755,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.612433534115553
+      }
+    },
+    {
+      "step": 4,
+      "rank": 2,
+      "name": "reference_step4_r2.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "6aa727d9c37b573708e5344d40f2254f65d575c9f9989cf3eb66bec1eb2e6533",
+        "size_bytes": 1999170459,
+        "hash_seconds": 1.6300454321317375,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "6aa727d9c37b573708e5344d40f2254f65d575c9f9989cf3eb66bec1eb2e6533",
+        "size_bytes": 1999170459,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.6022574570961297
+      }
+    },
+    {
+      "step": 4,
+      "rank": 3,
+      "name": "reference_step4_r3.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "f6ea8d7aacbfe95805f2d3d6c95e3e55307d451aac52aa262741fcb9b9911922",
+        "size_bytes": 1999170459,
+        "hash_seconds": 1.6390491500496864,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "f6ea8d7aacbfe95805f2d3d6c95e3e55307d451aac52aa262741fcb9b9911922",
+        "size_bytes": 1999170459,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.603098827879876
+      }
+    },
+    {
+      "step": 4,
+      "rank": 4,
+      "name": "reference_step4_r4.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "95760173d79568948387b902eb74165cf05206332bc1fbdd4f23ff9e067708cc",
+        "size_bytes": 2042675913,
+        "hash_seconds": 1.7325426079332829,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "95760173d79568948387b902eb74165cf05206332bc1fbdd4f23ff9e067708cc",
+        "size_bytes": 2042675913,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.6539752818644047
+      }
+    },
+    {
+      "step": 4,
+      "rank": 5,
+      "name": "reference_step4_r5.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "d73083a166139ee11dcd7eff1fb2180272c647c9765b26ce253ed8d2865bea9d",
+        "size_bytes": 2042675913,
+        "hash_seconds": 1.6622095401398838,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "d73083a166139ee11dcd7eff1fb2180272c647c9765b26ce253ed8d2865bea9d",
+        "size_bytes": 2042675913,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.6405149609781802
+      }
+    },
+    {
+      "step": 4,
+      "rank": 6,
+      "name": "reference_step4_r6.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "ed2cacbedcabb6624dc8097e7c7a4b7b265acd11859302b64736bd96e82fd527",
+        "size_bytes": 2042676617,
+        "hash_seconds": 1.7307595438323915,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "ed2cacbedcabb6624dc8097e7c7a4b7b265acd11859302b64736bd96e82fd527",
+        "size_bytes": 2042676617,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.6300786610227078
+      }
+    },
+    {
+      "step": 4,
+      "rank": 7,
+      "name": "reference_step4_r7.pt",
+      "source": {
+        "node": "node0",
+        "sha256": "7821cbccb4ef47110bf21da08aa31830454f2c7834a608f86ad215ed3e23537c",
+        "size_bytes": 2042676617,
+        "hash_seconds": 1.7314382288604975,
+        "deleted_after_verification": true
+      },
+      "destination": {
+        "node": "node1",
+        "sha256": "7821cbccb4ef47110bf21da08aa31830454f2c7834a608f86ad215ed3e23537c",
+        "size_bytes": 2042676617,
+        "transfer_hash_seconds": null,
+        "existing_verify_seconds": 1.6494795640464872
+      }
+    }
+  ]
+}

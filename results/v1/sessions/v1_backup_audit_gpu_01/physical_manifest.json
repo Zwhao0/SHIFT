@@ -1,0 +1,20 @@
+[
+  {
+    "rid": 0,
+    "generation": 0,
+    "physical_node": "node3",
+    "directory": "/workspace/SHIFT/results/v1_backup_audit_gpu_01/rid0_g0"
+  },
+  {
+    "rid": 1,
+    "generation": 0,
+    "physical_node": "node0",
+    "directory": "/workspace/SHIFT/results/v1_backup_audit_gpu_01/rid1_g0"
+  },
+  {
+    "rid": 1,
+    "generation": 1,
+    "physical_node": "node1",
+    "directory": "/workspace/SHIFT/results/v1_backup_audit_gpu_01/rid1_g1"
+  }
+]

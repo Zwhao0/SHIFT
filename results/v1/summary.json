@@ -1,0 +1,3929 @@
+{
+  "adam_coordinate": {
+    "coordinate": {
+      "flat": {
+        "actual_update": -3.717094659805298e-05,
+        "adam_step": 3,
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "eps": 1e-08,
+        "g2": 0.0,
+        "g3": 2.4113676388992644e-08,
+        "lr": 0.0001,
+        "m2": 0.0,
+        "m3": 2.4113677721260274e-09,
+        "m3_pred": 2.411367638899264e-09,
+        "m3_recurrence_residual": 1.3322676328589103e-16,
+        "p2": -0.013977022841572762,
+        "p3": -0.014014193788170815,
+        "p3_pred_observed_moments": -0.01401419401832733,
+        "p3_pred_recurrent_moments": -0.014014194016539694,
+        "step": 3,
+        "v2": 0.0,
+        "v3": 5.814694033287182e-19,
+        "v3_pred": 5.814693889930619e-19,
+        "v3_recurrence_residual": 1.4335656266965485e-26,
+        "weight_decay": 0.01
+      },
+      "shift": {
+        "actual_update": 4.2836181819438934e-05,
+        "adam_step": 3,
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "eps": 1e-08,
+        "g2": 0.0,
+        "g3": -3.520239744148057e-08,
+        "lr": 0.0001,
+        "m2": 0.0,
+        "m3": -3.52023987737482e-09,
+        "m3_pred": -3.5202397441480563e-09,
+        "m3_recurrence_residual": -1.3322676369948134e-16,
+        "p2": -0.013977022841572762,
+        "p3": -0.013934186659753323,
+        "p3_pred_observed_moments": -0.013934186634828555,
+        "p3_pred_recurrent_moments": -0.013934186636418919,
+        "step": 3,
+        "v2": 0.0,
+        "v3": 1.2392087882427351e-18,
+        "v3_pred": 1.2392087856279588e-18,
+        "v3_recurrence_residual": 2.6147763446312463e-27,
+        "weight_decay": 0.01
+      }
+    },
+    "cross_mode_differences": {
+      "g2": 0.0,
+      "g3": 5.9316073830473215e-08,
+      "m2": 0.0,
+      "m3": 5.931607649500847e-09,
+      "p2": 0.0,
+      "p3": -8.000712841749191e-05,
+      "v2": 0.0,
+      "v3": -6.5773938491401695e-19
+    },
+    "interpretation": "Scalar FP64 recurrence and AdamW formula diagnostics from saved FP32 values; recurrence residuals include FP32 update rounding. This isolates one coordinate and does not establish a global cause.",
+    "selected": {
+      "flat_index": 16002,
+      "max_abs": 8.000712841749191e-05,
+      "parameter": "decoder.layers.4.mlp.experts.15.down_proj.weight",
+      "rank": 1,
+      "step": 3
+    },
+    "source": "results/v1/strict_comparison.json"
+  },
+  "backup_timing": {
+    "extra_standby_communication": {
+      "basis": "standby gate waits before Manager construction; no bandwidth measurement is claimed",
+      "bytes": 0,
+      "scope": "structural, before ACTIVATE only"
+    },
+    "modes": {
+      "cold": {
+        "complete": true,
+        "expected_trials": 3,
+        "metrics": {
+          "detection_shrink_seconds": {
+            "count": 3,
+            "max": 3.046082019805908,
+            "median": 2.9024031162261963,
+            "min": 2.797872304916382,
+            "p95": 3.046082019805908
+          },
+          "fault_to_joint_seconds": {
+            "count": 3,
+            "max": 25.05518341064453,
+            "median": 22.680265426635742,
+            "min": 21.98376703262329,
+            "p95": 25.05518341064453
+          },
+          "healthy_max_adjacent_gap_preparation_seconds": {
+            "count": 0,
+            "max": null,
+            "median": null,
+            "min": null,
+            "p95": null
+          },
+          "healthy_max_adjacent_gap_seconds": {
+            "count": 3,
+            "max": 3.6501381397247314,
+            "median": 3.581082820892334,
+            "min": 3.5319936275482178,
+            "p95": 3.6501381397247314
+          },
+          "preparation_seconds": {
+            "count": 3,
+            "max": 3.814697265625e-06,
+            "median": 3.0994415283203125e-06,
+            "min": 3.0994415283203125e-06,
+            "p95": 3.814697265625e-06
+          },
+          "recovery_request_to_state_loaded_seconds": {
+            "count": 3,
+            "max": 1.6553659439086914,
+            "median": 1.5191686153411865,
+            "min": 1.124908685684204,
+            "p95": 1.6553659439086914
+          },
+          "request_to_ready_seconds": {
+            "count": 3,
+            "max": 18.880495071411133,
+            "median": 16.72589135169983,
+            "min": 16.55468463897705,
+            "p95": 18.880495071411133
+          },
+          "state_loaded_to_joint_seconds": {
+            "count": 3,
+            "max": 1.106135368347168,
+            "median": 1.0510339736938477,
+            "min": 1.0506134033203125,
+            "p95": 1.106135368347168
+          }
+        },
+        "trial_count": 3,
+        "trials": [
+          {
+            "detection_shrink": {
+              "generation": 0,
+              "healthy_rid": 0,
+              "ranks_found": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "reason": null
+            },
+            "metrics": {
+              "detection_shrink_seconds": 2.9024031162261963,
+              "fault_to_joint_seconds": 25.05518341064453,
+              "healthy_max_adjacent_gap_preparation_seconds": null,
+              "healthy_max_adjacent_gap_seconds": 3.6501381397247314,
+              "preparation_seconds": 3.0994415283203125e-06,
+              "recovery_request_to_state_loaded_seconds": 1.124908685684204,
+              "request_to_ready_seconds": 18.880495071411133,
+              "state_loaded_to_joint_seconds": 1.0510339736938477
+            },
+            "raw_reference": {
+              "fault_index": 0,
+              "ready_read_error": null,
+              "reconfigure_read_error": null,
+              "session_dir": "results/v1_backup_timing_cold_01"
+            },
+            "resources": {
+              "idle": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 0
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 0
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 0
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 0
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 0
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 0
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 0
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 0
+                  }
+                ],
+                "processes": {
+                  "count": 0,
+                  "cpu_stime_ticks_sum": 0,
+                  "cpu_utime_ticks_sum": 0,
+                  "states": {},
+                  "vmrss_kib_sum": 0
+                }
+              },
+              "prepared": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 0
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 0
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 0
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 0
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 0
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 0
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 0
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 0
+                  }
+                ],
+                "processes": {
+                  "count": 0,
+                  "cpu_stime_ticks_sum": 0,
+                  "cpu_utime_ticks_sum": 0,
+                  "states": {},
+                  "vmrss_kib_sum": 0
+                }
+              },
+              "prepared_minus_idle_process_counters": {
+                "count": 0,
+                "cpu_stime_ticks_sum": 0,
+                "cpu_utime_ticks_sum": 0,
+                "vmrss_kib_sum": 0
+              },
+              "recovered": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4325
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 4333
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 4433
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 4433
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 4745
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 4745
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 4669
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 4637
+                  }
+                ],
+                "processes": {
+                  "count": 10,
+                  "cpu_stime_ticks_sum": 3826,
+                  "cpu_utime_ticks_sum": 8133,
+                  "states": {
+                    "R": 8,
+                    "S": 2
+                  },
+                  "vmrss_kib_sum": 26848728
+                }
+              },
+              "recovered_ready_cuda_allocated_bytes": {
+                "0": 568737280,
+                "1": 568737280,
+                "2": 568737280,
+                "3": 568737280,
+                "4": 582056448,
+                "5": 582056448,
+                "6": 582056448,
+                "7": 582056448
+              },
+              "standby_rows": []
+            },
+            "session": "v1_backup_timing_cold_01",
+            "standby_preparation_window": {
+              "duration_seconds": null,
+              "end": null,
+              "healthy_ranks_with_gap": 0,
+              "reason": "cold mode has no standby_prepared event",
+              "start": null,
+              "timestamp_note": "start is event time minus preparation_seconds; end is controller event time"
+            },
+            "trial": 1
+          },
+          {
+            "detection_shrink": {
+              "generation": 0,
+              "healthy_rid": 0,
+              "ranks_found": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "reason": null
+            },
+            "metrics": {
+              "detection_shrink_seconds": 3.046082019805908,
+              "fault_to_joint_seconds": 21.98376703262329,
+              "healthy_max_adjacent_gap_preparation_seconds": null,
+              "healthy_max_adjacent_gap_seconds": 3.581082820892334,
+              "preparation_seconds": 3.814697265625e-06,
+              "recovery_request_to_state_loaded_seconds": 1.6553659439086914,
+              "request_to_ready_seconds": 16.72589135169983,
+              "state_loaded_to_joint_seconds": 1.106135368347168
+            },
+            "raw_reference": {
+              "fault_index": 0,
+              "ready_read_error": null,
+              "reconfigure_read_error": null,
+              "session_dir": "results/v1_backup_timing_cold_02"
+            },
+            "resources": {
+              "idle": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 531
+                  }
+                ],
+                "processes": {
+                  "count": 0,
+                  "cpu_stime_ticks_sum": 0,
+                  "cpu_utime_ticks_sum": 0,
+                  "states": {},
+                  "vmrss_kib_sum": 0
+                }
+              },
+              "prepared": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 531
+                  }
+                ],
+                "processes": {
+                  "count": 0,
+                  "cpu_stime_ticks_sum": 0,
+                  "cpu_utime_ticks_sum": 0,
+                  "states": {},
+                  "vmrss_kib_sum": 0
+                }
+              },
+              "prepared_minus_idle_process_counters": {
+                "count": 0,
+                "cpu_stime_ticks_sum": 0,
+                "cpu_utime_ticks_sum": 0,
+                "vmrss_kib_sum": 0
+              },
+              "recovered": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4326
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 4861
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 4961
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 4961
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 5275
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 5275
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 5197
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 5165
+                  }
+                ],
+                "processes": {
+                  "count": 10,
+                  "cpu_stime_ticks_sum": 3673,
+                  "cpu_utime_ticks_sum": 8412,
+                  "states": {
+                    "R": 4,
+                    "S": 6
+                  },
+                  "vmrss_kib_sum": 26885504
+                }
+              },
+              "recovered_ready_cuda_allocated_bytes": {
+                "0": 568737280,
+                "1": 568737280,
+                "2": 568737280,
+                "3": 568737280,
+                "4": 582056448,
+                "5": 582056448,
+                "6": 582056448,
+                "7": 582056448
+              },
+              "standby_rows": []
+            },
+            "session": "v1_backup_timing_cold_02",
+            "standby_preparation_window": {
+              "duration_seconds": null,
+              "end": null,
+              "healthy_ranks_with_gap": 0,
+              "reason": "cold mode has no standby_prepared event",
+              "start": null,
+              "timestamp_note": "start is event time minus preparation_seconds; end is controller event time"
+            },
+            "trial": 2
+          },
+          {
+            "detection_shrink": {
+              "generation": 0,
+              "healthy_rid": 0,
+              "ranks_found": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "reason": null
+            },
+            "metrics": {
+              "detection_shrink_seconds": 2.797872304916382,
+              "fault_to_joint_seconds": 22.680265426635742,
+              "healthy_max_adjacent_gap_preparation_seconds": null,
+              "healthy_max_adjacent_gap_seconds": 3.5319936275482178,
+              "preparation_seconds": 3.0994415283203125e-06,
+              "recovery_request_to_state_loaded_seconds": 1.5191686153411865,
+              "request_to_ready_seconds": 16.55468463897705,
+              "state_loaded_to_joint_seconds": 1.0506134033203125
+            },
+            "raw_reference": {
+              "fault_index": 0,
+              "ready_read_error": null,
+              "reconfigure_read_error": null,
+              "session_dir": "results/v1_backup_timing_cold_03"
+            },
+            "resources": {
+              "idle": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 531
+                  }
+                ],
+                "processes": {
+                  "count": 0,
+                  "cpu_stime_ticks_sum": 0,
+                  "cpu_utime_ticks_sum": 0,
+                  "states": {},
+                  "vmrss_kib_sum": 0
+                }
+              },
+              "prepared": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 531
+                  }
+                ],
+                "processes": {
+                  "count": 0,
+                  "cpu_stime_ticks_sum": 0,
+                  "cpu_utime_ticks_sum": 0,
+                  "states": {},
+                  "vmrss_kib_sum": 0
+                }
+              },
+              "prepared_minus_idle_process_counters": {
+                "count": 0,
+                "cpu_stime_ticks_sum": 0,
+                "cpu_utime_ticks_sum": 0,
+                "vmrss_kib_sum": 0
+              },
+              "recovered": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4320
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 4855
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 4959
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 4959
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 5273
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 5273
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 5197
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 5165
+                  }
+                ],
+                "processes": {
+                  "count": 10,
+                  "cpu_stime_ticks_sum": 3506,
+                  "cpu_utime_ticks_sum": 7800,
+                  "states": {
+                    "R": 4,
+                    "S": 6
+                  },
+                  "vmrss_kib_sum": 26943044
+                }
+              },
+              "recovered_ready_cuda_allocated_bytes": {
+                "0": 568737280,
+                "1": 568737280,
+                "2": 568737280,
+                "3": 568737280,
+                "4": 582056448,
+                "5": 582056448,
+                "6": 582056448,
+                "7": 582056448
+              },
+              "standby_rows": []
+            },
+            "session": "v1_backup_timing_cold_03",
+            "standby_preparation_window": {
+              "duration_seconds": null,
+              "end": null,
+              "healthy_ranks_with_gap": 0,
+              "reason": "cold mode has no standby_prepared event",
+              "start": null,
+              "timestamp_note": "start is event time minus preparation_seconds; end is controller event time"
+            },
+            "trial": 3
+          }
+        ]
+      },
+      "cpu": {
+        "complete": true,
+        "expected_trials": 3,
+        "metrics": {
+          "detection_shrink_seconds": {
+            "count": 3,
+            "max": 3.3365986347198486,
+            "median": 3.1369359493255615,
+            "min": 3.0051207542419434,
+            "p95": 3.3365986347198486
+          },
+          "fault_to_joint_seconds": {
+            "count": 3,
+            "max": 20.640636205673218,
+            "median": 19.42654299736023,
+            "min": 19.37792181968689,
+            "p95": 20.640636205673218
+          },
+          "healthy_max_adjacent_gap_preparation_seconds": {
+            "count": 3,
+            "max": 0.9871294498443604,
+            "median": 0.9433920383453369,
+            "min": 0.7702300548553467,
+            "p95": 0.9871294498443604
+          },
+          "healthy_max_adjacent_gap_seconds": {
+            "count": 3,
+            "max": 3.8530397415161133,
+            "median": 3.6593644618988037,
+            "min": 3.5982816219329834,
+            "p95": 3.8530397415161133
+          },
+          "preparation_seconds": {
+            "count": 3,
+            "max": 4.146431922912598,
+            "median": 3.2496418952941895,
+            "min": 3.2477190494537354,
+            "p95": 4.146431922912598
+          },
+          "recovery_request_to_state_loaded_seconds": {
+            "count": 3,
+            "max": 1.736285924911499,
+            "median": 1.2872936725616455,
+            "min": 1.1462290287017822,
+            "p95": 1.736285924911499
+          },
+          "request_to_ready_seconds": {
+            "count": 3,
+            "max": 13.961970806121826,
+            "median": 13.876308679580688,
+            "min": 13.812210083007812,
+            "p95": 13.961970806121826
+          },
+          "state_loaded_to_joint_seconds": {
+            "count": 3,
+            "max": 1.0858192443847656,
+            "median": 1.062351942062378,
+            "min": 1.0561518669128418,
+            "p95": 1.0858192443847656
+          }
+        },
+        "trial_count": 3,
+        "trials": [
+          {
+            "detection_shrink": {
+              "generation": 0,
+              "healthy_rid": 0,
+              "ranks_found": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "reason": null
+            },
+            "metrics": {
+              "detection_shrink_seconds": 3.3365986347198486,
+              "fault_to_joint_seconds": 20.640636205673218,
+              "healthy_max_adjacent_gap_preparation_seconds": 0.9433920383453369,
+              "healthy_max_adjacent_gap_seconds": 3.6593644618988037,
+              "preparation_seconds": 4.146431922912598,
+              "recovery_request_to_state_loaded_seconds": 1.736285924911499,
+              "request_to_ready_seconds": 13.812210083007812,
+              "state_loaded_to_joint_seconds": 1.0858192443847656
+            },
+            "raw_reference": {
+              "fault_index": 0,
+              "ready_read_error": null,
+              "reconfigure_read_error": null,
+              "session_dir": "results/v1_backup_timing_cpu_01"
+            },
+            "resources": {
+              "idle": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 23
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 43
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 39
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 531
+                  }
+                ],
+                "processes": {
+                  "count": 0,
+                  "cpu_stime_ticks_sum": 0,
+                  "cpu_utime_ticks_sum": 0,
+                  "states": {},
+                  "vmrss_kib_sum": 0
+                }
+              },
+              "prepared": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 531
+                  }
+                ],
+                "processes": {
+                  "count": 10,
+                  "cpu_stime_ticks_sum": 235,
+                  "cpu_utime_ticks_sum": 1056,
+                  "states": {
+                    "S": 10
+                  },
+                  "vmrss_kib_sum": 5322992
+                }
+              },
+              "prepared_minus_idle_process_counters": {
+                "count": 10,
+                "cpu_stime_ticks_sum": 235,
+                "cpu_utime_ticks_sum": 1056,
+                "vmrss_kib_sum": 5322992
+              },
+              "recovered": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4324
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 4859
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 4955
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 4955
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 5275
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 5275
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 5197
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 5165
+                  }
+                ],
+                "processes": {
+                  "count": 10,
+                  "cpu_stime_ticks_sum": 3769,
+                  "cpu_utime_ticks_sum": 8439,
+                  "states": {
+                    "R": 4,
+                    "S": 6
+                  },
+                  "vmrss_kib_sum": 26879628
+                }
+              },
+              "recovered_ready_cuda_allocated_bytes": {
+                "0": 568737280,
+                "1": 568737280,
+                "2": 568737280,
+                "3": 568737280,
+                "4": 582056448,
+                "5": 582056448,
+                "6": 582056448,
+                "7": 582056448
+              },
+              "standby_rows": [
+                {
+                  "cpu_maxrss_kib": 591360,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 0
+                },
+                {
+                  "cpu_maxrss_kib": 592896,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 1
+                },
+                {
+                  "cpu_maxrss_kib": 591360,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 2
+                },
+                {
+                  "cpu_maxrss_kib": 589824,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 3
+                },
+                {
+                  "cpu_maxrss_kib": 591360,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 4
+                },
+                {
+                  "cpu_maxrss_kib": 592896,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 5
+                },
+                {
+                  "cpu_maxrss_kib": 592896,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 6
+                },
+                {
+                  "cpu_maxrss_kib": 591360,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 7
+                }
+              ]
+            },
+            "session": "v1_backup_timing_cpu_01",
+            "standby_preparation_window": {
+              "duration_seconds": 4.145921945571899,
+              "end": 1793638451.135705,
+              "healthy_ranks_with_gap": 8,
+              "reason": null,
+              "start": 1793638446.989783,
+              "timestamp_note": "start is event time minus preparation_seconds; end is controller event time"
+            },
+            "trial": 1
+          },
+          {
+            "detection_shrink": {
+              "generation": 0,
+              "healthy_rid": 0,
+              "ranks_found": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "reason": null
+            },
+            "metrics": {
+              "detection_shrink_seconds": 3.0051207542419434,
+              "fault_to_joint_seconds": 19.37792181968689,
+              "healthy_max_adjacent_gap_preparation_seconds": 0.9871294498443604,
+              "healthy_max_adjacent_gap_seconds": 3.5982816219329834,
+              "preparation_seconds": 3.2477190494537354,
+              "recovery_request_to_state_loaded_seconds": 1.2872936725616455,
+              "request_to_ready_seconds": 13.876308679580688,
+              "state_loaded_to_joint_seconds": 1.062351942062378
+            },
+            "raw_reference": {
+              "fault_index": 0,
+              "ready_read_error": null,
+              "reconfigure_read_error": null,
+              "session_dir": "results/v1_backup_timing_cpu_02"
+            },
+            "resources": {
+              "idle": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 531
+                  }
+                ],
+                "processes": {
+                  "count": 0,
+                  "cpu_stime_ticks_sum": 0,
+                  "cpu_utime_ticks_sum": 0,
+                  "states": {},
+                  "vmrss_kib_sum": 0
+                }
+              },
+              "prepared": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 531
+                  }
+                ],
+                "processes": {
+                  "count": 10,
+                  "cpu_stime_ticks_sum": 235,
+                  "cpu_utime_ticks_sum": 972,
+                  "states": {
+                    "S": 10
+                  },
+                  "vmrss_kib_sum": 5318392
+                }
+              },
+              "prepared_minus_idle_process_counters": {
+                "count": 10,
+                "cpu_stime_ticks_sum": 235,
+                "cpu_utime_ticks_sum": 972,
+                "vmrss_kib_sum": 5318392
+              },
+              "recovered": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4324
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 4859
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 4951
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 4951
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 5275
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 5275
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 5201
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 5169
+                  }
+                ],
+                "processes": {
+                  "count": 10,
+                  "cpu_stime_ticks_sum": 3668,
+                  "cpu_utime_ticks_sum": 8003,
+                  "states": {
+                    "R": 4,
+                    "S": 6
+                  },
+                  "vmrss_kib_sum": 26897076
+                }
+              },
+              "recovered_ready_cuda_allocated_bytes": {
+                "0": 568737280,
+                "1": 568737280,
+                "2": 568737280,
+                "3": 568737280,
+                "4": 582056448,
+                "5": 582056448,
+                "6": 582056448,
+                "7": 582056448
+              },
+              "standby_rows": [
+                {
+                  "cpu_maxrss_kib": 588288,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 0
+                },
+                {
+                  "cpu_maxrss_kib": 588288,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 1
+                },
+                {
+                  "cpu_maxrss_kib": 589824,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 2
+                },
+                {
+                  "cpu_maxrss_kib": 589824,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 3
+                },
+                {
+                  "cpu_maxrss_kib": 589824,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 4
+                },
+                {
+                  "cpu_maxrss_kib": 591360,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 5
+                },
+                {
+                  "cpu_maxrss_kib": 594432,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 6
+                },
+                {
+                  "cpu_maxrss_kib": 592896,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 7
+                }
+              ]
+            },
+            "session": "v1_backup_timing_cpu_02",
+            "standby_preparation_window": {
+              "duration_seconds": 3.2471089363098145,
+              "end": 1793638754.375673,
+              "healthy_ranks_with_gap": 8,
+              "reason": null,
+              "start": 1793638751.1285641,
+              "timestamp_note": "start is event time minus preparation_seconds; end is controller event time"
+            },
+            "trial": 2
+          },
+          {
+            "detection_shrink": {
+              "generation": 0,
+              "healthy_rid": 0,
+              "ranks_found": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "reason": null
+            },
+            "metrics": {
+              "detection_shrink_seconds": 3.1369359493255615,
+              "fault_to_joint_seconds": 19.42654299736023,
+              "healthy_max_adjacent_gap_preparation_seconds": 0.7702300548553467,
+              "healthy_max_adjacent_gap_seconds": 3.8530397415161133,
+              "preparation_seconds": 3.2496418952941895,
+              "recovery_request_to_state_loaded_seconds": 1.1462290287017822,
+              "request_to_ready_seconds": 13.961970806121826,
+              "state_loaded_to_joint_seconds": 1.0561518669128418
+            },
+            "raw_reference": {
+              "fault_index": 0,
+              "ready_read_error": null,
+              "reconfigure_read_error": null,
+              "session_dir": "results/v1_backup_timing_cpu_03"
+            },
+            "resources": {
+              "idle": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 531
+                  }
+                ],
+                "processes": {
+                  "count": 0,
+                  "cpu_stime_ticks_sum": 0,
+                  "cpu_utime_ticks_sum": 0,
+                  "states": {},
+                  "vmrss_kib_sum": 0
+                }
+              },
+              "prepared": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 531
+                  }
+                ],
+                "processes": {
+                  "count": 10,
+                  "cpu_stime_ticks_sum": 241,
+                  "cpu_utime_ticks_sum": 969,
+                  "states": {
+                    "S": 10
+                  },
+                  "vmrss_kib_sum": 5322108
+                }
+              },
+              "prepared_minus_idle_process_counters": {
+                "count": 10,
+                "cpu_stime_ticks_sum": 241,
+                "cpu_utime_ticks_sum": 969,
+                "vmrss_kib_sum": 5322108
+              },
+              "recovered": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4326
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 4861
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 4957
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 4957
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 5275
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 5275
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 5201
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 5169
+                  }
+                ],
+                "processes": {
+                  "count": 10,
+                  "cpu_stime_ticks_sum": 3740,
+                  "cpu_utime_ticks_sum": 8091,
+                  "states": {
+                    "R": 8,
+                    "S": 2
+                  },
+                  "vmrss_kib_sum": 26880888
+                }
+              },
+              "recovered_ready_cuda_allocated_bytes": {
+                "0": 568737280,
+                "1": 568737280,
+                "2": 568737280,
+                "3": 568737280,
+                "4": 582056448,
+                "5": 582056448,
+                "6": 582056448,
+                "7": 582056448
+              },
+              "standby_rows": [
+                {
+                  "cpu_maxrss_kib": 588288,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 0
+                },
+                {
+                  "cpu_maxrss_kib": 589824,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 1
+                },
+                {
+                  "cpu_maxrss_kib": 591360,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 2
+                },
+                {
+                  "cpu_maxrss_kib": 592896,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 3
+                },
+                {
+                  "cpu_maxrss_kib": 589824,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 4
+                },
+                {
+                  "cpu_maxrss_kib": 588288,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 5
+                },
+                {
+                  "cpu_maxrss_kib": 599040,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 6
+                },
+                {
+                  "cpu_maxrss_kib": 594432,
+                  "cuda_allocated_bytes": 0,
+                  "rank": 7
+                }
+              ]
+            },
+            "session": "v1_backup_timing_cpu_03",
+            "standby_preparation_window": {
+              "duration_seconds": 3.24849009513855,
+              "end": 1793638829.345471,
+              "healthy_ranks_with_gap": 8,
+              "reason": null,
+              "start": 1793638826.0969808,
+              "timestamp_note": "start is event time minus preparation_seconds; end is controller event time"
+            },
+            "trial": 3
+          }
+        ]
+      },
+      "gpu": {
+        "complete": true,
+        "expected_trials": 3,
+        "metrics": {
+          "detection_shrink_seconds": {
+            "count": 3,
+            "max": 2.9733147621154785,
+            "median": 2.7856435775756836,
+            "min": 1.143477439880371,
+            "p95": 2.9733147621154785
+          },
+          "fault_to_joint_seconds": {
+            "count": 3,
+            "max": 6.850235939025879,
+            "median": 6.736640214920044,
+            "min": 6.319495677947998,
+            "p95": 6.850235939025879
+          },
+          "healthy_max_adjacent_gap_preparation_seconds": {
+            "count": 3,
+            "max": 1.0249359607696533,
+            "median": 0.9494237899780273,
+            "min": 0.9271829128265381,
+            "p95": 1.0249359607696533
+          },
+          "healthy_max_adjacent_gap_seconds": {
+            "count": 3,
+            "max": 3.6026816368103027,
+            "median": 3.51101016998291,
+            "min": 1.2294788360595703,
+            "p95": 3.6026816368103027
+          },
+          "preparation_seconds": {
+            "count": 3,
+            "max": 16.949875116348267,
+            "median": 16.79894208908081,
+            "min": 16.648514986038208,
+            "p95": 16.949875116348267
+          },
+          "recovery_request_to_state_loaded_seconds": {
+            "count": 3,
+            "max": 1.8018507957458496,
+            "median": 1.5874722003936768,
+            "min": 1.364180564880371,
+            "p95": 1.8018507957458496
+          },
+          "request_to_ready_seconds": {
+            "count": 3,
+            "max": 0.47464489936828613,
+            "median": 0.4652564525604248,
+            "min": 0.4435877799987793,
+            "p95": 0.47464489936828613
+          },
+          "state_loaded_to_joint_seconds": {
+            "count": 3,
+            "max": 1.1864376068115234,
+            "median": 1.081287145614624,
+            "min": 1.059978723526001,
+            "p95": 1.1864376068115234
+          }
+        },
+        "trial_count": 3,
+        "trials": [
+          {
+            "detection_shrink": {
+              "generation": 0,
+              "healthy_rid": 0,
+              "ranks_found": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "reason": null
+            },
+            "metrics": {
+              "detection_shrink_seconds": 2.9733147621154785,
+              "fault_to_joint_seconds": 6.736640214920044,
+              "healthy_max_adjacent_gap_preparation_seconds": 0.9494237899780273,
+              "healthy_max_adjacent_gap_seconds": 3.6026816368103027,
+              "preparation_seconds": 16.949875116348267,
+              "recovery_request_to_state_loaded_seconds": 1.8018507957458496,
+              "request_to_ready_seconds": 0.4435877799987793,
+              "state_loaded_to_joint_seconds": 1.081287145614624
+            },
+            "raw_reference": {
+              "fault_index": 0,
+              "ready_read_error": null,
+              "reconfigure_read_error": null,
+              "session_dir": "results/v1_backup_timing_gpu_01"
+            },
+            "resources": {
+              "idle": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 531
+                  }
+                ],
+                "processes": {
+                  "count": 0,
+                  "cpu_stime_ticks_sum": 0,
+                  "cpu_utime_ticks_sum": 0,
+                  "states": {},
+                  "vmrss_kib_sum": 0
+                }
+              },
+              "prepared": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 3162
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 3697
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 3743
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 3743
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 4399
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 4399
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 4391
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 4359
+                  }
+                ],
+                "processes": {
+                  "count": 10,
+                  "cpu_stime_ticks_sum": 3336,
+                  "cpu_utime_ticks_sum": 5605,
+                  "states": {
+                    "S": 10
+                  },
+                  "vmrss_kib_sum": 25519260
+                }
+              },
+              "prepared_minus_idle_process_counters": {
+                "count": 10,
+                "cpu_stime_ticks_sum": 3336,
+                "cpu_utime_ticks_sum": 5605,
+                "vmrss_kib_sum": 25519260
+              },
+              "recovered": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4326
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 4861
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 4955
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 4955
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 5277
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 5277
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 5197
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 5165
+                  }
+                ],
+                "processes": {
+                  "count": 10,
+                  "cpu_stime_ticks_sum": 3698,
+                  "cpu_utime_ticks_sum": 8457,
+                  "states": {
+                    "R": 4,
+                    "S": 6
+                  },
+                  "vmrss_kib_sum": 26871920
+                }
+              },
+              "recovered_ready_cuda_allocated_bytes": {
+                "0": 568737280,
+                "1": 568737280,
+                "2": 568737280,
+                "3": 568737280,
+                "4": 582056448,
+                "5": 582056448,
+                "6": 582056448,
+                "7": 582056448
+              },
+              "standby_rows": [
+                {
+                  "cpu_maxrss_kib": 3086844,
+                  "cuda_allocated_bytes": 568737280,
+                  "rank": 0
+                },
+                {
+                  "cpu_maxrss_kib": 3116904,
+                  "cuda_allocated_bytes": 568737280,
+                  "rank": 1
+                },
+                {
+                  "cpu_maxrss_kib": 3088876,
+                  "cuda_allocated_bytes": 568737280,
+                  "rank": 2
+                },
+                {
+                  "cpu_maxrss_kib": 3107628,
+                  "cuda_allocated_bytes": 568737280,
+                  "rank": 3
+                },
+                {
+                  "cpu_maxrss_kib": 3080584,
+                  "cuda_allocated_bytes": 582056448,
+                  "rank": 4
+                },
+                {
+                  "cpu_maxrss_kib": 3102132,
+                  "cuda_allocated_bytes": 582056448,
+                  "rank": 5
+                },
+                {
+                  "cpu_maxrss_kib": 3089312,
+                  "cuda_allocated_bytes": 582056448,
+                  "rank": 6
+                },
+                {
+                  "cpu_maxrss_kib": 3097108,
+                  "cuda_allocated_bytes": 582056448,
+                  "rank": 7
+                }
+              ]
+            },
+            "session": "v1_backup_timing_gpu_01",
+            "standby_preparation_window": {
+              "duration_seconds": 16.949191093444824,
+              "end": 1793638540.892409,
+              "healthy_ranks_with_gap": 8,
+              "reason": null,
+              "start": 1793638523.943218,
+              "timestamp_note": "start is event time minus preparation_seconds; end is controller event time"
+            },
+            "trial": 1
+          },
+          {
+            "detection_shrink": {
+              "generation": 0,
+              "healthy_rid": 0,
+              "ranks_found": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "reason": null
+            },
+            "metrics": {
+              "detection_shrink_seconds": 1.143477439880371,
+              "fault_to_joint_seconds": 6.850235939025879,
+              "healthy_max_adjacent_gap_preparation_seconds": 1.0249359607696533,
+              "healthy_max_adjacent_gap_seconds": 1.2294788360595703,
+              "preparation_seconds": 16.648514986038208,
+              "recovery_request_to_state_loaded_seconds": 1.5874722003936768,
+              "request_to_ready_seconds": 0.4652564525604248,
+              "state_loaded_to_joint_seconds": 1.1864376068115234
+            },
+            "raw_reference": {
+              "fault_index": 0,
+              "ready_read_error": null,
+              "reconfigure_read_error": null,
+              "session_dir": "results/v1_backup_timing_gpu_02"
+            },
+            "resources": {
+              "idle": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 531
+                  }
+                ],
+                "processes": {
+                  "count": 0,
+                  "cpu_stime_ticks_sum": 0,
+                  "cpu_utime_ticks_sum": 0,
+                  "states": {},
+                  "vmrss_kib_sum": 0
+                }
+              },
+              "prepared": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 3162
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 3697
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 3743
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 3743
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 4399
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 4399
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 4391
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 4359
+                  }
+                ],
+                "processes": {
+                  "count": 10,
+                  "cpu_stime_ticks_sum": 3338,
+                  "cpu_utime_ticks_sum": 5681,
+                  "states": {
+                    "S": 10
+                  },
+                  "vmrss_kib_sum": 25606028
+                }
+              },
+              "prepared_minus_idle_process_counters": {
+                "count": 10,
+                "cpu_stime_ticks_sum": 3338,
+                "cpu_utime_ticks_sum": 5681,
+                "vmrss_kib_sum": 25606028
+              },
+              "recovered": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4324
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 4859
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 4949
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 4949
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 5275
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 5275
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 5195
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 5163
+                  }
+                ],
+                "processes": {
+                  "count": 10,
+                  "cpu_stime_ticks_sum": 3769,
+                  "cpu_utime_ticks_sum": 8487,
+                  "states": {
+                    "R": 8,
+                    "S": 2
+                  },
+                  "vmrss_kib_sum": 26943244
+                }
+              },
+              "recovered_ready_cuda_allocated_bytes": {
+                "0": 568737280,
+                "1": 568737280,
+                "2": 568737280,
+                "3": 568737280,
+                "4": 582056448,
+                "5": 582056448,
+                "6": 582056448,
+                "7": 582056448
+              },
+              "standby_rows": [
+                {
+                  "cpu_maxrss_kib": 3098880,
+                  "cuda_allocated_bytes": 568737280,
+                  "rank": 0
+                },
+                {
+                  "cpu_maxrss_kib": 3101036,
+                  "cuda_allocated_bytes": 568737280,
+                  "rank": 1
+                },
+                {
+                  "cpu_maxrss_kib": 3095748,
+                  "cuda_allocated_bytes": 568737280,
+                  "rank": 2
+                },
+                {
+                  "cpu_maxrss_kib": 3104952,
+                  "cuda_allocated_bytes": 568737280,
+                  "rank": 3
+                },
+                {
+                  "cpu_maxrss_kib": 3101192,
+                  "cuda_allocated_bytes": 582056448,
+                  "rank": 4
+                },
+                {
+                  "cpu_maxrss_kib": 3107632,
+                  "cuda_allocated_bytes": 582056448,
+                  "rank": 5
+                },
+                {
+                  "cpu_maxrss_kib": 3098272,
+                  "cuda_allocated_bytes": 582056448,
+                  "rank": 6
+                },
+                {
+                  "cpu_maxrss_kib": 3116328,
+                  "cuda_allocated_bytes": 582056448,
+                  "rank": 7
+                }
+              ]
+            },
+            "session": "v1_backup_timing_gpu_02",
+            "standby_preparation_window": {
+              "duration_seconds": 16.647660970687866,
+              "end": 1793638617.8447292,
+              "healthy_ranks_with_gap": 8,
+              "reason": null,
+              "start": 1793638601.1970682,
+              "timestamp_note": "start is event time minus preparation_seconds; end is controller event time"
+            },
+            "trial": 2
+          },
+          {
+            "detection_shrink": {
+              "generation": 0,
+              "healthy_rid": 0,
+              "ranks_found": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "reason": null
+            },
+            "metrics": {
+              "detection_shrink_seconds": 2.7856435775756836,
+              "fault_to_joint_seconds": 6.319495677947998,
+              "healthy_max_adjacent_gap_preparation_seconds": 0.9271829128265381,
+              "healthy_max_adjacent_gap_seconds": 3.51101016998291,
+              "preparation_seconds": 16.79894208908081,
+              "recovery_request_to_state_loaded_seconds": 1.364180564880371,
+              "request_to_ready_seconds": 0.47464489936828613,
+              "state_loaded_to_joint_seconds": 1.059978723526001
+            },
+            "raw_reference": {
+              "fault_index": 0,
+              "ready_read_error": null,
+              "reconfigure_read_error": null,
+              "session_dir": "results/v1_backup_timing_gpu_03"
+            },
+            "resources": {
+              "idle": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 531
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 531
+                  }
+                ],
+                "processes": {
+                  "count": 0,
+                  "cpu_stime_ticks_sum": 0,
+                  "cpu_utime_ticks_sum": 0,
+                  "states": {},
+                  "vmrss_kib_sum": 0
+                }
+              },
+              "prepared": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 3162
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 3697
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 3743
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 3743
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 4399
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 4399
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 4391
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 4359
+                  }
+                ],
+                "processes": {
+                  "count": 10,
+                  "cpu_stime_ticks_sum": 3373,
+                  "cpu_utime_ticks_sum": 5622,
+                  "states": {
+                    "S": 10
+                  },
+                  "vmrss_kib_sum": 25564260
+                }
+              },
+              "prepared_minus_idle_process_counters": {
+                "count": 10,
+                "cpu_stime_ticks_sum": 3373,
+                "cpu_utime_ticks_sum": 5622,
+                "vmrss_kib_sum": 25564260
+              },
+              "recovered": {
+                "gpus": [
+                  {
+                    "index": 0,
+                    "memory_used_mib": 4324
+                  },
+                  {
+                    "index": 1,
+                    "memory_used_mib": 4859
+                  },
+                  {
+                    "index": 2,
+                    "memory_used_mib": 4953
+                  },
+                  {
+                    "index": 3,
+                    "memory_used_mib": 4953
+                  },
+                  {
+                    "index": 4,
+                    "memory_used_mib": 5277
+                  },
+                  {
+                    "index": 5,
+                    "memory_used_mib": 5277
+                  },
+                  {
+                    "index": 6,
+                    "memory_used_mib": 5195
+                  },
+                  {
+                    "index": 7,
+                    "memory_used_mib": 5163
+                  }
+                ],
+                "processes": {
+                  "count": 10,
+                  "cpu_stime_ticks_sum": 3735,
+                  "cpu_utime_ticks_sum": 8016,
+                  "states": {
+                    "R": 7,
+                    "S": 3
+                  },
+                  "vmrss_kib_sum": 26906424
+                }
+              },
+              "recovered_ready_cuda_allocated_bytes": {
+                "0": 568737280,
+                "1": 568737280,
+                "2": 568737280,
+                "3": 568737280,
+                "4": 582056448,
+                "5": 582056448,
+                "6": 582056448,
+                "7": 582056448
+              },
+              "standby_rows": [
+                {
+                  "cpu_maxrss_kib": 3101920,
+                  "cuda_allocated_bytes": 568737280,
+                  "rank": 0
+                },
+                {
+                  "cpu_maxrss_kib": 3104160,
+                  "cuda_allocated_bytes": 568737280,
+                  "rank": 1
+                },
+                {
+                  "cpu_maxrss_kib": 3100576,
+                  "cuda_allocated_bytes": 568737280,
+                  "rank": 2
+                },
+                {
+                  "cpu_maxrss_kib": 3098760,
+                  "cuda_allocated_bytes": 568737280,
+                  "rank": 3
+                },
+                {
+                  "cpu_maxrss_kib": 3091152,
+                  "cuda_allocated_bytes": 582056448,
+                  "rank": 4
+                },
+                {
+                  "cpu_maxrss_kib": 3099528,
+                  "cuda_allocated_bytes": 582056448,
+                  "rank": 5
+                },
+                {
+                  "cpu_maxrss_kib": 3086572,
+                  "cuda_allocated_bytes": 582056448,
+                  "rank": 6
+                },
+                {
+                  "cpu_maxrss_kib": 3088480,
+                  "cuda_allocated_bytes": 582056448,
+                  "rank": 7
+                }
+              ]
+            },
+            "session": "v1_backup_timing_gpu_03",
+            "standby_preparation_window": {
+              "duration_seconds": 16.798219919204712,
+              "end": 1793638917.06222,
+              "healthy_ranks_with_gap": 8,
+              "reason": null,
+              "start": 1793638900.2640002,
+              "timestamp_note": "start is event time minus preparation_seconds; end is controller event time"
+            },
+            "trial": 3
+          }
+        ]
+      }
+    },
+    "standby_preparation_timing_note": "Window start is controller standby_prepared time minus preparation_seconds; this approximates start at event emission precision."
+  },
+  "benchmark_abba": {
+    "flat": {
+      "complete_sessions": 2,
+      "count": 140,
+      "mean": 0.7203400567880766,
+      "median": 0.7008037909981795,
+      "p95": 0.8725911775196435,
+      "steps_per_second": 1.388233224817316
+    },
+    "mean_step_seconds_change_percent": 4.843038162084645,
+    "order": [
+      {
+        "condition": "flat",
+        "label": "v1_bench_flat_01"
+      },
+      {
+        "condition": "shift",
+        "label": "v1_bench_shift_02"
+      },
+      {
+        "condition": "shift",
+        "label": "v1_bench_shift_03"
+      },
+      {
+        "condition": "flat",
+        "label": "v1_bench_flat_04"
+      }
+    ],
+    "shift": {
+      "complete_sessions": 2,
+      "count": 140,
+      "mean": 0.7552264006351054,
+      "median": 0.732635824882891,
+      "p95": 0.9084320570691481,
+      "steps_per_second": 1.3241062536466588
+    },
+    "throughput_change_percent": -4.619322605471854
+  },
+  "evidence_scope": "results/v1精选JSON和压缩原始日志；不含凭据、模型.pt或runtime上传。",
+  "fastest_median_fault_to_joint_mode": "gpu",
+  "full_state_audits": {
+    "cold": {
+      "faults": 1,
+      "pass": true
+    },
+    "cpu": {
+      "faults": 1,
+      "pass": true
+    },
+    "gpu": {
+      "faults": 1,
+      "pass": true
+    }
+  },
+  "github_publication": "artifact-ready",
+  "limitations": [
+    "进程树SIGKILL故障，控制器/Lighthouse存活；未验证主机断电。",
+    "副本失效时有效batch从8变4；数值诊断固定batch8。",
+    "每节点一个8-GPU副本；GPU热备需要额外8-GPU容量。",
+    "未运行完整同负载TorchTitan对照。",
+    "运行依赖现有模型、FLASH1022/旧Core及runtime manifest。"
+  ],
+  "long_rotation": {
+    "fault_window": {
+      "completed_faults": 60,
+      "completed_seconds": 3600.002876333,
+      "requested_faults": 60,
+      "requested_seconds": 3600.0,
+      "schedule_late_events": 0
+    },
+    "first_joint_hash_role_pairs": 480,
+    "healthy_pid_stable_faults": 60,
+    "lighthouse_alive_faults": 60,
+    "pass": true,
+    "restored_rank_hashes": 480,
+    "rpo0_faults": 60,
+    "session": "v1_rotation_long_20261102_01",
+    "steady_joint_role_pairs": 2344,
+    "steady_joint_steps": 293,
+    "timing_percentiles": {
+      "controller_request_to_restored_seconds": {
+        "count": 60,
+        "max": 26.229520320892334,
+        "median": 23.15063202381134,
+        "min": 21.538215398788452,
+        "p95": 25.66760516166687
+      },
+      "fault_to_joint_seconds": {
+        "count": 60,
+        "max": 30.40122127532959,
+        "median": 27.89331078529358,
+        "min": 25.299487590789795,
+        "p95": 29.921124935150146
+      },
+      "healthy_max_commit_gap_fault_to_joint_seconds": {
+        "count": 60,
+        "max": 4.6669933795928955,
+        "median": 3.462286591529846,
+        "min": 2.975782632827759,
+        "p95": 3.607774019241333
+      },
+      "healthy_max_commit_gap_whole_generation_seconds": {
+        "count": 60,
+        "max": 4.6669933795928955,
+        "median": 3.4966914653778076,
+        "min": 3.0243656635284424,
+        "p95": 4.591651439666748
+      },
+      "train_recovery_request_to_state_loaded_seconds": {
+        "count": 60,
+        "max": 4.111990451812744,
+        "median": 2.6655133962631226,
+        "min": 2.1904287338256836,
+        "p95": 3.7088942527770996
+      }
+    }
+  },
+  "phase_complete": true,
+  "recommendation": {
+    "backup_mode": "gpu",
+    "benchmark_shift_mean_step_change_percent": 4.843038162084645,
+    "cold_fault_to_joint_median_seconds": 22.680265426635742,
+    "gpu_hot_fault_to_joint_median_seconds": 6.736640214920044
+  },
+  "route_membership_diagnostic": {
+    "common_route_keys": 368,
+    "diagnostic_valid": true,
+    "interpretation": "The one-replica replay interleaves both replica inputs: route call ordinals 0/2 map to original rid0 microbatches 0/1; 1/3 map to rid1. Valid only if all 368 ordered hashes and 16 sample plans reproduce. Then sorted top-k differences indicate membership changes; ordered-only differences indicate selection order changes. This is a diagnostic replay, not a trajectory or performance substitute.",
+    "membership_change_count": 2,
+    "order_only_count": 30,
+    "replay_requirements": {
+      "flat": {
+        "missing_ordered_hash": 0,
+        "missing_sorted_hash": 0,
+        "ordered_hash_matches": 368,
+        "ordered_reproduction_pass": true,
+        "replay_routes": 368,
+        "route_keys_match": true,
+        "sample_ids_by_rank": {
+          "rid0/rank0": {
+            "match": true,
+            "original": [
+              16,
+              20
+            ],
+            "replay_commit3_interleave": [
+              16,
+              20
+            ]
+          },
+          "rid0/rank1": {
+            "match": true,
+            "original": [
+              16,
+              20
+            ],
+            "replay_commit3_interleave": [
+              16,
+              20
+            ]
+          },
+          "rid0/rank2": {
+            "match": true,
+            "original": [
+              17,
+              21
+            ],
+            "replay_commit3_interleave": [
+              17,
+              21
+            ]
+          },
+          "rid0/rank3": {
+            "match": true,
+            "original": [
+              17,
+              21
+            ],
+            "replay_commit3_interleave": [
+              17,
+              21
+            ]
+          },
+          "rid0/rank4": {
+            "match": true,
+            "original": [
+              16,
+              20
+            ],
+            "replay_commit3_interleave": [
+              16,
+              20
+            ]
+          },
+          "rid0/rank5": {
+            "match": true,
+            "original": [
+              16,
+              20
+            ],
+            "replay_commit3_interleave": [
+              16,
+              20
+            ]
+          },
+          "rid0/rank6": {
+            "match": true,
+            "original": [
+              17,
+              21
+            ],
+            "replay_commit3_interleave": [
+              17,
+              21
+            ]
+          },
+          "rid0/rank7": {
+            "match": true,
+            "original": [
+              17,
+              21
+            ],
+            "replay_commit3_interleave": [
+              17,
+              21
+            ]
+          },
+          "rid1/rank0": {
+            "match": true,
+            "original": [
+              18,
+              22
+            ],
+            "replay_commit3_interleave": [
+              18,
+              22
+            ]
+          },
+          "rid1/rank1": {
+            "match": true,
+            "original": [
+              18,
+              22
+            ],
+            "replay_commit3_interleave": [
+              18,
+              22
+            ]
+          },
+          "rid1/rank2": {
+            "match": true,
+            "original": [
+              19,
+              23
+            ],
+            "replay_commit3_interleave": [
+              19,
+              23
+            ]
+          },
+          "rid1/rank3": {
+            "match": true,
+            "original": [
+              19,
+              23
+            ],
+            "replay_commit3_interleave": [
+              19,
+              23
+            ]
+          },
+          "rid1/rank4": {
+            "match": true,
+            "original": [
+              18,
+              22
+            ],
+            "replay_commit3_interleave": [
+              18,
+              22
+            ]
+          },
+          "rid1/rank5": {
+            "match": true,
+            "original": [
+              18,
+              22
+            ],
+            "replay_commit3_interleave": [
+              18,
+              22
+            ]
+          },
+          "rid1/rank6": {
+            "match": true,
+            "original": [
+              19,
+              23
+            ],
+            "replay_commit3_interleave": [
+              19,
+              23
+            ]
+          },
+          "rid1/rank7": {
+            "match": true,
+            "original": [
+              19,
+              23
+            ],
+            "replay_commit3_interleave": [
+              19,
+              23
+            ]
+          }
+        },
+        "sample_ids_pass": true,
+        "source_routes": 368
+      },
+      "shift": {
+        "missing_ordered_hash": 0,
+        "missing_sorted_hash": 0,
+        "ordered_hash_matches": 368,
+        "ordered_reproduction_pass": true,
+        "replay_routes": 368,
+        "route_keys_match": true,
+        "sample_ids_by_rank": {
+          "rid0/rank0": {
+            "match": true,
+            "original": [
+              16,
+              20
+            ],
+            "replay_commit3_interleave": [
+              16,
+              20
+            ]
+          },
+          "rid0/rank1": {
+            "match": true,
+            "original": [
+              16,
+              20
+            ],
+            "replay_commit3_interleave": [
+              16,
+              20
+            ]
+          },
+          "rid0/rank2": {
+            "match": true,
+            "original": [
+              17,
+              21
+            ],
+            "replay_commit3_interleave": [
+              17,
+              21
+            ]
+          },
+          "rid0/rank3": {
+            "match": true,
+            "original": [
+              17,
+              21
+            ],
+            "replay_commit3_interleave": [
+              17,
+              21
+            ]
+          },
+          "rid0/rank4": {
+            "match": true,
+            "original": [
+              16,
+              20
+            ],
+            "replay_commit3_interleave": [
+              16,
+              20
+            ]
+          },
+          "rid0/rank5": {
+            "match": true,
+            "original": [
+              16,
+              20
+            ],
+            "replay_commit3_interleave": [
+              16,
+              20
+            ]
+          },
+          "rid0/rank6": {
+            "match": true,
+            "original": [
+              17,
+              21
+            ],
+            "replay_commit3_interleave": [
+              17,
+              21
+            ]
+          },
+          "rid0/rank7": {
+            "match": true,
+            "original": [
+              17,
+              21
+            ],
+            "replay_commit3_interleave": [
+              17,
+              21
+            ]
+          },
+          "rid1/rank0": {
+            "match": true,
+            "original": [
+              18,
+              22
+            ],
+            "replay_commit3_interleave": [
+              18,
+              22
+            ]
+          },
+          "rid1/rank1": {
+            "match": true,
+            "original": [
+              18,
+              22
+            ],
+            "replay_commit3_interleave": [
+              18,
+              22
+            ]
+          },
+          "rid1/rank2": {
+            "match": true,
+            "original": [
+              19,
+              23
+            ],
+            "replay_commit3_interleave": [
+              19,
+              23
+            ]
+          },
+          "rid1/rank3": {
+            "match": true,
+            "original": [
+              19,
+              23
+            ],
+            "replay_commit3_interleave": [
+              19,
+              23
+            ]
+          },
+          "rid1/rank4": {
+            "match": true,
+            "original": [
+              18,
+              22
+            ],
+            "replay_commit3_interleave": [
+              18,
+              22
+            ]
+          },
+          "rid1/rank5": {
+            "match": true,
+            "original": [
+              18,
+              22
+            ],
+            "replay_commit3_interleave": [
+              18,
+              22
+            ]
+          },
+          "rid1/rank6": {
+            "match": true,
+            "original": [
+              19,
+              23
+            ],
+            "replay_commit3_interleave": [
+              19,
+              23
+            ]
+          },
+          "rid1/rank7": {
+            "match": true,
+            "original": [
+              19,
+              23
+            ],
+            "replay_commit3_interleave": [
+              19,
+              23
+            ]
+          }
+        },
+        "sample_ids_pass": true,
+        "source_routes": 368
+      }
+    }
+  },
+  "short_rotation": {
+    "faults": 10,
+    "pass": true,
+    "session": "v1_rotation_short_20261102_01"
+  },
+  "strict_fp32": {
+    "checks": {
+      "input_read": {
+        "pass": true
+      },
+      "numerical_comparison": {
+        "pass": false
+      },
+      "participants_and_global_batch": {
+        "pass": true
+      },
+      "same_batch_plans": {
+        "pass": true
+      },
+      "same_initial_state": {
+        "pass": true
+      },
+      "same_routing": {
+        "pass": true
+      },
+      "step_coverage": {
+        "pass": true
+      }
+    },
+    "configuration": {
+      "legacy": "FP32 parameters, TF32-high baseline",
+      "strict": "TF32 disabled; float32 matmul precision highest"
+    },
+    "interpretation": "The FP32/TF32-high run diverges in routing; the strict run has identical 736 ordered and sorted role/layer/microbatch signatures yet still fails on its second update. TF32 amplifies the earlier divergence but is not the sole explanation.",
+    "legacy_route_differences_by_preupdate_step": {
+      "1": 0,
+      "2": 32,
+      "3": 152
+    },
+    "numerical_by_step": [
+      {
+        "by_category": {
+          "gradients": {
+            "max_abs": 3.0517578125e-05,
+            "max_relative_l2": 4.216392688327262e-08,
+            "pass_count": 8
+          },
+          "model": {
+            "max_abs": 7.427297532558441e-08,
+            "max_relative_l2": 4.696809514624391e-10,
+            "pass_count": 8
+          },
+          "optimizer": {
+            "max_abs": 3.0517578125e-05,
+            "max_relative_l2": 5.179841643402229e-08,
+            "pass_count": 8
+          },
+          "scheduler": {
+            "max_abs": null,
+            "max_relative_l2": null,
+            "pass_count": 8
+          }
+        },
+        "failed_pairs": [],
+        "role_pairs": 8,
+        "step": 2
+      },
+      {
+        "by_category": {
+          "gradients": {
+            "max_abs": 0.00225830078125,
+            "max_relative_l2": 8.462347739141455e-06,
+            "pass_count": 2
+          },
+          "model": {
+            "max_abs": 8.000712841749191e-05,
+            "max_relative_l2": 3.43085441198841e-07,
+            "pass_count": 0
+          },
+          "optimizer": {
+            "max_abs": 0.003662109375,
+            "max_relative_l2": 5.403483703493324e-06,
+            "pass_count": 2
+          },
+          "scheduler": {
+            "max_abs": null,
+            "max_relative_l2": null,
+            "pass_count": 8
+          }
+        },
+        "failed_pairs": [
+          "step3/rank0",
+          "step3/rank1",
+          "step3/rank2",
+          "step3/rank3",
+          "step3/rank4",
+          "step3/rank5",
+          "step3/rank6",
+          "step3/rank7"
+        ],
+        "role_pairs": 8,
+        "step": 3
+      }
+    ],
+    "numerical_comparison": {
+      "by_category": {
+        "gradients": {
+          "failed_pairs": [
+            "step3/rank0",
+            "step3/rank1",
+            "step3/rank2",
+            "step3/rank3",
+            "step3/rank4",
+            "step3/rank6"
+          ],
+          "maximum_abs": 0.00225830078125,
+          "maximum_relative_l2": 8.462347739141455e-06,
+          "observations": 16,
+          "pass": false
+        },
+        "model": {
+          "failed_pairs": [
+            "step3/rank0",
+            "step3/rank1",
+            "step3/rank2",
+            "step3/rank3",
+            "step3/rank4",
+            "step3/rank5",
+            "step3/rank6",
+            "step3/rank7"
+          ],
+          "maximum_abs": 8.000712841749191e-05,
+          "maximum_relative_l2": 3.43085441198841e-07,
+          "observations": 16,
+          "pass": false
+        },
+        "optimizer": {
+          "failed_pairs": [
+            "step3/rank0",
+            "step3/rank1",
+            "step3/rank2",
+            "step3/rank3",
+            "step3/rank4",
+            "step3/rank6"
+          ],
+          "maximum_abs": 0.003662109375,
+          "maximum_relative_l2": 5.403483703493324e-06,
+          "observations": 16,
+          "pass": false
+        },
+        "scheduler": {
+          "failed_pairs": [],
+          "maximum_abs": null,
+          "maximum_relative_l2": null,
+          "observations": 16,
+          "pass": true
+        }
+      },
+      "comparator_checks": {
+        "all_rank_step_comparisons_pass": {
+          "failed_pairs": [
+            "step3/rank0",
+            "step3/rank1",
+            "step3/rank2",
+            "step3/rank3",
+            "step3/rank4",
+            "step3/rank5",
+            "step3/rank6",
+            "step3/rank7"
+          ],
+          "pass": false
+        },
+        "files_present": {
+          "missing": [],
+          "pass": true
+        },
+        "loads_succeeded": {
+          "errors": [],
+          "pass": true
+        }
+      },
+      "errors": [],
+      "failed_pairs": [
+        "step3/rank0",
+        "step3/rank1",
+        "step3/rank2",
+        "step3/rank3",
+        "step3/rank4",
+        "step3/rank5",
+        "step3/rank6",
+        "step3/rank7"
+      ],
+      "pair_count": 16,
+      "pass": false,
+      "ranks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "steps": [
+        2,
+        3
+      ],
+      "tolerances": {
+        "gradients": {
+          "atol": 1e-05,
+          "rtol": 0.001
+        },
+        "model": {
+          "atol": 1e-06,
+          "rtol": 0.0001
+        },
+        "optimizer": {
+          "atol": 1e-05,
+          "rtol": 0.001
+        },
+        "scheduler": {
+          "atol": 0.0,
+          "rtol": 0.0
+        }
+      }
+    },
+    "routing": {
+      "boundary_diagnostics": {
+        "flat": {
+          "1": {
+            "audited_tokens": 5888,
+            "min_boundary_margin": 3.501772880554199e-07,
+            "near_ties_1e6": 4,
+            "zero_margins": 0
+          },
+          "2": {
+            "audited_tokens": 5888,
+            "min_boundary_margin": 4.470348358154297e-08,
+            "near_ties_1e6": 14,
+            "zero_margins": 0
+          }
+        },
+        "shift": {
+          "1": {
+            "audited_tokens": 5888,
+            "min_boundary_margin": 3.501772880554199e-07,
+            "near_ties_1e6": 4,
+            "zero_margins": 0
+          },
+          "2": {
+            "audited_tokens": 5888,
+            "min_boundary_margin": 4.470348358154297e-08,
+            "near_ties_1e6": 14,
+            "zero_margins": 0
+          }
+        }
+      },
+      "common_count": 736,
+      "coverage_errors": {},
+      "different_count": 0,
+      "duplicate_keys": {
+        "flat": [],
+        "shift": []
+      },
+      "first_differences": [],
+      "first_divergent_pre_update_step": null,
+      "flat_count": 736,
+      "invalid_hash_keys": {
+        "flat": [],
+        "shift": []
+      },
+      "missing_from_flat_count": 0,
+      "missing_from_shift_count": 0,
+      "pass": true,
+      "per_step": {
+        "1": {
+          "compared": 368,
+          "different": 0,
+          "flat": 368,
+          "matched": 368,
+          "missing_from_flat": 0,
+          "missing_from_shift": 0,
+          "shift": 368
+        },
+        "2": {
+          "compared": 368,
+          "different": 0,
+          "flat": 368,
+          "matched": 368,
+          "missing_from_flat": 0,
+          "missing_from_shift": 0,
+          "shift": 368
+        }
+      },
+      "selection_set_comparison_per_step": {
+        "1": {
+          "compared": 368,
+          "different": 0
+        },
+        "2": {
+          "compared": 368,
+          "different": 0
+        }
+      },
+      "shift_count": 736
+    },
+    "runtime_verified_roles": 32,
+    "step_coverage": {
+      "numerical_commit_steps": [
+        2,
+        3
+      ],
+      "pre_update_batch_and_routing_steps": [
+        1,
+        2
+      ]
+    },
+    "tolerances": {
+      "gradients": {
+        "atol": 1e-05,
+        "rtol": 0.001
+      },
+      "model": {
+        "atol": 1e-06,
+        "rtol": 0.0001
+      },
+      "optimizer": {
+        "atol": 1e-05,
+        "rtol": 0.001
+      },
+      "scheduler": {
+        "atol": 0.0,
+        "rtol": 0.0
+      }
+    }
+  },
+  "trajectory": {
+    "batch_plans": {
+      "common_count": 48,
+      "coverage_errors": [],
+      "different_sample_ids": [],
+      "duplicate_keys": {
+        "flat": [],
+        "shift": []
+      },
+      "flat_count": 48,
+      "invalid_sample_ids": {
+        "flat": [],
+        "shift": []
+      },
+      "missing_from_flat": [],
+      "missing_from_shift": [],
+      "pass": true,
+      "shift_count": 48
+    },
+    "checks": {
+      "input_read": {
+        "pass": true
+      },
+      "numerical_comparison": {
+        "pass": false
+      },
+      "participants_and_global_batch": {
+        "pass": true
+      },
+      "same_batch_plans": {
+        "pass": true
+      },
+      "same_initial_state": {
+        "pass": true
+      },
+      "same_routing": {
+        "pass": false
+      },
+      "step_coverage": {
+        "pass": true
+      }
+    },
+    "initial_state": {
+      "duplicate_ready_roles": {
+        "flat": [],
+        "shift": []
+      },
+      "expected_role_count": 16,
+      "hash_fields": [
+        "cpu_rng",
+        "cuda_rng",
+        "model",
+        "optimizer",
+        "progress",
+        "python_rng",
+        "scheduler"
+      ],
+      "malformed_hash_roles": {
+        "flat": [],
+        "shift": []
+      },
+      "mismatched_roles": [],
+      "missing_roles": {
+        "flat": [],
+        "shift": []
+      },
+      "pass": true,
+      "roles_present": {
+        "flat": 16,
+        "shift": 16
+      },
+      "unexpected_roles": {
+        "flat": [],
+        "shift": []
+      }
+    },
+    "interpretation": "These observations compare the captured trajectories; they do not prove a root cause. FP32 reduction and accumulation order may differ even when sample plans and routing agree.",
+    "numerical_by_step": [
+      {
+        "by_category": {
+          "gradients": {
+            "max_abs": 6.103515625e-05,
+            "max_relative_l2": 4.2248685360168447e-08,
+            "pass_count": 8
+          },
+          "model": {
+            "max_abs": 1.1920928955078125e-07,
+            "max_relative_l2": 5.110734320094283e-10,
+            "pass_count": 8
+          },
+          "optimizer": {
+            "max_abs": 6.103515625e-05,
+            "max_relative_l2": 6.37627573635393e-08,
+            "pass_count": 8
+          },
+          "scheduler": {
+            "max_abs": null,
+            "max_relative_l2": null,
+            "pass_count": 8
+          }
+        },
+        "failed_pairs": [],
+        "role_pairs": 8,
+        "step": 2
+      },
+      {
+        "by_category": {
+          "gradients": {
+            "max_abs": 0.06426620483398438,
+            "max_relative_l2": 0.0002857207618889366,
+            "pass_count": 0
+          },
+          "model": {
+            "max_abs": 0.0001263068988919258,
+            "max_relative_l2": 1.45812762422194e-06,
+            "pass_count": 0
+          },
+          "optimizer": {
+            "max_abs": 0.00787353515625,
+            "max_relative_l2": 1.8124364564339096e-05,
+            "pass_count": 0
+          },
+          "scheduler": {
+            "max_abs": null,
+            "max_relative_l2": null,
+            "pass_count": 8
+          }
+        },
+        "failed_pairs": [
+          "step3/rank0",
+          "step3/rank1",
+          "step3/rank2",
+          "step3/rank3",
+          "step3/rank4",
+          "step3/rank5",
+          "step3/rank6",
+          "step3/rank7"
+        ],
+        "role_pairs": 8,
+        "step": 3
+      },
+      {
+        "by_category": {
+          "gradients": {
+            "max_abs": 3.75128173828125,
+            "max_relative_l2": 0.10075037988477417,
+            "pass_count": 0
+          },
+          "model": {
+            "max_abs": 0.00020057871006429195,
+            "max_relative_l2": 6.780385846200239e-05,
+            "pass_count": 0
+          },
+          "optimizer": {
+            "max_abs": 1.17431640625,
+            "max_relative_l2": 0.0020409581399314213,
+            "pass_count": 0
+          },
+          "scheduler": {
+            "max_abs": null,
+            "max_relative_l2": null,
+            "pass_count": 8
+          }
+        },
+        "failed_pairs": [
+          "step4/rank0",
+          "step4/rank1",
+          "step4/rank2",
+          "step4/rank3",
+          "step4/rank4",
+          "step4/rank5",
+          "step4/rank6",
+          "step4/rank7"
+        ],
+        "role_pairs": 8,
+        "step": 4
+      }
+    ],
+    "numerical_comparison": {
+      "by_category": {
+        "gradients": {
+          "failed_pairs": [
+            "step3/rank0",
+            "step3/rank1",
+            "step3/rank2",
+            "step3/rank3",
+            "step3/rank4",
+            "step3/rank5",
+            "step3/rank6",
+            "step3/rank7",
+            "step4/rank0",
+            "step4/rank1",
+            "step4/rank2",
+            "step4/rank3",
+            "step4/rank4",
+            "step4/rank5",
+            "step4/rank6",
+            "step4/rank7"
+          ],
+          "maximum_abs": 3.75128173828125,
+          "maximum_relative_l2": 0.10075037988477417,
+          "observations": 24,
+          "pass": false
+        },
+        "model": {
+          "failed_pairs": [
+            "step3/rank0",
+            "step3/rank1",
+            "step3/rank2",
+            "step3/rank3",
+            "step3/rank4",
+            "step3/rank5",
+            "step3/rank6",
+            "step3/rank7",
+            "step4/rank0",
+            "step4/rank1",
+            "step4/rank2",
+            "step4/rank3",
+            "step4/rank4",
+            "step4/rank5",
+            "step4/rank6",
+            "step4/rank7"
+          ],
+          "maximum_abs": 0.00020057871006429195,
+          "maximum_relative_l2": 6.780385846200239e-05,
+          "observations": 24,
+          "pass": false
+        },
+        "optimizer": {
+          "failed_pairs": [
+            "step3/rank0",
+            "step3/rank1",
+            "step3/rank2",
+            "step3/rank3",
+            "step3/rank4",
+            "step3/rank5",
+            "step3/rank6",
+            "step3/rank7",
+            "step4/rank0",
+            "step4/rank1",
+            "step4/rank2",
+            "step4/rank3",
+            "step4/rank4",
+            "step4/rank5",
+            "step4/rank6",
+            "step4/rank7"
+          ],
+          "maximum_abs": 1.17431640625,
+          "maximum_relative_l2": 0.0020409581399314213,
+          "observations": 24,
+          "pass": false
+        },
+        "scheduler": {
+          "failed_pairs": [],
+          "maximum_abs": null,
+          "maximum_relative_l2": null,
+          "observations": 24,
+          "pass": true
+        }
+      },
+      "comparator_checks": {
+        "all_rank_step_comparisons_pass": {
+          "failed_pairs": [
+            "step3/rank0",
+            "step3/rank1",
+            "step3/rank2",
+            "step3/rank3",
+            "step3/rank4",
+            "step3/rank5",
+            "step3/rank6",
+            "step3/rank7",
+            "step4/rank0",
+            "step4/rank1",
+            "step4/rank2",
+            "step4/rank3",
+            "step4/rank4",
+            "step4/rank5",
+            "step4/rank6",
+            "step4/rank7"
+          ],
+          "pass": false
+        },
+        "files_present": {
+          "missing": [],
+          "pass": true
+        },
+        "loads_succeeded": {
+          "errors": [],
+          "pass": true
+        }
+      },
+      "errors": [],
+      "failed_pairs": [
+        "step3/rank0",
+        "step3/rank1",
+        "step3/rank2",
+        "step3/rank3",
+        "step3/rank4",
+        "step3/rank5",
+        "step3/rank6",
+        "step3/rank7",
+        "step4/rank0",
+        "step4/rank1",
+        "step4/rank2",
+        "step4/rank3",
+        "step4/rank4",
+        "step4/rank5",
+        "step4/rank6",
+        "step4/rank7"
+      ],
+      "pair_count": 24,
+      "pass": false,
+      "ranks": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "steps": [
+        2,
+        3,
+        4
+      ],
+      "tolerances": {
+        "gradients": {
+          "atol": 1e-05,
+          "rtol": 0.001
+        },
+        "model": {
+          "atol": 1e-06,
+          "rtol": 0.0001
+        },
+        "optimizer": {
+          "atol": 1e-05,
+          "rtol": 0.001
+        },
+        "scheduler": {
+          "atol": 0.0,
+          "rtol": 0.0
+        }
+      }
+    },
+    "participants_and_global_batch": {
+      "commit_count": {
+        "flat": 48,
+        "shift": 48
+      },
+      "coverage_errors": {},
+      "expected_global_batch": 8,
+      "expected_participants": 2,
+      "invalid_rows": {
+        "flat": [],
+        "shift": []
+      },
+      "matching_role_step_keys": true,
+      "pass": true
+    },
+    "routing": {
+      "boundary_diagnostics": {
+        "flat": {
+          "1": {
+            "audited_tokens": 5888,
+            "min_boundary_margin": 1.2665987014770508e-07,
+            "near_ties_1e6": 6,
+            "zero_margins": 0
+          },
+          "2": {
+            "audited_tokens": 5888,
+            "min_boundary_margin": 2.8312206268310547e-07,
+            "near_ties_1e6": 6,
+            "zero_margins": 0
+          },
+          "3": {
+            "audited_tokens": 5888,
+            "min_boundary_margin": 2.421438694000244e-07,
+            "near_ties_1e6": 14,
+            "zero_margins": 0
+          }
+        },
+        "shift": {
+          "1": {
+            "audited_tokens": 5888,
+            "min_boundary_margin": 1.2665987014770508e-07,
+            "near_ties_1e6": 6,
+            "zero_margins": 0
+          },
+          "2": {
+            "audited_tokens": 5888,
+            "min_boundary_margin": 3.0547380447387695e-07,
+            "near_ties_1e6": 2,
+            "zero_margins": 0
+          },
+          "3": {
+            "audited_tokens": 5888,
+            "min_boundary_margin": 2.1606683731079102e-07,
+            "near_ties_1e6": 10,
+            "zero_margins": 0
+          }
+        }
+      },
+      "common_count": 1104,
+      "coverage_errors": {},
+      "different_count": 184,
+      "duplicate_keys": {
+        "flat": [],
+        "shift": []
+      },
+      "first_differences": [
+        {
+          "call": 3,
+          "flat_min_boundary_margin": 2.2668391466140747e-05,
+          "flat_topk_hash": "0bf856e1d3684ff8f857c056facd60ef204fb3ff6e83bb059e19c06a48bc0cfd",
+          "layer": "decoder.layers.11.mlp.gate",
+          "rank": 0,
+          "rid": 0,
+          "shift_min_boundary_margin": 2.269074320793152e-05,
+          "shift_topk_hash": "21dd11ff204c16c82ee8f692e8d8a44d0605477e72201e769a149bbd66cab84e",
+          "step": 2
+        },
+        {
+          "call": 3,
+          "flat_min_boundary_margin": 2.2668391466140747e-05,
+          "flat_topk_hash": "0bf856e1d3684ff8f857c056facd60ef204fb3ff6e83bb059e19c06a48bc0cfd",
+          "layer": "decoder.layers.11.mlp.gate",
+          "rank": 1,
+          "rid": 0,
+          "shift_min_boundary_margin": 2.269074320793152e-05,
+          "shift_topk_hash": "21dd11ff204c16c82ee8f692e8d8a44d0605477e72201e769a149bbd66cab84e",
+          "step": 2
+        },
+        {
+          "call": 2,
+          "flat_min_boundary_margin": 6.990879774093628e-05,
+          "flat_topk_hash": "8719de890a876b7b665d5538ef4e5611073ae0f9b47db57672f9dbc85e5cf822",
+          "layer": "decoder.layers.9.mlp.gate",
+          "rank": 2,
+          "rid": 0,
+          "shift_min_boundary_margin": 6.981566548347473e-05,
+          "shift_topk_hash": "b11ef4f561be534a207eb71635d284e9cb25c29bb1147bb07e4b77724611eeb6",
+          "step": 2
+        },
+        {
+          "call": 2,
+          "flat_min_boundary_margin": 6.990879774093628e-05,
+          "flat_topk_hash": "8719de890a876b7b665d5538ef4e5611073ae0f9b47db57672f9dbc85e5cf822",
+          "layer": "decoder.layers.9.mlp.gate",
+          "rank": 3,
+          "rid": 0,
+          "shift_min_boundary_margin": 6.981566548347473e-05,
+          "shift_topk_hash": "b11ef4f561be534a207eb71635d284e9cb25c29bb1147bb07e4b77724611eeb6",
+          "step": 2
+        },
+        {
+          "call": 2,
+          "flat_min_boundary_margin": 1.5944242477416992e-06,
+          "flat_topk_hash": "ea33a0b0f136e70e1cbbcf1847336d08b5febfe60a6c217c3f7fc87bd5f2a554",
+          "layer": "decoder.layers.0.mlp.gate",
+          "rank": 6,
+          "rid": 0,
+          "shift_min_boundary_margin": 1.5981495380401611e-06,
+          "shift_topk_hash": "8a94b336990f2c3a3bd82c660d5284b0c96a7a5380b80a4ce24e5474c63ea730",
+          "step": 2
+        },
+        {
+          "call": 3,
+          "flat_min_boundary_margin": 2.8349459171295166e-06,
+          "flat_topk_hash": "6250afef694ad2f8b6acbf46604be54d93ebd09456182e0a6f81568bc6f17345",
+          "layer": "decoder.layers.7.mlp.gate",
+          "rank": 6,
+          "rid": 0,
+          "shift_min_boundary_margin": 2.909451723098755e-06,
+          "shift_topk_hash": "4b334947d1ae25775ffc3c1867c3647f6e9e4ac904251685560b3b41b955ada3",
+          "step": 2
+        },
+        {
+          "call": 2,
+          "flat_min_boundary_margin": 1.5944242477416992e-06,
+          "flat_topk_hash": "ea33a0b0f136e70e1cbbcf1847336d08b5febfe60a6c217c3f7fc87bd5f2a554",
+          "layer": "decoder.layers.0.mlp.gate",
+          "rank": 7,
+          "rid": 0,
+          "shift_min_boundary_margin": 1.5981495380401611e-06,
+          "shift_topk_hash": "8a94b336990f2c3a3bd82c660d5284b0c96a7a5380b80a4ce24e5474c63ea730",
+          "step": 2
+        },
+        {
+          "call": 3,
+          "flat_min_boundary_margin": 2.8349459171295166e-06,
+          "flat_topk_hash": "6250afef694ad2f8b6acbf46604be54d93ebd09456182e0a6f81568bc6f17345",
+          "layer": "decoder.layers.7.mlp.gate",
+          "rank": 7,
+          "rid": 0,
+          "shift_min_boundary_margin": 2.909451723098755e-06,
+          "shift_topk_hash": "4b334947d1ae25775ffc3c1867c3647f6e9e4ac904251685560b3b41b955ada3",
+          "step": 2
+        },
+        {
+          "call": 3,
+          "flat_min_boundary_margin": 0.00010634958744049072,
+          "flat_topk_hash": "ab600aaf4fcbabcc4d677ea73079b2a634cd55b1116cd1356dd21ce1f1c9eb52",
+          "layer": "decoder.layers.11.mlp.gate",
+          "rank": 0,
+          "rid": 1,
+          "shift_min_boundary_margin": 0.0001375339925289154,
+          "shift_topk_hash": "2e7c5584d6bd3e5853c4fdb1b6304610cb71ab0773ba2bb1c45ef6fd63085242",
+          "step": 2
+        },
+        {
+          "call": 2,
+          "flat_min_boundary_margin": 8.843839168548584e-06,
+          "flat_topk_hash": "42d4570e431ea5cd302301ce24850088f44cdf39c7017d5edce666362c7aad62",
+          "layer": "decoder.layers.4.mlp.gate",
+          "rank": 0,
+          "rid": 1,
+          "shift_min_boundary_margin": 8.843839168548584e-06,
+          "shift_topk_hash": "a4137a3c7d18b1bd39a91177507ad2ce085ff94a214a2c1e5ffce034d41be8b9",
+          "step": 2
+        },
+        {
+          "call": 3,
+          "flat_min_boundary_margin": 4.9330294132232666e-05,
+          "flat_topk_hash": "ddf79b976afaf1b054faf1911f6f8fe472da60df41f933c8504be11897666820",
+          "layer": "decoder.layers.5.mlp.gate",
+          "rank": 0,
+          "rid": 1,
+          "shift_min_boundary_margin": 4.9330294132232666e-05,
+          "shift_topk_hash": "28e872701b99063466c8fd5edf450b4760c5c27597d3ef2a316ba3a4323607c3",
+          "step": 2
+        },
+        {
+          "call": 3,
+          "flat_min_boundary_margin": 9.052455425262451e-07,
+          "flat_topk_hash": "c78c23b792186b8778b27c4cadb32cedcecb17baef527083caf2114015db827f",
+          "layer": "decoder.layers.6.mlp.gate",
+          "rank": 0,
+          "rid": 1,
+          "shift_min_boundary_margin": 3.598630428314209e-06,
+          "shift_topk_hash": "06997afc6e9028a6739af527de0725e6da56ddbe73ee7f761f4b4327c77cadd0",
+          "step": 2
+        },
+        {
+          "call": 3,
+          "flat_min_boundary_margin": 0.00010634958744049072,
+          "flat_topk_hash": "ab600aaf4fcbabcc4d677ea73079b2a634cd55b1116cd1356dd21ce1f1c9eb52",
+          "layer": "decoder.layers.11.mlp.gate",
+          "rank": 1,
+          "rid": 1,
+          "shift_min_boundary_margin": 0.0001375339925289154,
+          "shift_topk_hash": "2e7c5584d6bd3e5853c4fdb1b6304610cb71ab0773ba2bb1c45ef6fd63085242",
+          "step": 2
+        },
+        {
+          "call": 2,
+          "flat_min_boundary_margin": 8.843839168548584e-06,
+          "flat_topk_hash": "42d4570e431ea5cd302301ce24850088f44cdf39c7017d5edce666362c7aad62",
+          "layer": "decoder.layers.4.mlp.gate",
+          "rank": 1,
+          "rid": 1,
+          "shift_min_boundary_margin": 8.843839168548584e-06,
+          "shift_topk_hash": "a4137a3c7d18b1bd39a91177507ad2ce085ff94a214a2c1e5ffce034d41be8b9",
+          "step": 2
+        },
+        {
+          "call": 3,
+          "flat_min_boundary_margin": 4.9330294132232666e-05,
+          "flat_topk_hash": "ddf79b976afaf1b054faf1911f6f8fe472da60df41f933c8504be11897666820",
+          "layer": "decoder.layers.5.mlp.gate",
+          "rank": 1,
+          "rid": 1,
+          "shift_min_boundary_margin": 4.9330294132232666e-05,
+          "shift_topk_hash": "28e872701b99063466c8fd5edf450b4760c5c27597d3ef2a316ba3a4323607c3",
+          "step": 2
+        },
+        {
+          "call": 3,
+          "flat_min_boundary_margin": 9.052455425262451e-07,
+          "flat_topk_hash": "c78c23b792186b8778b27c4cadb32cedcecb17baef527083caf2114015db827f",
+          "layer": "decoder.layers.6.mlp.gate",
+          "rank": 1,
+          "rid": 1,
+          "shift_min_boundary_margin": 3.598630428314209e-06,
+          "shift_topk_hash": "06997afc6e9028a6739af527de0725e6da56ddbe73ee7f761f4b4327c77cadd0",
+          "step": 2
+        },
+        {
+          "call": 2,
+          "flat_min_boundary_margin": 6.236135959625244e-06,
+          "flat_topk_hash": "b4f3e2582e9d7b1fbc9a736b553798638652a74c59c65272d1ad73c0ba049419",
+          "layer": "decoder.layers.1.mlp.gate",
+          "rank": 4,
+          "rid": 1,
+          "shift_min_boundary_margin": 7.4356794357299805e-06,
+          "shift_topk_hash": "809bb1efc84f372ead0283156fe305b88989f836e7f3f3340ff0a6c1bb38f231",
+          "step": 2
+        },
+        {
+          "call": 3,
+          "flat_min_boundary_margin": 0.00020753592252731323,
+          "flat_topk_hash": "caa583cfb8b6fedc51f78a847d17f993ec2aed44cdf2a8ed91df42549020a1d5",
+          "layer": "decoder.layers.1.mlp.gate",
+          "rank": 4,
+          "rid": 1,
+          "shift_min_boundary_margin": 0.00039758533239364624,
+          "shift_topk_hash": "4c702f16145b71bd7bac8c26246d1e175e394bc4237be12f4d1e9eab84991fe5",
+          "step": 2
+        },
+        {
+          "call": 3,
+          "flat_min_boundary_margin": 2.08243727684021e-06,
+          "flat_topk_hash": "0e035e34295c3906de8c61a233d0f2fa1c1e845ef3e4832d0638462e9bc9bccd",
+          "layer": "decoder.layers.10.mlp.gate",
+          "rank": 4,
+          "rid": 1,
+          "shift_min_boundary_margin": 2.7529895305633545e-06,
+          "shift_topk_hash": "f90ef053a13d419aadcb1b1cc7e0dc457279ddf518ed07d8f82bcad6db8283c2",
+          "step": 2
+        },
+        {
+          "call": 3,
+          "flat_min_boundary_margin": 4.883483052253723e-05,
+          "flat_topk_hash": "b25799688405ec35d44fd14c311173e1cca28a70ceaaf6bdcde0a1aca4e5f3ac",
+          "layer": "decoder.layers.4.mlp.gate",
+          "rank": 4,
+          "rid": 1,
+          "shift_min_boundary_margin": 0.0001299530267715454,
+          "shift_topk_hash": "e923af6df074b661cab6e72389805f8c6ae658664685cc9a072087169da94f53",
+          "step": 2
+        },
+        {
+          "call": 3,
+          "flat_min_boundary_margin": 8.529797196388245e-05,
+          "flat_topk_hash": "95805e3edc00dcf2d8861efe862454419cb20953a1cbf03ac3d65bd8ba640638",
+          "layer": "decoder.layers.6.mlp.gate",
+          "rank": 4,
+          "rid": 1,
+          "shift_min_boundary_margin": 8.73468816280365e-05,
+          "shift_topk_hash": "01e508f85e3cd61779270e1e9e513498024d1e8d1b29d0920821d2d436aad532",
+          "step": 2
+        },
+        {
+          "call": 2,
+          "flat_min_boundary_margin": 6.236135959625244e-06,
+          "flat_topk_hash": "b4f3e2582e9d7b1fbc9a736b553798638652a74c59c65272d1ad73c0ba049419",
+          "layer": "decoder.layers.1.mlp.gate",
+          "rank": 5,
+          "rid": 1,
+          "shift_min_boundary_margin": 7.4356794357299805e-06,
+          "shift_topk_hash": "809bb1efc84f372ead0283156fe305b88989f836e7f3f3340ff0a6c1bb38f231",
+          "step": 2
+        },
+        {
+          "call": 3,
+          "flat_min_boundary_margin": 0.00020753592252731323,
+          "flat_topk_hash": "caa583cfb8b6fedc51f78a847d17f993ec2aed44cdf2a8ed91df42549020a1d5",
+          "layer": "decoder.layers.1.mlp.gate",
+          "rank": 5,
+          "rid": 1,
+          "shift_min_boundary_margin": 0.00039758533239364624,
+          "shift_topk_hash": "4c702f16145b71bd7bac8c26246d1e175e394bc4237be12f4d1e9eab84991fe5",
+          "step": 2
+        },
+        {
+          "call": 3,
+          "flat_min_boundary_margin": 2.08243727684021e-06,
+          "flat_topk_hash": "0e035e34295c3906de8c61a233d0f2fa1c1e845ef3e4832d0638462e9bc9bccd",
+          "layer": "decoder.layers.10.mlp.gate",
+          "rank": 5,
+          "rid": 1,
+          "shift_min_boundary_margin": 2.7529895305633545e-06,
+          "shift_topk_hash": "f90ef053a13d419aadcb1b1cc7e0dc457279ddf518ed07d8f82bcad6db8283c2",
+          "step": 2
+        },
+        {
+          "call": 3,
+          "flat_min_boundary_margin": 4.883483052253723e-05,
+          "flat_topk_hash": "b25799688405ec35d44fd14c311173e1cca28a70ceaaf6bdcde0a1aca4e5f3ac",
+          "layer": "decoder.layers.4.mlp.gate",
+          "rank": 5,
+          "rid": 1,
+          "shift_min_boundary_margin": 0.0001299530267715454,
+          "shift_topk_hash": "e923af6df074b661cab6e72389805f8c6ae658664685cc9a072087169da94f53",
+          "step": 2
+        },
+        {
+          "call": 3,
+          "flat_min_boundary_margin": 8.529797196388245e-05,
+          "flat_topk_hash": "95805e3edc00dcf2d8861efe862454419cb20953a1cbf03ac3d65bd8ba640638",
+          "layer": "decoder.layers.6.mlp.gate",
+          "rank": 5,
+          "rid": 1,
+          "shift_min_boundary_margin": 8.73468816280365e-05,
+          "shift_topk_hash": "01e508f85e3cd61779270e1e9e513498024d1e8d1b29d0920821d2d436aad532",
+          "step": 2
+        },
+        {
+          "call": 2,
+          "flat_min_boundary_margin": 1.3053417205810547e-05,
+          "flat_topk_hash": "24c1b2ebefbba60d59dbb5c220c04b3162bd9de43ef3769a3ed34c58d55ef2be",
+          "layer": "decoder.layers.5.mlp.gate",
+          "rank": 6,
+          "rid": 1,
+          "shift_min_boundary_margin": 1.306086778640747e-05,
+          "shift_topk_hash": "646a84980ed12cc8c67d5ee0edeb7fc9f6e36250cf9d722a8c10e01274131423",
+          "step": 2
+        },
+        {
+          "call": 2,
+          "flat_min_boundary_margin": 0.00030680373311042786,
+          "flat_topk_hash": "91ad0ce9913ea90ddf61f4a9a9c2c4b09c20fa1eb36ce2eeec7ff20811f98610",
+          "layer": "decoder.layers.6.mlp.gate",
+          "rank": 6,
+          "rid": 1,
+          "shift_min_boundary_margin": 0.0003080293536186218,
+          "shift_topk_hash": "11c05bdcd11e6ef1be88fbbb6bec378238dbadac93826fe0eb15fcd66ca32cc6",
+          "step": 2
+        },
+        {
+          "call": 2,
+          "flat_min_boundary_margin": 8.90977680683136e-05,
+          "flat_topk_hash": "a0b9c789d915fab8d47cf93916fd24899807e012e022e2759baaba44baaf9a08",
+          "layer": "decoder.layers.7.mlp.gate",
+          "rank": 6,
+          "rid": 1,
+          "shift_min_boundary_margin": 8.542090654373169e-05,
+          "shift_topk_hash": "ff87a6d5fbfab78e4880ba61f7d581d5d6f2e982f163465a6a236c9d4a9cd194",
+          "step": 2
+        },
+        {
+          "call": 2,
+          "flat_min_boundary_margin": 1.3053417205810547e-05,
+          "flat_topk_hash": "24c1b2ebefbba60d59dbb5c220c04b3162bd9de43ef3769a3ed34c58d55ef2be",
+          "layer": "decoder.layers.5.mlp.gate",
+          "rank": 7,
+          "rid": 1,
+          "shift_min_boundary_margin": 1.306086778640747e-05,
+          "shift_topk_hash": "646a84980ed12cc8c67d5ee0edeb7fc9f6e36250cf9d722a8c10e01274131423",
+          "step": 2
+        }
+      ],
+      "first_divergent_pre_update_step": 2,
+      "flat_count": 1104,
+      "invalid_hash_keys": {
+        "flat": [],
+        "shift": []
+      },
+      "missing_from_flat_count": 0,
+      "missing_from_shift_count": 0,
+      "pass": false,
+      "per_step": {
+        "1": {
+          "compared": 368,
+          "different": 0,
+          "flat": 368,
+          "matched": 368,
+          "missing_from_flat": 0,
+          "missing_from_shift": 0,
+          "shift": 368
+        },
+        "2": {
+          "compared": 368,
+          "different": 32,
+          "flat": 368,
+          "matched": 336,
+          "missing_from_flat": 0,
+          "missing_from_shift": 0,
+          "shift": 368
+        },
+        "3": {
+          "compared": 368,
+          "different": 152,
+          "flat": 368,
+          "matched": 216,
+          "missing_from_flat": 0,
+          "missing_from_shift": 0,
+          "shift": 368
+        }
+      },
+      "shift_count": 1104
+    },
+    "step_coverage": {
+      "numerical_commit_steps": [
+        2,
+        3,
+        4
+      ],
+      "pre_update_batch_and_routing_steps": [
+        1,
+        2,
+        3
+      ]
+    }
+  },
+  "version": "v1"
+}

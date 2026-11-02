@@ -1,0 +1,38 @@
+{
+  "mode": "flat",
+  "target_steps": 2,
+  "audit_initial": true,
+  "train_args": [
+    "--mode",
+    "flat",
+    "--fp32",
+    "--reference-dump",
+    "--hash-every",
+    "1",
+    "--audit-state",
+    "--sync-quorum",
+    "--fixed-batch",
+    "--max-seconds",
+    "600",
+    "--backend",
+    "nccl",
+    "--bucket-size",
+    "67108864",
+    "--reference-anchor",
+    "/workspace/SHIFT/results/opt_reference_flat_ib64_20261102_01",
+    "--reference-ranks",
+    "0,4",
+    "--audit-routing"
+  ],
+  "nccl_library": null,
+  "python": "/workspace/SHIFT/runtime/torch214/bin/python",
+  "env": {
+    "NCCL_NET": "IB",
+    "NCCL_IB_DISABLE": "0",
+    "NCCL_IB_HCA": "=mlx5_0:1,mlx5_1:1,mlx5_2:1,mlx5_3:1",
+    "NCCL_IB_GID_INDEX": "3",
+    "NCCL_DEBUG": "WARN",
+    "NCCL_DEBUG_SUBSYS": "INIT,NET"
+  },
+  "fast_launch": true
+}

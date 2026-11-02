@@ -1,0 +1,22 @@
+{
+  "mode": "flat",
+  "target_steps": 1000000,
+  "train_args": [
+    "--mode",
+    "flat",
+    "--audit-state",
+    "--hash-every",
+    "1",
+    "--checkpoint-step",
+    "3",
+    "--resume-checkpoint",
+    "--max-seconds",
+    "900",
+    "--checkpoint-cold",
+    "--sync-quorum",
+    "--backend",
+    "nccl"
+  ],
+  "nccl_library": null,
+  "python": "/workspace/SHIFT/runtime/torch214/bin/python"
+}

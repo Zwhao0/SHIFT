@@ -1,0 +1,2522 @@
+{
+  "pass": false,
+  "steps": [
+    2,
+    3
+  ],
+  "ranks": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "tolerances": {
+    "gradients": {
+      "atol": 1e-05,
+      "rtol": 0.001
+    },
+    "model": {
+      "atol": 1e-06,
+      "rtol": 0.0001
+    },
+    "optimizer": {
+      "atol": 1e-05,
+      "rtol": 0.001
+    },
+    "scheduler": {
+      "atol": 0.0,
+      "rtol": 0.0
+    }
+  },
+  "checks": {
+    "files_present": {
+      "pass": true,
+      "missing": []
+    },
+    "loads_succeeded": {
+      "pass": true,
+      "errors": []
+    },
+    "all_rank_step_comparisons_pass": {
+      "pass": false,
+      "failed_pairs": [
+        "step3/rank0",
+        "step3/rank1",
+        "step3/rank2",
+        "step3/rank3",
+        "step3/rank4",
+        "step3/rank5",
+        "step3/rank6",
+        "step3/rank7"
+      ]
+    }
+  },
+  "byrank": {
+    "2": {
+      "0": {
+        "pass": true,
+        "checks": {
+          "payload_keys": true,
+          "gradients": true,
+          "model": true,
+          "optimizer": true,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 3.0517578125e-05,
+              "max_rel": 0.046566128730773926,
+              "relative_l2": 3.9952153898961664e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "model": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 1.4901161193847656e-08,
+              "max_rel": 0.0015685674981114062,
+              "relative_l2": 4.161984175702245e-10,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "optimizer": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 2235,
+              "elements": 249754857,
+              "max_abs": 3.0517578125e-05,
+              "max_rel": 0.009549331442980133,
+              "relative_l2": 4.222263011569633e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": []
+      },
+      "1": {
+        "pass": true,
+        "checks": {
+          "payload_keys": true,
+          "gradients": true,
+          "model": true,
+          "optimizer": true,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 3.0517578125e-05,
+              "max_rel": 0.03260869565217391,
+              "relative_l2": 4.2152226942390724e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "model": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 7.427297532558441e-08,
+              "max_rel": 0.0007842615445952106,
+              "relative_l2": 4.4342898005892477e-10,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "optimizer": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 2235,
+              "elements": 249754857,
+              "max_abs": 3.0517578125e-05,
+              "max_rel": 0.0072850462540027736,
+              "relative_l2": 5.179605004474632e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": []
+      },
+      "2": {
+        "pass": true,
+        "checks": {
+          "payload_keys": true,
+          "gradients": true,
+          "model": true,
+          "optimizer": true,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 3.0517578125e-05,
+              "max_rel": 0.046566128730773926,
+              "relative_l2": 3.994346632058116e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "model": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 1.4901161193847656e-08,
+              "max_rel": 0.0015685674981114062,
+              "relative_l2": 4.163501320736491e-10,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "optimizer": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 2235,
+              "elements": 249754857,
+              "max_abs": 3.0517578125e-05,
+              "max_rel": 0.009549331442980133,
+              "relative_l2": 4.2221675042499684e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": []
+      },
+      "3": {
+        "pass": true,
+        "checks": {
+          "payload_keys": true,
+          "gradients": true,
+          "model": true,
+          "optimizer": true,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 3.0517578125e-05,
+              "max_rel": 0.03260869565217391,
+              "relative_l2": 4.216392688327262e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "model": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 7.427297532558441e-08,
+              "max_rel": 0.0007842615445952106,
+              "relative_l2": 4.435079236780782e-10,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "optimizer": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 2235,
+              "elements": 249754857,
+              "max_abs": 3.0517578125e-05,
+              "max_rel": 0.0072850462540027736,
+              "relative_l2": 5.179841643402229e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": []
+      },
+      "4": {
+        "pass": true,
+        "checks": {
+          "payload_keys": true,
+          "gradients": true,
+          "model": true,
+          "optimizer": true,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 3.0517578125e-05,
+              "max_rel": 0.038461538461538464,
+              "relative_l2": 3.471801975626596e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "model": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 2.9802322387695312e-08,
+              "max_rel": 0.0015685674981114062,
+              "relative_l2": 4.5498433427953855e-10,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "optimizer": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 2088,
+              "elements": 255202488,
+              "max_abs": 1.52587890625e-05,
+              "max_rel": 0.01862647813766216,
+              "relative_l2": 2.3906811061299916e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": []
+      },
+      "5": {
+        "pass": true,
+        "checks": {
+          "payload_keys": true,
+          "gradients": true,
+          "model": true,
+          "optimizer": true,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 5.960464477539063e-08,
+              "max_rel": 0.014925373134328358,
+              "relative_l2": 3.105697642887551e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "model": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 1.4901161193847656e-08,
+              "max_rel": 0.0007842837490557031,
+              "relative_l2": 4.696589921791801e-10,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "optimizer": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 2088,
+              "elements": 255202488,
+              "max_abs": 1.4901161193847656e-08,
+              "max_rel": 0.009313261273291573,
+              "relative_l2": 4.675853725171549e-09,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": []
+      },
+      "6": {
+        "pass": true,
+        "checks": {
+          "payload_keys": true,
+          "gradients": true,
+          "model": true,
+          "optimizer": true,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 3.0517578125e-05,
+              "max_rel": 0.038461538461538464,
+              "relative_l2": 3.4717883136724094e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "model": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 2.9802322387695312e-08,
+              "max_rel": 0.0015685674981114062,
+              "relative_l2": 4.542032620639824e-10,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "optimizer": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 2088,
+              "elements": 255202488,
+              "max_abs": 1.52587890625e-05,
+              "max_rel": 0.01862647813766216,
+              "relative_l2": 2.390679682928866e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": []
+      },
+      "7": {
+        "pass": true,
+        "checks": {
+          "payload_keys": true,
+          "gradients": true,
+          "model": true,
+          "optimizer": true,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 5.960464477539063e-08,
+              "max_rel": 0.014925373134328358,
+              "relative_l2": 3.093889879354828e-08,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "model": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 1.4901161193847656e-08,
+              "max_rel": 0.0007842837490557031,
+              "relative_l2": 4.696809514624391e-10,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "optimizer": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 2088,
+              "elements": 255202488,
+              "max_abs": 1.4901161193847656e-08,
+              "max_rel": 0.009313261273291573,
+              "relative_l2": 4.675163994808989e-09,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": []
+      }
+    },
+    "3": {
+      "0": {
+        "pass": false,
+        "checks": {
+          "payload_keys": true,
+          "gradients": false,
+          "model": false,
+          "optimizer": false,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": false,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 0.0015401840209960938,
+              "max_rel": 192.472361959517,
+              "relative_l2": 8.462347739141455e-06,
+              "allclose": false,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": [
+              {
+                "path": "gradients['decoder.embed_tokens.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 68067328,
+                "max_abs": 0.0015401840209960938,
+                "max_rel": 0.4631678889470927,
+                "relative_l2": 6.275736894247039e-05,
+                "first_largest_abs_flat_index": 96613,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.0.self_attn.v_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 0.0007638931274414062,
+                "max_rel": 7.974806201550388,
+                "relative_l2": 9.340743607947682e-05,
+                "first_largest_abs_flat_index": 26936,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.0.self_attn.v_proj.bias']",
+                "kind": "float_tensor_difference",
+                "numel": 64,
+                "max_abs": 0.0006513595581054688,
+                "max_rel": 0.0037008648315074977,
+                "relative_l2": 8.865996364500957e-05,
+                "first_largest_abs_flat_index": 30,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.6.self_attn.v_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 0.0003648996353149414,
+                "max_rel": 1.654767957004866,
+                "relative_l2": 0.00021548652749428168,
+                "first_largest_abs_flat_index": 48446,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.0.input_layernorm.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 896,
+                "max_abs": 0.00034427642822265625,
+                "max_rel": 0.050630241021043194,
+                "relative_l2": 8.137037657849109e-05,
+                "first_largest_abs_flat_index": 387,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.1.mlp.shared_expert.up_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 344064,
+                "max_abs": 0.0002865791320800781,
+                "max_rel": 14.249235391616821,
+                "relative_l2": 7.961060186663813e-05,
+                "first_largest_abs_flat_index": 958,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.1.mlp.shared_expert.gate_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 344064,
+                "max_abs": 0.0002759695053100586,
+                "max_rel": 12.982532751091703,
+                "relative_l2": 0.00010440490585911382,
+                "first_largest_abs_flat_index": 26434,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.4.self_attn.v_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 0.00024366378784179688,
+                "max_rel": 5.026431718061674,
+                "relative_l2": 8.771615740143806e-05,
+                "first_largest_abs_flat_index": 2750,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.2.mlp.gate.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 28672,
+                "max_abs": 0.0002434253692626953,
+                "max_rel": 0.8675773312260104,
+                "relative_l2": 5.9775981915365365e-05,
+                "first_largest_abs_flat_index": 12294,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.3.mlp.shared_expert.gate_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 344064,
+                "max_abs": 0.0002261921763420105,
+                "max_rel": 23.95,
+                "relative_l2": 3.6615576917697346e-06,
+                "first_largest_abs_flat_index": 137150,
+                "allclose": false
+              }
+            ]
+          },
+          "model": {
+            "pass": false,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 6.688013672828674e-05,
+              "max_rel": 1.190083957899667,
+              "relative_l2": 3.43085441198841e-07,
+              "allclose": false,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": [
+              {
+                "path": "model['decoder.layers.4.mlp.experts.15.down_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 6.688013672828674e-05,
+                "max_rel": 0.01849384022485593,
+                "relative_l2": 4.647498670086965e-06,
+                "first_largest_abs_flat_index": 16033,
+                "allclose": false
+              },
+              {
+                "path": "model['decoder.layers.0.self_attn.q_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 401408,
+                "max_abs": 1.710653305053711e-05,
+                "max_rel": 0.23992514245236468,
+                "relative_l2": 1.934707529517037e-06,
+                "first_largest_abs_flat_index": 113005,
+                "allclose": false
+              },
+              {
+                "path": "model['decoder.layers.8.self_attn.q_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 401408,
+                "max_abs": 4.872679710388184e-06,
+                "max_rel": 0.0037357043450366393,
+                "relative_l2": 8.203569959409465e-07,
+                "first_largest_abs_flat_index": 199398,
+                "allclose": false
+              },
+              {
+                "path": "model['decoder.layers.5.mlp.experts.2.down_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 3.632158041000366e-06,
+                "max_rel": 0.004598907614075421,
+                "relative_l2": 3.216728944159479e-07,
+                "first_largest_abs_flat_index": 38818,
+                "allclose": false
+              },
+              {
+                "path": "model['decoder.layers.5.mlp.experts.2.gate_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 3.2261013984680176e-06,
+                "max_rel": 0.052579952920706746,
+                "relative_l2": 1.9762546229554777e-06,
+                "first_largest_abs_flat_index": 8707,
+                "allclose": false
+              },
+              {
+                "path": "model['decoder.layers.6.mlp.experts.9.gate_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 3.0546216294169426e-06,
+                "max_rel": 0.06937142826759149,
+                "relative_l2": 2.4893186304591855e-06,
+                "first_largest_abs_flat_index": 28665,
+                "allclose": false
+              },
+              {
+                "path": "model['decoder.layers.7.mlp.experts.7.gate_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 2.0777806639671326e-06,
+                "max_rel": 0.0052035378688354015,
+                "relative_l2": 1.1603730349262906e-06,
+                "first_largest_abs_flat_index": 24516,
+                "allclose": false
+              }
+            ]
+          },
+          "optimizer": {
+            "pass": false,
+            "metrics": {
+              "tensor_count": 2235,
+              "elements": 249754857,
+              "max_abs": 0.0020751953125,
+              "max_rel": 15.138648490342632,
+              "relative_l2": 1.2023893434812908e-06,
+              "allclose": false,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": [
+              {
+                "path": "optimizer.state[0].exp_avg",
+                "kind": "float_tensor_difference",
+                "numel": 68067328,
+                "max_abs": 0.00015401840209960938,
+                "max_rel": 0.48535672651077577,
+                "relative_l2": 2.4790274739490906e-06,
+                "first_largest_abs_flat_index": 96613,
+                "allclose": false
+              },
+              {
+                "path": "optimizer.state[253].exp_avg",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 2.4378299713134766e-05,
+                "max_rel": 1.382783655822904,
+                "relative_l2": 2.4952243952076402e-05,
+                "first_largest_abs_flat_index": 2750,
+                "allclose": false
+              }
+            ]
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": [
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.embed_tokens.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 68067328,
+            "max_abs": 0.0015401840209960938,
+            "max_rel": 0.4631678889470927,
+            "relative_l2": 6.275736894247039e-05,
+            "first_largest_abs_flat_index": 96613,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.0.self_attn.v_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 57344,
+            "max_abs": 0.0007638931274414062,
+            "max_rel": 7.974806201550388,
+            "relative_l2": 9.340743607947682e-05,
+            "first_largest_abs_flat_index": 26936,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.0.self_attn.v_proj.bias']",
+            "kind": "float_tensor_difference",
+            "numel": 64,
+            "max_abs": 0.0006513595581054688,
+            "max_rel": 0.0037008648315074977,
+            "relative_l2": 8.865996364500957e-05,
+            "first_largest_abs_flat_index": 30,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.6.self_attn.v_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 57344,
+            "max_abs": 0.0003648996353149414,
+            "max_rel": 1.654767957004866,
+            "relative_l2": 0.00021548652749428168,
+            "first_largest_abs_flat_index": 48446,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.0.input_layernorm.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 896,
+            "max_abs": 0.00034427642822265625,
+            "max_rel": 0.050630241021043194,
+            "relative_l2": 8.137037657849109e-05,
+            "first_largest_abs_flat_index": 387,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.1.mlp.shared_expert.up_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 344064,
+            "max_abs": 0.0002865791320800781,
+            "max_rel": 14.249235391616821,
+            "relative_l2": 7.961060186663813e-05,
+            "first_largest_abs_flat_index": 958,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.1.mlp.shared_expert.gate_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 344064,
+            "max_abs": 0.0002759695053100586,
+            "max_rel": 12.982532751091703,
+            "relative_l2": 0.00010440490585911382,
+            "first_largest_abs_flat_index": 26434,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.4.self_attn.v_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 57344,
+            "max_abs": 0.00024366378784179688,
+            "max_rel": 5.026431718061674,
+            "relative_l2": 8.771615740143806e-05,
+            "first_largest_abs_flat_index": 2750,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.2.mlp.gate.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 28672,
+            "max_abs": 0.0002434253692626953,
+            "max_rel": 0.8675773312260104,
+            "relative_l2": 5.9775981915365365e-05,
+            "first_largest_abs_flat_index": 12294,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.3.mlp.shared_expert.gate_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 344064,
+            "max_abs": 0.0002261921763420105,
+            "max_rel": 23.95,
+            "relative_l2": 3.6615576917697346e-06,
+            "first_largest_abs_flat_index": 137150,
+            "allclose": false
+          }
+        ]
+      },
+      "1": {
+        "pass": false,
+        "checks": {
+          "payload_keys": true,
+          "gradients": false,
+          "model": false,
+          "optimizer": false,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": false,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 0.0013456344604492188,
+              "max_rel": 83.04596121888608,
+              "relative_l2": 7.7909787935445e-06,
+              "allclose": false,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": [
+              {
+                "path": "gradients['decoder.layers.0.self_attn.v_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 0.0013456344604492188,
+                "max_rel": 6.662424648359009,
+                "relative_l2": 9.677577679275125e-05,
+                "first_largest_abs_flat_index": 28728,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.0.self_attn.v_proj.bias']",
+                "kind": "float_tensor_difference",
+                "numel": 64,
+                "max_abs": 0.0011444091796875,
+                "max_rel": 0.0018634006827775466,
+                "relative_l2": 9.332560672148388e-05,
+                "first_largest_abs_flat_index": 32,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.1.self_attn.v_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 0.0010089874267578125,
+                "max_rel": 1.3152932960893855,
+                "relative_l2": 9.322209479452863e-05,
+                "first_largest_abs_flat_index": 20670,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.6.self_attn.v_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 0.0003559589385986328,
+                "max_rel": 10.27929501429025,
+                "relative_l2": 0.00017703615720272278,
+                "first_largest_abs_flat_index": 34110,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.0.input_layernorm.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 896,
+                "max_abs": 0.00034427642822265625,
+                "max_rel": 0.050630241021043194,
+                "relative_l2": 8.137037657849109e-05,
+                "first_largest_abs_flat_index": 387,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.2.mlp.gate.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 28672,
+                "max_abs": 0.0002434253692626953,
+                "max_rel": 0.8675773312260104,
+                "relative_l2": 5.9775981915365365e-05,
+                "first_largest_abs_flat_index": 12294,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.2.mlp.experts.13.up_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 0.00022339820861816406,
+                "max_rel": 1.7752659574468086,
+                "relative_l2": 0.00010541595796883531,
+                "first_largest_abs_flat_index": 18566,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.5.mlp.shared_expert_gate.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 896,
+                "max_abs": 0.00022330880165100098,
+                "max_rel": 6.23590213877145,
+                "relative_l2": 8.482504080327551e-05,
+                "first_largest_abs_flat_index": 262,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.0.mlp.shared_expert_gate.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 896,
+                "max_abs": 0.00022149085998535156,
+                "max_rel": 0.06068513669709622,
+                "relative_l2": 0.00012074804350246905,
+                "first_largest_abs_flat_index": 674,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.6.self_attn.k_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 0.00019723176956176758,
+                "max_rel": 10.216819973718792,
+                "relative_l2": 0.0004263100596785238,
+                "first_largest_abs_flat_index": 54718,
+                "allclose": false
+              }
+            ]
+          },
+          "model": {
+            "pass": false,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 8.000712841749191e-05,
+              "max_rel": 1.190083957899667,
+              "relative_l2": 2.21811081841898e-07,
+              "allclose": false,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": [
+              {
+                "path": "model['decoder.layers.4.mlp.experts.15.down_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 8.000712841749191e-05,
+                "max_rel": 0.009983330146628371,
+                "relative_l2": 4.167858647034699e-06,
+                "first_largest_abs_flat_index": 16002,
+                "allclose": false
+              },
+              {
+                "path": "model['decoder.layers.5.mlp.experts.2.up_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 5.737878382205963e-06,
+                "max_rel": 0.23113205225239297,
+                "relative_l2": 2.794300760150243e-06,
+                "first_largest_abs_flat_index": 37022,
+                "allclose": false
+              },
+              {
+                "path": "model['decoder.layers.5.mlp.experts.2.gate_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 3.5781413316726685e-06,
+                "max_rel": 0.01666831731588443,
+                "relative_l2": 1.1991096691747193e-06,
+                "first_largest_abs_flat_index": 33065,
+                "allclose": false
+              }
+            ]
+          },
+          "optimizer": {
+            "pass": false,
+            "metrics": {
+              "tensor_count": 2235,
+              "elements": 249754857,
+              "max_abs": 0.0020751953125,
+              "max_rel": 29.5272544249559,
+              "relative_l2": 1.4786109772897145e-06,
+              "allclose": false,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": [
+              {
+                "path": "optimizer.state[5].exp_avg",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 0.0001373291015625,
+                "max_rel": 0.8305408591873327,
+                "relative_l2": 1.6393001682841538e-06,
+                "first_largest_abs_flat_index": 28728,
+                "allclose": false
+              }
+            ]
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": [
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.0.self_attn.v_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 57344,
+            "max_abs": 0.0013456344604492188,
+            "max_rel": 6.662424648359009,
+            "relative_l2": 9.677577679275125e-05,
+            "first_largest_abs_flat_index": 28728,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.0.self_attn.v_proj.bias']",
+            "kind": "float_tensor_difference",
+            "numel": 64,
+            "max_abs": 0.0011444091796875,
+            "max_rel": 0.0018634006827775466,
+            "relative_l2": 9.332560672148388e-05,
+            "first_largest_abs_flat_index": 32,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.1.self_attn.v_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 57344,
+            "max_abs": 0.0010089874267578125,
+            "max_rel": 1.3152932960893855,
+            "relative_l2": 9.322209479452863e-05,
+            "first_largest_abs_flat_index": 20670,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.6.self_attn.v_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 57344,
+            "max_abs": 0.0003559589385986328,
+            "max_rel": 10.27929501429025,
+            "relative_l2": 0.00017703615720272278,
+            "first_largest_abs_flat_index": 34110,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.0.input_layernorm.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 896,
+            "max_abs": 0.00034427642822265625,
+            "max_rel": 0.050630241021043194,
+            "relative_l2": 8.137037657849109e-05,
+            "first_largest_abs_flat_index": 387,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.2.mlp.gate.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 28672,
+            "max_abs": 0.0002434253692626953,
+            "max_rel": 0.8675773312260104,
+            "relative_l2": 5.9775981915365365e-05,
+            "first_largest_abs_flat_index": 12294,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.2.mlp.experts.13.up_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 57344,
+            "max_abs": 0.00022339820861816406,
+            "max_rel": 1.7752659574468086,
+            "relative_l2": 0.00010541595796883531,
+            "first_largest_abs_flat_index": 18566,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.5.mlp.shared_expert_gate.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 896,
+            "max_abs": 0.00022330880165100098,
+            "max_rel": 6.23590213877145,
+            "relative_l2": 8.482504080327551e-05,
+            "first_largest_abs_flat_index": 262,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.0.mlp.shared_expert_gate.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 896,
+            "max_abs": 0.00022149085998535156,
+            "max_rel": 0.06068513669709622,
+            "relative_l2": 0.00012074804350246905,
+            "first_largest_abs_flat_index": 674,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.6.self_attn.k_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 57344,
+            "max_abs": 0.00019723176956176758,
+            "max_rel": 10.216819973718792,
+            "relative_l2": 0.0004263100596785238,
+            "first_largest_abs_flat_index": 54718,
+            "allclose": false
+          }
+        ]
+      },
+      "2": {
+        "pass": false,
+        "checks": {
+          "payload_keys": true,
+          "gradients": false,
+          "model": false,
+          "optimizer": false,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": false,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 0.0015401840209960938,
+              "max_rel": 192.472361959517,
+              "relative_l2": 8.442583946859942e-06,
+              "allclose": false,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": [
+              {
+                "path": "gradients['decoder.embed_tokens.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 68067328,
+                "max_abs": 0.0015401840209960938,
+                "max_rel": 0.4631678889470927,
+                "relative_l2": 6.275736894247039e-05,
+                "first_largest_abs_flat_index": 96613,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.0.self_attn.v_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 0.0007638931274414062,
+                "max_rel": 7.974806201550388,
+                "relative_l2": 9.340743607947682e-05,
+                "first_largest_abs_flat_index": 26936,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.0.self_attn.v_proj.bias']",
+                "kind": "float_tensor_difference",
+                "numel": 64,
+                "max_abs": 0.0006513595581054688,
+                "max_rel": 0.0037008648315074977,
+                "relative_l2": 8.865996364500957e-05,
+                "first_largest_abs_flat_index": 30,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.6.self_attn.v_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 0.0003648996353149414,
+                "max_rel": 1.654767957004866,
+                "relative_l2": 0.00021548652749428168,
+                "first_largest_abs_flat_index": 48446,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.0.input_layernorm.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 896,
+                "max_abs": 0.00034427642822265625,
+                "max_rel": 0.050630241021043194,
+                "relative_l2": 8.137037657849109e-05,
+                "first_largest_abs_flat_index": 387,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.1.mlp.shared_expert.up_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 344064,
+                "max_abs": 0.0002865791320800781,
+                "max_rel": 14.249235391616821,
+                "relative_l2": 7.961060186663813e-05,
+                "first_largest_abs_flat_index": 958,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.1.mlp.shared_expert.gate_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 344064,
+                "max_abs": 0.0002759695053100586,
+                "max_rel": 12.982532751091703,
+                "relative_l2": 0.00010440490585911382,
+                "first_largest_abs_flat_index": 26434,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.4.self_attn.v_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 0.00024366378784179688,
+                "max_rel": 5.026431718061674,
+                "relative_l2": 8.771615740143806e-05,
+                "first_largest_abs_flat_index": 2750,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.2.mlp.gate.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 28672,
+                "max_abs": 0.0002434253692626953,
+                "max_rel": 0.8675773312260104,
+                "relative_l2": 5.9775981915365365e-05,
+                "first_largest_abs_flat_index": 12294,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.3.mlp.shared_expert.gate_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 344064,
+                "max_abs": 0.0002261921763420105,
+                "max_rel": 23.95,
+                "relative_l2": 3.6615576917697346e-06,
+                "first_largest_abs_flat_index": 137150,
+                "allclose": false
+              }
+            ]
+          },
+          "model": {
+            "pass": false,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 6.103515625e-05,
+              "max_rel": 1.190083957899667,
+              "relative_l2": 2.425779843701318e-07,
+              "allclose": false,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": [
+              {
+                "path": "model['decoder.layers.0.self_attn.q_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 401408,
+                "max_abs": 1.710653305053711e-05,
+                "max_rel": 0.23992514245236468,
+                "relative_l2": 1.934707529517037e-06,
+                "first_largest_abs_flat_index": 113005,
+                "allclose": false
+              },
+              {
+                "path": "model['decoder.layers.6.mlp.experts.31.gate_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 6.163492798805237e-06,
+                "max_rel": 0.028061375014483997,
+                "relative_l2": 2.2193388666295676e-06,
+                "first_largest_abs_flat_index": 42806,
+                "allclose": false
+              },
+              {
+                "path": "model['decoder.layers.8.self_attn.q_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 401408,
+                "max_abs": 4.872679710388184e-06,
+                "max_rel": 0.0037357043450366393,
+                "relative_l2": 8.203569959409465e-07,
+                "first_largest_abs_flat_index": 199398,
+                "allclose": false
+              },
+              {
+                "path": "model['decoder.layers.5.mlp.experts.17.gate_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 3.93204391002655e-06,
+                "max_rel": 0.17123301181758352,
+                "relative_l2": 9.545827341971662e-07,
+                "first_largest_abs_flat_index": 22715,
+                "allclose": false
+              },
+              {
+                "path": "model['decoder.layers.6.mlp.experts.31.up_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 3.5939738154411316e-06,
+                "max_rel": 0.025178367284606963,
+                "relative_l2": 1.2519954594801647e-06,
+                "first_largest_abs_flat_index": 56177,
+                "allclose": false
+              },
+              {
+                "path": "model['decoder.layers.3.mlp.experts.31.gate_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 2.950429916381836e-06,
+                "max_rel": 0.008602118974377208,
+                "relative_l2": 9.305209660646762e-07,
+                "first_largest_abs_flat_index": 10088,
+                "allclose": false
+              },
+              {
+                "path": "model['decoder.layers.5.mlp.experts.17.up_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 2.6635825634002686e-06,
+                "max_rel": 0.041871362657115704,
+                "relative_l2": 1.7162015979695437e-06,
+                "first_largest_abs_flat_index": 1517,
+                "allclose": false
+              }
+            ]
+          },
+          "optimizer": {
+            "pass": false,
+            "metrics": {
+              "tensor_count": 2235,
+              "elements": 249754857,
+              "max_abs": 0.0020751953125,
+              "max_rel": 14.631531513387268,
+              "relative_l2": 1.2019588335174492e-06,
+              "allclose": false,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": [
+              {
+                "path": "optimizer.state[0].exp_avg",
+                "kind": "float_tensor_difference",
+                "numel": 68067328,
+                "max_abs": 0.00015401840209960938,
+                "max_rel": 0.48535672651077577,
+                "relative_l2": 2.4790274739490906e-06,
+                "first_largest_abs_flat_index": 96613,
+                "allclose": false
+              },
+              {
+                "path": "optimizer.state[253].exp_avg",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 2.4378299713134766e-05,
+                "max_rel": 1.382783655822904,
+                "relative_l2": 2.4952243952076402e-05,
+                "first_largest_abs_flat_index": 2750,
+                "allclose": false
+              }
+            ]
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": [
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.embed_tokens.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 68067328,
+            "max_abs": 0.0015401840209960938,
+            "max_rel": 0.4631678889470927,
+            "relative_l2": 6.275736894247039e-05,
+            "first_largest_abs_flat_index": 96613,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.0.self_attn.v_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 57344,
+            "max_abs": 0.0007638931274414062,
+            "max_rel": 7.974806201550388,
+            "relative_l2": 9.340743607947682e-05,
+            "first_largest_abs_flat_index": 26936,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.0.self_attn.v_proj.bias']",
+            "kind": "float_tensor_difference",
+            "numel": 64,
+            "max_abs": 0.0006513595581054688,
+            "max_rel": 0.0037008648315074977,
+            "relative_l2": 8.865996364500957e-05,
+            "first_largest_abs_flat_index": 30,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.6.self_attn.v_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 57344,
+            "max_abs": 0.0003648996353149414,
+            "max_rel": 1.654767957004866,
+            "relative_l2": 0.00021548652749428168,
+            "first_largest_abs_flat_index": 48446,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.0.input_layernorm.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 896,
+            "max_abs": 0.00034427642822265625,
+            "max_rel": 0.050630241021043194,
+            "relative_l2": 8.137037657849109e-05,
+            "first_largest_abs_flat_index": 387,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.1.mlp.shared_expert.up_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 344064,
+            "max_abs": 0.0002865791320800781,
+            "max_rel": 14.249235391616821,
+            "relative_l2": 7.961060186663813e-05,
+            "first_largest_abs_flat_index": 958,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.1.mlp.shared_expert.gate_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 344064,
+            "max_abs": 0.0002759695053100586,
+            "max_rel": 12.982532751091703,
+            "relative_l2": 0.00010440490585911382,
+            "first_largest_abs_flat_index": 26434,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.4.self_attn.v_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 57344,
+            "max_abs": 0.00024366378784179688,
+            "max_rel": 5.026431718061674,
+            "relative_l2": 8.771615740143806e-05,
+            "first_largest_abs_flat_index": 2750,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.2.mlp.gate.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 28672,
+            "max_abs": 0.0002434253692626953,
+            "max_rel": 0.8675773312260104,
+            "relative_l2": 5.9775981915365365e-05,
+            "first_largest_abs_flat_index": 12294,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.3.mlp.shared_expert.gate_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 344064,
+            "max_abs": 0.0002261921763420105,
+            "max_rel": 23.95,
+            "relative_l2": 3.6615576917697346e-06,
+            "first_largest_abs_flat_index": 137150,
+            "allclose": false
+          }
+        ]
+      },
+      "3": {
+        "pass": false,
+        "checks": {
+          "payload_keys": true,
+          "gradients": false,
+          "model": false,
+          "optimizer": false,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": false,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 0.0013456344604492188,
+              "max_rel": 102.17772796750069,
+              "relative_l2": 7.73748916029335e-06,
+              "allclose": false,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": [
+              {
+                "path": "gradients['decoder.layers.0.self_attn.v_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 0.0013456344604492188,
+                "max_rel": 6.662424648359009,
+                "relative_l2": 9.677577679275125e-05,
+                "first_largest_abs_flat_index": 28728,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.0.self_attn.v_proj.bias']",
+                "kind": "float_tensor_difference",
+                "numel": 64,
+                "max_abs": 0.0011444091796875,
+                "max_rel": 0.0018634006827775466,
+                "relative_l2": 9.332560672148388e-05,
+                "first_largest_abs_flat_index": 32,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.1.self_attn.v_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 0.0010089874267578125,
+                "max_rel": 1.3152932960893855,
+                "relative_l2": 9.322209479452863e-05,
+                "first_largest_abs_flat_index": 20670,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.6.self_attn.v_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 0.0003559589385986328,
+                "max_rel": 10.27929501429025,
+                "relative_l2": 0.00017703615720272278,
+                "first_largest_abs_flat_index": 34110,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.0.input_layernorm.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 896,
+                "max_abs": 0.00034427642822265625,
+                "max_rel": 0.050630241021043194,
+                "relative_l2": 8.137037657849109e-05,
+                "first_largest_abs_flat_index": 387,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.2.mlp.gate.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 28672,
+                "max_abs": 0.0002434253692626953,
+                "max_rel": 0.8675773312260104,
+                "relative_l2": 5.9775981915365365e-05,
+                "first_largest_abs_flat_index": 12294,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.5.mlp.shared_expert_gate.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 896,
+                "max_abs": 0.00022330880165100098,
+                "max_rel": 6.23590213877145,
+                "relative_l2": 8.482504080327551e-05,
+                "first_largest_abs_flat_index": 262,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.0.mlp.shared_expert_gate.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 896,
+                "max_abs": 0.00022149085998535156,
+                "max_rel": 0.06068513669709622,
+                "relative_l2": 0.00012074804350246905,
+                "first_largest_abs_flat_index": 674,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.6.self_attn.k_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 0.00019723176956176758,
+                "max_rel": 10.216819973718792,
+                "relative_l2": 0.0004263100596785238,
+                "first_largest_abs_flat_index": 54718,
+                "allclose": false
+              },
+              {
+                "path": "gradients['decoder.layers.0.self_attn.q_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 401408,
+                "max_abs": 0.0001747608184814453,
+                "max_rel": 7.822222869435791,
+                "relative_l2": 0.00010608439298348696,
+                "first_largest_abs_flat_index": 200760,
+                "allclose": false
+              }
+            ]
+          },
+          "model": {
+            "pass": false,
+            "metrics": {
+              "tensor_count": 745,
+              "elements": 124877056,
+              "max_abs": 1.1444091796875e-05,
+              "max_rel": 1.190083957899667,
+              "relative_l2": 5.2317999389153785e-08,
+              "allclose": false,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": [
+              {
+                "path": "model['decoder.layers.5.mlp.experts.17.gate_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 2.333894371986389e-06,
+                "max_rel": 0.01081051056756608,
+                "relative_l2": 1.183069320083619e-06,
+                "first_largest_abs_flat_index": 43511,
+                "allclose": false
+              },
+              {
+                "path": "model['decoder.layers.5.mlp.experts.17.up_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 2.2193416953086853e-06,
+                "max_rel": 0.023641629442567848,
+                "relative_l2": 1.0392875143683881e-06,
+                "first_largest_abs_flat_index": 50316,
+                "allclose": false
+              },
+              {
+                "path": "model['decoder.layers.6.mlp.experts.31.up_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 2.149317879229784e-06,
+                "max_rel": 0.029978527370960455,
+                "relative_l2": 1.0035764517937546e-06,
+                "first_largest_abs_flat_index": 42479,
+                "allclose": false
+              }
+            ]
+          },
+          "optimizer": {
+            "pass": false,
+            "metrics": {
+              "tensor_count": 2235,
+              "elements": 249754857,
+              "max_abs": 0.0020751953125,
+              "max_rel": 6.443976661841757,
+              "relative_l2": 1.4773896310511748e-06,
+              "allclose": false,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": [
+              {
+                "path": "optimizer.state[5].exp_avg",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 0.0001373291015625,
+                "max_rel": 0.8305408591873327,
+                "relative_l2": 1.6393001682841538e-06,
+                "first_largest_abs_flat_index": 28728,
+                "allclose": false
+              }
+            ]
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": [
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.0.self_attn.v_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 57344,
+            "max_abs": 0.0013456344604492188,
+            "max_rel": 6.662424648359009,
+            "relative_l2": 9.677577679275125e-05,
+            "first_largest_abs_flat_index": 28728,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.0.self_attn.v_proj.bias']",
+            "kind": "float_tensor_difference",
+            "numel": 64,
+            "max_abs": 0.0011444091796875,
+            "max_rel": 0.0018634006827775466,
+            "relative_l2": 9.332560672148388e-05,
+            "first_largest_abs_flat_index": 32,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.1.self_attn.v_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 57344,
+            "max_abs": 0.0010089874267578125,
+            "max_rel": 1.3152932960893855,
+            "relative_l2": 9.322209479452863e-05,
+            "first_largest_abs_flat_index": 20670,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.6.self_attn.v_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 57344,
+            "max_abs": 0.0003559589385986328,
+            "max_rel": 10.27929501429025,
+            "relative_l2": 0.00017703615720272278,
+            "first_largest_abs_flat_index": 34110,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.0.input_layernorm.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 896,
+            "max_abs": 0.00034427642822265625,
+            "max_rel": 0.050630241021043194,
+            "relative_l2": 8.137037657849109e-05,
+            "first_largest_abs_flat_index": 387,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.2.mlp.gate.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 28672,
+            "max_abs": 0.0002434253692626953,
+            "max_rel": 0.8675773312260104,
+            "relative_l2": 5.9775981915365365e-05,
+            "first_largest_abs_flat_index": 12294,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.5.mlp.shared_expert_gate.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 896,
+            "max_abs": 0.00022330880165100098,
+            "max_rel": 6.23590213877145,
+            "relative_l2": 8.482504080327551e-05,
+            "first_largest_abs_flat_index": 262,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.0.mlp.shared_expert_gate.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 896,
+            "max_abs": 0.00022149085998535156,
+            "max_rel": 0.06068513669709622,
+            "relative_l2": 0.00012074804350246905,
+            "first_largest_abs_flat_index": 674,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.6.self_attn.k_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 57344,
+            "max_abs": 0.00019723176956176758,
+            "max_rel": 10.216819973718792,
+            "relative_l2": 0.0004263100596785238,
+            "first_largest_abs_flat_index": 54718,
+            "allclose": false
+          },
+          {
+            "category": "gradients",
+            "path": "gradients['decoder.layers.0.self_attn.q_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 401408,
+            "max_abs": 0.0001747608184814453,
+            "max_rel": 7.822222869435791,
+            "relative_l2": 0.00010608439298348696,
+            "first_largest_abs_flat_index": 200760,
+            "allclose": false
+          }
+        ]
+      },
+      "4": {
+        "pass": false,
+        "checks": {
+          "payload_keys": true,
+          "gradients": false,
+          "model": false,
+          "optimizer": false,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": false,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 0.00225830078125,
+              "max_rel": 6.148184183984995,
+              "relative_l2": 6.577466165581558e-06,
+              "allclose": false,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": [
+              {
+                "path": "gradients['lm_head.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 68067328,
+                "max_abs": 0.0015401840209960938,
+                "max_rel": 0.4631678889470927,
+                "relative_l2": 6.275736894247039e-05,
+                "first_largest_abs_flat_index": 96613,
+                "allclose": false
+              }
+            ]
+          },
+          "model": {
+            "pass": false,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 4.082918167114258e-06,
+              "max_rel": 0.12273636560791644,
+              "relative_l2": 1.7114238496131563e-08,
+              "allclose": false,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": [
+              {
+                "path": "model['decoder.layers.10.mlp.experts.0.gate_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 1.903623342514038e-06,
+                "max_rel": 0.004744732458175536,
+                "relative_l2": 6.039995938301458e-07,
+                "first_largest_abs_flat_index": 28597,
+                "allclose": false
+              }
+            ]
+          },
+          "optimizer": {
+            "pass": false,
+            "metrics": {
+              "tensor_count": 2088,
+              "elements": 255202488,
+              "max_abs": 0.003662109375,
+              "max_rel": 0.8762868971958108,
+              "relative_l2": 3.184150857589738e-06,
+              "allclose": false,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": [
+              {
+                "path": "optimizer.state[695].exp_avg",
+                "kind": "float_tensor_difference",
+                "numel": 68067328,
+                "max_abs": 0.00015401840209960938,
+                "max_rel": 0.48535672651077577,
+                "relative_l2": 2.4790274739490906e-06,
+                "first_largest_abs_flat_index": 96613,
+                "allclose": false
+              }
+            ]
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": [
+          {
+            "category": "gradients",
+            "path": "gradients['lm_head.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 68067328,
+            "max_abs": 0.0015401840209960938,
+            "max_rel": 0.4631678889470927,
+            "relative_l2": 6.275736894247039e-05,
+            "first_largest_abs_flat_index": 96613,
+            "allclose": false
+          },
+          {
+            "category": "optimizer",
+            "path": "optimizer.state[695].exp_avg",
+            "kind": "float_tensor_difference",
+            "numel": 68067328,
+            "max_abs": 0.00015401840209960938,
+            "max_rel": 0.48535672651077577,
+            "relative_l2": 2.4790274739490906e-06,
+            "first_largest_abs_flat_index": 96613,
+            "allclose": false
+          },
+          {
+            "category": "model",
+            "path": "model['decoder.layers.10.mlp.experts.0.gate_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 57344,
+            "max_abs": 1.903623342514038e-06,
+            "max_rel": 0.004744732458175536,
+            "relative_l2": 6.039995938301458e-07,
+            "first_largest_abs_flat_index": 28597,
+            "allclose": false
+          }
+        ]
+      },
+      "5": {
+        "pass": false,
+        "checks": {
+          "payload_keys": true,
+          "gradients": true,
+          "model": false,
+          "optimizer": true,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 0.00225830078125,
+              "max_rel": 3.3059701492537314,
+              "relative_l2": 2.7679141665028006e-06,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "model": {
+            "pass": false,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 3.4570693969726562e-06,
+              "max_rel": 0.08244294979304224,
+              "relative_l2": 1.5182696719527145e-08,
+              "allclose": false,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": [
+              {
+                "path": "model['decoder.layers.6.mlp.experts.9.gate_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 2.789311110973358e-06,
+                "max_rel": 0.0010413887355291082,
+                "relative_l2": 7.356411563452084e-07,
+                "first_largest_abs_flat_index": 18446,
+                "allclose": false
+              }
+            ]
+          },
+          "optimizer": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 2088,
+              "elements": 255202488,
+              "max_abs": 0.003662109375,
+              "max_rel": 0.6477153410481103,
+              "relative_l2": 5.403483703493324e-06,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": [
+          {
+            "category": "model",
+            "path": "model['decoder.layers.6.mlp.experts.9.gate_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 57344,
+            "max_abs": 2.789311110973358e-06,
+            "max_rel": 0.0010413887355291082,
+            "relative_l2": 7.356411563452084e-07,
+            "first_largest_abs_flat_index": 18446,
+            "allclose": false
+          }
+        ]
+      },
+      "6": {
+        "pass": false,
+        "checks": {
+          "payload_keys": true,
+          "gradients": false,
+          "model": false,
+          "optimizer": false,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": false,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 0.00225830078125,
+              "max_rel": 6.148184183984995,
+              "relative_l2": 6.5773885515265584e-06,
+              "allclose": false,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": [
+              {
+                "path": "gradients['lm_head.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 68067328,
+                "max_abs": 0.0015401840209960938,
+                "max_rel": 0.4631678889470927,
+                "relative_l2": 6.275736894247039e-05,
+                "first_largest_abs_flat_index": 96613,
+                "allclose": false
+              }
+            ]
+          },
+          "model": {
+            "pass": false,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 4.082918167114258e-06,
+              "max_rel": 0.12273636560791644,
+              "relative_l2": 1.941048168033128e-08,
+              "allclose": false,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": [
+              {
+                "path": "model['decoder.layers.10.mlp.experts.17.gate_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 2.8242357075214386e-06,
+                "max_rel": 0.005647372096600863,
+                "relative_l2": 9.235902134640128e-07,
+                "first_largest_abs_flat_index": 524,
+                "allclose": false
+              },
+              {
+                "path": "model['decoder.layers.10.mlp.experts.19.gate_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 1.7513521015644073e-06,
+                "max_rel": 0.0016704637794431314,
+                "relative_l2": 5.38530807783456e-07,
+                "first_largest_abs_flat_index": 7651,
+                "allclose": false
+              }
+            ]
+          },
+          "optimizer": {
+            "pass": false,
+            "metrics": {
+              "tensor_count": 2088,
+              "elements": 255202488,
+              "max_abs": 0.003662109375,
+              "max_rel": 0.8127654045905665,
+              "relative_l2": 3.184149571744125e-06,
+              "allclose": false,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": [
+              {
+                "path": "optimizer.state[695].exp_avg",
+                "kind": "float_tensor_difference",
+                "numel": 68067328,
+                "max_abs": 0.00015401840209960938,
+                "max_rel": 0.48535672651077577,
+                "relative_l2": 2.4790274739490906e-06,
+                "first_largest_abs_flat_index": 96613,
+                "allclose": false
+              }
+            ]
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": [
+          {
+            "category": "gradients",
+            "path": "gradients['lm_head.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 68067328,
+            "max_abs": 0.0015401840209960938,
+            "max_rel": 0.4631678889470927,
+            "relative_l2": 6.275736894247039e-05,
+            "first_largest_abs_flat_index": 96613,
+            "allclose": false
+          },
+          {
+            "category": "optimizer",
+            "path": "optimizer.state[695].exp_avg",
+            "kind": "float_tensor_difference",
+            "numel": 68067328,
+            "max_abs": 0.00015401840209960938,
+            "max_rel": 0.48535672651077577,
+            "relative_l2": 2.4790274739490906e-06,
+            "first_largest_abs_flat_index": 96613,
+            "allclose": false
+          },
+          {
+            "category": "model",
+            "path": "model['decoder.layers.10.mlp.experts.17.gate_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 57344,
+            "max_abs": 2.8242357075214386e-06,
+            "max_rel": 0.005647372096600863,
+            "relative_l2": 9.235902134640128e-07,
+            "first_largest_abs_flat_index": 524,
+            "allclose": false
+          },
+          {
+            "category": "model",
+            "path": "model['decoder.layers.10.mlp.experts.19.gate_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 57344,
+            "max_abs": 1.7513521015644073e-06,
+            "max_rel": 0.0016704637794431314,
+            "relative_l2": 5.38530807783456e-07,
+            "first_largest_abs_flat_index": 7651,
+            "allclose": false
+          }
+        ]
+      },
+      "7": {
+        "pass": false,
+        "checks": {
+          "payload_keys": true,
+          "gradients": true,
+          "model": false,
+          "optimizer": true,
+          "scheduler": true
+        },
+        "errors": [],
+        "by_category": {
+          "gradients": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 0.00225830078125,
+              "max_rel": 3.3059701492537314,
+              "relative_l2": 2.767952644702839e-06,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "model": {
+            "pass": false,
+            "metrics": {
+              "tensor_count": 696,
+              "elements": 127600896,
+              "max_abs": 5.182623863220215e-05,
+              "max_rel": 0.9428992826844103,
+              "relative_l2": 8.803014791801159e-08,
+              "allclose": false,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": [
+              {
+                "path": "model['decoder.layers.10.mlp.experts.17.gate_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 5.182623863220215e-05,
+                "max_rel": 0.003416722785208675,
+                "relative_l2": 1.0834611447391456e-05,
+                "first_largest_abs_flat_index": 23393,
+                "allclose": false
+              },
+              {
+                "path": "model['decoder.layers.10.mlp.experts.17.up_proj.weight']",
+                "kind": "float_tensor_difference",
+                "numel": 57344,
+                "max_abs": 3.0901283025741577e-06,
+                "max_rel": 0.9428992826844103,
+                "relative_l2": 9.894406014299764e-07,
+                "first_largest_abs_flat_index": 15179,
+                "allclose": false
+              }
+            ]
+          },
+          "optimizer": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 2088,
+              "elements": 255202488,
+              "max_abs": 0.003662109375,
+              "max_rel": 0.6477153410481103,
+              "relative_l2": 5.403479966968258e-06,
+              "allclose": true,
+              "strict_equal": false
+            },
+            "errors": [],
+            "top_differences": []
+          },
+          "scheduler": {
+            "pass": true,
+            "metrics": {
+              "tensor_count": 0,
+              "elements": 0,
+              "max_abs": null,
+              "max_rel": null,
+              "relative_l2": null,
+              "allclose": true,
+              "strict_equal": true
+            },
+            "errors": [],
+            "top_differences": []
+          }
+        },
+        "top_differences": [
+          {
+            "category": "model",
+            "path": "model['decoder.layers.10.mlp.experts.17.gate_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 57344,
+            "max_abs": 5.182623863220215e-05,
+            "max_rel": 0.003416722785208675,
+            "relative_l2": 1.0834611447391456e-05,
+            "first_largest_abs_flat_index": 23393,
+            "allclose": false
+          },
+          {
+            "category": "model",
+            "path": "model['decoder.layers.10.mlp.experts.17.up_proj.weight']",
+            "kind": "float_tensor_difference",
+            "numel": 57344,
+            "max_abs": 3.0901283025741577e-06,
+            "max_rel": 0.9428992826844103,
+            "relative_l2": 9.894406014299764e-07,
+            "first_largest_abs_flat_index": 15179,
+            "allclose": false
+          }
+        ]
+      }
+    }
+  }
+}

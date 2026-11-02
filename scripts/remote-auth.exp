@@ -1,0 +1,22 @@
+set timeout 25
+set root [file dirname [file dirname [file normalize [info script]]]]
+set cfgpath [file join $root server.md]
+if {[info exists env(SHIFT_CREDENTIAL_FILE)]} {set cfgpath $env(SHIFT_CREDENTIAL_FILE)}
+set pass ""
+if {[file exists $cfgpath]} {
+    set f [open $cfgpath r]
+    set cfg [read $f]
+    close $f
+    regexp {密码[：: ]+([^\s]+)} $cfg -> pass
+}
+log_user 0
+spawn {*}$argv
+expect {
+    -re "(?i)password:" {
+        if {$pass eq ""} {error "configure SSH keys or local server.md"}
+        send -- "$pass\r"
+        exp_continue
+    }
+    eof {catch wait result; exit [lindex $result 3]}
+    timeout {exit 2}
+}

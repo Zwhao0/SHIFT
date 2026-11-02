@@ -1,0 +1,29 @@
+{
+  "initial_project_gpu_utilization_percent": 0,
+  "legacy_zombies": {
+    "node0": 4480,
+    "node1": 0,
+    "node3": 0
+  },
+  "action": "Restarted empty node0 project container after checking no active training; other containers preserved",
+  "short_final_process_states": {
+    "node0": {
+      "S": 1,
+      "R": 1
+    },
+    "node1": {
+      "S": 1,
+      "R": 1
+    },
+    "node3": {
+      "S": 1,
+      "R": 1
+    }
+  },
+  "short_final_zombies": 0,
+  "baseline": {
+    "torchft": "0.2.0",
+    "torchtitan": "not installed/no compatible source",
+    "decision": "skip full same-workload TorchTitan comparison; retain native_probe as state-scale diagnostic only"
+  }
+}

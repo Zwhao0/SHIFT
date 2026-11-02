@@ -1,0 +1,5 @@
+{"kind": "single_replica_plan", "time": 1793639504.023113, "rid": 0, "generation": 0, "physical_node": "node1", "mode": "shift", "anchor_mode": "flat", "anchor_step": 2, "target_steps": 3, "microbatches": 2, "fixed_batch": true, "global_batch": 8, "interleave_rids": [0, 1]}
+{"kind": "endpoint_launched", "time": 1793639504.3270788, "physical_node": "node1", "physical_ip": "10.10.4.1", "rid": 0, "generation": 0, "container": "shift-rdma-node1", "runtime": "greyhound", "namespace": null}
+{"kind": "all_ready", "time": 1793639519.72596, "ranks": 8}
+{"kind": "complete", "time": 1793639531.870778, "cleanup_errors": []}
+{"kind": "archive_collected", "time": 1793639532.5707169, "physical_node": "node1", "archive": "node1.tgz", "bytes": 60290}

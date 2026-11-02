@@ -1,0 +1,10 @@
+{"kind": "placement", "time": 1793639011.451041, "seed": 20261102, "active": {"0": "node3", "1": "node0"}, "control_physical_node": "node0", "control_owner": {"pid": 94621, "lighthouse_pid": 94627, "command": ["/workspace/SHIFT/runtime/torch214/bin/python", "/workspace/SHIFT/vendor/bin/torchft_lighthouse", "--bind", "[::]:29771", "--min_replicas", "1", "--heartbeat_timeout_ms", "500", "--join_timeout_ms", "200", "--quorum_tick_ms", "50"]}}
+{"kind": "endpoint_launched", "time": 1793639011.865154, "rid": 0, "generation": 0, "physical_node": "node3", "directory": "/workspace/SHIFT/results/v1_bench_flat_01/rid0_g0"}
+{"kind": "endpoint_launched", "time": 1793639012.114815, "rid": 1, "generation": 0, "physical_node": "node0", "directory": "/workspace/SHIFT/results/v1_bench_flat_01/rid1_g0"}
+{"kind": "launched", "time": 1793639012.114888, "physical_endpoints": ["node3", "node0"]}
+{"kind": "all_ready", "time": 1793639031.8084302, "generations": [0, 0], "physical_nodes": ["node3", "node0"]}
+{"kind": "start_released", "time": 1793639032.31641, "physical_node": "node3", "rid": 0, "generation": 0}
+{"kind": "start_released", "time": 1793639032.476524, "physical_node": "node0", "rid": 1, "generation": 0}
+{"kind": "all_stopped", "time": 1793639093.114617, "generations": [0, 0], "physical_nodes": ["node3", "node0"]}
+{"kind": "complete", "time": 1793639093.11484, "faults": 0}
+{"kind": "collected", "time": 1793639099.190376, "physical_nodes": ["node3", "node0"]}

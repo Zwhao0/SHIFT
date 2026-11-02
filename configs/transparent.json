@@ -1,0 +1,11 @@
+{
+  "mode": "shift",
+  "entry_module": "shift_full.launch",
+  "target_steps": 1000000,
+  "train_args": [
+    "--max-seconds",
+    "900"
+  ],
+  "nccl_library": null,
+  "python": "/workspace/SHIFT/runtime/torch214/bin/python"
+}

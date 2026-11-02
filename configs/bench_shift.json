@@ -1,0 +1,18 @@
+{
+  "mode": "shift",
+  "target_steps": 40,
+  "train_args": [
+    "--mode",
+    "shift",
+    "--seq-len",
+    "512",
+    "--max-seconds",
+    "600",
+    "--sync-quorum",
+    "--backend",
+    "hybrid",
+    "--measure-step"
+  ],
+  "nccl_library": null,
+  "python": "/workspace/SHIFT/runtime/torch214/bin/python"
+}

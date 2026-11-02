@@ -1,0 +1,9 @@
+torch==2.14.1+cu130
+torchft==0.2.0
+transformers==4.53.2
+einops
+psutil
+numpy
+redis
+setuptools==80.9.0
+six==1.17.0

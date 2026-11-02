@@ -1,0 +1,1 @@
+{"checks": {"input_read": {"pass": true}, "numerical_comparison": {"pass": false}, "participants_and_global_batch": {"pass": true}, "same_batch_plans": {"pass": true}, "same_initial_state": {"pass": true}, "same_routing": {"pass": false}, "step_coverage": {"pass": true}}, "output": "/Users/henry/Desktop/SHIFT/results/v1/trajectory_summary.json", "pass": false}
