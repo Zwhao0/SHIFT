@@ -1,0 +1,10 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+server.md
+tmp/
+runtime/torch214/
+*.pt
+*.pdf
+results/*
+!results/v1/
