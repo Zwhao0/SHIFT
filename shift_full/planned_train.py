@@ -109,9 +109,14 @@ def main():
     p.add_argument('--standby', choices=('cpu', 'gpu'))
     p.add_argument('--strict-fp32', action='store_true')
     p.add_argument('--planned-role', choices=['A','B','C'], required=True)
-    p.add_argument('--planned-variant', choices=['p0','p1','p1d','p1f','steady'], required=True)
+    p.add_argument('--planned-variant', choices=['p0','p1','p1d','p1f','p2','steady'], required=True)
     p.add_argument('--planned-source', choices=['A','B'], default='B')
+    p.add_argument('--planned-inject',choices=['healthy','prepare-fail','ready-timeout','stale-state','relay-reject','slow-compute'],default='healthy')
+    p.add_argument('--planned-slow-ms',type=float,default=250)
+    p.add_argument('--planned-cycles',type=int,default=1)
     args = p.parse_args()
+    if args.planned_cycles<1 or (args.planned_cycles>1 and args.planned_variant!='p2'):p.error('cycles require p2 and a positive count')
+    args.planned_round=0
     if args.strict_fp32:
         args.fp32=True
         torch.backends.cuda.matmul.allow_tf32=False
@@ -128,6 +133,7 @@ def main():
         row = dict(kind=kind, time=time.time(), monotonic=time.monotonic(), rid=args.replica, rank=rank,
                    generation=args.generation, physical_node=os.environ.get('SHIFT_PHYSICAL_NODE', args.host_ip),
                    host_ip=args.host_ip, pid=os.getpid(), **fields)
+        row.setdefault('planned_round',args.planned_round)
         with lock:
             log.write(json.dumps(row, sort_keys=True) + '\n')
 
@@ -224,7 +230,7 @@ def main():
     stage.config.no_sync_func = ddp.no_sync
     stage.config.finalize_model_grads_func = finalize_model_grads
     optimizer = torch.optim.AdamW(stage.parameters(), lr=args.lr, foreach=False)
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=1000, gamma=0.98)
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=int(os.environ.get('SHIFT_PLANNED_SCHEDULER_STEP','1000')), gamma=0.98)
     phase_started = phase('cuda_ddp_optimizer', phase_started)
     def role_manifest():
         return dict(tp=2, pp=2, ep=2, etp=2, rank=rank,
@@ -319,7 +325,7 @@ def main():
         matches = hashes == payload['hashes']
         event('restored', step=payload['step'], load_seconds=loaded_at-load_started, audit_seconds=time.monotonic()-loaded_at, source_replica=payload['source_replica'],
               source_rank=payload['source_rank'], hashes_match=matches,
-              expected_hashes=payload['hashes'], actual_hashes=hashes,
+              expected_hashes=payload['hashes'], actual_hashes=hashes,restored_learning_rates=[g['lr'] for g in optimizer.param_groups],
               optimizer_tensors=tensor_count(optimizer.state_dict().get('state', {})),
               cuda_allocated_bytes=torch.cuda.memory_allocated(device_rank), cuda_peak_allocated_bytes=torch.cuda.max_memory_allocated(device_rank))
         assert matches, 'Restored state differs from source snapshot'
@@ -348,7 +354,10 @@ def main():
 
     # Distinct logical-rid RNG streams; model initialization is already complete.
     torch.manual_seed(70000+100*args.replica+rank);random.seed(80000+100*args.replica+rank)
+    export_state.role_metadata=lambda:dict(all_buffers=dict(stage.named_buffers()),source_rank=rank,step=progress['updates'],progress=dict(progress),**rng_snapshot())
     from shift_full.planned_handoff import PlannedHandoff
+    if args.planned_variant=='p2':
+        from shift_full.overlap_handoff import OverlapHandoff as PlannedHandoff
     handoff=PlannedHandoff(args,rank,event,export_state,load_state,progress,role_manifest,rng_snapshot)
     if args.planned_role=='C':
         if not handoff.ready_receiver():
@@ -386,7 +395,7 @@ def main():
             pg = HybridGloo(timeout=timedelta(seconds=10))
         else:
             pg = CompatibleProcessGroupGloo(timeout=timedelta(seconds=10))
-        if handoff.gate.epoch:
+        if handoff.activated and not getattr(handoff,'fallback',False):
             pg=handoff.candidate
         native_configure=pg.configure
         def measured_configure(*pos, **kwargs):
@@ -411,7 +420,7 @@ def main():
                           init_sync=False, timeout=timedelta(seconds=90),
                           quorum_timeout=timedelta(seconds=180), connect_timeout=timedelta(seconds=20),
                           hostname=args.host_ip, lighthouse_addr=args.lighthouse,
-                          store_addr=args.host_ip,store_port=31600 if handoff.gate.epoch else int(os.environ['MASTER_PORT']),
+                          store_addr=args.host_ip,store_port=31600+handoff.offset if handoff.activated else int(os.environ['MASTER_PORT']),
                           replica_id=f'shift{args.replica}', checkpoint_transport=transport, max_retries=8)
         if args.reference_anchor or handoff.gate.epoch:
             manager.load_state_dict(dict(step=progress['updates'],batches_committed=progress['updates']*2))
@@ -434,12 +443,16 @@ def main():
     # The native finalizer waits intra-replica buckets, then sums tied PP grads.
     # Both dense and routed-expert buffers need the second reduction. In this
     # vendor, expert gradients use dense-DP normalization, retained unchanged.
+    forward_counter=[0]
+    def count_forward(*_):forward_counter[0]+=1
+    stage.register_forward_pre_hook(count_forward)
     original_finish = ddp.finish_grad_sync
     buffers = list(ddp.buffers) + list(ddp.expert_parallel_buffers)
     cross_calls = [0]
     cross_timings = {}
 
     def finish_grad_sync(_self):
+        nonlocal manager
         entered = time.monotonic()
         gpu_started = torch.cuda.Event(enable_timing=True) if args.profile_timings else None
         gpu_done = torch.cuda.Event(enable_timing=True) if args.profile_timings else None
@@ -455,29 +468,41 @@ def main():
             before = time.monotonic()
             pending.append((bucket.grad_data, value, manager.allreduce(value)))
             dispatch_seconds += time.monotonic()-before
-        patched = []
-        if args.bucket_hook:
-            # Preserve both native DDP and buffer finalizers. Inject only after
-            # each bucket's own finish has established local gradient readiness.
+        relay = args.planned_variant=='p2' and handoff.is_relay_step()
+        if relay:
+            if args.planned_role!='C': original_finish()
+            manager,retired=handoff.at_gradient(manager,[b.grad_data for buf in buffers for b in buf.buckets],make_manager,sample_ids,apply_tail)
+            if retired:
+                from shift_full.overlap_handoff import RetiredReplica
+                raise RetiredReplica()
             for buffer in buffers:
-                for bucket in buffer.buckets:
-                    original = bucket.finish_grad_sync
-                    previous = bucket.__dict__.get('finish_grad_sync')
-                    def finish_bucket(this, native=original):
-                        native()
-                        enqueue(this)
-                    patched.append((bucket, previous))
-                    bucket.finish_grad_sync = types.MethodType(finish_bucket, bucket)
-        try:
-            original_finish()
-        finally:
-            for bucket, previous in patched:
-                if previous is None: del bucket.finish_grad_sync
-                else: bucket.finish_grad_sync = previous
-        intra_done = time.monotonic()
-        if not args.bucket_hook:
-            for buffer in buffers:
-                for bucket in buffer.buckets: enqueue(bucket)
+                for bucket in buffer.buckets:enqueue(bucket)
+            handoff.emit('planned_ac_outer_begin',step=progress['updates'])
+            intra_done=time.monotonic()
+        else:
+            patched = []
+            if args.bucket_hook:
+                # Preserve both native DDP and buffer finalizers. Inject only after
+                # each bucket's own finish has established local gradient readiness.
+                for buffer in buffers:
+                    for bucket in buffer.buckets:
+                        original = bucket.finish_grad_sync
+                        previous = bucket.__dict__.get('finish_grad_sync')
+                        def finish_bucket(this, native=original):
+                            native()
+                            enqueue(this)
+                        patched.append((bucket, previous))
+                        bucket.finish_grad_sync = types.MethodType(finish_bucket, bucket)
+            try:
+                original_finish()
+            finally:
+                for bucket, previous in patched:
+                    if previous is None: del bucket.finish_grad_sync
+                    else: bucket.finish_grad_sync = previous
+            intra_done = time.monotonic()
+            if not args.bucket_hook:
+                for buffer in buffers:
+                    for bucket in buffer.buckets: enqueue(bucket)
         waiting = time.monotonic()
         for target, cpu, work in pending:
             work.wait()
@@ -491,6 +516,13 @@ def main():
             gpu_done.record(); gpu_done.synchronize()
             cross_timings['cross_gpu_seconds'] = gpu_started.elapsed_time(gpu_done)/1000
         cross_calls[0] += len(pending)
+
+    def apply_tail(tail):
+        target=dict(stage.named_buffers())
+        if set(target)!=set(tail['all_buffers']):raise RuntimeError('relay buffer mismatch')
+        for name,t in tail['all_buffers'].items():target[name].copy_(t)
+        torch.set_rng_state(tail['torch_rng']);torch.cuda.set_rng_state(tail['cuda_rng']);random.setstate(tail['python_rng'])
+        return dict(tail,all_buffers=dict(stage.named_buffers()),progress=dict(progress),**rng_snapshot())
 
     if args.mode == 'shift':
         ddp.finish_grad_sync = types.MethodType(finish_grad_sync, ddp)
@@ -526,13 +558,37 @@ def main():
             return False
         text = marker.read_text().strip()
         return not text or progress['updates'] >= int(text)
+    def advance_round(wait=False):
+        nonlocal handoff,manager
+        import gc
+        r=handoff.round+1
+        if r>=args.planned_cycles:return False
+        raw=handoff.coord_raw
+        end=time.monotonic()+180
+        while not (raw.check(['advance']) and int(raw.get('advance'))>=r):
+            if not wait:return False
+            if time.monotonic()>end:raise RuntimeError('next round was not requested')
+            time.sleep(.02)
+        old=handoff;old.finish_retired_cleanup()
+        args._coord_raw=raw;args.planned_round=r
+        # Only the second logical DP slot changes physical owner.
+        physical=os.environ.get('SHIFT_PHYSICAL_NODE')
+        args.planned_role='A' if args.replica==0 else ('C' if (physical=='node1')==(r%2==1) else 'B')
+        handoff=PlannedHandoff(args,rank,event,export_state,load_state,progress,role_manifest,rng_snapshot)
+        del old;gc.collect()
+        event('planned_round_started',step=progress['updates'],role=args.planned_role,epoch=handoff.gate.epoch,cuda_allocated_bytes=torch.cuda.memory_allocated(),cuda_reserved_bytes=torch.cuda.memory_reserved(),threads=len(__import__('os').listdir('/proc/self/task')))
+        if args.planned_role=='C':
+            if not handoff.ready_receiver():raise RuntimeError('cycle target cancelled; coordinated stop required')
+            manager=make_manager();event('planned_epoch_activated',step=progress['updates'],epoch=handoff.gate.epoch)
+        return True
     try:
         while not requested_stop() and time.monotonic() < deadline and progress['updates'] < args.steps:
+            if args.planned_cycles>1:advance_round()
             handoff.check()
             iteration_started = time.monotonic()
             torch.cuda.current_stream().synchronize()
             boundary_done = time.monotonic()
-            if not handoff.gate.epoch:
+            if not handoff.activated:
                 boundary_rng = dict(step=progress['updates'], rng=rng_snapshot())
                 manager,retired=handoff.boundary(manager)
                 if retired: break
@@ -583,9 +639,24 @@ def main():
             if args.reference_dump: event('batch_plan',step=step,sample_ids=sample_ids)
             started = time.monotonic()
             before_calls = cross_calls[0]
-            metrics = schedule(forward_step_func=forward_step, data_iterator=iter(batches),
-                               model=ddp, num_microbatches=count,
-                               seq_length=args.seq_len + stage.extra_positions(1), micro_batch_size=1)
+            before_forward=forward_counter[0]
+            if args.planned_inject=='slow-compute' and args.planned_role=='B' and not handoff.activated and handoff.request_seen:
+                delay_started=time.monotonic();time.sleep(args.planned_slow_ms/1000)
+                event('planned_compute_delay',step=step,seconds=time.monotonic()-delay_started)
+            try:
+                if args.planned_variant=='p2' and args.planned_role=='C' and handoff.is_relay_step():
+                    metrics=[]
+                    stage.config.finalize_model_grads_func([ddp])
+                else:
+                    metrics = schedule(forward_step_func=forward_step, data_iterator=iter(batches),
+                                       model=ddp, num_microbatches=count,
+                                       seq_length=args.seq_len + stage.extra_positions(1), micro_batch_size=1)
+            except Exception as exc:
+                from shift_full.overlap_handoff import RetiredReplica
+                if not isinstance(exc,RetiredReplica):raise
+                manager=None
+                if args.planned_cycles>1 and advance_round(wait=True):continue
+                break
             for parameter in stage.parameters():
                 parameter.grad = parameter.main_grad
             # A bad numeric result must never be counted as a valid update.
@@ -626,6 +697,8 @@ def main():
                       global_batch=args.microbatches*4 if args.fixed_batch else args.microbatches*2*actual_participants,
                       optimizer_hash=hashes.get('optimizer'), scheduler_hash=hashes.get('scheduler'),
                       optimizer_tensors=tensor_count(optimizer.state_dict().get('state', {})),
+                      learning_rates=[g['lr'] for g in optimizer.param_groups],
+                      local_forward_calls=forward_counter[0]-before_forward,
                       cross_calls=cross_calls[0] - before_calls, finite_gradients=finite,
                       seconds=time.monotonic() - iteration_started, compute_seconds=time.monotonic()-started,
                       loss=[float(m['loss']) for m in metrics] if metrics else [], **timings, **cross_timings, **handoff.commit_fields(manager))

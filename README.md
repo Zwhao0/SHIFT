@@ -1,16 +1,18 @@
-# SHIFT v2 — 副本间慢故障恢复
+# SHIFT v2.1 — v2继续优化
 
-两份有效DP副本A+B继续训练，待命C提前初始化并与A预建、预热未来外层NCCL通信组；在共同提交边界继承仍存活B的最新状态，切为A+C。最终版复用通信组，并把旧组的物理回收放到首个AC共同提交之后；A/C侧在第三个AC提交前完成回收。
+新增完整MoE状态预传、本步梯度接替、B/C原进程连续轮换，以及限定异常的新epoch恢复。保持两份有效贡献，精度、batch和归一化不变。
 
-这是外部指定待替换副本的计划性交接原型；没有注入真实慢故障。状态仍在最终边界从B完整同步，短暂等待由实测报告，不承诺零停机。实现、最终对照、未完成项与复现见 [RESULTS_V2.md](RESULTS_V2.md)，机器可读结果见 [summary.json](results/v2/summary.json)。
-
-负载约0.495B MoE、合成token；两活一备，每副本8×H800，TP/PP/EP/eTP均为2。依赖现有 `/workspace/FLASH1022/{flash_v1,Greyhound-master/Megatron-LM,models/qwen_moe}` 与 `/workspace/SHIFT/runtime/torch214/bin/python`；版本清单见 `runtime/torch214-manifest/`。凭据仅存Git排除的 `server.md`，模板为 `server.example.md`。
+P1f/P2各5次新对照的交接间隔中位数为1.195/1.188秒，差异区间跨0，未证明P2稳定提速。**常规单次替换推荐P1f；P2提供预传/本步接替、多轮与本轮受控恢复能力。** 详细结果、边界与复现见 [RESULTS_V2_1.md](RESULTS_V2_1.md)、[summary.json](results/v2_1/summary.json)。
 
 ```bash
 python3 -m shift_full.deploy --include-node3
-python3 scripts/run_planned_handoff.py --name UNIQUE_V2 --variant p1f --source B --audit --post-steps 6
-python3 scripts/unpack_v2_evidence.py --output tmp/v2-evidence
-python3 scripts/analyze_planned_handoff.py tmp/v2-evidence/v2_final_timing_10_p1f
+python3 scripts/verify_overlap_source.py tmp/deployed-v21.json
+python3 scripts/run_planned_handoff.py --name UNIQUE_REPLACE --variant p1f --source B --post-steps 50
+python3 scripts/run_planned_handoff.py --name UNIQUE_RELAY --variant p2 --source B --audit --post-steps 6
+python3 scripts/run_overlap_cycles.py --name UNIQUE_CYCLES --cycles 3 --audit --post-steps 6
+python3 scripts/unpack_v2_evidence.py --evidence results/v2_1 --output tmp/v21-evidence
 ```
 
-v1的进程SIGKILL恢复实验、60次/3600秒长测及公开证据保留，见 [RESULTS.md](RESULTS.md) 与 [results/v1](results/v1)。严格FP32第二次更新仍未通过原容差，未放宽容差或修改Adam epsilon。v2状态交接通过不代表该数值问题已解决。
+三机，每DP副本8×H800，约0.495B MoE、合成batch8，TP/PP/EP/eTP均为2。依赖已有FLASH/Megatron、模型与`runtime/torch214`；环境沿用v2。凭据仅存Git排除的`server.md`，模板为`server.example.md`。
+
+v2的计划性交接结果保留：[RESULTS_V2.md](RESULTS_V2.md)、[results/v2](results/v2)。v1的进程故障恢复结果保留：[RESULTS.md](RESULTS.md)、[results/v1](results/v1)。v1严格FP32数值失败未改变；本轮状态/梯度审计通过不代表已解决数值轨迹等价问题。

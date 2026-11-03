@@ -17,7 +17,7 @@ def main():
  (out/'config.json').write_text(json.dumps(dict(phase=phase,env=env,python=python,seed=20261103),indent=2))
  lightcode='''import subprocess,time,os
 from pathlib import Path
-ps=[subprocess.Popen(['/workspace/SHIFT/runtime/torch214/bin/python','/workspace/SHIFT/vendor/bin/torchft_lighthouse','--bind','[::]:'+str(port),'--min_replicas','2','--heartbeat_timeout_ms','1000','--join_timeout_ms','1000','--quorum_tick_ms','100']) for port in (31300,31310)]
+ps=[subprocess.Popen(['/workspace/SHIFT/runtime/torch214/bin/python','/workspace/SHIFT/vendor/bin/torchft_lighthouse','--bind','[::]:'+str(port),'--min_replicas','2','--heartbeat_timeout_ms','1000','--join_timeout_ms','1000','--quorum_tick_ms','100']) for port in PORTS]
 try:
  end=time.monotonic()+200
  while time.monotonic()<end and not Path(REMOTE+'/STOP_LIGHTHOUSE').exists():
@@ -28,7 +28,7 @@ finally:
   p.terminate()
   try:p.wait(timeout=5)
   except subprocess.TimeoutExpired:p.kill();p.wait()
-'''.replace('REMOTE',repr(remote))
+'''.replace('REMOTE',repr(remote)).replace('PORTS',repr((31300,31410) if phase=='relay' else (31300,31310)))
  with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
   light=pool.submit(run_job,s,eps['node0'],['env',*[f'{k}={v}' for k,v in env.items()],python,'-c',lightcode],240)
   time.sleep(1)

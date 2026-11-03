@@ -11,7 +11,7 @@ from shift_full.prepared_pg import PreparedNCCL
 from shift_full.transport import PackedGPUTransport
 
 class EpochGate:
- def __init__(self):self.epoch=0;self.members=('A','B');self.step=None;self.ready=False
+ def __init__(self,epoch=0):self.epoch=epoch;self.members=('A','B');self.step=None;self.ready=False
  def activate(self,epoch,step,loaded_step,ready):
   if epoch!=self.epoch+1 or step!=loaded_step or not ready:raise ValueError('stale epoch/state or unready target')
   self.epoch=epoch;self.members=('A','C');self.step=step;self.ready=True
@@ -23,17 +23,42 @@ class EpochGate:
 
 class PlannedHandoff:
  def __init__(self,args,rank,event,export,load,progress,manifest,rng_snapshot):
-  self.args=args;self.rank=rank;self.device=torch.cuda.current_device();self.emit=event;self.export=export;self.load=load;self.progress=progress;self.role=args.planned_role;self.variant=args.planned_variant;self.source=args.planned_source;self.gate=EpochGate();self.threads=[];self.errors=[];self.channels={};self.candidate=None;self.cut=None;self.cancelled=False;self.request_seen=False;self.rng_snapshot=rng_snapshot;self.manifest=manifest;self.deferred=self.variant in ('p1d','p1f');self.old_epoch_revoked=False;self.retired_pgs=[];self.cleanup_thread=None;self.cleanup_cancel=threading.Event()
-  self.coord=dist.TCPStore('10.10.4.2',31402,None,self.role=='A' and rank==0,timeout=timedelta(seconds=180),wait_for_workers=False)
-  self.epoch_store=dist.TCPStore(args.host_ip,31600,None,rank==0,timeout=timedelta(seconds=60),wait_for_workers=False) if self.role in ('A','C') else None
-  if self.role=='C':self.coord.set(f'local/C/{self.rank}','1')
+  self.local_world=dist.get_world_size();self.args=args;self.rank=rank;self.device=torch.cuda.current_device();self.emit=event;self.export=export;self.load=load;self.progress=progress;self.role=args.planned_role;self.variant=args.planned_variant;self.source=args.planned_source;self.gate=EpochGate();self.threads=[];self.errors=[];self.channels={};self.candidate=None;self.cut=None;self.cancelled=False;self.request_seen=False;self.rng_snapshot=rng_snapshot;self.manifest=manifest;self.deferred=self.variant in ('p1d','p1f','p2');self.old_epoch_revoked=False;self.retired_pgs=[];self.cleanup_thread=None;self.cleanup_cancel=threading.Event()
+  self.round=getattr(args,'planned_round',0);self.offset=20*self.round
+  self.source_host='10.10.4.3' if self.round%2 else '10.10.4.1'
+  self.coord_prefix=f'round/{self.round}' if getattr(args,'planned_cycles',1)>1 else ''
+  self.coord_raw=getattr(args,'_coord_raw',None)
+  if self.coord_raw is None:self.coord_raw=dist.TCPStore('10.10.4.2',31402,None,self.role=='A' and rank==0,timeout=timedelta(seconds=180),wait_for_workers=False)
+  self.coord=dist.PrefixStore(self.coord_prefix,self.coord_raw) if self.coord_prefix else self.coord_raw
+  self.epoch_store=dist.TCPStore(args.host_ip,31600+self.offset,None,rank==0,timeout=timedelta(seconds=60),wait_for_workers=False) if self.role in ('A','C') else None
   # One background worker establishes common PGs in a fixed order.
   # Source A/C both create state before candidate; C inserts B's role channel.
   if self.variant!='steady':self.spawn(self.prepare_all)
+ @staticmethod
+ def layout_manifest(value):
+  if 'optimizer_groups' not in value:return value
+  return dict(value,optimizer_groups=[{k:v for k,v in g.items() if k!='lr'} for g in value['optimizer_groups']])
+ @property
+ def activated(self):return bool(self.gate.epoch)
+ def control_client(self,seconds):
+  raw=dist.TCPStore('10.10.4.2',31402,None,False,timeout=timedelta(seconds=seconds))
+  prefix=getattr(self,'coord_prefix','')
+  return dist.PrefixStore(prefix,raw) if prefix else raw
  def prepare_all(self):
-  if self.role in (self.source,'C'):self.prepare_channel('state',self.source,31404)
+  if self.role=='C':
+   fault=getattr(self.args,'planned_inject','healthy')
+   if fault=='prepare-fail':
+    self.coord.set(f'rejected/{self.rank}','1');self.emit('planned_prepare_rejected',step=self.progress['updates']);return
+   if fault=='ready-timeout':
+    self.emit('planned_prepare_delayed',step=self.progress['updates'])
+    end=time.monotonic()+30
+    while time.monotonic()<end:
+     if self.coord.check(['cancel']):return
+     time.sleep(.02)
+   self.coord.set(f'local/C/{self.rank}','1')
+  if self.role in (self.source,'C') and not self.prepare_channel('state',self.source,31404):return
   if self.source=='A' and self.role in ('B','C'):self.prepare_channel('role','B',31405)
-  if self.variant in ('p1','p1d','p1f') and self.role in ('A','C'):self.prepare_candidate()
+  if self.variant in ('p1','p1d','p1f','p2') and self.role in ('A','C'):self.prepare_candidate()
  def spawn(self,fn):
   def wrapped():
    try:
@@ -48,25 +73,32 @@ class PlannedHandoff:
   self.check()
  def prepare_channel(self,name,source,port):
   from torchft import ProcessGroupNCCL
-  host='10.10.4.2' if source=='A' else '10.10.4.1'
+  host='10.10.4.2' if source=='A' else self.source_host
+  port+=self.offset
   store=dist.TCPStore(host,port,None,self.role==source and self.rank==0,timeout=timedelta(seconds=90),wait_for_workers=False)
   # TCPStore serializes requests per client: a background wait must not
   # monopolize the training thread's check/set connection.
-  waiter=dist.TCPStore('10.10.4.2',31402,None,False,timeout=timedelta(seconds=180))
-  waiter.wait([f'local/C/{self.rank}'])
+  waiter=self.control_client(180)
+  while not waiter.check([f'local/C/{self.rank}']):
+   if waiter.check(['cancel']):return False
+   time.sleep(.02)
   pg=ProcessGroupNCCL(timeout=timedelta(seconds=60));pg._owned_store=store
   pg.configure(f'{host}:{port}/{name}/{self.rank}',name,0 if self.role==source else 1,2)
   v=torch.ones(1,device='cuda');pg.allreduce([v],dist.AllreduceOptions()).wait();torch.cuda.current_stream().synchronize();self.channels[name]=pg
   if v.item()!=2:raise RuntimeError('state channel warmup mismatch')
   self.emit('planned_channel_ready',channel=name)
+  return True
  def prepare_candidate(self):
-  store=dist.TCPStore('10.10.4.2',31403,None,self.role=='A' and self.rank==0,timeout=timedelta(seconds=90),wait_for_workers=False)
+  port=31403+self.offset
+  store=dist.TCPStore('10.10.4.2',port,None,self.role=='A' and self.rank==0,timeout=timedelta(seconds=90),wait_for_workers=False)
   # TCPStore serializes requests per client: a background wait must not
   # monopolize the training thread's check/set connection.
-  waiter=dist.TCPStore('10.10.4.2',31402,None,False,timeout=timedelta(seconds=180))
-  waiter.wait([f'local/C/{self.rank}'])
-  pg=PreparedNCCL(0 if self.role=='A' else 1,[self.rank,8+self.rank],self.emit,timeout=timedelta(seconds=60));pg._owned_store=store
-  pg.prepare(f'10.10.4.2:31403/ac/{self.rank}',f'shift{0 if self.role=="A" else 1}',self.rank,8);self.candidate=pg
+  waiter=self.control_client(180)
+  while not waiter.check([f'local/C/{self.rank}']):
+   if waiter.check(['cancel']):return False
+   time.sleep(.02)
+  pg=PreparedNCCL(0 if self.role=='A' else 1,[self.rank,self.local_world+self.rank],self.emit,timeout=timedelta(seconds=60));pg._owned_store=store
+  pg.prepare(f'10.10.4.2:{port}/ac/{self.rank}',f'shift{0 if self.role=="A" else 1}',self.rank,self.local_world);self.candidate=pg
  def ready_receiver(self):
   self.join();self.emit('planned_local_ready',manifest=self.manifest(),cuda_allocated_bytes=torch.cuda.memory_allocated(),cuda_peak_allocated_bytes=torch.cuda.max_memory_allocated(),cpu_maxrss_kib=__import__('resource').getrusage(__import__('resource').RUSAGE_SELF).ru_maxrss)
   self.coord.set(f'prepared/C/{self.rank}','1')
@@ -86,7 +118,7 @@ class PlannedHandoff:
   for pg in self.channels.values():pg.abort(errored=False);pg.shutdown()
   self.channels={}
   if self.candidate:self.candidate.abort(errored=False);self.candidate.shutdown();self.candidate=None
- def wait_freeze(self):self.coord.wait([f'freeze/{r}/{i}' for r in ('A','B') for i in range(8)])
+ def wait_freeze(self):self.coord.wait([f'freeze/{r}/{i}' for r in ('A','B') for i in range(self.local_world)])
  def metadata(self,payload=None):
   payload=payload or self.export()
   return {k:payload[k] for k in ('torch_rng','cuda_rng','python_rng','all_buffers','source_rank','step','progress')}
@@ -106,7 +138,7 @@ class PlannedHandoff:
     role=transport('role').recv_checkpoint(0,'<packed-gpu>',k,timeout)
     torch.cuda.current_stream().synchronize();self.coord.set(f'role_loaded/{self.rank}','1')
    payload=transport('state').recv_checkpoint(0,'<packed-gpu>',k,timeout)
-   if payload['step']!=k or payload['planned_epoch']!=1 or payload['planned_role']!=1 or payload['manifest']!=self.manifest():raise RuntimeError('state version/role/manifest mismatch')
+   if payload['step']!=k or payload['planned_epoch']!=1 or payload['planned_role']!=1 or self.layout_manifest(payload['manifest'])!=self.layout_manifest(self.manifest()):raise RuntimeError('state version/role/manifest mismatch')
    if role:
     if role['step']!=k:raise RuntimeError('B role metadata stale')
     payload.update(role)
@@ -129,7 +161,7 @@ class PlannedHandoff:
   if not self.request_seen and self.coord.check(['request']):
    self.request_seen=True;self.emit('planned_request_seen',step=self.progress['updates'])
   if self.variant=='p1f' and self.role=='A' and self.rank==0 and self.coord.check(['arm']) and not self.coord.check(['cut']):
-   if not self.coord.check([f'prepared/C/{rank}' for rank in range(8)]):raise RuntimeError('target ranks not prepared')
+   if not self.coord.check([f'prepared/C/{rank}' for rank in range(self.local_world)]):raise RuntimeError('target ranks not prepared')
    # Synchronous per-step quorum/collectives bound peer lead to one step.
    # Two future committed steps leave one complete iteration for notification.
    selected=self.progress['updates']+2;self.coord.set('cut',str(selected));self.emit('planned_cut_selected',step=selected)
@@ -147,7 +179,7 @@ class PlannedHandoff:
   if not self.deferred and manager._pg._pg is not None:raise RuntimeError('old training group still present')
   self.emit('planned_old_manager_closed',step=k,training_pg_absent=not self.deferred,server_closed=True,old_epoch_revoked=True)
   self.final_transfer()
-  self.coord.wait([f'loaded/{i}' for i in range(8)])
+  self.coord.wait([f'loaded/{i}' for i in range(self.local_world)])
   if self.role=='B':
    self.gate.activate(1,k,k,True)
    try:self.authorize(manager)
@@ -175,7 +207,7 @@ class PlannedHandoff:
   if self.gate.epoch and self.progress['updates']>=self.cut+3:
    self.coord.set(f'ac3/{self.role}/{self.rank}','1')
    if self.role=='A' and self.rank==0:
-    self.coord.wait([f'ac3/{role}/{rank}' for role in ('A','C') for rank in range(8)])
+    self.coord.wait([f'ac3/{role}/{rank}' for role in ('A','C') for rank in range(self.local_world)])
     self.coord.set('ac_three','1')
 
  def start_retired_cleanup(self):
@@ -184,8 +216,8 @@ class PlannedHandoff:
    try:
     torch.cuda.set_device(self.device)
     # A dedicated client avoids blocking the training thread's TCPStore.
-    control=dist.TCPStore('10.10.4.2',31402,None,False,timeout=timedelta(seconds=10))
-    keys=[f'ac_first/{role}/{rank}' for role in ('A','C') for rank in range(8)];deadline=time.monotonic()+45
+    control=self.control_client(10)
+    keys=[f'ac_first/{role}/{rank}' for role in ('A','C') for rank in range(getattr(self,'local_world',8))];deadline=time.monotonic()+45
     while not control.check(keys):
      if self.cleanup_cancel.wait(.02):return
      if time.monotonic()>deadline:raise RuntimeError('first AC cleanup trigger timed out')

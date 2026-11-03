@@ -9,7 +9,7 @@ def main():
   f=a.evidence/name
   if len(f.read_bytes())!=row['bytes'] or hashlib.sha256(f.read_bytes()).hexdigest()!=row['sha256']:raise ValueError(f'checksum mismatch: {name}')
  a.output.mkdir(parents=True,exist_ok=True)
- for f in sorted((a.evidence/'bundles').rglob('*.tar.gz'))+[a.evidence/'metadata.tar.gz',a.evidence/'components.tar.gz']:
+ for f in sorted((a.evidence/'bundles').rglob('*.tar.gz'))+[p for n in ('metadata.tar.gz','components.tar.gz','micro.tar.gz') if (p:=a.evidence/n).is_file()]:
   dest=(a.output/'components' if f.name=='components.tar.gz' else a.output).resolve();dest.mkdir(parents=True,exist_ok=True)
   with tarfile.open(f) as t:
    members=t.getmembers()

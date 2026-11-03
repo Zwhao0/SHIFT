@@ -7,7 +7,10 @@ import torch.distributed as dist
 from shift_full.compat import install_managed_callback_fix
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('--rid',type=int);p.add_argument('--host');p.add_argument('--session');p.add_argument('--phase',choices=['shadow','candidate','p0','overlap'],default='shadow');a=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('--rid',type=int);p.add_argument('--host');p.add_argument('--session');p.add_argument('--phase',choices=['shadow','candidate','p0','overlap','relay'],default='shadow');a=p.parse_args()
+ if a.phase=='relay':
+  from shift_full.overlap_probe import run
+  return run(a)
  if a.phase in ('candidate','p0'):
   from shift_full.planned_components import run
   return run(a)
