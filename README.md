@@ -1,19 +1,16 @@
-# SHIFT v1
+# SHIFT v2 — 副本间慢故障恢复
 
-三机进程故障恢复实验已完成。长测60次/3600秒通过，状态恢复、首个共同提交与RPO0均经离线原始日志核验。版本 v1：kill 进程恢复。
+两份有效DP副本A+B继续训练，待命C提前初始化并与A预建、预热未来外层NCCL通信组；在共同提交边界继承仍存活B的最新状态，切为A+C。最终版复用通信组，并把旧组的物理回收放到首个AC共同提交之后；A/C侧在第三个AC提交前完成回收。
 
-- 数值三步对照：`false`；按原容差报告，未放宽。
-- ABBA步时变化：4.84%；备份建议：gpu（GPU热备需预留8张GPU）。
-- 详细证据：`RESULTS.md`、`results/v1/summary.json`。
+这是外部指定待替换副本的计划性交接原型；没有注入真实慢故障。状态仍在最终边界从B完整同步，短暂等待由实测报告，不承诺零停机。实现、最终对照、未完成项与复现见 [RESULTS_V2.md](RESULTS_V2.md)，机器可读结果见 [summary.json](results/v2/summary.json)。
+
+负载约0.495B MoE、合成token；两活一备，每副本8×H800，TP/PP/EP/eTP均为2。依赖现有 `/workspace/FLASH1022/{flash_v1,Greyhound-master/Megatron-LM,models/qwen_moe}` 与 `/workspace/SHIFT/runtime/torch214/bin/python`；版本清单见 `runtime/torch214-manifest/`。凭据仅存Git排除的 `server.md`，模板为 `server.example.md`。
 
 ```bash
 python3 -m shift_full.deploy --include-node3
-python3 -m shift_full.rotation --session UNIQUE_LONG --config configs/shift_rotation_verify.json --seconds 4800 --faults 60 --interval 60 --duration 3600 --seed 20261102
-python3 -m shift_full.rotation --session UNIQUE_GPU_HOT_AUDIT --config configs/shift_rotation_audit512.json --seconds 900 --faults 1 --backup-mode gpu --seed 20261102
-python3 scripts/unpack_v1_evidence.py --evidence results/v1 --output tmp/v1-evidence
-python3 -m shift_full.verify_rotation tmp/v1-evidence/v1_rotation_long_20261102_01 --expected-faults 60 --minimum-duration 3600
+python3 scripts/run_planned_handoff.py --name UNIQUE_V2 --variant p1f --source B --audit --post-steps 6
+python3 scripts/unpack_v2_evidence.py --output tmp/v2-evidence
+python3 scripts/analyze_planned_handoff.py tmp/v2-evidence/v2_final_timing_10_p1f
 ```
 
-严格FP32复核在首个更新后通过、第二个更新仍失败，路由签名一致；原容差保留。单坐标AdamW分析见 `RESULTS.md` 与 `results/v1/adam_coordinate.json`。
-
-负载约0.5B MoE、合成token；两活一备，每副本8×H800，TP/PP/EP/eTP均为2。依赖现有 `/workspace/FLASH1022/{flash_v1,Greyhound-master/Megatron-LM,models/qwen_moe}` 与 `/workspace/SHIFT/runtime/torch214/bin/python`；版本清单见 `runtime/torch214-manifest/`。本机凭据仅存Git排除的 `server.md`，模板为 `server.example.md`。
+v1的进程SIGKILL恢复实验、60次/3600秒长测及公开证据保留，见 [RESULTS.md](RESULTS.md) 与 [results/v1](results/v1)。严格FP32第二次更新仍未通过原容差，未放宽容差或修改Adam epsilon。v2状态交接通过不代表该数值问题已解决。

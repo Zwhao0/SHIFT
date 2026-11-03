@@ -1,0 +1,353 @@
+{
+  "files": {
+    "SUMMARY.md": {
+      "sha256": "9f24d2998adccd8bce71c26fe83ea77f88667ef5372a650d9f974fd662183caa",
+      "bytes": 1577
+    },
+    "bundles/final/v2_final_audit_02_p1f.tar.gz": {
+      "sha256": "531c694f432abc3d178ce45afe8dd9f14e170f47c4f79182c2380bd777f67423",
+      "bytes": 192633
+    },
+    "bundles/final/v2_final_audit_03_p1f.tar.gz": {
+      "sha256": "5c1ffbfc4d908f9a1b45ac677f635bb7288d8fd79af9ef29107d9fb449b594e8",
+      "bytes": 198785
+    },
+    "bundles/final/v2_final_audit_04_p1f.tar.gz": {
+      "sha256": "b42a66a7c9bf89c3e0378f9d0aac0060bf0e7f6d238f7de3d554f0dce4c10017",
+      "bytes": 185677
+    },
+    "bundles/final/v2_final_audit_05_p1f.tar.gz": {
+      "sha256": "1071ec77c5ff28f578667b986c5c36de9ce97aa7a20276e6fd711cce54781ebb",
+      "bytes": 185896
+    },
+    "bundles/final/v2_final_audit_06_p1f.tar.gz": {
+      "sha256": "ef11d667ca0ba2428bdc6bc99e7859d92a0cf0365559bee96e64c1979f1b71e4",
+      "bytes": 192623
+    },
+    "bundles/final/v2_final_audit_07_p1f.tar.gz": {
+      "sha256": "a9d459f3bfd5c752fe12572cc5207131f8d6fc15462cacd8d48c365054855fb7",
+      "bytes": 192510
+    },
+    "bundles/final/v2_final_audit_08_p1f.tar.gz": {
+      "sha256": "5261a79cd1b78e87abb4d7c697177ba1337cd72444ef540052d0a26483e25d65",
+      "bytes": 185656
+    },
+    "bundles/final/v2_final_audit_09_p1f.tar.gz": {
+      "sha256": "053a3404a9a9a7262f885f807fe718dae85c7cb673b5a8a50aa6d7311228cd8d",
+      "bytes": 185782
+    },
+    "bundles/final/v2_final_audit_10_p1f.tar.gz": {
+      "sha256": "5c089f90289485665501e5cc2523729b43db59fac958f6725ef6042db9a54bfe",
+      "bytes": 185693
+    },
+    "bundles/final/v2_final_cancel_p1f.tar.gz": {
+      "sha256": "3f06170e1d7d6dfa8d71ac91663cea34763086a68bf746e039d4b636048ea28e",
+      "bytes": 134897
+    },
+    "bundles/final/v2_final_timing_01_p1.tar.gz": {
+      "sha256": "f0a667aa7a937e29e32ca6b9229f27fbfc56898251dd5fdbdc0be3b335fdbc8b",
+      "bytes": 307887
+    },
+    "bundles/final/v2_final_timing_02_p1f.tar.gz": {
+      "sha256": "f8ffb8742b8f5e15d245e784c87c6b6f34020216e836857b02c5a763b155116b",
+      "bytes": 304802
+    },
+    "bundles/final/v2_final_timing_03_p1f.tar.gz": {
+      "sha256": "0e1da39ad1e5b8ba5958491e58181117b9e48ae7f4e5bc61523bf76573935dcf",
+      "bytes": 295962
+    },
+    "bundles/final/v2_final_timing_04_p1.tar.gz": {
+      "sha256": "64ba69484d8c2243d12da33cc652e2604ddfcb2e42ebbd6946e77feef4866b90",
+      "bytes": 302190
+    },
+    "bundles/final/v2_final_timing_05_p1.tar.gz": {
+      "sha256": "9507f2148428aee1ba4529951e3a18b43dda8834c7689c22c7adf5687000a08b",
+      "bytes": 302087
+    },
+    "bundles/final/v2_final_timing_06_p1f.tar.gz": {
+      "sha256": "aa889fd8200cafe9b317760c43615f14df92c86559fc7cbac9f9dfe8183b961b",
+      "bytes": 296009
+    },
+    "bundles/final/v2_final_timing_07_p1f.tar.gz": {
+      "sha256": "a6e63db2d786c91f8cd316cb5294fbdf23b562b830b76fd9ecaf19c8e0a99987",
+      "bytes": 307456
+    },
+    "bundles/final/v2_final_timing_08_p1.tar.gz": {
+      "sha256": "917c59ca48d70139394b967be4be427053fa32d98a16611c55f97413e2cbee89",
+      "bytes": 304799
+    },
+    "bundles/final/v2_final_timing_09_p1.tar.gz": {
+      "sha256": "0da93eea290db43ee14f184034788bb78d09ea66ba5bebbbb60e90930c63a20f",
+      "bytes": 311166
+    },
+    "bundles/final/v2_final_timing_10_p1f.tar.gz": {
+      "sha256": "a7a6f744d2ed5ce651ae23b779811e1a31791e2d2395172a3705da5aa3906eb9",
+      "bytes": 299417
+    },
+    "bundles/final/v2_p1d_B_audit01.tar.gz": {
+      "sha256": "b935de1b5a477b37cc6159af0a90b8741ba34c8b207b0c64ce11194769c6a452",
+      "bytes": 216564
+    },
+    "bundles/final/v2_p1d_B_timing01.tar.gz": {
+      "sha256": "ef615616248cd1cf0db60851e15cd0af57dbfa9bb55943da61ecf9f4e78f7aed",
+      "bytes": 308204
+    },
+    "bundles/final/v2_p1f_B_audit01.tar.gz": {
+      "sha256": "418a8d2704aeaf61acef8ac4d963a19d414b18d861ec2861837412c33272692f",
+      "bytes": 185925
+    },
+    "bundles/legacy/ph_audit_01_p1_B.tar.gz": {
+      "sha256": "083ed0430bf732c334a1f51fee9fa15bf417a0ba49853606ffc6228921170e5a",
+      "bytes": 188571
+    },
+    "bundles/legacy/ph_audit_02_p1_A.tar.gz": {
+      "sha256": "16ef7685bdc3144356107f09da339adb4f787db3004cccc4780634eea821c119",
+      "bytes": 190848
+    },
+    "bundles/legacy/ph_audit_03_p1_B.tar.gz": {
+      "sha256": "ed45cdf867423a09fc57fd75c4775bd1ebfdb9d1bb3975ab31353a94579972d1",
+      "bytes": 188569
+    },
+    "bundles/legacy/ph_audit_04_p1_A.tar.gz": {
+      "sha256": "db01ca6d9b1aba967256856bcdb7215fab06bcce378949ad06eb03174ff58f6a",
+      "bytes": 190985
+    },
+    "bundles/legacy/ph_audit_05_p1_B.tar.gz": {
+      "sha256": "d7371db9c243dd7a388632633ef51794dc07556a9ed1a4d309702d46c79addae",
+      "bytes": 188522
+    },
+    "bundles/legacy/ph_audit_06_p1_A.tar.gz": {
+      "sha256": "0ac7c9098599d86f9152d745584e2015417f7d05ca40b0961fa396c44791c86d",
+      "bytes": 190895
+    },
+    "bundles/legacy/ph_audit_07_p1_B.tar.gz": {
+      "sha256": "3ee97bd21382f0e2a841e0f97fcac8e9353d5a9c9c0fee6904d78a946fba2893",
+      "bytes": 188454
+    },
+    "bundles/legacy/ph_audit_08_p1_A.tar.gz": {
+      "sha256": "8b1532ee23b17e9930f1eb272aa60c50804f36427be292fc6ea486d40a994177",
+      "bytes": 190979
+    },
+    "bundles/legacy/ph_audit_09_p1_B.tar.gz": {
+      "sha256": "7ff5e6b9a974c95f04d17acbdd49f02da4352273a7d64117ff337b26e176ff1b",
+      "bytes": 188585
+    },
+    "bundles/legacy/ph_audit_10_p1_A.tar.gz": {
+      "sha256": "bf02e013766d9f7570c637eab49d25411c16193660230441f40ad17815c0d834",
+      "bytes": 197118
+    },
+    "bundles/legacy/ph_cancel_p1_B_01.tar.gz": {
+      "sha256": "fbae9bfc6a030815876e439720c845c05fc4b16e24fdb8f954fca7194218537f",
+      "bytes": 128940
+    },
+    "bundles/legacy/ph_moe_p0_A_audit01.tar.gz": {
+      "sha256": "abefeb7dd03ff33675c2459969821a53b377721349be9e0117d7bb5b62e33486",
+      "bytes": 600828
+    },
+    "bundles/legacy/ph_moe_p0_A_audit02.tar.gz": {
+      "sha256": "f8697b1f5559e4affd3d3693467842a0044e757cf9281a0ed7e5128b39305e31",
+      "bytes": 184594
+    },
+    "bundles/legacy/ph_moe_p0_B_audit01.tar.gz": {
+      "sha256": "4f3b5291dd055307759a0043a91d1b697918bacec0be06af622884bee774b0e1",
+      "bytes": 188542
+    },
+    "bundles/legacy/ph_moe_p1_B_audit01.tar.gz": {
+      "sha256": "3d3da0a8aa5c6f85fb76b227c63d4c3836ddc8ecd9bd0856f82e08ade6a39e17",
+      "bytes": 31847
+    },
+    "bundles/legacy/ph_moe_p1_B_audit02.tar.gz": {
+      "sha256": "5c1abf554832dee28c3ec6dd2ced9e5fcbf84e076830a4c62a6f30cd68d791b0",
+      "bytes": 53475
+    },
+    "bundles/legacy/ph_moe_p1_B_audit03.tar.gz": {
+      "sha256": "62d428498af953affc012f4f176744edcad740e65d9f78a6f3b62ca264d32431",
+      "bytes": 28104
+    },
+    "bundles/legacy/ph_moe_p1_B_audit04.tar.gz": {
+      "sha256": "5ab53f54577e93069324f50c6601f1453cb827630704d49139757bf0c2aecaee",
+      "bytes": 162506
+    },
+    "bundles/legacy/ph_moe_p1_B_audit05.tar.gz": {
+      "sha256": "f8c052582de9ad7d930cbe5fa3daa6987f7fbfd79cad4c94068246d6cd7093ae",
+      "bytes": 184873
+    },
+    "bundles/legacy/ph_moe_p1_B_audit06.tar.gz": {
+      "sha256": "49bbd005f23e689b6fd28f0d97f718dab49a66c75a79cf4f2c366d6d035bfb6d",
+      "bytes": 194264
+    },
+    "bundles/legacy/ph_native_01.tar.gz": {
+      "sha256": "471485f7b942fa94ac201f1261ab5b5a5201d674db26edf26eb64f7b6238c67c",
+      "bytes": 197240
+    },
+    "bundles/legacy/ph_steady_01.tar.gz": {
+      "sha256": "dffa6ab8355f45500b5e071885fc3a4bf5cd8b8623be547bad1a7f7739161c8d",
+      "bytes": 188828
+    },
+    "bundles/legacy/ph_timing_01_p0_B.tar.gz": {
+      "sha256": "32cd9b360318cfb257bfb8316387c36f9a334d141a81e8a0a7a29b03dc798abb",
+      "bytes": 148221
+    },
+    "bundles/legacy/ph_timing_02_p1_B.tar.gz": {
+      "sha256": "7b8245739c22be951820499e8962cc197e2da45466ba4443a0f4ba80be9b6ff2",
+      "bytes": 153870
+    },
+    "bundles/legacy/ph_timing_03_p1_B.tar.gz": {
+      "sha256": "649f5a1a8db3df58a7e81bf31ca9a2aaf58a9fcc3a773955626cd58e32a33f01",
+      "bytes": 154021
+    },
+    "bundles/legacy/ph_timing_04_p0_B.tar.gz": {
+      "sha256": "ec47efd5e1257b97582316e3f7ee390f53c6616dbdb52560b5dc92eb70824ca9",
+      "bytes": 147988
+    },
+    "bundles/legacy/ph_timing_05_p0_B.tar.gz": {
+      "sha256": "72058b7f7957cf5d10c2082b49aee8a84090342c225426be6d809c4886b5c529",
+      "bytes": 151121
+    },
+    "bundles/legacy/ph_timing_06_p1_B.tar.gz": {
+      "sha256": "7b0a725e5e60e4bc5d0b4519e4bbd90c86a5e9713637ca69712c4ea4249dae49",
+      "bytes": 157386
+    },
+    "bundles/legacy/ph_timing_07_p1_B.tar.gz": {
+      "sha256": "3351b982ea578522ef68deab5e32ef12ff90dfb013096a582b9434dbe5ec232e",
+      "bytes": 166139
+    },
+    "bundles/legacy/ph_timing_08_p0_B.tar.gz": {
+      "sha256": "6276db0446e16223f1fe257e6fd0db075ef3b3154985f25ede5a3112c0217199",
+      "bytes": 148027
+    },
+    "bundles/legacy/ph_timing_09_p0_B.tar.gz": {
+      "sha256": "6300f1263a7ecdf9f3629511edf7ba5305519f46cf42551e5a10821d8079dde0",
+      "bytes": 148064
+    },
+    "bundles/legacy/ph_timing_10_p1_B.tar.gz": {
+      "sha256": "c75207d5b30f8817e1df781e4cbec29da576c5d5d919a4ea2521faedbd2fa3fe",
+      "bytes": 151074
+    },
+    "bundles/legacy/ph_timing_11_p0_A.tar.gz": {
+      "sha256": "465cb771cdd7bd0d970b4417414e626a0063f0498ee4be4cac3381d23267a74a",
+      "bytes": 153627
+    },
+    "bundles/legacy/ph_timing_12_p1_A.tar.gz": {
+      "sha256": "c47357b2473f5d2e8dd0028c73f8c55b8b9c479e36dc3a608f10862f7791fa3d",
+      "bytes": 153151
+    },
+    "bundles/legacy/ph_timing_13_p1_A.tar.gz": {
+      "sha256": "678df108df27c96401342e30792044ef712344b461d273e92fdb258a299f6630",
+      "bytes": 153209
+    },
+    "bundles/legacy/ph_timing_14_p0_A.tar.gz": {
+      "sha256": "f499f77eb6b3316e038e5e618f98a93c9910ec71bd509ee417589f244f3e32c8",
+      "bytes": 150167
+    },
+    "bundles/legacy/ph_timing_15_p0_A.tar.gz": {
+      "sha256": "5c73f455979502a0000eff5a8079e02fddc0feabc040232c9bd06ac2db455d30",
+      "bytes": 150077
+    },
+    "bundles/legacy/ph_timing_16_p1_A.tar.gz": {
+      "sha256": "50d94ebb0d32a1ae6304f4c5fff977580f562f5b5bf093f54c17c8496446d03f",
+      "bytes": 153303
+    },
+    "bundles/legacy/ph_timing_17_p1_A.tar.gz": {
+      "sha256": "4854ce26edb366929652b364503688adb66e840f7193b20631aa6dfebe36938f",
+      "bytes": 156265
+    },
+    "bundles/legacy/ph_timing_18_p0_A.tar.gz": {
+      "sha256": "30cb8e7eb70986bc7567c9f3c66851d6686ff83a5336f09741e532e81b220f12",
+      "bytes": 165602
+    },
+    "bundles/legacy/ph_timing_19_p0_A.tar.gz": {
+      "sha256": "56a779c5993b474ac1dece484620404e8db104a611f36e8cfe53dd6987e925a1",
+      "bytes": 153253
+    },
+    "bundles/legacy/ph_timing_20_p1_A.tar.gz": {
+      "sha256": "85f635b82f5054a9d5e844f4689c0d7fd4226c6f145fba27c41c8e65947880d7",
+      "bytes": 156553
+    },
+    "checks.json": {
+      "sha256": "2904fe90211ff97a25d933aa0c01eec88a119ea6ad12fecf1cb201f687fa32ca",
+      "bytes": 2863
+    },
+    "components.tar.gz": {
+      "sha256": "c0e4029ecd04b780a0751690923234cbe19590794b4414465e36314faa159d4a",
+      "bytes": 888258
+    },
+    "legacy/LIMITS.md": {
+      "sha256": "e6616d5bcf5c13af495ab8bc1a36a028d231171aa850aedd43761febfa186a15",
+      "bytes": 2239
+    },
+    "legacy/SUMMARY.md": {
+      "sha256": "2a0477bc587bf145accea752336fad32cca7d9f15cd0fc301e79de293f3f850b",
+      "bytes": 4323
+    },
+    "legacy/aggregate.json": {
+      "sha256": "dd9b97efb6ac0c3117a8d96dd73d90bb78600b7e8b872ef35f961f485415a2a9",
+      "bytes": 15680
+    },
+    "legacy/cleanup.json": {
+      "sha256": "3ab811f83300e6e8ec873e7000195f78b4fe41a7a55cd692e983808465966bff",
+      "bytes": 424
+    },
+    "legacy/final_stage_baseline.json": {
+      "sha256": "d42446e17df9b400c061f7026807ac7f6757500265a9be34a6fa62cb6e3b525d",
+      "bytes": 63123
+    },
+    "legacy/final_stage_baseline.md": {
+      "sha256": "1a324012a0f3b93d974e271ada14fc70db5be3d68da3fd00782841926929fb78",
+      "bytes": 3337
+    },
+    "legacy/installed_vs_wheel.json": {
+      "sha256": "8eda7c7f322f80914765455071d48fc5c7a2195586da1940183e3384c074d748",
+      "bytes": 342
+    },
+    "legacy/native_capabilities.md": {
+      "sha256": "06c07f3070e71fc57148b9daf5ce49a8a08646f1b400e0f8092067b42e5936ff",
+      "bytes": 8667
+    },
+    "legacy/protocol_negative.json": {
+      "sha256": "04d02dd2e6478a6d839ada7eda530a933c40d23424b14d7463e8dacd06bd6b97",
+      "bytes": 697
+    },
+    "legacy/source_delta_v1.tgz": {
+      "sha256": "781c52416e24f34916037fa789f92533bfad977fa7348f07b23e964a856fd834",
+      "bytes": 40767
+    },
+    "legacy/v1_preservation.json": {
+      "sha256": "c448cbbf1c396de0ffa56943001ba792035dbba6b65a47e5e1777cea8cf8583b",
+      "bytes": 290
+    },
+    "legacy/v1_preservation_final.json": {
+      "sha256": "b1cbf79b91c2521a349c34594db3d522f8be402dec946d077c930a316aa1383c",
+      "bytes": 460
+    },
+    "legacy/v2_final_audit.jsonl": {
+      "sha256": "257462206b84a448f20ef20f01d10283363c5f086fc600058fa08786852a9c42",
+      "bytes": 3456
+    },
+    "legacy/v2_final_timing.jsonl": {
+      "sha256": "86f3aec67f5cc338c27fb12b92e13890d0fd36203f8b8d7050e02bb2b0a4e221",
+      "bytes": 3482
+    },
+    "legacy/versions.json": {
+      "sha256": "8b3253f75da66ff2c743955577dd94bcddde8c583abc55d553d93024affd4ec7",
+      "bytes": 2748
+    },
+    "metadata.tar.gz": {
+      "sha256": "9522dbf962002ea0505f46302cb038c94336373fe903e4234d980daaa96c2ea7",
+      "bytes": 386442
+    },
+    "session_index.json": {
+      "sha256": "1ee94a7961b39ff58a5bde5832fd405b0cf7b8ecdd49cb166c80baab80288de3",
+      "bytes": 27162
+    },
+    "source_manifest.json": {
+      "sha256": "1e8f3e1004da1d6b7b0dd7dd6bd8a752930ef1d09bbb2cebda5c80c2c27b57c5",
+      "bytes": 14582
+    },
+    "summary.json": {
+      "sha256": "4fdd63cbc8a8571213a0b2ba6d4f015cedbba0a598dcc5d8f84f6fc609ed4553",
+      "bytes": 21966
+    }
+  },
+  "note": "manifest.json omits its own hash; existing summary.json and SUMMARY.md are preserved and included."
+}

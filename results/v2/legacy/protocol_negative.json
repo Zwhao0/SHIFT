@@ -1,0 +1,41 @@
+{
+  "rows": [
+    {
+      "name": "cancel_preserves_AB",
+      "passed": true
+    },
+    {
+      "name": "stale_epoch",
+      "rejected": true
+    },
+    {
+      "name": "skipped_epoch",
+      "rejected": true
+    },
+    {
+      "name": "stale_state",
+      "rejected": true
+    },
+    {
+      "name": "unready_C",
+      "rejected": true
+    },
+    {
+      "name": "old_B_old_epoch",
+      "rejected": true
+    },
+    {
+      "name": "old_B_new_epoch",
+      "rejected": true
+    },
+    {
+      "name": "old_A_epoch",
+      "rejected": true
+    },
+    {
+      "name": "cancel_after_activation",
+      "rejected": true
+    }
+  ],
+  "limitation": "Application EpochGate; no forced stale Rust RPC"
+}

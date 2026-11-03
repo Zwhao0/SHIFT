@@ -1,0 +1,73 @@
+{
+  "nodes": {
+    "node0": {
+      "python": "3.12.3 (main, Feb  4 2025, 14:48:35) [GCC 13.3.0]",
+      "torch": "2.14.1+cu130",
+      "cuda": "13.0",
+      "nccl": [
+        2,
+        30,
+        7
+      ],
+      "torchft": "0.2.0",
+      "source_root": "<excluded-path>",
+      "source_sha256": {
+        "manager.py": "df8876d4306c601d5d7848abf91f3249604c2a359a91e3a0a51101dba850a033",
+        "ddp.py": "32040608231c2fcdc9911a9ab7055727231a36805c91015843b0d37d07f8eb46",
+        "optim.py": "724f0020797c90ac4aa3c98ad4dd6674832098a7f2b9cb694b8efa0c006bc088",
+        "process_group.py": "86ddccf60be1190c1a45ae1834d88733e5133c1f817318467b22bf063db7412a"
+      },
+      "remote_minus_controller_wall_seconds_estimate": 0.61981201171875,
+      "clock_uncertainty_seconds": 0.858222484588623
+    },
+    "node1": {
+      "python": "3.12.3 (main, Feb  4 2025, 14:48:35) [GCC 13.3.0]",
+      "torch": "2.14.1+cu130",
+      "cuda": "13.0",
+      "nccl": [
+        2,
+        30,
+        7
+      ],
+      "torchft": "0.2.0",
+      "source_root": "<excluded-path>",
+      "source_sha256": {
+        "manager.py": "df8876d4306c601d5d7848abf91f3249604c2a359a91e3a0a51101dba850a033",
+        "ddp.py": "32040608231c2fcdc9911a9ab7055727231a36805c91015843b0d37d07f8eb46",
+        "optim.py": "724f0020797c90ac4aa3c98ad4dd6674832098a7f2b9cb694b8efa0c006bc088",
+        "process_group.py": "86ddccf60be1190c1a45ae1834d88733e5133c1f817318467b22bf063db7412a"
+      },
+      "remote_minus_controller_wall_seconds_estimate": 0.8067729473114014,
+      "clock_uncertainty_seconds": 1.2070635557174683
+    },
+    "node3": {
+      "python": "3.12.3 (main, Feb  4 2025, 14:48:35) [GCC 13.3.0]",
+      "torch": "2.14.1+cu130",
+      "cuda": "13.0",
+      "nccl": [
+        2,
+        30,
+        7
+      ],
+      "torchft": "0.2.0",
+      "source_root": "<excluded-path>",
+      "source_sha256": {
+        "manager.py": "df8876d4306c601d5d7848abf91f3249604c2a359a91e3a0a51101dba850a033",
+        "ddp.py": "32040608231c2fcdc9911a9ab7055727231a36805c91015843b0d37d07f8eb46",
+        "optim.py": "724f0020797c90ac4aa3c98ad4dd6674832098a7f2b9cb694b8efa0c006bc088",
+        "process_group.py": "86ddccf60be1190c1a45ae1834d88733e5133c1f817318467b22bf063db7412a"
+      },
+      "remote_minus_controller_wall_seconds_estimate": 0.5931880474090576,
+      "clock_uncertainty_seconds": 0.8950741291046143
+    }
+  },
+  "local_git_head": "c29611e861de401c37a5d1079b1a10b0708f31a3",
+  "github_main_preverified": "c29611e861de401c37a5d1079b1a10b0708f31a3",
+  "full_training_seeds": {
+    "model": 2026,
+    "random_data_generator": "100000 + sample_id",
+    "torch_rng": "70000 +100*logical_rid+rank",
+    "python_rng": "80000 +100*logical_rid+rank"
+  },
+  "micro_seed": 20261103
+}

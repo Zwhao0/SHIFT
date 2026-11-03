@@ -1,0 +1,56 @@
+{
+  "unit": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "test_cancel_cleanup_wait_without_hanging (shift_full.test_planned_protocol.PlannedProtocolTest.test_cancel_cleanup_wait_without_hanging) ... ok\ntest_cleanup_attempts_all_groups_and_propagates_error (shift_full.test_planned_protocol.PlannedProtocolTest.test_cleanup_attempts_all_groups_and_propagates_error) ... ok\ntest_fence_denies_old_manager_before_new_activation (shift_full.test_planned_protocol.PlannedProtocolTest.test_fence_denies_old_manager_before_new_activation) ... ok\ntest_only_new_active_owners_authorized (shift_full.test_planned_protocol.PlannedProtocolTest.test_only_new_active_owners_authorized) ... ok\ntest_stale_state_or_unready_c_cannot_activate (shift_full.test_planned_protocol.PlannedProtocolTest.test_stale_state_or_unready_c_cannot_activate) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.003s\n\nOK\n"
+  },
+  "protocol": {
+    "exit_code": 0,
+    "stdout": "{\"rows\": [{\"name\": \"cancel_preserves_AB\", \"passed\": true}, {\"name\": \"stale_epoch\", \"rejected\": true}, {\"name\": \"skipped_epoch\", \"rejected\": true}, {\"name\": \"stale_state\", \"rejected\": true}, {\"name\": \"unready_C\", \"rejected\": true}, {\"name\": \"old_B_old_epoch\", \"rejected\": true}, {\"name\": \"old_B_new_epoch\", \"rejected\": true}, {\"name\": \"old_A_epoch\", \"rejected\": true}, {\"name\": \"cancel_after_activation\", \"rejected\": true}], \"limitation\": \"Application EpochGate; no forced stale Rust RPC\"}\n",
+    "stderr": ""
+  },
+  "commands": [
+    "python -m unittest shift_full.test_planned_protocol -v",
+    "python -m scripts.probe_planned_protocol"
+  ],
+  "cancel": {
+    "passed": true,
+    "ready_progress": 20,
+    "final_progress": 28,
+    "ab_steps_after_cancel": 8,
+    "c_effective_commits": 0
+  },
+  "cleanup": {
+    "passed": true,
+    "nodes": {
+      "node0": {
+        "experiment_processes_left": [],
+        "gpu_compute_apps": [],
+        "passed": true
+      },
+      "node1": {
+        "experiment_processes_left": [],
+        "gpu_compute_apps": [],
+        "passed": true
+      },
+      "node3": {
+        "experiment_processes_left": [],
+        "gpu_compute_apps": [],
+        "passed": true
+      }
+    },
+    "action": "read-only; no signals or deletions"
+  },
+  "v1_preservation": {
+    "passed": true,
+    "baseline_commit": "c29611e861de401c37a5d1079b1a10b0708f31a3",
+    "tracked_v1_evidence_files": 211,
+    "git_diff_exit_code": 0,
+    "sha256": {
+      "results/v1/summary.json": "460198162222ba788403e8e1aa38252a922412fe1d12a9f3b6a3c33fe87c8c72",
+      "results/v1/cleanup.json": "bb02d14d070c72bc2293abc54584be9f516a34036a6e5cb885deb645be3cd8fa",
+      "shift_full/train.py": "404f00850b96dad3f3c3805a78774d49019915b9d3daefb8b89b8b43dccdd464"
+    }
+  },
+  "passed": true
+}

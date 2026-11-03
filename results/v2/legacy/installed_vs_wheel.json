@@ -1,0 +1,20 @@
+{
+  "node0": {
+    "manager.py": true,
+    "ddp.py": true,
+    "optim.py": true,
+    "process_group.py": true
+  },
+  "node1": {
+    "manager.py": true,
+    "ddp.py": true,
+    "optim.py": true,
+    "process_group.py": true
+  },
+  "node3": {
+    "manager.py": true,
+    "ddp.py": true,
+    "optim.py": true,
+    "process_group.py": true
+  }
+}

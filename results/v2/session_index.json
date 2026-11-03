@@ -1,0 +1,1049 @@
+[
+  {
+    "session": "v2_final_audit_02_p1f",
+    "group": "final",
+    "source": "results/v2_final_audit_02_p1f",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "v2_final_audit_03_p1f",
+    "group": "final",
+    "source": "results/v2_final_audit_03_p1f",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "v2_final_audit_04_p1f",
+    "group": "final",
+    "source": "results/v2_final_audit_04_p1f",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "v2_final_audit_05_p1f",
+    "group": "final",
+    "source": "results/v2_final_audit_05_p1f",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "v2_final_audit_06_p1f",
+    "group": "final",
+    "source": "results/v2_final_audit_06_p1f",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "v2_final_audit_07_p1f",
+    "group": "final",
+    "source": "results/v2_final_audit_07_p1f",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "v2_final_audit_08_p1f",
+    "group": "final",
+    "source": "results/v2_final_audit_08_p1f",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "v2_final_audit_09_p1f",
+    "group": "final",
+    "source": "results/v2_final_audit_09_p1f",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "v2_final_audit_10_p1f",
+    "group": "final",
+    "source": "results/v2_final_audit_10_p1f",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "v2_final_cancel_p1f",
+    "group": "final",
+    "source": "results/v2_final_cancel_p1f",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "cancel_status.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": [
+      "analysis"
+    ]
+  },
+  {
+    "session": "v2_final_timing_01_p1",
+    "group": "final",
+    "source": "results/v2_final_timing_01_p1",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "v2_final_timing_02_p1f",
+    "group": "final",
+    "source": "results/v2_final_timing_02_p1f",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "v2_final_timing_03_p1f",
+    "group": "final",
+    "source": "results/v2_final_timing_03_p1f",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "v2_final_timing_04_p1",
+    "group": "final",
+    "source": "results/v2_final_timing_04_p1",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "v2_final_timing_05_p1",
+    "group": "final",
+    "source": "results/v2_final_timing_05_p1",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "v2_final_timing_06_p1f",
+    "group": "final",
+    "source": "results/v2_final_timing_06_p1f",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "v2_final_timing_07_p1f",
+    "group": "final",
+    "source": "results/v2_final_timing_07_p1f",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "v2_final_timing_08_p1",
+    "group": "final",
+    "source": "results/v2_final_timing_08_p1",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "v2_final_timing_09_p1",
+    "group": "final",
+    "source": "results/v2_final_timing_09_p1",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "v2_final_timing_10_p1f",
+    "group": "final",
+    "source": "results/v2_final_timing_10_p1f",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "v2_p1d_B_audit01",
+    "group": "final",
+    "source": "results/v2_p1d_B_audit01",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "v2_p1d_B_timing01",
+    "group": "final",
+    "source": "results/v2_p1d_B_timing01",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": [
+      "analysis"
+    ]
+  },
+  {
+    "session": "v2_p1f_B_audit01",
+    "group": "final",
+    "source": "results/v2_p1f_B_audit01",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_audit_01_p1_B",
+    "group": "legacy",
+    "source": "results/ph_audit_01_p1_B",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_audit_02_p1_A",
+    "group": "legacy",
+    "source": "results/ph_audit_02_p1_A",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_audit_03_p1_B",
+    "group": "legacy",
+    "source": "results/ph_audit_03_p1_B",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_audit_04_p1_A",
+    "group": "legacy",
+    "source": "results/ph_audit_04_p1_A",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_audit_05_p1_B",
+    "group": "legacy",
+    "source": "results/ph_audit_05_p1_B",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_audit_06_p1_A",
+    "group": "legacy",
+    "source": "results/ph_audit_06_p1_A",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_audit_07_p1_B",
+    "group": "legacy",
+    "source": "results/ph_audit_07_p1_B",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_audit_08_p1_A",
+    "group": "legacy",
+    "source": "results/ph_audit_08_p1_A",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_audit_09_p1_B",
+    "group": "legacy",
+    "source": "results/ph_audit_09_p1_B",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_audit_10_p1_A",
+    "group": "legacy",
+    "source": "results/ph_audit_10_p1_A",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_cancel_p1_B_01",
+    "group": "legacy",
+    "source": "results/ph_cancel_p1_B_01",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "cancel_status.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": [
+      "analysis"
+    ]
+  },
+  {
+    "session": "ph_moe_p0_A_audit01",
+    "group": "legacy",
+    "source": "results/ph_moe_p0_A_audit01",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": [
+      "status",
+      "analysis"
+    ]
+  },
+  {
+    "session": "ph_moe_p0_A_audit02",
+    "group": "legacy",
+    "source": "results/ph_moe_p0_A_audit02",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_moe_p0_B_audit01",
+    "group": "legacy",
+    "source": "results/ph_moe_p0_B_audit01",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_moe_p1_B_audit01",
+    "group": "legacy",
+    "source": "results/ph_moe_p1_B_audit01",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json"
+    ],
+    "missing_expected": [
+      "status",
+      "analysis"
+    ]
+  },
+  {
+    "session": "ph_moe_p1_B_audit02",
+    "group": "legacy",
+    "source": "results/ph_moe_p1_B_audit02",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": [
+      "status",
+      "analysis"
+    ]
+  },
+  {
+    "session": "ph_moe_p1_B_audit03",
+    "group": "legacy",
+    "source": "results/ph_moe_p1_B_audit03",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json"
+    ],
+    "missing_expected": [
+      "status",
+      "analysis"
+    ]
+  },
+  {
+    "session": "ph_moe_p1_B_audit04",
+    "group": "legacy",
+    "source": "results/ph_moe_p1_B_audit04",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": [
+      "status",
+      "analysis"
+    ]
+  },
+  {
+    "session": "ph_moe_p1_B_audit05",
+    "group": "legacy",
+    "source": "results/ph_moe_p1_B_audit05",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": [
+      "status",
+      "analysis"
+    ]
+  },
+  {
+    "session": "ph_moe_p1_B_audit06",
+    "group": "legacy",
+    "source": "results/ph_moe_p1_B_audit06",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_native_01",
+    "group": "legacy",
+    "source": "results/ph_native_01",
+    "included": [
+      "steady_status.json",
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json"
+    ],
+    "missing_expected": [
+      "analysis"
+    ]
+  },
+  {
+    "session": "ph_steady_01",
+    "group": "legacy",
+    "source": "results/ph_steady_01",
+    "included": [
+      "steady_status.json",
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json"
+    ],
+    "missing_expected": [
+      "analysis"
+    ]
+  },
+  {
+    "session": "ph_timing_01_p0_B",
+    "group": "legacy",
+    "source": "results/ph_timing_01_p0_B",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_timing_02_p1_B",
+    "group": "legacy",
+    "source": "results/ph_timing_02_p1_B",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_timing_03_p1_B",
+    "group": "legacy",
+    "source": "results/ph_timing_03_p1_B",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_timing_04_p0_B",
+    "group": "legacy",
+    "source": "results/ph_timing_04_p0_B",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_timing_05_p0_B",
+    "group": "legacy",
+    "source": "results/ph_timing_05_p0_B",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_timing_06_p1_B",
+    "group": "legacy",
+    "source": "results/ph_timing_06_p1_B",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_timing_07_p1_B",
+    "group": "legacy",
+    "source": "results/ph_timing_07_p1_B",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_timing_08_p0_B",
+    "group": "legacy",
+    "source": "results/ph_timing_08_p0_B",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_timing_09_p0_B",
+    "group": "legacy",
+    "source": "results/ph_timing_09_p0_B",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_timing_10_p1_B",
+    "group": "legacy",
+    "source": "results/ph_timing_10_p1_B",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_timing_11_p0_A",
+    "group": "legacy",
+    "source": "results/ph_timing_11_p0_A",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_timing_12_p1_A",
+    "group": "legacy",
+    "source": "results/ph_timing_12_p1_A",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_timing_13_p1_A",
+    "group": "legacy",
+    "source": "results/ph_timing_13_p1_A",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_timing_14_p0_A",
+    "group": "legacy",
+    "source": "results/ph_timing_14_p0_A",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_timing_15_p0_A",
+    "group": "legacy",
+    "source": "results/ph_timing_15_p0_A",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_timing_16_p1_A",
+    "group": "legacy",
+    "source": "results/ph_timing_16_p1_A",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_timing_17_p1_A",
+    "group": "legacy",
+    "source": "results/ph_timing_17_p1_A",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_timing_18_p0_A",
+    "group": "legacy",
+    "source": "results/ph_timing_18_p0_A",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_timing_19_p0_A",
+    "group": "legacy",
+    "source": "results/ph_timing_19_p0_A",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  },
+  {
+    "session": "ph_timing_20_p1_A",
+    "group": "legacy",
+    "source": "results/ph_timing_20_p1_A",
+    "included": [
+      "physical_manifest.json",
+      "config.json",
+      "controller.jsonl",
+      "planned_status.json",
+      "planned_analysis.json",
+      "provenance/physical_node0.json",
+      "provenance/physical_node1.json",
+      "provenance/physical_node3.json"
+    ],
+    "missing_expected": []
+  }
+]
