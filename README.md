@@ -16,3 +16,5 @@ python3 scripts/unpack_v2_evidence.py --evidence results/v2_1 --output tmp/v21-e
 三机，每DP副本8×H800，约0.495B MoE、合成batch8，TP/PP/EP/eTP均为2。依赖已有FLASH/Megatron、模型与`runtime/torch214`；环境沿用v2。凭据仅存Git排除的`server.md`，模板为`server.example.md`。
 
 v2的计划性交接结果保留：[RESULTS_V2.md](RESULTS_V2.md)、[results/v2](results/v2)。v1的进程故障恢复结果保留：[RESULTS.md](RESULTS.md)、[results/v1](results/v1)。v1严格FP32数值失败未改变；本轮状态/梯度审计通过不代表已解决数值轨迹等价问题。
+
+服务器在v2.1完成后已按要求释放实验容器、镜像和完整运行时；后续重跑需要重建环境，见[资源清理记录](SERVER_CLEANUP.md)。
