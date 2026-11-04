@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-04",
+  "user_policy": "retain only necessary runnable code, installed env, model, private configuration/seed/version manifests and indispensable initial comparison inputs; remove other regenerable data after summaries published",
+  "performance_pass": false,
+  "flat_tolerance_pass": false,
+  "retain_remote": [
+    "SHIFT source/configs/scripts",
+    "torch214 installed env and headers",
+    "FLASH/Megatron source and model",
+    "BF16 num01 step1 anchors: one complete eight-rank set per original logical role on two active hosts",
+    "compact reference signatures required by existing exact comparison entry point",
+    "injection ledger and tiny manifests/private endpoint config"
+  ],
+  "delete": [
+    "intermediate full step snapshots, including strict and BF16 .pt dumps",
+    "regenerable raw/logs/archives/traces and old reports",
+    "strict diagnostic anchors (can regenerate with strict runner)",
+    "obsolete dedicated container engine binaries where owner verified; no company/shared layers",
+    "unused install wheels/cache and local staging"
+  ],
+  "sources_after_cleanup": "historical SHA identifiers remain; deleted original data cannot be fetched from the summary; rerun required",
+  "source_defaults": "public RFC5737 examples; original private endpoints retained separately; no training semantics changed"
+}

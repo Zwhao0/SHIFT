@@ -1,6 +1,6 @@
 # v3 复现入口与外部依赖
 
-此版本保留研究源码与必要分析/验证入口，GPU结果来自已记录的既有环境；发布验证只做CPU/编译/引用检查，不重跑GPU矩阵。不能从少量公开摘要重算未公开的大张量证据。
+此版本保留研究源码与必要分析/验证入口，GPU结果来自已记录的既有环境；发布验证只做CPU/编译/引用检查，不重跑GPU矩阵。按用户最新指令，可再生raw/归档/trace/中间快照已纳入清理；摘要不能重算旧成绩，需重新实验。
 
 ## 环境
 
@@ -24,7 +24,7 @@ python3 -m scripts.start_v3_planned --suffix UNIQUE_SLOW --scenario slow-compute
 
 每次独立controller之前重新prepare一次，等待前次完全退出；真实kill仅在cold模块的受控SHIFT树内执行。`--slow-ms 100`仅展示参数入口，不代表已发表样本的固定强度；应从保留的原配置复现相应样本。planned基线必须先在现场记录公司GPU PID；`scripts.inspect_v3_resources --baseline ... --output ...`用于检查，不能以PID保持替代业务健康。
 
-生产/研究候选默认off；staged摘要必须显式选择。完整schema2检查入口`shift_full.verify_v3_recovery`；原raw重算使用`reanalyze_v3_benchmark.py`、`summarize_v3_cold_path.py`、`summarize_v3_cold_steps.py`、`summarize_v3_planned_path.py`等。各脚本`--help`给出输入路径，不附带现场私有raw。
+生产/研究候选默认off；staged摘要必须显式选择。完整schema2检查入口`shift_full.verify_v3_recovery`；如需raw重算，先重新实验生成数据，再使用`reanalyze_v3_benchmark.py`、`summarize_v3_cold_path.py`、`summarize_v3_cold_steps.py`、`summarize_v3_planned_path.py`等。各脚本`--help`给出输入路径，原历史raw已按授权清理。
 
 ## CPU与源码身份
 
@@ -35,3 +35,5 @@ python3 -m unittest scripts.test_planned_state scripts.test_v3_recovery
 ```
 
 `evidence/v3/source_manifest.json`区分公开source SHA与实验冻结source provenance文件SHA。发布只调整部署默认地址和公开打包清单，没有重新证明所有GPU行为逐字相同。公开包不含私有AGENTS/handoff、调度IDs、server.md、socket、模型、wheel、虚拟环境或大日志；旧版本仍可在旧Git提交查阅。
+
+清理后重入：本机先`source runtime/v3-private.env`，再prepare；私有精确run配置与公司PID基线在`runtime/v3-reproduce/`，默认实验种子20261106，公开去敏配置见`evidence/v3/reproduction_configs.json`。现有服务器直接使用host/systemd路径，无需恢复旧容器或重装环境。纯冷/慢化耗时受噪声影响，保留配置保证重跑同条件，不能保证每次得到完全相同秒数。BF16原始step1 anchor按原逻辑角色各一套保留；strict诊断可重新运行生成自己的初始anchor。

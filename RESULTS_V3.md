@@ -21,12 +21,12 @@
 |最近staged受控慢化freeze→joint|2.262413 / 2.161504s|非总迁移时间，2s仍未过|
 |对应完整commit gap|7.157995 / 6.814702s|含切换间隔；不能与旧正常audit-off额外gap混比|
 
-常态三模式各4×80步、预定11–80统计窗口，15360 raw rank-step核验；全部原始首步、慢步、skip仍保留，rank/step不当独立重复。step均值flat728.928ms、nativeFT783.668ms、SHIFT785.636ms。审计、staged/reference digest与慢化条件必须随成绩一起说明；旧v2.1正常/audit-off成绩不可直接替代本轮受控慢化。
+常态三模式各4×80步、预定11–80统计窗口，15360 raw rank-step核验；原分析包含全部首步、慢步、skip，清理后保留结果摘要，rank/step不当独立重复。step均值flat728.928ms、nativeFT783.668ms、SHIFT785.636ms。审计、staged/reference digest与慢化条件必须随成绩一起说明；旧v2.1正常/audit-off成绩不可直接替代本轮受控慢化。
 
-跨主机墙钟未独立校时，同rank monotonic仅作分段；state_loaded/局部joint不是全球恢复终点。P11故障→joint首样本20.702180s，与Popen口径不同。正式注入12、历史排障5；限制已取消，原始失败记录保留。
+跨主机墙钟未独立校时，同rank monotonic仅作分段；state_loaded/局部joint不是全球恢复终点。P11故障→joint首样本20.702180s，与Popen口径不同。正式注入12、历史排障5；限制已取消，失败结论与来源SHA保留；可再生原件按用户最新指令清理。
 
 ## 默认与候选
 
 staged digest需要显式选择；CPU load/import重叠、lazy导入、ownership、shadow/recompute与细分桶/trace均为实验候选，优化开关默认off，未证明收益的路线不改成生产通过。仅将部署默认私有地址替换为RFC文档地址、移除私有部署文档打包项；训练计算与验收语义未作发布性修改。公开源码SHA与实验冻结源码SHA分别记录，不能混称逐字相同。
 
-公开小证据是从本机不可变原始材料选取的摘要与SHA索引，不包含大张量/raw归档。可核对摘要与公开源码身份，但没有私有原始归档就不能独立重算全部GPU成绩；必要原件及唯一SHA归档仍保留。见[evidence/v3](evidence/v3/summary.json)和[复现入口](docs/v3_reproduce.md)。
+公开小证据是从原始材料选取的摘要与SHA索引，不包含大张量/raw归档。用户随后明确要求只保留继续实验所需代码/环境/模型/配置和必要初始输入，其余raw、快照、日志、trace与归档删除。来源SHA只标识历史输入，清理后不能凭摘要独立重算全部旧GPU成绩；需要重新运行实验。保留BF16原始step1 anchor的逻辑角色集及compact reference signatures，以支持原有exact比较入口；不保留中间step快照。见[evidence/v3](evidence/v3/summary.json)和[复现入口](docs/v3_reproduce.md)。

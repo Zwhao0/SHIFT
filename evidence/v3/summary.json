@@ -356,50 +356,59 @@
       "path": "results/v3_b1_20261103_pdtri01/reanalyzed.json",
       "bytes": 886654,
       "sha256": "ffe3520b08e8f65594440c5f6bb4269bff52c22e30829adbdb0f68a76092e4ce",
-      "included": false
+      "included": false,
+      "planned_retained_after_cleanup": false
     },
     {
       "path": "results/v3_b1_20261103_pdtri01/critical_attribution.json",
       "bytes": 818395,
       "sha256": "78c24573d9bb83b334b2290170cc131174bd34852790f2eb245a75497f6fe414",
-      "included": false
+      "included": false,
+      "planned_retained_after_cleanup": false
     },
     {
       "path": "results/v3_p_20261103/p11_repeat_checked.json",
       "bytes": 1263,
       "sha256": "c8058a15c503ce8aee5c562edd3e5592fee40f21b0c32d265b165b7ef1735aa9",
-      "included": false
+      "included": false,
+      "planned_retained_after_cleanup": false
     },
     {
       "path": "results/v3_p_20261103/p14_screening_checked.json",
       "bytes": 30645,
       "sha256": "74cd02449ef11b6deeb81655fad7922cf6022f00aec270213de5d9ffaf204a23",
-      "included": false
+      "included": false,
+      "planned_retained_after_cleanup": false
     },
     {
       "path": "results/v3_b1_20261103/pdtri01_source_provenance.json",
       "bytes": 13738,
       "sha256": "3ef0f4ccb43c104547ea97de1795ed7fb7af0a66314d157568fd04ecbe27421c",
-      "included": false
+      "included": false,
+      "planned_retained_after_cleanup": false
     },
     {
       "path": "results/v3_b1_20261103/pdtri01-evidence.tgz",
       "bytes": 23894673,
       "sha256": "0f98dda478f081d14a3836e2e7d108e23d2b1edd1ea5b6f2d2f69015ca5c86fe",
-      "included": false
+      "included": false,
+      "planned_retained_after_cleanup": false
     },
     {
       "path": "results/v3_b2_20261103/p11cold01-evidence.tgz",
       "bytes": 1519355,
       "sha256": "2fa40937d4b0a95cd8cee716614a6dd76ba1f87340124594f3f2c8c9d3c0df41",
-      "included": false
+      "included": false,
+      "planned_retained_after_cleanup": false
     },
     {
       "path": "results/v3_b2_20261103/p11cold02-evidence.tgz",
       "bytes": 1506314,
       "sha256": "b40afa63fee1e33bf3894320e742d0467c9230bae324e951ce8e0f182585a8a4",
-      "included": false
+      "included": false,
+      "planned_retained_after_cleanup": false
     }
   ],
-  "raw_evidence_public": false
+  "raw_evidence_public": false,
+  "raw_retention_policy": "User authorized deletion of regenerable raw logs/tensors/archives/traces on 2026-11-04 after publishing summaries. Necessary initial BF16 anchor role sets and compact reference signatures retained privately as experiment inputs; all deleted sources require rerunning experiments."
 }
