@@ -21,6 +21,8 @@ FILES = ['scripts/recheck_v1_host.py', 'scripts/v1_acceptance_remote.py',
          'scripts/v1_cold_remote.py', 'scripts/v3_controller_smoke.py']
 FILES = sorted(set(FILES + [str(p.relative_to(ROOT)) for d in ('shift_full', 'scripts')
                             for p in (ROOT/d).glob('*.py')]))
+if (ROOT/'runtime/v3-reproduce/company_gpu_baseline.json').is_file():
+    FILES.append('runtime/v3-reproduce/company_gpu_baseline.json')
 MARKER = 'shift-v3-controller-20261103'
 
 

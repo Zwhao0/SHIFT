@@ -1,0 +1,92 @@
+{
+  "baseline_tag": "v3-20261104.1",
+  "train_unchanged": {
+    "shift_full/train.py": true,
+    "shift_full/bucket_finalizer.py": true,
+    "shift_full/compat.py": true
+  },
+  "external_sha256": {
+    "ddp": "5dc93b7f0019c51d3b624aac92c1ddcc81572734de4d1da2a143db36dcbe8029",
+    "adapter": "c1da9ff1db8628290bdfdf372a43c5043d3f93ee04c7a6be3b4d94a5c4e3d76e",
+    "finalize": "051790f45f896159d6c98fe6e911fbb8bb969119addd854ae14434a6aacad820",
+    "futures": "62e646268ea5fee5478c48352cc138ec8bc0d7f21ccd918a6ef40cbde02221a5",
+    "grad_buffer": "ec9465366ba85312a63dcd5e781a65222a1424adf97273a2a55859597bf8e50b",
+    "manager": "df8876d4306c601d5d7848abf91f3249604c2a359a91e3a0a51101dba850a033",
+    "process_group": "86ddccf60be1190c1a45ae1834d88733e5133c1f817318467b22bf063db7412a"
+  },
+  "tests": "10 CPU tests passed",
+  "fault_injections": 0,
+  "diagnostic_timeout_seconds": 20,
+  "formal_timeout_seconds": 2,
+  "formal_failure": "NCCL aborted after seven committed updates; eight skipped events per rank followed by ninth should_commit rejection raising max_retries=8. Trigger of abort unproven; no injected fault.",
+  "startup_failure": "Initial benchmark missed lighthouse endpoint and used documentation address; fixed before common diagnostics. No training algorithm modified.",
+  "startup_log_sha256": {
+    "v3b1_steady_diag01_02_shift/physical_node0/rid1_g0/torchrun_g0.log": "77c6607d531dcc58a40de0b78e402510cb1d47bbb6d8ea244f31c819f5075f7a",
+    "v3b1_steady_diag01_02_shift/physical_node3/rid0_g0/torchrun_g0.log": "03f09fa0bc88a63b4e0c8dde8e992568f0104447be386b8d7512735d4057e5fc"
+  },
+  "formal_status_sha256": "ac1716cc9c51402f9079bbc96cf0171cd355a3a8fd6bda34689e15fa10ba38f8",
+  "resources_before": {
+    "node0": {
+      "company_pids_unchanged": true,
+      "extra_gpu_pids_count": 0,
+      "shift_process_count": 0,
+      "units": []
+    },
+    "node1": {
+      "company_pids_unchanged": true,
+      "extra_gpu_pids_count": 0,
+      "shift_process_count": 0,
+      "units": []
+    },
+    "node3": {
+      "company_pids_unchanged": true,
+      "extra_gpu_pids_count": 0,
+      "shift_process_count": 0,
+      "units": []
+    }
+  },
+  "resources_after_failure": {
+    "node0": {
+      "company_pids_unchanged": true,
+      "extra_gpu_pids_count": 0,
+      "shift_process_count": 0,
+      "units": []
+    },
+    "node1": {
+      "company_pids_unchanged": true,
+      "extra_gpu_pids_count": 0,
+      "shift_process_count": 0,
+      "units": []
+    },
+    "node3": {
+      "company_pids_unchanged": true,
+      "extra_gpu_pids_count": 0,
+      "shift_process_count": 0,
+      "units": []
+    }
+  },
+  "resources_final": {
+    "node0": {
+      "company_pids_unchanged": true,
+      "extra_gpu_pids_count": 0,
+      "shift_process_count": 0,
+      "units": [],
+      "scoped_key_markers": 0
+    },
+    "node1": {
+      "company_pids_unchanged": true,
+      "extra_gpu_pids_count": 0,
+      "shift_process_count": 0,
+      "units": [],
+      "scoped_key_markers": 0
+    },
+    "node3": {
+      "company_pids_unchanged": true,
+      "extra_gpu_pids_count": 0,
+      "shift_process_count": 0,
+      "units": [],
+      "scoped_key_markers": 0
+    }
+  },
+  "temporary_authorization_revoked": true
+}

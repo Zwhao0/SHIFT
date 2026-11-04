@@ -1,0 +1,204 @@
+{
+  "runs": [
+    {
+      "name": "v4_peerref10",
+      "reference_only": true,
+      "plan": {
+        "cut": 4,
+        "post_steps": 12,
+        "seq_len": 512,
+        "microbatches": 4
+      },
+      "outer_manager": true,
+      "outer_audit": true,
+      "outer_timeout": 120.0,
+      "functional_pass": true,
+      "resources_clean": true,
+      "cleanup_errors": [],
+      "source_sha256": {
+        "shift_full/v4_train.py": "7dcfd3a522b4b6085b3d7e7e0c685dccaf554c87f125c73be58df297ff36c691",
+        "shift_full/v4_protocol.py": "add7d0f9ddaf0ad05f9f53759334038d8a38a5b38ae6aa217cfcd9308e10ebed",
+        "shift_full/transport.py": "b03464786a4f8f6b8814f002b4649c1fb9a77e0985387e92e0f1ad17cee611e7",
+        "shift_full/compat.py": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76",
+        "shift_full/v4_groups.py": "7a0ae3809d30eeb266025fb7dcec0b357fed9d973818cffe0cfbfe02c706af4c",
+        "shift_full/v4_reference.py": "9a1024f558b328bd4acd45c04076e9d2fb60e993f31b9c91b6f934b933051077",
+        "scripts/v4_remote.py": "bb8b9873f494056030c1fff5c3bf4337cefd705262758169d40f0d94a19beb1c",
+        "scripts/verify_v4.py": "826ec940f60207595fb4bf92d08a85f91081594cef0e768f04263af72e8db4c8",
+        "shift_full/v4_outer.py": "9bb7413e48547fb69e402b8c81f3b784fb04099a666de6ee2014ef4add77bea7",
+        "scripts/verify_v4_outer.py": "b00c53124a2ce54a9cdce1e8612e410f5cf75fbfc5e3305e432087aed9325f1b",
+        "scripts/verify_v4_reference.py": "38e63b34fcca00747020f335f96a4d67b49612654cef047b293d5c03280a2ae0"
+      },
+      "independent_audit": {
+        "pass_all": true,
+        "errors": [],
+        "resources_clean": true,
+        "reference_only": true,
+        "logical_workers": 16,
+        "reference_rank_steps": 256,
+        "independent_gradient_audit": true
+      },
+      "reference_sha256": "52cd0e1c1229c696d2ceee191215ed325295c9efb2e372cabc26ff2c1da5f4fc",
+      "comparison_method": "nine_state_sha256_not_full_tensor_dump"
+    },
+    {
+      "name": "v4_peer11",
+      "topology": {
+        "tp": 2,
+        "pp": 2,
+        "ep": 2,
+        "ranks": 16,
+        "devices_per_node": 4,
+        "A": "node0/PP0",
+        "B": "node1/PP1",
+        "C": "node3/standby_PP1",
+        "replicas": 2,
+        "ranks_per_replica": 8,
+        "global_batch": 16,
+        "D": "node0/GPU4..7/replica1_PP0",
+        "E": "node1/GPU4..7/replica1_PP1",
+        "independent_fault_domains": false
+      },
+      "plan": {
+        "cut": 4,
+        "post_steps": 10,
+        "seq_len": 512,
+        "microbatches": 4
+      },
+      "oracle": true,
+      "outer_manager": true,
+      "outer_audit": true,
+      "outer_timeout": 120.0,
+      "fail_restore_rank": -1,
+      "functional_pass": true,
+      "oracle_exact": true,
+      "source_sha256": {
+        "shift_full/v4_train.py": "7dcfd3a522b4b6085b3d7e7e0c685dccaf554c87f125c73be58df297ff36c691",
+        "shift_full/v4_protocol.py": "add7d0f9ddaf0ad05f9f53759334038d8a38a5b38ae6aa217cfcd9308e10ebed",
+        "shift_full/transport.py": "b03464786a4f8f6b8814f002b4649c1fb9a77e0985387e92e0f1ad17cee611e7",
+        "shift_full/compat.py": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76",
+        "shift_full/v4_groups.py": "7a0ae3809d30eeb266025fb7dcec0b357fed9d973818cffe0cfbfe02c706af4c",
+        "shift_full/v4_reference.py": "9a1024f558b328bd4acd45c04076e9d2fb60e993f31b9c91b6f934b933051077",
+        "scripts/v4_remote.py": "bb8b9873f494056030c1fff5c3bf4337cefd705262758169d40f0d94a19beb1c",
+        "scripts/verify_v4.py": "826ec940f60207595fb4bf92d08a85f91081594cef0e768f04263af72e8db4c8",
+        "shift_full/v4_outer.py": "9bb7413e48547fb69e402b8c81f3b784fb04099a666de6ee2014ef4add77bea7",
+        "scripts/verify_v4_outer.py": "b00c53124a2ce54a9cdce1e8612e410f5cf75fbfc5e3305e432087aed9325f1b",
+        "scripts/verify_v4_reference.py": "38e63b34fcca00747020f335f96a4d67b49612654cef047b293d5c03280a2ae0"
+      },
+      "resources_clean": true,
+      "cleanup_errors": [],
+      "reference_run": "peerref10",
+      "reference_sha256": "52cd0e1c1229c696d2ceee191215ed325295c9efb2e372cabc26ff2c1da5f4fc",
+      "retain_outer_managers": true,
+      "overlap_peer": true,
+      "peer_compute_overlap_proven": true,
+      "peer_cut_quorum_wait_seconds": {
+        "D/rank0": 2.002564766909927,
+        "D/rank1": 2.004872628953308,
+        "D/rank2": 2.00332114379853,
+        "D/rank3": 2.0038619679398835,
+        "E/rank4": 2.7839670940302312,
+        "E/rank5": 2.7754954339470714,
+        "E/rank6": 2.7877516879234463,
+        "E/rank7": 2.783820906188339
+      },
+      "reference_comparison_cases": 224,
+      "reference_comparison_failures": 0,
+      "comparison_method": "independent_nine_state_sha256",
+      "independent_audit": {
+        "pass_all": true,
+        "errors": [],
+        "resources_clean": true,
+        "replicas": 2,
+        "logical_workers": 16,
+        "healthy_processes_preserved": 12,
+        "source_processes_fenced": 4,
+        "cut": 4,
+        "post_steps": 10,
+        "expected_failure": false,
+        "oracle_rank_steps": 160,
+        "independent_gradient_audit": true,
+        "gradient_audit_enabled": true,
+        "gradient_audit_status": "passed",
+        "gradient_audit_cases": 224,
+        "overlap_peer": true,
+        "peer_compute_overlap_proven": true,
+        "peer_cut_quorum_wait_seconds": {
+          "D/rank0": 2.002564766909927,
+          "D/rank1": 2.004872628953308,
+          "D/rank2": 2.00332114379853,
+          "D/rank3": 2.0038619679398835,
+          "E/rank4": 2.7839670940302312,
+          "E/rank5": 2.7754954339470714,
+          "E/rank6": 2.7877516879234463,
+          "E/rank7": 2.783820906188339
+        },
+        "independent_fault_domains": false
+      },
+      "diagnostic_timing": {
+        "freeze_to_active": 4.980388330295682,
+        "freeze_to_first_commit": 8.03045962844044,
+        "boundary_to_active": 9.115669631864876,
+        "boundary_to_first_commit": 12.165740930009633,
+        "commit_gap": 12.166573907248676,
+        "includes_oracle_replay": false,
+        "includes_reference_hashing": true,
+        "performance_evidence": false
+      },
+      "expected_failure_pass": null,
+      "gradient_audit_cases": 224,
+      "gradient_audit_failures": 0,
+      "oracle_rank_steps": 0,
+      "oracle_failures": 0,
+      "tensor_unequal": 0,
+      "warning_categories_present": [
+        "nccl_exit_without_explicit_destroy",
+        "barrier_device_inferred",
+        "torchft_nonblocking_timeout_default",
+        "future_deprecation_warning"
+      ],
+      "outer_manager_instances": 20,
+      "effective_deadlines": [
+        {
+          "timeout_seconds": 120.0,
+          "quorum_timeout_seconds": 120.0,
+          "connect_timeout_seconds": 120.0
+        }
+      ],
+      "raw_sha256": {
+        "D2.jsonl": "a16a51018dc41d192dde1bfb0597b8e12cc39cc78398387783aa6989b8d48107",
+        "B2.jsonl": "f97373dcb02a1cf84ac4a5dd4324d95cd38f2b934995caa9964705dc054173ed",
+        "E3.jsonl": "559cdd506480312216a53afbfe63a91311f7d38778bd70fb97b8f4858daecb43",
+        "A1.jsonl": "e4a41be204974a5e16ca93a1ad99d643aec27662bc793251723bc1a162155832",
+        "C1.jsonl": "d5f9bba7388662b6101aa22f814c3be88674111fcc12194e44b216193f1559c4",
+        "E2.jsonl": "53abc032199b69f997bac87e501041662b8c4304dec128334c20adc2989f35a5",
+        "A3.jsonl": "df36fcebf8f0d263f389ea017cde0d1c2fb38b36204af3ab7c0808fc3a7ced82",
+        "A0.jsonl": "3c797a22af8c25d9768ac525882d2fbebe463f573d10ecb20594b45b72d680e5",
+        "E1.jsonl": "19f9030b6e7fe1a91a2352ef28efad28d5dfa37591c0251e1c6c31bfff2bffb5",
+        "C2.jsonl": "28afba460abea38f2f906449070516c1e5286018ae94765cc25e467be7944677",
+        "D3.jsonl": "53264c331426ae6876fb805824eacf51c2ea42e36f09b0e0e404354380077b10",
+        "C3.jsonl": "4fde1bd63d36d8b3602b085fb85c18036f5cb130ccec1e0712bbcf13f45b040f",
+        "D0.jsonl": "6bcc4717a04515a884c78993b227b1bdac0f9059186f82b48a71bf1b147f701c",
+        "D1.jsonl": "ab463c4e4fea8060b8d8fa9c7e62be21c325ee0372a9fa70106f0b772dc449df",
+        "B3.jsonl": "2924d61555073380395f7efa4588055381050fd01a564b01b2bfc16d4b7bb974",
+        "B0.jsonl": "3825264b7d620f04abf723b4114e214062279ecef43689092fcf64d37d0c5ece",
+        "E0.jsonl": "7eca3931eaedbbbbee89d1ee1cdbba46f7816d8386399f279cf45168eae94405",
+        "A2.jsonl": "abcfc2fbe9e9b2882a741bb6ff0268d0fc77274f80a02a4e44b9e6eda1af5cb8",
+        "C0.jsonl": "2940d30fe568bfc0497a00771c2e42396678a403b1935535b7b058fe8df5c9be",
+        "B1.jsonl": "36c5688d561d3ae9b1a582bc8cfdd29483be4a60dee40b34c416ca51db322b96"
+      },
+      "limitations": [
+        "two replicas share hosts; D/E compute before activation and wait at the shared two-replica quorum",
+        "restore failure is bounded whole-job fail-stop; rollback and fault isolation unverified",
+        "120s controlled defaults do not resolve the historical v3 2s outer deadline failure",
+        "native NCCL teardown warnings are retained as categories; resource audit is separate",
+        "raw events/logs removed after summarization; hashes cannot reconstruct trajectories"
+      ]
+    }
+  ],
+  "auditor_sha256": {
+    "scripts/verify_v4_outer.py": "b00c53124a2ce54a9cdce1e8612e410f5cf75fbfc5e3305e432087aed9325f1b",
+    "scripts/verify_v4_reference.py": "38e63b34fcca00747020f335f96a4d67b49612654cef047b293d5c03280a2ae0"
+  },
+  "cpu_tests_passed": 54,
+  "scope": "fixed-two-replica transparent intra-replica replacement; healthy peer precomputes next update"
+}

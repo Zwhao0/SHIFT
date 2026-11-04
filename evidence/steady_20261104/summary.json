@@ -1,0 +1,114 @@
+{
+  "baseline_tag": "v3-20261104.1",
+  "baseline_commit": "8ee421cada7b1986fc0f0bed7d1c1dab42f7d1e3",
+  "training_algorithm_changed": false,
+  "performance_pass": false,
+  "source_sha256": {
+    "shift_full/train.py": "a045269eeffe6e2793a3199a7d682922275f67615b09d670977311d46f1cfbef",
+    "shift_full/bucket_finalizer.py": "6fcce23b956a51fda326944c3ddf8adae6a7f73f9a1e3c6e63a8fbea40b6167a",
+    "shift_full/compat.py": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76",
+    "scripts/v3_benchmark_remote.py": "fd0d22bfc6169f644fca93d6e34da854b44f47719dcf0f150c92213e690d98d2",
+    "scripts/start_v3_benchmark.py": "547369ac5c127f3a4b6c26cbf6f6e0c67822e18b5eb5e99285f6b68de8488e9f",
+    "scripts/summarize_steady_round.py": "12f6c7617c8edbb7c92163d55290c77b6eb3cc6bea9207807fa217a77e420203"
+  },
+  "full_report": {
+    "path": "full_report.json.gz",
+    "compressed_sha256": "1dcff85a682913b756fa2c94157471630da66766530b6981e78866d004ffa8d4",
+    "uncompressed_sha256": "1de495259d2eec874e37c7b6ac36ed05b5bb8d456f20566329f4bea9d9338267",
+    "uncompressed_bytes": 390166,
+    "compressed_bytes": 45788,
+    "contents": "Full 80-step/79-interval distribution, selected-rank trace summaries, all failed attempts per role, source SHAs and control attribution."
+  },
+  "diagnostics": [
+    {
+      "session": "v3b1_steady_diag01_01_flat",
+      "functional_pass": true,
+      "performance_evidence": false,
+      "selected_ranks": 2
+    },
+    {
+      "session": "v3b1_steady_diag02_01_shift",
+      "functional_pass": true,
+      "performance_evidence": false,
+      "selected_ranks": 2
+    },
+    {
+      "session": "v3b1_steady_diag02_02_nativeft",
+      "functional_pass": true,
+      "performance_evidence": false,
+      "selected_ranks": 2
+    }
+  ],
+  "formal": {
+    "done": true,
+    "success": false,
+    "planned_runs": 4,
+    "failure_reason": "Cross-replica NCCL aborted; should_commit rejected nine consecutive attempts",
+    "schedule": [
+      "flat",
+      "shift",
+      "shift",
+      "flat"
+    ],
+    "seed": 20261106,
+    "fixed_window": [
+      11,
+      80
+    ],
+    "complete_run_rank_steps": 1280,
+    "comparison": null,
+    "completed_runs": [
+      {
+        "session": "v3b1_steady_abba01_01_flat",
+        "mode": "flat",
+        "windows": {
+          "first10": {
+            "count": 10,
+            "mean": 1.981155327509623,
+            "p50": 0.8590823311824352,
+            "p95": 6.566608753037872,
+            "maximum": 6.778196926927194,
+            "samples_per_second": 4.038047844565656
+          },
+          "full": {
+            "count": 80,
+            "mean": 0.9650551517916028,
+            "p50": 0.6691930845845491,
+            "p95": 1.4736188804497936,
+            "maximum": 6.778196926927194,
+            "samples_per_second": 8.289681667569136
+          },
+          "fixed11_80": {
+            "count": 70,
+            "mean": 0.8198979838318857,
+            "p50": 0.6654823119752109,
+            "p95": 1.2740433083847165,
+            "maximum": 6.670543008018285,
+            "samples_per_second": 9.757311467715894
+          }
+        },
+        "commit_intervals": {
+          "count": 70,
+          "mean": 0.8199498274064224,
+          "p50": 0.6656128009781241,
+          "p95": 1.2741676933597774,
+          "maximum": 6.670784582849592,
+          "samples_per_second": 9.756694534962882
+        }
+      }
+    ],
+    "incomplete_runs": [
+      {
+        "session": "v3b1_steady_abba01_02_shift",
+        "roles": 16,
+        "committed_steps_per_role": [
+          7
+        ],
+        "logged_skips_per_role": [
+          8
+        ]
+      }
+    ]
+  },
+  "retention": "All 80 step distributions, same-rank attribution and input SHAs retained. Regenerable raw/traces removed after analysis; summaries cannot reconstruct traces."
+}

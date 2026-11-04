@@ -14,7 +14,7 @@ def main():
     p.add_argument('--digest-engine',choices=['reference','staged'],default='reference')
     p.add_argument('--overlap-cpu-model-load',action='store_true')
     p.add_argument('--overlap-cpu-imports',action='store_true')
-    p.add_argument('--schedule',choices=['probe','cold-probe','abba','native-abba','triad','digest','digest-breakdown','numerical'],default='probe')
+    p.add_argument('--schedule',choices=['probe','common-probe','cold-probe','short-abba','abba','native-abba','triad','digest','digest-breakdown','numerical'],default='probe')
     p.add_argument('--trace-events',action='store_true')
     p.add_argument('--bucket-ready-trace',action='store_true')
     p.add_argument('--timeline-trace',action='store_true')
@@ -33,7 +33,7 @@ def main():
         p.error('CPU model overlap admission requires cold-probe or numerical validation')
     if a.overlap_cpu_imports and (a.cpu_only or a.schedule not in ('cold-probe','numerical')):
         p.error('CPU import overlap admission requires cold-probe or numerical validation')
-    if a.timeline_trace and (a.schedule!='probe' or not a.trace_events or a.cpu_only or a.bucket_ready_trace):
+    if a.timeline_trace and (a.schedule not in ('probe','common-probe') or not a.trace_events or a.cpu_only or a.bucket_ready_trace):
         p.error('timeline is a separate trace-enabled formal-load probe only')
     if a.schedule in ('digest','digest-breakdown') and (a.digest_engine!='reference' or a.trace_events or a.sync_quorum or a.eager_groups or a.cpu_only):
         p.error('digest probe does not accept training/CPU-only flags')

@@ -10,6 +10,7 @@ import time
 
 from scripts import v1_acceptance_remote as remote
 from shift_full.control import server_password
+from shift_full.control import endpoints_from_env
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMAS = {'model', 'buffers', 'optimizer', 'scheduler', 'progress', 'cpu_rng', 'cuda_rng', 'python_rng', 'tracker_rng'}
@@ -25,6 +26,7 @@ def config(mode, steps, trace=False):
         a.append('--trace-events')
     c.update(target_steps=steps, fast_launch=False, persistent_cpu_launcher=False,
              single_gpu_visibility=False, audit_initial=True)
+    c.setdefault('lighthouse_ip', endpoints_from_env()['node0'].ip)
     c['env']['CUDA_DEVICE_MAX_CONNECTIONS'] = '1'
     return c
 
@@ -218,7 +220,7 @@ def run_case(name, mode, steps, seed, trace, cold_launcher=False,sync_quorum=Fal
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--suffix', required=True)
-    p.add_argument('--schedule', choices=['probe','cold-probe','abba','native-abba','triad'], default='probe')
+    p.add_argument('--schedule', choices=['probe','common-probe','cold-probe','short-abba','abba','native-abba','triad'], default='probe')
     p.add_argument('--seed', type=int, default=20261106)
     p.add_argument('--trace-events', action='store_true')
     p.add_argument('--bucket-ready-trace', action='store_true')
@@ -228,7 +230,7 @@ def main():
     a = p.parse_args()
     if a.bucket_ready_trace and (a.schedule!='probe' or not a.trace_events):
         p.error('bucket readiness is a trace-enabled formal-load probe only')
-    if a.timeline_trace and (a.schedule!='probe' or not a.trace_events or a.bucket_ready_trace):
+    if a.timeline_trace and (a.schedule not in ('probe','common-probe') or not a.trace_events or a.bucket_ready_trace):
         p.error('timeline is a separate trace-enabled formal-load probe only')
     if not a.suffix or not all(c.isalnum() or c in '_-' for c in a.suffix): p.error('invalid suffix')
     out = ROOT/f'results/v3_b1_20261103_{a.suffix}'
@@ -237,7 +239,8 @@ def main():
     fcntl.flock(lock, fcntl.LOCK_EX|fcntl.LOCK_NB)
     remote.PASSWORD = server_password(remote.PRIVATE/'credentials')
     (remote.PRIVATE/'credentials').unlink()
-    schedule = ['shift'] if a.schedule=='cold-probe' else ['flat','shift','nativeft'] if a.schedule=='probe' else (
+    schedule = ['shift'] if a.schedule=='cold-probe' else ['shift','nativeft'] if a.schedule=='common-probe' else ['flat','shift','nativeft'] if a.schedule=='probe' else (
+        ['flat','shift','shift','flat'] if a.schedule=='short-abba' else
         ['flat','shift','shift','flat','shift','flat','flat','shift'] if a.schedule=='abba' else
         ['shift','nativeft','nativeft','shift','nativeft','shift','shift','nativeft'] if a.schedule=='native-abba' else
         ['flat','nativeft','shift','shift','nativeft','flat','nativeft','shift','flat','flat','shift','nativeft'])
@@ -247,7 +250,7 @@ def main():
     try:
         for i,mode in enumerate(schedule):
             name=f'v3b1_{a.suffix}_{i+1:02d}_{mode}'
-            result = run_case(name,mode,12 if a.schedule in ('probe','cold-probe') else 80,a.seed,a.trace_events,
+            result = run_case(name,mode,12 if a.schedule in ('probe','common-probe','cold-probe') else 80,a.seed,a.trace_events,
                               cold_launcher=a.schedule=='cold-probe',sync_quorum=a.sync_quorum,eager_groups=a.eager_groups,ready_trace=a.bucket_ready_trace,timeline_trace=a.timeline_trace)
             status['rows'].append(dict(session=name,mode=mode,windows=result['windows'],
                 commit_intervals=result.get('fixed11_80_commit_intervals'),
@@ -256,15 +259,16 @@ def main():
         if a.schedule=='triad':
             status['comparisons'] = {baseline+'->'+candidate: matched_comparison(status['rows'],baseline,candidate)
                 for baseline,candidate in [('flat','nativeft'),('nativeft','shift'),('flat','shift')]}
-        elif a.schedule not in ('probe','cold-probe'):
+        elif a.schedule not in ('probe','common-probe','cold-probe'):
             left,right = schedule[:2]
             means = {m:[r['windows']['fixed11_80']['mean'] for r in status['rows'] if r['mode']==m] for m in (left,right)}
-            paired=[100*(means[right][i]/means[left][i]-1) for i in range(4)]
-            half=3.182446*statistics.stdev(paired)/2
+            paired=[100*(b/a-1) for a,b in zip(means[left],means[right])]
+            n=len(paired)
+            half=(12.706205 if n==2 else 3.182446)*statistics.stdev(paired)/(n**.5)
             status['comparison'] = dict(baseline=left,candidate=right,run_means=means,
                 paired_percent_mean=statistics.fmean(paired),
                 paired_percent_t95=[statistics.fmean(paired)-half,statistics.fmean(paired)+half],
-                confidence_note='Exploratory t interval over four run pairs; steps are not independent repetitions.',
+                confidence_note=f'Exploratory t interval over {n} chronological run pairs; steps are not independent repetitions. Two pairs cannot establish stability.',
                 pooled_overhead_percent=100*(statistics.fmean(means[right])/statistics.fmean(means[left])-1),
                 run_stddev={m:statistics.stdev(v) for m,v in means.items()},
                 pairs_percent=paired)

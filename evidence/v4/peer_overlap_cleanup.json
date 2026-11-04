@@ -1,0 +1,65 @@
+{
+  "runs": [
+    "v4_peerref10",
+    "v4_peer11"
+  ],
+  "nodes": {
+    "node0": {
+      "deleted_file_bytes": 5412512,
+      "company_pid_count": 8,
+      "company_pids_unchanged": true,
+      "extra_gpu": 0,
+      "shift_processes": 0,
+      "active_shift_units": 0,
+      "temporary_authorization_markers": 0,
+      "environment_preserved": true,
+      "headers_preserved": true,
+      "model_preserved": true,
+      "installed_source_sha256": {
+        "torchft/manager.py": "df8876d4306c601d5d7848abf91f3249604c2a359a91e3a0a51101dba850a033",
+        "torchft/process_group.py": "86ddccf60be1190c1a45ae1834d88733e5133c1f817318467b22bf063db7412a",
+        "torch/distributed/distributed_c10d.py": "ffa3de81159c96c1a1042c8e2bce52fb604cd7e083675ebd7bed9a12d9c0143b",
+        "torchft/_torchft.cpython-312-x86_64-linux-gnu.so": "e259c17273bd454b45f9361a754dc5ac52b8c8f9e4db8f1b5708b2abb9d572c3"
+      }
+    },
+    "node1": {
+      "deleted_file_bytes": 1700321,
+      "company_pid_count": 8,
+      "company_pids_unchanged": true,
+      "extra_gpu": 0,
+      "shift_processes": 0,
+      "active_shift_units": 0,
+      "temporary_authorization_markers": 0,
+      "environment_preserved": true,
+      "headers_preserved": true,
+      "model_preserved": true,
+      "installed_source_sha256": {
+        "torchft/manager.py": "df8876d4306c601d5d7848abf91f3249604c2a359a91e3a0a51101dba850a033",
+        "torchft/process_group.py": "86ddccf60be1190c1a45ae1834d88733e5133c1f817318467b22bf063db7412a",
+        "torch/distributed/distributed_c10d.py": "ffa3de81159c96c1a1042c8e2bce52fb604cd7e083675ebd7bed9a12d9c0143b",
+        "torchft/_torchft.cpython-312-x86_64-linux-gnu.so": "e259c17273bd454b45f9361a754dc5ac52b8c8f9e4db8f1b5708b2abb9d572c3"
+      }
+    },
+    "node3": {
+      "deleted_file_bytes": 523930,
+      "company_pid_count": 8,
+      "company_pids_unchanged": true,
+      "extra_gpu": 0,
+      "shift_processes": 0,
+      "active_shift_units": 0,
+      "temporary_authorization_markers": 0,
+      "environment_preserved": true,
+      "headers_preserved": true,
+      "model_preserved": true,
+      "installed_source_sha256": {
+        "torchft/manager.py": "df8876d4306c601d5d7848abf91f3249604c2a359a91e3a0a51101dba850a033",
+        "torchft/process_group.py": "86ddccf60be1190c1a45ae1834d88733e5133c1f817318467b22bf063db7412a",
+        "torch/distributed/distributed_c10d.py": "ffa3de81159c96c1a1042c8e2bce52fb604cd7e083675ebd7bed9a12d9c0143b",
+        "torchft/_torchft.cpython-312-x86_64-linux-gnu.so": "e259c17273bd454b45f9361a754dc5ac52b8c8f9e4db8f1b5708b2abb9d572c3"
+      }
+    }
+  },
+  "business_health_tested": false,
+  "all_resources_clean": true,
+  "raw_retention": "saved audited summaries and signatures only"
+}

@@ -1,0 +1,416 @@
+{
+  "remote": {
+    "node0": {
+      "files": 33,
+      "reclaimed_bytes": 492816618,
+      "removed": [
+        {
+          "path": "results/v3b1_steady_diag01_02_shift",
+          "bytes": 367979
+        },
+        {
+          "path": "results/v3b1_steady_diag02_01_shift",
+          "bytes": 61668749
+        },
+        {
+          "path": "results/v3b1_steady_abba01_01_flat-node0.tgz",
+          "bytes": 486015
+        },
+        {
+          "path": "results/v3b1_steady_abba01_02_shift",
+          "bytes": 1832386
+        },
+        {
+          "path": "results/v3b1_steady_diag01_01_flat",
+          "bytes": 61434519
+        },
+        {
+          "path": "results/v3b1_steady_abba01_01_flat",
+          "bytes": 6522819
+        },
+        {
+          "path": "results/v3b1_steady_diag02_02_nativeft-node0.tgz",
+          "bytes": 19695137
+        },
+        {
+          "path": "results/v3b1_steady_diag02_01_shift-node0.tgz",
+          "bytes": 19712250
+        },
+        {
+          "path": "results/v3b1_steady_abba01_02_shift-node0.tgz",
+          "bytes": 143909
+        },
+        {
+          "path": "results/v3b1_steady_diag01_02_shift-node0.tgz",
+          "bytes": 37857
+        },
+        {
+          "path": "results/v3b1_steady_diag02_02_nativeft",
+          "bytes": 61623575
+        },
+        {
+          "path": "results/v3b1_steady_diag01_01_flat-node0.tgz",
+          "bytes": 19682445
+        },
+        {
+          "path": "results/v3_b1_20261103_steady_diag01",
+          "bytes": 1352
+        },
+        {
+          "path": "results/v3_b1_20261103_steady_diag02",
+          "bytes": 1762
+        },
+        {
+          "path": "results/v3_b1_20261103_steady_abba01",
+          "bytes": 1849
+        },
+        {
+          "path": "results/v3_b1_20261103/steady_abba01.log",
+          "bytes": 4926
+        },
+        {
+          "path": "results/v3_b1_20261103/steady_diag01.log",
+          "bytes": 4752
+        },
+        {
+          "path": "results/v3_b1_20261103/steady_diag02.log",
+          "bytes": 3326
+        },
+        {
+          "path": "configs/v3b1_steady_diag02_01_shift.json",
+          "bytes": 1093
+        },
+        {
+          "path": "configs/v3b1_steady_abba01_02_shift.json",
+          "bytes": 1061
+        },
+        {
+          "path": "configs/v3b1_steady_diag02_02_nativeft.json",
+          "bytes": 1096
+        },
+        {
+          "path": "configs/v3b1_steady_diag01_01_flat.json",
+          "bytes": 1061
+        },
+        {
+          "path": "configs/v3b1_steady_abba01_01_flat.json",
+          "bytes": 1059
+        },
+        {
+          "path": "configs/v3b1_steady_diag01_02_shift.json",
+          "bytes": 1063
+        },
+        {
+          "path": "v3b1_steady_diag02_02_nativeft-logs.tgz",
+          "bytes": 19695137
+        },
+        {
+          "path": "v3b1_steady_diag01_01_flat-logs.tgz",
+          "bytes": 19682445
+        },
+        {
+          "path": "v3b1_steady_abba01_02_shift-logs.tgz",
+          "bytes": 143909
+        },
+        {
+          "path": "v3b1_steady_abba01_01_flat-logs.tgz",
+          "bytes": 486015
+        },
+        {
+          "path": "v3b1_steady_diag01_02_shift-logs.tgz",
+          "bytes": 37857
+        },
+        {
+          "path": "v3b1_steady_diag02_01_shift-logs.tgz",
+          "bytes": 19712250
+        },
+        {
+          "path": "/tmp/shift-v3-b1-steady_diag01-evidence.tgz",
+          "bytes": 59227695
+        },
+        {
+          "path": "/tmp/shift-v3-b1-steady_diag02-evidence.tgz",
+          "bytes": 118372850
+        },
+        {
+          "path": "/tmp/shift-v3-b1-steady_abba01-evidence.tgz",
+          "bytes": 2226420
+        }
+      ]
+    },
+    "node1": {
+      "files": 0,
+      "reclaimed_bytes": 0,
+      "removed": []
+    },
+    "node3": {
+      "files": 24,
+      "reclaimed_bytes": 92647333,
+      "removed": [
+        {
+          "path": "results/v3b1_steady_diag02_02_nativeft-node3.tgz",
+          "bytes": 9824098
+        },
+        {
+          "path": "results/v3b1_steady_diag02_02_nativeft",
+          "bytes": 10641896
+        },
+        {
+          "path": "results/v3b1_steady_diag01_02_shift",
+          "bytes": 65327
+        },
+        {
+          "path": "results/v3b1_steady_diag02_01_shift",
+          "bytes": 10646441
+        },
+        {
+          "path": "results/v3b1_steady_diag01_01_flat",
+          "bytes": 10621332
+        },
+        {
+          "path": "results/v3b1_steady_diag01_01_flat-node3.tgz",
+          "bytes": 9822446
+        },
+        {
+          "path": "results/v3b1_steady_diag02_01_shift-node3.tgz",
+          "bytes": 9833600
+        },
+        {
+          "path": "results/v3b1_steady_abba01_01_flat",
+          "bytes": 968599
+        },
+        {
+          "path": "results/v3b1_steady_abba01_01_flat-node3.tgz",
+          "bytes": 162384
+        },
+        {
+          "path": "results/v3b1_steady_diag01_02_shift-node3.tgz",
+          "bytes": 12056
+        },
+        {
+          "path": "results/v3b1_steady_abba01_02_shift",
+          "bytes": 291139
+        },
+        {
+          "path": "results/v3b1_steady_abba01_02_shift-node3.tgz",
+          "bytes": 48499
+        },
+        {
+          "path": "configs/v3b1_steady_abba01_02_shift.json",
+          "bytes": 1061
+        },
+        {
+          "path": "configs/v3b1_steady_diag02_02_nativeft.json",
+          "bytes": 1096
+        },
+        {
+          "path": "configs/v3b1_steady_diag02_01_shift.json",
+          "bytes": 1093
+        },
+        {
+          "path": "configs/v3b1_steady_diag01_02_shift.json",
+          "bytes": 1063
+        },
+        {
+          "path": "configs/v3b1_steady_abba01_01_flat.json",
+          "bytes": 1059
+        },
+        {
+          "path": "configs/v3b1_steady_diag01_01_flat.json",
+          "bytes": 1061
+        },
+        {
+          "path": "v3b1_steady_diag01_02_shift-logs.tgz",
+          "bytes": 12056
+        },
+        {
+          "path": "v3b1_steady_abba01_01_flat-logs.tgz",
+          "bytes": 162384
+        },
+        {
+          "path": "v3b1_steady_abba01_02_shift-logs.tgz",
+          "bytes": 48499
+        },
+        {
+          "path": "v3b1_steady_diag02_02_nativeft-logs.tgz",
+          "bytes": 9824098
+        },
+        {
+          "path": "v3b1_steady_diag01_01_flat-logs.tgz",
+          "bytes": 9822446
+        },
+        {
+          "path": "v3b1_steady_diag02_01_shift-logs.tgz",
+          "bytes": 9833600
+        }
+      ]
+    }
+  },
+  "policy": "Only this round results, archives, traces and generated run configurations removed; source/env/headers/models/private configs/anchors retained.",
+  "local": {
+    "files": 40,
+    "reclaimed_bytes": 394545479,
+    "removed": [
+      {
+        "path": "results/steady_20261104_resources_after_failure.json",
+        "bytes": 2022
+      },
+      {
+        "path": "results/steady_20261104_resources_before.json",
+        "bytes": 2021
+      },
+      {
+        "path": "results/steady_20261104_resources_final.json",
+        "bytes": 2022
+      },
+      {
+        "path": "results/steady_abba01_collection.txt",
+        "bytes": 1189
+      },
+      {
+        "path": "results/steady_audit_sources",
+        "bytes": 181146
+      },
+      {
+        "path": "results/steady_cpu_tests.log",
+        "bytes": 103
+      },
+      {
+        "path": "results/steady_cpu_tests_final.log",
+        "bytes": 109
+      },
+      {
+        "path": "results/steady_diag01_collection.txt",
+        "bytes": 1030
+      },
+      {
+        "path": "results/steady_diag02_collection.txt",
+        "bytes": 926
+      },
+      {
+        "path": "results/steady_diagnostics_summary.json",
+        "bytes": 102414
+      },
+      {
+        "path": "results/steady_inventory_node0.json",
+        "bytes": 2514
+      },
+      {
+        "path": "results/steady_inventory_node1.json",
+        "bytes": 2
+      },
+      {
+        "path": "results/steady_inventory_node3.json",
+        "bytes": 2017
+      },
+      {
+        "path": "results/steady_prepare_abba.json",
+        "bytes": 18531
+      },
+      {
+        "path": "results/steady_prepare_diag.json",
+        "bytes": 18531
+      },
+      {
+        "path": "results/steady_prepare_diag02.json",
+        "bytes": 18531
+      },
+      {
+        "path": "results/steady_revoke.json",
+        "bytes": 193
+      },
+      {
+        "path": "results/steady_traces",
+        "bytes": 20831785
+      },
+      {
+        "path": "results/v3_a1_20261103/controller_prepare.json",
+        "bytes": 19455
+      },
+      {
+        "path": "results/v3_b1_20261103/steady_abba01-evidence.tgz",
+        "bytes": 2226420
+      },
+      {
+        "path": "results/v3_b1_20261103/steady_abba01-evidence.tgz.sha256",
+        "bytes": 93
+      },
+      {
+        "path": "results/v3_b1_20261103/steady_abba01_owner.json",
+        "bytes": 114
+      },
+      {
+        "path": "results/v3_b1_20261103/steady_abba01_source_provenance.json",
+        "bytes": 19455
+      },
+      {
+        "path": "results/v3_b1_20261103/steady_diag01-evidence.tgz",
+        "bytes": 59227695
+      },
+      {
+        "path": "results/v3_b1_20261103/steady_diag01-evidence.tgz.sha256",
+        "bytes": 93
+      },
+      {
+        "path": "results/v3_b1_20261103/steady_diag01_owner.json",
+        "bytes": 112
+      },
+      {
+        "path": "results/v3_b1_20261103/steady_diag01_source_provenance.json",
+        "bytes": 19455
+      },
+      {
+        "path": "results/v3_b1_20261103/steady_diag02-evidence.tgz",
+        "bytes": 118372850
+      },
+      {
+        "path": "results/v3_b1_20261103/steady_diag02-evidence.tgz.sha256",
+        "bytes": 93
+      },
+      {
+        "path": "results/v3_b1_20261103/steady_diag02_owner.json",
+        "bytes": 113
+      },
+      {
+        "path": "results/v3_b1_20261103/steady_diag02_source_provenance.json",
+        "bytes": 19455
+      },
+      {
+        "path": "results/v3_b1_20261103_steady_abba01",
+        "bytes": 1849
+      },
+      {
+        "path": "results/v3_b1_20261103_steady_diag01",
+        "bytes": 1352
+      },
+      {
+        "path": "results/v3_b1_20261103_steady_diag02",
+        "bytes": 1762
+      },
+      {
+        "path": "results/v3b1_steady_abba01_01_flat",
+        "bytes": 6522819
+      },
+      {
+        "path": "results/v3b1_steady_abba01_02_shift",
+        "bytes": 1832386
+      },
+      {
+        "path": "results/v3b1_steady_diag01_01_flat",
+        "bytes": 61434519
+      },
+      {
+        "path": "results/v3b1_steady_diag01_02_shift",
+        "bytes": 367979
+      },
+      {
+        "path": "results/v3b1_steady_diag02_01_shift",
+        "bytes": 61668749
+      },
+      {
+        "path": "results/v3b1_steady_diag02_02_nativeft",
+        "bytes": 61623575
+      }
+    ]
+  }
+}

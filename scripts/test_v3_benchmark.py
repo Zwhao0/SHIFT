@@ -8,6 +8,17 @@ from scripts.v3_benchmark_remote import analyze, SCHEMAS, NoFaultRotation, match
 from scripts.reanalyze_v3_benchmark import independent_raw
 
 class BenchmarkTest(unittest.TestCase):
+    def test_benchmark_lighthouse_uses_retained_controller_endpoint(self):
+        from scripts.v3_benchmark_remote import config
+        from unittest.mock import Mock
+        with patch('scripts.v3_benchmark_remote.endpoints_from_env',
+                   return_value={'node0':Mock(ip='198.51.100.123')}):
+            for mode in ('flat','shift','nativeft'):
+                c=config(mode,80)
+                self.assertEqual(c['lighthouse_ip'],'198.51.100.123')
+                self.assertIn('--audit-state',c['train_args'])
+                self.assertEqual(c['target_steps'],80)
+
     def test_anchor_timeline_preserves_formal_workload_and_all_checks(self):
         from scripts import v3_numerical_remote as numerical
         from unittest.mock import MagicMock

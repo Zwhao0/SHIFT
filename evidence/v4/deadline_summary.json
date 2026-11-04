@@ -1,0 +1,257 @@
+{
+  "runs": [
+    {
+      "summary": {
+        "success": false,
+        "expected_timeout": true,
+        "exit_codes": [
+          1,
+          1
+        ],
+        "backend": "nccl",
+        "pg_timeout": 2.0,
+        "delay": 3.0,
+        "cancel_timer": false,
+        "gpu_used": true,
+        "effective_deadlines": [
+          {
+            "manager_timeout": 90.0,
+            "quorum_timeout": 180.0,
+            "pg_timeout": 2.0
+          },
+          {
+            "manager_timeout": 90.0,
+            "quorum_timeout": 180.0,
+            "pg_timeout": 2.0
+          }
+        ],
+        "timers": [
+          {
+            "replica": 1,
+            "step": 1,
+            "origin": "cuda_stream",
+            "timeout_seconds": 2.0,
+            "elapsed": 2.0019307089969516
+          }
+        ],
+        "errors": [
+          {
+            "replica": 1,
+            "step": 1,
+            "error": "RuntimeError: should_commit failed 1 times consecutively, exceeding max_retries=0",
+            "manager_error": "ExceptionWithTraceback('aborted\\nNoneType: None\\n')",
+            "native_pg_error": "RuntimeError('aborted')"
+          },
+          {
+            "replica": 0,
+            "step": 1,
+            "error": "AssertionError: ",
+            "manager_error": "None",
+            "native_pg_error": "None"
+          }
+        ],
+        "resources_clean": true,
+        "source_sha256": "52268939ad005b46c6df33e1997c52b1c534d542ac6ab842b4b3ce40d072961d",
+        "pass_expected": true
+      },
+      "independent_audit": {
+        "pass_all": true,
+        "errors": [],
+        "case": "native_pg_timeout",
+        "expected_timeout": true,
+        "manager_timeout_seconds": 90,
+        "quorum_timeout_seconds": 180,
+        "pg_timeout_seconds": 2.0,
+        "deadlines": [
+          {
+            "replica": 0,
+            "manager_timeout": 90.0,
+            "quorum_timeout": 180.0,
+            "pg_timeout": 2.0
+          },
+          {
+            "replica": 1,
+            "manager_timeout": 90.0,
+            "quorum_timeout": 180.0,
+            "pg_timeout": 2.0
+          }
+        ],
+        "failure_layer": "native_process_group_timeout",
+        "timer_origin": "cuda_stream",
+        "timer_elapsed_seconds": 2.0019307089969516,
+        "error_count": 2,
+        "timer_abort_count": 1,
+        "cancel_timer_guard_steps": {
+          "0": [],
+          "1": []
+        },
+        "resources_clean": true
+      },
+      "pass_all": true,
+      "actual_auditor_sha256": "7542fe4c5cab0b5bfd5ff32f12288e0465b2dd9de184916bc93e0e5e5d5433e2",
+      "raw_sha256": {
+        "summary.json": "5f28296ea87e4d153b515c1e76eb9cd5c1930362b2954bfb1e78380c32e624d9",
+        "R0.jsonl": "411f05eae57aba9c09ab1e416bca686582e867172f603539dec70a234bc6e82c",
+        "R1.jsonl": "2bda0342d0d28de0f3becf201c35e6ba667e53dd7b5193ce293c284332a34bd3"
+      },
+      "name": "v4_deadline13"
+    },
+    {
+      "summary": {
+        "success": true,
+        "expected_timeout": false,
+        "exit_codes": [
+          0,
+          0
+        ],
+        "backend": "nccl",
+        "pg_timeout": 10.0,
+        "delay": 3.0,
+        "cancel_timer": false,
+        "gpu_used": true,
+        "effective_deadlines": [
+          {
+            "manager_timeout": 90.0,
+            "quorum_timeout": 180.0,
+            "pg_timeout": 10.0
+          },
+          {
+            "manager_timeout": 90.0,
+            "quorum_timeout": 180.0,
+            "pg_timeout": 10.0
+          }
+        ],
+        "timers": [],
+        "errors": [],
+        "resources_clean": true,
+        "source_sha256": "52268939ad005b46c6df33e1997c52b1c534d542ac6ab842b4b3ce40d072961d",
+        "pass_expected": true
+      },
+      "independent_audit": {
+        "pass_all": true,
+        "errors": [],
+        "case": "normal",
+        "expected_timeout": false,
+        "manager_timeout_seconds": 90,
+        "quorum_timeout_seconds": 180,
+        "pg_timeout_seconds": 10.0,
+        "deadlines": [
+          {
+            "replica": 0,
+            "manager_timeout": 90.0,
+            "quorum_timeout": 180.0,
+            "pg_timeout": 10.0
+          },
+          {
+            "replica": 1,
+            "manager_timeout": 90.0,
+            "quorum_timeout": 180.0,
+            "pg_timeout": 10.0
+          }
+        ],
+        "failure_layer": null,
+        "timer_origin": null,
+        "timer_elapsed_seconds": null,
+        "error_count": 0,
+        "timer_abort_count": 0,
+        "cancel_timer_guard_steps": {
+          "0": [],
+          "1": []
+        },
+        "resources_clean": true
+      },
+      "pass_all": true,
+      "actual_auditor_sha256": "7542fe4c5cab0b5bfd5ff32f12288e0465b2dd9de184916bc93e0e5e5d5433e2",
+      "raw_sha256": {
+        "summary.json": "bdd194c1a790b6830b5e545fdd6446251e31e113e0c2c3b3046ad06f9b469910",
+        "R0.jsonl": "f450fbcba982d9efd2f4a1a76b614b0ec177eb4234aad6d0b0521120f8abd35b",
+        "R1.jsonl": "94f4af310df77c94f854a3b7f30c6c9a12fdc2f244629ad52b071438089cfc19"
+      },
+      "name": "v4_deadline17"
+    },
+    {
+      "summary": {
+        "success": true,
+        "expected_timeout": false,
+        "exit_codes": [
+          0,
+          0
+        ],
+        "backend": "nccl",
+        "pg_timeout": 2.0,
+        "delay": 0.0,
+        "cancel_timer": true,
+        "gpu_used": true,
+        "effective_deadlines": [
+          {
+            "manager_timeout": 90.0,
+            "quorum_timeout": 180.0,
+            "pg_timeout": 2.0
+          },
+          {
+            "manager_timeout": 90.0,
+            "quorum_timeout": 180.0,
+            "pg_timeout": 2.0
+          }
+        ],
+        "timers": [],
+        "errors": [],
+        "resources_clean": true,
+        "source_sha256": "52268939ad005b46c6df33e1997c52b1c534d542ac6ab842b4b3ce40d072961d",
+        "pass_expected": true
+      },
+      "independent_audit": {
+        "pass_all": true,
+        "errors": [],
+        "case": "cancel_timer_control",
+        "expected_timeout": false,
+        "manager_timeout_seconds": 90,
+        "quorum_timeout_seconds": 180,
+        "pg_timeout_seconds": 2.0,
+        "deadlines": [
+          {
+            "replica": 0,
+            "manager_timeout": 90.0,
+            "quorum_timeout": 180.0,
+            "pg_timeout": 2.0
+          },
+          {
+            "replica": 1,
+            "manager_timeout": 90.0,
+            "quorum_timeout": 180.0,
+            "pg_timeout": 2.0
+          }
+        ],
+        "failure_layer": null,
+        "timer_origin": null,
+        "timer_elapsed_seconds": null,
+        "error_count": 0,
+        "timer_abort_count": 0,
+        "cancel_timer_guard_steps": {
+          "0": [
+            1
+          ],
+          "1": [
+            1
+          ]
+        },
+        "resources_clean": true
+      },
+      "pass_all": true,
+      "actual_auditor_sha256": "7542fe4c5cab0b5bfd5ff32f12288e0465b2dd9de184916bc93e0e5e5d5433e2",
+      "raw_sha256": {
+        "summary.json": "e8ca64fc1f6ad7836a00b2a5259c1fe0620db7b7b26c392bea449412523e4ffd",
+        "R0.jsonl": "c01089c704b869b1534675dabe76d3acf7d02e543774de1a8845b57746efeb65",
+        "R1.jsonl": "74e22daca7c4ffb58c36f434a1a248c1a94a73b0070fc32636f33317358f9966"
+      },
+      "name": "v4_deadline18"
+    }
+  ],
+  "installed_source_sha256": {
+    "torchft/manager.py": "df8876d4306c601d5d7848abf91f3249604c2a359a91e3a0a51101dba850a033",
+    "torchft/process_group.py": "86ddccf60be1190c1a45ae1834d88733e5133c1f817318467b22bf063db7412a",
+    "torch/distributed/distributed_c10d.py": "ffa3de81159c96c1a1042c8e2bce52fb604cd7e083675ebd7bed9a12d9c0143b",
+    "torchft/_torchft.cpython-312-x86_64-linux-gnu.so": "e259c17273bd454b45f9361a754dc5ac52b8c8f9e4db8f1b5708b2abb9d572c3"
+  },
+  "historical_limit": "Reproduces the configured 2s native PG timer and abort signature, not the unidentified original training stall."
+}

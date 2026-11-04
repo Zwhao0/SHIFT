@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "random_seed": 1127942288,
+  "quick": true,
+  "trials_per_type": 2,
+  "v4": [
+    {
+      "suffix": "q4_local",
+      "cross_node_tp": false,
+      "trigger": 6,
+      "post_steps": 5
+    },
+    {
+      "suffix": "q4_cross",
+      "cross_node_tp": true,
+      "trigger": 4,
+      "post_steps": 6
+    }
+  ],
+  "v1": [
+    {
+      "suffix": "q1_0",
+      "seed": 1182328,
+      "trigger": 10,
+      "post_steps": 5
+    },
+    {
+      "suffix": "q1_1",
+      "seed": 6761565,
+      "trigger": 12,
+      "post_steps": 5
+    }
+  ],
+  "v2": [
+    {
+      "suffix": "q2_0",
+      "seed": 7821975,
+      "trigger": 9,
+      "post_steps": 5,
+      "target": "B",
+      "spare": "C"
+    },
+    {
+      "suffix": "q2_1",
+      "seed": 5146091,
+      "trigger": 10,
+      "post_steps": 5,
+      "target": "B",
+      "spare": "C"
+    }
+  ]
+}

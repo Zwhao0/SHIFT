@@ -1,0 +1,53 @@
+{
+  "date": "2026-11-04",
+  "runs": [
+    "v4_groups01",
+    "v4_groupsbase01",
+    "v4_groups02",
+    "v4_groups03",
+    "v4_groups04",
+    "v4_groups05"
+  ],
+  "nodes": {
+    "node0": {
+      "deleted_file_bytes": 3389826,
+      "company_pid_count": 8,
+      "company_pids_unchanged": true,
+      "extra_gpu": 0,
+      "shift_processes": 0,
+      "active_shift_units": 0,
+      "temporary_authorization_markers": 0,
+      "environment_preserved": true,
+      "headers_preserved": true,
+      "model_preserved": true
+    },
+    "node1": {
+      "deleted_file_bytes": 305700,
+      "company_pid_count": 8,
+      "company_pids_unchanged": true,
+      "extra_gpu": 0,
+      "shift_processes": 0,
+      "active_shift_units": 0,
+      "temporary_authorization_markers": 0,
+      "environment_preserved": true,
+      "headers_preserved": true,
+      "model_preserved": true
+    },
+    "node3": {
+      "deleted_file_bytes": 1167043,
+      "company_pid_count": 8,
+      "company_pids_unchanged": true,
+      "extra_gpu": 0,
+      "shift_processes": 0,
+      "active_shift_units": 0,
+      "temporary_authorization_markers": 0,
+      "environment_preserved": true,
+      "headers_preserved": true,
+      "model_preserved": true
+    }
+  },
+  "business_health_tested": false,
+  "all_resources_clean": true,
+  "raw_retention": "audited compact results, comparison signatures and source hashes only",
+  "local_deleted_file_bytes": 112106
+}

@@ -1,0 +1,49 @@
+{
+  "date": "2026-11-04",
+  "runs": [
+    "v4_gpu01",
+    "v4_gpu02"
+  ],
+  "nodes": {
+    "node0": {
+      "deleted_file_bytes": 996854,
+      "company_pid_count": 8,
+      "company_pids_unchanged": true,
+      "extra_gpu": 0,
+      "shift_processes": 0,
+      "active_shift_units": 0,
+      "temporary_authorization_markers": 0,
+      "environment_preserved": true,
+      "headers_preserved": true,
+      "model_preserved": true
+    },
+    "node1": {
+      "deleted_file_bytes": 98846,
+      "company_pid_count": 8,
+      "company_pids_unchanged": true,
+      "extra_gpu": 0,
+      "shift_processes": 0,
+      "active_shift_units": 0,
+      "temporary_authorization_markers": 0,
+      "environment_preserved": true,
+      "headers_preserved": true,
+      "model_preserved": true
+    },
+    "node3": {
+      "deleted_file_bytes": 379764,
+      "company_pid_count": 8,
+      "company_pids_unchanged": true,
+      "extra_gpu": 0,
+      "shift_processes": 0,
+      "active_shift_units": 0,
+      "temporary_authorization_markers": 0,
+      "environment_preserved": true,
+      "headers_preserved": true,
+      "model_preserved": true
+    }
+  },
+  "raw_retention": "audited compact results and source hashes only",
+  "all_resources_clean": true,
+  "local_deleted_file_bytes": 74037,
+  "business_health_tested": false
+}

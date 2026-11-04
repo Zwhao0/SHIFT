@@ -1,0 +1,52 @@
+{
+  "success": false,
+  "exit_codes": [
+    1,
+    1
+  ],
+  "timeout": 10,
+  "delay": 0,
+  "gpu_used": false,
+  "source_sha256": "f613b26e7c1fef24f7108ba8067c013a6abb474175eb970ec3d2ecac03ae0980",
+  "name": "v4_native08",
+  "scope": "exploratory CPU-only alternative; not a passing v4 training experiment",
+  "observed_commits": [
+    {
+      "replica": 1,
+      "step": 1,
+      "batches_committed": 2
+    },
+    {
+      "replica": 1,
+      "step": 2,
+      "batches_committed": 4
+    },
+    {
+      "replica": 0,
+      "step": 1,
+      "batches_committed": 2
+    },
+    {
+      "replica": 0,
+      "step": 2,
+      "batches_committed": 4
+    }
+  ],
+  "errors": [
+    {
+      "replica": 1,
+      "error": "TimeoutError: status: Cancelled, message: \"Timeout expired\", details: [], metadata: MetadataMap { headers: {} }"
+    },
+    {
+      "replica": 0,
+      "error": "DistStoreError: wait timeout after 25000ms, keys: /healthy/5"
+    }
+  ],
+  "majority_rejection_observed": true,
+  "raw_sha256": {
+    "R1.jsonl": "e08fa1256f50430b082cef4a2b690ec8f1efbcc54f6f74a178fa5048157f176f",
+    "summary.json": "1eff0c9167a7e43903da7315f5bcbf692a9900db7c4630d08f72488498dffcac",
+    "R0.jsonl": "bb9f9f4d52a670bccb2a55d808297753728a5e47ef544197d47089e44aeeda60"
+  },
+  "raw_deleted": true
+}

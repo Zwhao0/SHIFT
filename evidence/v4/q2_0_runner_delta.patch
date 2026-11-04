@@ -1,0 +1,18 @@
+--- scripts/quick_v2_remote.py	2026-11-04 19:01:52
++++ tmp/q2_0_deployed_runner.py	2026-11-04 19:02:40
+@@ -31,7 +31,6 @@
+ # wrapper only enforces the per-process GPU memory cap requested for v2.
+ WORKER_WRAPPER = '''import os, runpy, torch
+ rank = int(os.environ["LOCAL_RANK"])
+-torch.cuda.set_device(rank)
+ torch.cuda.set_per_process_memory_fraction(0.12, rank)
+ runpy.run_module("shift_full.planned_train", run_name="__main__", alter_sys=True)
+ '''
+@@ -52,7 +51,6 @@
+     args = c['train_args']
+     _set_arg(args, '--communication-timeout', 30)
+     _set_arg(args, '--max-seconds', SECONDS - 60)
+-    _set_arg(args, '--microbatches', 2)
+     args += ['--audit-state', '--hash-every', '1', '--sync-quorum',
+              '--fixed-batch', '--data', 'random', '--planned-variant', 'p1f',
+              '--planned-source', 'B', '--planned-inject', 'healthy',

@@ -1,0 +1,63 @@
+{
+  "nodes": {
+    "node0": {
+      "deleted_file_bytes": 0,
+      "removed_sha256": {},
+      "company_gpu_pids_unchanged": true,
+      "own_target_units_active": 0,
+      "other_experiment_and_reference_preserved": true
+    },
+    "node1": {
+      "deleted_file_bytes": 1352916,
+      "removed_sha256": {
+        "results/v4_loss19/g0_E2.log": "af99c93b58c2a080f2ab4b09b51ae25292a884d13121fc5e26e1adb971734f21",
+        "results/v4_loss19/g0_E3.log": "b578e0e97fded47d8d9151fe9782cb98cf467164b4680d2a0bf936eef4d338b3",
+        "results/v4_loss19/g0_E1.log": "df66b2bfed48659384e434596bdc0a1fa659e68e8bceff453528252f3cd23974",
+        "results/v4_loss19/g0_B2.log": "fefa7fea38390af869437637437bb5065c65fcead1d91303bd800faa0d726284",
+        "results/v4_loss19/g0_E0.log": "144323fb77863426d6197aaa45165adbc0d802b641131917c35fc98d22329473",
+        "results/v4_loss19/g0_B0.log": "32f80a639417a66cab8735afd3a088cdb7067f9fb9af7636e8c1df8e235120af",
+        "results/v4_loss19/g0_B3.jsonl": "921bf8d3f900caf11edf3c5ab6b4d5605333d619738495a5de2f91aa2c229ee0",
+        "results/v4_loss19/g0_E0.jsonl": "684c31d1ef2c2fc7a3dabce0d4ade61887dde63381d8f9ea3511bb49285dcf98",
+        "results/v4_loss19/g0_B2.jsonl": "e2bab8dae792dca3b4b7ab94f8d5ed11ce5997c2a39a8b1ab329b2a86968aa60",
+        "results/v4_loss19/g0_B3.log": "9ad1d951b18e6b5c2c25472dd3405677e541a0bb7a836d4b8c4abb1a9d3fa0ed",
+        "results/v4_loss19/g0_E2.jsonl": "de4a6ed2e50008bc08993cf0dc5c7edcfcdd242097a8e0f9d228f5b41f335ab1",
+        "results/v4_loss19/g0_E3.jsonl": "c566f11cc61926c07adf5694d2ebf18f8765497cbbc57e8406120fade5e2895c",
+        "results/v4_loss19/g0_B0.jsonl": "bf784e7f19b5a9be54a3701d0bb03933e1f4be8886381a589f5da679c19d0307",
+        "results/v4_loss19/g0_B1.jsonl": "7a0bf21c755ad574639310d68160c56870b8a74193f95effca4f6fc3660c3041",
+        "results/v4_loss19/g0_E1.jsonl": "f92a6b1ce9f5a8759693d4bd5f392ba940dab45407c5054606ffe831f233da88",
+        "results/v4_loss19/g0_B.host.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "results/v4_loss19/g0_E.host.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "results/v4_loss19/g0_B1.log": "764231c33ef5b821805aca79267cf4f4a655307324937b70d8ecd7915a2bf15d"
+      },
+      "company_gpu_pids_unchanged": true,
+      "own_target_units_active": 0,
+      "other_experiment_and_reference_preserved": true
+    },
+    "node3": {
+      "deleted_file_bytes": 594764,
+      "removed_sha256": {
+        "results/v4_loss19/g0_C.host.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "results/v4_loss19/g0_C0.jsonl": "061de73d7a3ea283dfcfcf096ffc65a345aa8f7c0bdc0e903e0a48e4a958a23d",
+        "results/v4_loss19/g0_C1.log": "fb2e8558c0176780a65db9730150f912a7fa6b330e52f8d11a415b902c39369a",
+        "results/v4_loss19/g0_C0.log": "bbe4c1f1efbfacaaf9e4baee7b736694bca8f252fc82b5ad3ba487272a822ea8",
+        "results/v4_loss19/g0_C1.jsonl": "81aa23457e15c38ec514baeafc17c3eb2eb6f046b25ecb8c0b30f807fc34122a",
+        "results/v4_loss19/g0_C3.log": "b91d1a7d7bcb5a4bc16d0a1273686392c229854b7390f1db190680a7d7fd62e9",
+        "results/v4_loss19/g0_C2.log": "2320f833f4e0da5b590528570f93f45cdf0355a9e94cf3462fc40a039cdebd17",
+        "results/v4_loss19/g0_C2.jsonl": "c6625ae3dc4aee6e104ee40e264978f74a0cdc8d479d0198f118cbd2d81f27a8",
+        "results/v4_loss19/g0_C3.jsonl": "a339b70a6da22f4f6ccc06cd3c5c762b17d0d935215b1d3beec15d1cf61a27b4",
+        "results/v4_loss19/topology_standby_C/topology.json": "5c3ea876a7704ab1df9204898f3f6205649f8ad73734d598b7b0f97a9dd9cc83"
+      },
+      "company_gpu_pids_unchanged": true,
+      "own_target_units_active": 0,
+      "other_experiment_and_reference_preserved": true
+    }
+  },
+  "total_deleted_file_bytes": 1947680,
+  "preserved": [
+    "active q4_local experiment",
+    "q4_ref_local required reference",
+    "shared temporary SSH authorization",
+    "installed environment, headers, model, private configs and seed/manifest"
+  ],
+  "scope": "completed loss19 remnants created by this chat; active work in another chat untouched"
+}

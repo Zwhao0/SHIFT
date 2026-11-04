@@ -1,0 +1,339 @@
+{
+  "runs": [
+    {
+      "name": "v4_ref04",
+      "reference_only": true,
+      "plan": {
+        "cut": 4,
+        "post_steps": 20,
+        "seq_len": 512,
+        "microbatches": 4
+      },
+      "outer_manager": true,
+      "outer_audit": true,
+      "outer_timeout": 120.0,
+      "functional_pass": true,
+      "resources_clean": true,
+      "cleanup_errors": [],
+      "source_sha256": {
+        "shift_full/v4_train.py": "920ca842ed9b25a561972d435878608f34351d1994e4fa4710eaa71634e8b633",
+        "shift_full/v4_protocol.py": "add7d0f9ddaf0ad05f9f53759334038d8a38a5b38ae6aa217cfcd9308e10ebed",
+        "shift_full/transport.py": "b03464786a4f8f6b8814f002b4649c1fb9a77e0985387e92e0f1ad17cee611e7",
+        "shift_full/compat.py": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76",
+        "shift_full/v4_groups.py": "7a0ae3809d30eeb266025fb7dcec0b357fed9d973818cffe0cfbfe02c706af4c",
+        "shift_full/v4_reference.py": "9a1024f558b328bd4acd45c04076e9d2fb60e993f31b9c91b6f934b933051077",
+        "scripts/v4_remote.py": "da51804be190a7fa9bfb2c006df17ec9b0024263efb9b33f910302efc13d7998",
+        "scripts/verify_v4.py": "826ec940f60207595fb4bf92d08a85f91081594cef0e768f04263af72e8db4c8",
+        "shift_full/v4_outer.py": "e0cc9a23499feb88bf3a3a879073d650af5cda88e7ddf6bc3d79db3a57d2f133",
+        "scripts/verify_v4_outer.py": "2eda919f25a7eb2fee27e2d92a60e7df5c18138c1e321f49e54cd026ddc6cfde",
+        "scripts/verify_v4_reference.py": "38e63b34fcca00747020f335f96a4d67b49612654cef047b293d5c03280a2ae0"
+      },
+      "independent_audit": {
+        "pass_all": true,
+        "errors": [],
+        "resources_clean": true,
+        "reference_only": true,
+        "logical_workers": 16,
+        "reference_rank_steps": 384,
+        "independent_gradient_audit": true
+      },
+      "reference_sha256": "52f71fc5212abf82b2065f02366665735666f0fcb5b6a00d34bf4bd58842478f",
+      "comparison_method": "nine_state_sha256_not_full_tensor_dump"
+    },
+    {
+      "name": "v4_retain06",
+      "topology": {
+        "tp": 2,
+        "pp": 2,
+        "ep": 2,
+        "ranks": 16,
+        "devices_per_node": 4,
+        "A": "node0/PP0",
+        "B": "node1/PP1",
+        "C": "node3/standby_PP1",
+        "replicas": 2,
+        "ranks_per_replica": 8,
+        "global_batch": 16,
+        "D": "node0/GPU4..7/replica1_PP0",
+        "E": "node1/GPU4..7/replica1_PP1",
+        "independent_fault_domains": false
+      },
+      "plan": {
+        "cut": 4,
+        "post_steps": 10,
+        "seq_len": 512,
+        "microbatches": 4
+      },
+      "oracle": true,
+      "outer_manager": true,
+      "outer_audit": true,
+      "outer_timeout": 120.0,
+      "fail_restore_rank": -1,
+      "functional_pass": true,
+      "oracle_exact": true,
+      "source_sha256": {
+        "shift_full/v4_train.py": "920ca842ed9b25a561972d435878608f34351d1994e4fa4710eaa71634e8b633",
+        "shift_full/v4_protocol.py": "add7d0f9ddaf0ad05f9f53759334038d8a38a5b38ae6aa217cfcd9308e10ebed",
+        "shift_full/transport.py": "b03464786a4f8f6b8814f002b4649c1fb9a77e0985387e92e0f1ad17cee611e7",
+        "shift_full/compat.py": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76",
+        "shift_full/v4_groups.py": "7a0ae3809d30eeb266025fb7dcec0b357fed9d973818cffe0cfbfe02c706af4c",
+        "shift_full/v4_reference.py": "9a1024f558b328bd4acd45c04076e9d2fb60e993f31b9c91b6f934b933051077",
+        "scripts/v4_remote.py": "10b6f14e2f277d80d164e89f228d0432035eafbd44736cdfd507ca645eead5e8",
+        "scripts/verify_v4.py": "826ec940f60207595fb4bf92d08a85f91081594cef0e768f04263af72e8db4c8",
+        "shift_full/v4_outer.py": "e0cc9a23499feb88bf3a3a879073d650af5cda88e7ddf6bc3d79db3a57d2f133",
+        "scripts/verify_v4_outer.py": "2eda919f25a7eb2fee27e2d92a60e7df5c18138c1e321f49e54cd026ddc6cfde",
+        "scripts/verify_v4_reference.py": "38e63b34fcca00747020f335f96a4d67b49612654cef047b293d5c03280a2ae0"
+      },
+      "resources_clean": true,
+      "cleanup_errors": [],
+      "reference_run": "ref04",
+      "reference_sha256": "52f71fc5212abf82b2065f02366665735666f0fcb5b6a00d34bf4bd58842478f",
+      "retain_outer_managers": true,
+      "reference_comparison_cases": 224,
+      "reference_comparison_failures": 0,
+      "comparison_method": "independent_nine_state_sha256",
+      "independent_audit": {
+        "pass_all": true,
+        "errors": [],
+        "resources_clean": true,
+        "replicas": 2,
+        "logical_workers": 16,
+        "healthy_processes_preserved": 12,
+        "source_processes_fenced": 4,
+        "cut": 4,
+        "post_steps": 10,
+        "expected_failure": false,
+        "oracle_rank_steps": 160,
+        "independent_gradient_audit": true,
+        "gradient_audit_enabled": true,
+        "gradient_audit_status": "passed",
+        "gradient_audit_cases": 224,
+        "independent_fault_domains": false
+      },
+      "diagnostic_timing": {
+        "freeze_to_active": 4.891962729860097,
+        "freeze_to_first_commit": 8.371746777091175,
+        "boundary_to_active": 8.563804091885686,
+        "boundary_to_first_commit": 12.043588139116764,
+        "commit_gap": 12.04434642707929,
+        "includes_oracle_replay": false,
+        "performance_evidence": false,
+        "source_reported_includes_oracle_replay": true,
+        "includes_reference_hashing": true
+      },
+      "expected_failure_pass": null,
+      "gradient_audit_cases": 224,
+      "gradient_audit_failures": 0,
+      "oracle_rank_steps": 0,
+      "oracle_failures": 0,
+      "tensor_unequal": 0,
+      "warning_categories_present": [
+        "nccl_exit_without_explicit_destroy",
+        "barrier_device_inferred",
+        "torchft_nonblocking_timeout_default",
+        "future_deprecation_warning"
+      ],
+      "outer_manager_instances": 20,
+      "effective_deadlines": [
+        {
+          "timeout_seconds": 120.0,
+          "quorum_timeout_seconds": 120.0,
+          "connect_timeout_seconds": 120.0
+        }
+      ],
+      "raw_sha256": {
+        "D2.jsonl": "d14df85180fc1743bf34d4cc98350b3027c3ead0b6cd9e950d4ca369ebf21720",
+        "B2.jsonl": "b8f9cdb5c338a609afbaf2b016f5e677e0b363859973fbcf8583106c9e67eca9",
+        "E3.jsonl": "4d6f1e7a12acf6a219bdf27cab9458a111eef3a7a01ff6811b25739cb7c1a524",
+        "A1.jsonl": "36166a23c4d02af932a05faa22bfb9b709ed6d6f42305c8ed4e098126b939d74",
+        "C1.jsonl": "ed43d055d96566b09da65e502d6856b3a405afa7b60dc8daca47b5c5fade77bf",
+        "E2.jsonl": "52acc2f305159d0daa452c12ecfaea8717b44328660db6fea56b04f2d08033dc",
+        "A3.jsonl": "868a6c82b74794e2713fb538d379aab4d666365b4f6921450e6a842cb6638030",
+        "A0.jsonl": "43bd7172e48bffa78a471582e41708392a1a7eb09eba654472042829c771b81b",
+        "E1.jsonl": "5a0c509752600ecb73f71b1facfe6c164a20f4c74483c4b1abd9c42e77e1306e",
+        "C2.jsonl": "54d45947ffd483672b412a6e73b41c78acb5e4c9e43f6f2cf72c47ebd716f67a",
+        "D3.jsonl": "03341398af756e86a1d7ec0c4a358005cdd8600dc1475e3d9b5cc5c10484a89e",
+        "C3.jsonl": "530653b1caf99c450d39deb88d54c36129474121572434971ff366bc8a6faa55",
+        "D0.jsonl": "39e8a750abe012b6e660d5ba8ace3fd95790508cb8118878016de7f3f3c36a1d",
+        "D1.jsonl": "a75b12b2d393726fc8d78f1b77c790d9358943dc55fbac27f52d69657ab0b96f",
+        "B3.jsonl": "de93fbf507b11ae9966ce73176a4ad1796da7bfb180bb58f2310465d37c93967",
+        "B0.jsonl": "3b90da25d6b96a4c71f83c685c5b5df35b20ccacbf1cfd4feaa672af93bc57c7",
+        "E0.jsonl": "cc9c644fc31194b9361ecf6ad13b51d65dd9dda23daadcfb9098f84b982ab850",
+        "A2.jsonl": "7dc1fd3e17d53ff3c4c78149e3c1cf4da38c4048b896ee773b4e3b6f5c8681f3",
+        "C0.jsonl": "e4228a0cd11452bc98a3ea926c2a302a0e4d203ca93bbb60f48cab298afb990c",
+        "B1.jsonl": "d0b3e29325a42c9c75b392c4f3fd9cea8ba5140fb192631795c0d7d9cfaf77f8"
+      },
+      "limitations": [
+        "two replicas share hosts; both pause; healthy Managers retained",
+        "restore failure is bounded whole-job fail-stop; rollback and fault isolation unverified",
+        "120s controlled defaults do not resolve the historical v3 2s outer deadline failure",
+        "native NCCL teardown warnings are retained as categories; resource audit is separate",
+        "raw events/logs removed after summarization; hashes cannot reconstruct trajectories"
+      ],
+      "retention_counts": {
+        "healthy_managers": 12,
+        "rank0_manager_servers": 2,
+        "training_and_adam_storage_preserved": 12,
+        "unchanged_outer_channels": 8,
+        "reconnected_outer_channel_endpoints": 8
+      },
+      "full_tensor_comparison_performed": false,
+      "diagnostic_timing_annotation": "replay label corrected from reference_run mode; original source value preserved"
+    },
+    {
+      "name": "v4_retain07fail",
+      "topology": {
+        "tp": 2,
+        "pp": 2,
+        "ep": 2,
+        "ranks": 16,
+        "devices_per_node": 4,
+        "A": "node0/PP0",
+        "B": "node1/PP1",
+        "C": "node3/standby_PP1",
+        "replicas": 2,
+        "ranks_per_replica": 8,
+        "global_batch": 16,
+        "D": "node0/GPU4..7/replica1_PP0",
+        "E": "node1/GPU4..7/replica1_PP1",
+        "independent_fault_domains": false
+      },
+      "plan": {
+        "cut": 3,
+        "post_steps": 10,
+        "seq_len": 512,
+        "microbatches": 4
+      },
+      "oracle": false,
+      "outer_manager": true,
+      "outer_audit": true,
+      "outer_timeout": 120.0,
+      "fail_restore_rank": 4,
+      "functional_pass": false,
+      "oracle_exact": null,
+      "source_sha256": {
+        "shift_full/v4_train.py": "920ca842ed9b25a561972d435878608f34351d1994e4fa4710eaa71634e8b633",
+        "shift_full/v4_protocol.py": "add7d0f9ddaf0ad05f9f53759334038d8a38a5b38ae6aa217cfcd9308e10ebed",
+        "shift_full/transport.py": "b03464786a4f8f6b8814f002b4649c1fb9a77e0985387e92e0f1ad17cee611e7",
+        "shift_full/compat.py": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76",
+        "shift_full/v4_groups.py": "7a0ae3809d30eeb266025fb7dcec0b357fed9d973818cffe0cfbfe02c706af4c",
+        "shift_full/v4_reference.py": "9a1024f558b328bd4acd45c04076e9d2fb60e993f31b9c91b6f934b933051077",
+        "scripts/v4_remote.py": "10b6f14e2f277d80d164e89f228d0432035eafbd44736cdfd507ca645eead5e8",
+        "scripts/verify_v4.py": "826ec940f60207595fb4bf92d08a85f91081594cef0e768f04263af72e8db4c8",
+        "shift_full/v4_outer.py": "e0cc9a23499feb88bf3a3a879073d650af5cda88e7ddf6bc3d79db3a57d2f133",
+        "scripts/verify_v4_outer.py": "2eda919f25a7eb2fee27e2d92a60e7df5c18138c1e321f49e54cd026ddc6cfde",
+        "scripts/verify_v4_reference.py": "38e63b34fcca00747020f335f96a4d67b49612654cef047b293d5c03280a2ae0"
+      },
+      "resources_clean": true,
+      "cleanup_errors": [],
+      "reference_run": null,
+      "reference_sha256": null,
+      "retain_outer_managers": true,
+      "reference_comparison_cases": 0,
+      "reference_comparison_failures": 0,
+      "comparison_method": "none",
+      "independent_audit": {
+        "pass_all": true,
+        "errors": [],
+        "resources_clean": true,
+        "replicas": 2,
+        "logical_workers": 16,
+        "healthy_processes_preserved": 0,
+        "source_processes_fenced": 4,
+        "cut": 3,
+        "post_steps": 10,
+        "expected_failure": true,
+        "oracle_rank_steps": 0,
+        "independent_gradient_audit": true,
+        "gradient_audit_enabled": true,
+        "gradient_audit_status": "passed",
+        "gradient_audit_cases": 48,
+        "independent_fault_domains": false
+      },
+      "diagnostic_timing": null,
+      "expected_failure_pass": true,
+      "gradient_audit_cases": 48,
+      "gradient_audit_failures": 0,
+      "oracle_rank_steps": 0,
+      "oracle_failures": 0,
+      "tensor_unequal": 0,
+      "warning_categories_present": [
+        "nccl_exit_without_explicit_destroy",
+        "barrier_device_inferred",
+        "torchft_nonblocking_timeout_default",
+        "future_deprecation_warning"
+      ],
+      "outer_manager_instances": 16,
+      "effective_deadlines": [
+        {
+          "timeout_seconds": 120.0,
+          "quorum_timeout_seconds": 120.0,
+          "connect_timeout_seconds": 120.0
+        }
+      ],
+      "raw_sha256": {
+        "D2.jsonl": "ef205ec29154626b1600b821ccc9425f0045279d692ff3207e6804ffc4ea3278",
+        "B2.jsonl": "f3dbf005359ce569347aff0ae976af74732449f3c60fd1bcf145645ed86f92d0",
+        "E3.jsonl": "f366cef05ab1d8f35eaa65d71e3f5a40197782555a889e69105393db0418b368",
+        "A1.jsonl": "5f765d03e830f4f11a0dc83c77bb0ebd9f0252de2c93c59b8714d1357437bdce",
+        "C1.jsonl": "7c948567989ef471f422292d4b9cdc0aa829ef817b0eeba99148f979b90df29a",
+        "E2.jsonl": "70ff8f0a6c89aed656a3381b562c064cb6f0aafaa5e8ea5274b95db46253d0e1",
+        "A3.jsonl": "5dd99dcea4faa78006495e8a26d1bf6e631ea895d86535e9aff6292a67f415dc",
+        "A0.jsonl": "131beb91eaa0fe4a15dae5dc9452223ae6e5004154f2222aaccc9caa97a81ae5",
+        "E1.jsonl": "1fd65bba952ab6e5bd256340c73ac5829a61971f0f86b27bdb293637accdc16b",
+        "C2.jsonl": "03c60ffdf6b8b661acc32acd931829c4f652ef1b312a63dadd4724791d6b0161",
+        "D3.jsonl": "87000f0f658d46d2f303f1aa67436df2499e811b75ad16cf6ebcf030767c334a",
+        "C3.jsonl": "dee9a43cd8f1ed9cd3c892eb8d62b4ee6ceeb5e218400708e4a431f3b7ea711e",
+        "D0.jsonl": "8c6937c68dfcb7caad5077ba977b8a6159b6f9227f8ddbee8f610e82cf878535",
+        "D1.jsonl": "1dd64c86c5a22684bd95f727c6f20263b2da2beca13c3fed6b491f1ceab97b55",
+        "B3.jsonl": "c9d8054bfc9546ecf7ed6b909a15f3981b60ebcf78460e6ecfdb54896e736fc3",
+        "B0.jsonl": "dfa74a884378212e85ca46870f7fd2c80a55a3091892a390e1563159427cb226",
+        "E0.jsonl": "d21404109c00d3295eb2d275620054fa9172e09a728ca1606a016a621ee8f7b0",
+        "A2.jsonl": "69ae65215f5abf78a9f82fd7f46a819f5c56fef61cacebfa1640f979278feb47",
+        "C0.jsonl": "8c5247b9dfd26cca60871f6242650f91b8673f8244daf5b32d5e9e140b8b1220",
+        "B1.jsonl": "3f820ed074f13a645c97a7d8ea46f794f92d0a815b267a375de993d7ab901b7e"
+      },
+      "limitations": [
+        "two replicas share hosts; both pause; healthy Managers retained",
+        "restore failure is bounded whole-job fail-stop; rollback and fault isolation unverified",
+        "120s controlled defaults do not resolve the historical v3 2s outer deadline failure",
+        "native NCCL teardown warnings are retained as categories; resource audit is separate",
+        "raw events/logs removed after summarization; hashes cannot reconstruct trajectories"
+      ]
+    }
+  ],
+  "independent_auditor_sha256": {
+    "scripts/verify_v4_outer.py": "2eda919f25a7eb2fee27e2d92a60e7df5c18138c1e321f49e54cd026ddc6cfde",
+    "scripts/verify_v4_reference.py": "38e63b34fcca00747020f335f96a4d67b49612654cef047b293d5c03280a2ae0"
+  },
+  "limitations": [
+    "historical raw runs cannot be re-audited with the strengthened verifier",
+    "independent reference compares nine state SHA256 signatures, not saved full tensors"
+  ],
+  "diagnostics": [
+    {
+      "name": "v4_retain05",
+      "functional_pass": false,
+      "error": "OSError: [Errno 7] Argument list too long: 'sudo'",
+      "resources_clean": true,
+      "cleanup_errors": [],
+      "source_sha256": {
+        "shift_full/v4_train.py": "920ca842ed9b25a561972d435878608f34351d1994e4fa4710eaa71634e8b633",
+        "shift_full/v4_protocol.py": "add7d0f9ddaf0ad05f9f53759334038d8a38a5b38ae6aa217cfcd9308e10ebed",
+        "shift_full/transport.py": "b03464786a4f8f6b8814f002b4649c1fb9a77e0985387e92e0f1ad17cee611e7",
+        "shift_full/compat.py": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76",
+        "shift_full/v4_groups.py": "7a0ae3809d30eeb266025fb7dcec0b357fed9d973818cffe0cfbfe02c706af4c",
+        "shift_full/v4_reference.py": "9a1024f558b328bd4acd45c04076e9d2fb60e993f31b9c91b6f934b933051077",
+        "scripts/v4_remote.py": "da51804be190a7fa9bfb2c006df17ec9b0024263efb9b33f910302efc13d7998",
+        "scripts/verify_v4.py": "826ec940f60207595fb4bf92d08a85f91081594cef0e768f04263af72e8db4c8",
+        "shift_full/v4_outer.py": "e0cc9a23499feb88bf3a3a879073d650af5cda88e7ddf6bc3d79db3a57d2f133",
+        "scripts/verify_v4_outer.py": "2eda919f25a7eb2fee27e2d92a60e7df5c18138c1e321f49e54cd026ddc6cfde",
+        "scripts/verify_v4_reference.py": "38e63b34fcca00747020f335f96a4d67b49612654cef047b293d5c03280a2ae0"
+      },
+      "worker_events": 0,
+      "phase": "reference_manifest_distribution",
+      "fix": "scp file transfer plus SHA256 verification"
+    }
+  ],
+  "cpu_tests_passed": 45
+}

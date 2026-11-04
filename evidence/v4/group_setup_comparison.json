@@ -1,0 +1,65 @@
+{
+  "schema": 1,
+  "matched_conditions": {
+    "cut": 8,
+    "post_steps": 10,
+    "seq_len": 512,
+    "microbatches": 4,
+    "slow_ms": 1000,
+    "seed": 20261106,
+    "oracle": false
+  },
+  "runs": [
+    {
+      "name": "v4_groupsbase01",
+      "reuse_local_groups": false,
+      "preconnect_state": false,
+      "defer_source_local_close": false,
+      "boundary_to_active": 9.044140256941319,
+      "boundary_to_first_commit": 11.405612051021308
+    },
+    {
+      "name": "v4_groups02",
+      "reuse_local_groups": true,
+      "preconnect_state": true,
+      "defer_source_local_close": false,
+      "boundary_to_active": 9.249110164120793,
+      "boundary_to_first_commit": 11.018079354893416
+    },
+    {
+      "name": "v4_groups04",
+      "reuse_local_groups": true,
+      "preconnect_state": true,
+      "defer_source_local_close": true,
+      "boundary_to_active": 7.798420464154333,
+      "boundary_to_first_commit": 9.692506526131183
+    },
+    {
+      "name": "v4_groups05",
+      "reuse_local_groups": true,
+      "preconnect_state": true,
+      "defer_source_local_close": true,
+      "boundary_to_active": 7.824832763057202,
+      "boundary_to_first_commit": 9.642374110408127
+    }
+  ],
+  "boundary_state_signature": "8dd2c08db50963924c0e6f1c93ab3ac9b8f4297d7735046e45b6ed58a38125ee",
+  "final_state_signature": "6c8f74b5afafb43d6c0868788b77646327605b9035d689686e5c8fcf48c8f406",
+  "all_four_boundary_and_final_nine_state_signatures_equal": true,
+  "full_oracle_runs": [
+    "v4_groups01",
+    "v4_groups03"
+  ],
+  "oracle_rank_steps": 160,
+  "oracle_failures": 0,
+  "cpu_tests": 11,
+  "invalid_option_guards": 3,
+  "performance_evidence": false,
+  "limitations": [
+    "one baseline and two deferred-close diagnostic samples; shared-host load not controlled",
+    "full hashing is enabled and perturbs timing; do not infer a stable speedup",
+    "source-local teardown remains required and runs after activation; memory is retained until then",
+    "pinned c10d/Megatron/FLASH private registry adapter; opt-in and layout-specific",
+    "outer TorchFT Manager, hung-rank recovery and rollback are unverified"
+  ]
+}
