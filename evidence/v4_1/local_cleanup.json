@@ -1,0 +1,12 @@
+{
+  "deleted_temporary_bytes": 2180252,
+  "deleted_artifact_bytes": 9632779,
+  "total_deleted_bytes": 11813031,
+  "removed_temporary_files": 57,
+  "all_uncommitted_python_sources_preserved": true,
+  "python_sources_checked": 238,
+  "private_source_helpers_preserved": 10,
+  "private_configuration_seed_and_manifest_preserved": true,
+  "installed_environment_headers_models_untouched": true,
+  "git_history_and_old_branches_preserved": true
+}
