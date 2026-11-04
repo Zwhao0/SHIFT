@@ -1,6 +1,0 @@
-{"exit_code": 0, "name": "v2_1_final_scenarios_01_p2_relay_reject", "passed": true, "scenario": "relay-reject", "seconds": 90.842117208, "variant": "p2"}
-{"exit_code": 0, "name": "v2_1_final_scenarios_02_p2_stale_state", "passed": true, "scenario": "stale-state", "seconds": 91.01137816699999, "variant": "p2"}
-{"exit_code": 1, "name": "v2_1_final_scenarios_03_p2_prepare_fail", "passed": false, "scenario": "prepare-fail", "seconds": 132.579704416, "variant": "p2"}
-{"exit_code": 0, "name": "v2_1_final_scenarios_03_p2_prepare_fail_retry01", "passed": true, "scenario": "prepare-fail", "seconds": 60.73099525, "variant": "p2"}
-{"exit_code": 0, "name": "v2_1_final_scenarios_04_p2_ready_timeout_retry01", "passed": true, "scenario": "ready-timeout", "seconds": 64.11193237500001, "variant": "p2"}
-{"exit_code": 0, "extra": 0.36403105524368584, "gap": 1.536291416734457, "name": "v2_1_final_scenarios_05_p2_slow_compute_retry01", "passed": true, "post50": 8.639537525828928, "relay_pause": 0.19811738980934024, "scenario": "slow-compute", "seconds": 68.00438587499998, "variant": "p2"}

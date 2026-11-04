@@ -35,9 +35,26 @@ def load_config(path):
     for name, port in (("lighthouse_port", lighthouse_port), ("master_port", master_port)):
         if not isinstance(port, int) or isinstance(port, bool) or not 1 <= port <= 65535:
             raise ValueError(f"config.{name} must be a valid TCP port")
-    lighthouse_ip = config.get("lighthouse_ip", "10.10.4.2")
+    lighthouse_ip = config.get("lighthouse_ip", "192.0.2.10")
     if not isinstance(lighthouse_ip, str) or not lighthouse_ip:
         raise ValueError("config.lighthouse_ip must be a non-empty string")
+    external_cpu_launcher_socket = config.get("external_cpu_launcher_socket")
+    if (external_cpu_launcher_socket is not None
+            and (not isinstance(external_cpu_launcher_socket, str)
+                 or not external_cpu_launcher_socket.strip())):
+        raise ValueError("config.external_cpu_launcher_socket must be a non-empty path string")
+    cpu_launcher_generation_offset = config.get("cpu_launcher_generation_offset", 0)
+    if (not isinstance(cpu_launcher_generation_offset, int)
+            or isinstance(cpu_launcher_generation_offset, bool)
+            or cpu_launcher_generation_offset < 0):
+        raise ValueError("config.cpu_launcher_generation_offset must be a non-negative integer")
+    persistent_cpu_launcher = config.get("persistent_cpu_launcher", False)
+    cold_launcher = config.get("cold_launcher", False)
+    if cold_launcher and (mode != 'shift' or config.get('fast_launch') or persistent_cpu_launcher
+                          or external_cpu_launcher_socket or config.get('single_gpu_visibility')):
+        raise ValueError('cold_launcher requires SHIFT fresh workers without preload or visibility remapping')
+    if external_cpu_launcher_socket is not None and not persistent_cpu_launcher:
+        raise ValueError("external_cpu_launcher_socket requires persistent_cpu_launcher")
     return {
         "mode": mode,
         "entry_module": config.get("entry_module", "shift_full.train"),
@@ -47,11 +64,14 @@ def load_config(path):
         "target_steps": target_steps,
         "lighthouse_port": lighthouse_port,
         "master_port": master_port,
-        "master_addr": config.get("master_addr", "10.10.4.2"),
+        "master_addr": config.get("master_addr", "192.0.2.10"),
         "lighthouse_ip": lighthouse_ip,
         "env": config.get("env", {}),
         "fast_launch": config.get("fast_launch", False),
-        "persistent_cpu_launcher": config.get("persistent_cpu_launcher", False),
+        "cold_launcher": cold_launcher,
+        "persistent_cpu_launcher": persistent_cpu_launcher,
+        "external_cpu_launcher_socket": external_cpu_launcher_socket,
+        "cpu_launcher_generation_offset": cpu_launcher_generation_offset,
         "heartbeat_timeout_ms": config.get("heartbeat_timeout_ms", 1000),
         "join_timeout_ms": config.get("join_timeout_ms", 1000),
         "quorum_tick_ms": config.get("quorum_tick_ms", 100),
@@ -92,6 +112,11 @@ def main():
     from shift_full.process_tree import enable_subreaper, reap_orphans
     enable_subreaper()
     root = Path(args.root).resolve()
+    if config["external_cpu_launcher_socket"]:
+        socket_path = Path(config["external_cpu_launcher_socket"]).expanduser()
+        if not socket_path.is_absolute():
+            socket_path = root / socket_path
+        config["external_cpu_launcher_socket"] = str(socket_path.resolve())
     out = root / "results" / args.session
     if args.result_subdir:
         if not all(c.isalnum() or c in '_-' for c in args.result_subdir):
@@ -206,7 +231,9 @@ def main():
             raise ValueError("master_port + generation exceeds 65535")
         stream = (out / f"torchrun_g{generation}.log").open("w", encoding="utf-8")
         log_handles.append(stream)
-        cmd = [config["python"], "-m", "shift_full.fast_launch" if config['fast_launch'] else "torch.distributed.run"]
+        launcher = ('shift_full.cold_launch' if config['cold_launcher'] else
+                    'shift_full.fast_launch' if config['fast_launch'] else 'torch.distributed.run')
+        cmd = [config["python"], "-m", launcher]
         entry = (["--start-method=fork", "--run-path", str(root / 'shift_full/worker_entry.py')]
                  if config['fast_launch'] else ["--module", config['entry_module']])
         if config["mode"] == "shift":
@@ -235,16 +262,27 @@ def main():
                 "--target-steps", str(config["target_steps"]),
             ]
         cmd += config["train_args"]
+        process_started_time = time.time()
         if config['persistent_cpu_launcher']:
             from shift_full.launch_server import launch as cached_launch
-            proc = cached_launch(out/'cpu_launcher.sock', cmd[3:], out/f'torchrun_g{generation}.log', generation)
+            external_socket = config["external_cpu_launcher_socket"]
+            launcher_socket = (Path(external_socket).expanduser()
+                               if external_socket else out/'cpu_launcher.sock')
+            launcher_generation = (config["cpu_launcher_generation_offset"] + generation
+                                   if external_socket else generation)
+            proc = cached_launch(launcher_socket, cmd[3:], out/f'torchrun_g{generation}.log',
+                                 launcher_generation, env=env)
+            process_started_time = getattr(proc, 'started_time', None) or process_started_time
         else:
+            process_started_time = time.time()
             proc = sp.Popen(
                 cmd, env=env, cwd=root, stdout=stream, stderr=sp.STDOUT,
                 start_new_session=True,
             )
         event("launched", generation=generation, launcher_pid=proc.pid,
-              master_port=port, command=cmd)
+              launcher_generation=(launcher_generation if config['persistent_cpu_launcher'] else generation),
+              external_cpu_launcher=bool(config["external_cpu_launcher_socket"]),
+              process_started_time=process_started_time, master_port=port, command=cmd)
         return proc
 
     def local_rank_ready_pid(rank, current_generation):
@@ -359,16 +397,27 @@ def main():
         if config['persistent_cpu_launcher']:
             if not config['fast_launch']:
                 raise ValueError('persistent CPU launcher requires fast_launch')
-            stream=(out/'cpu_launcher.log').open('w',encoding='utf-8');log_handles.append(stream)
-            preload_started=time.monotonic()
-            cpu_launcher=sp.Popen([config['python'],'-m','shift_full.launch_server','--socket',str(out/'cpu_launcher.sock')],
-                                  env=env,cwd=root,stdout=stream,stderr=sp.STDOUT,start_new_session=True)
-            while not (out/'cpu_launcher.sock').exists():
-                if cpu_launcher.poll() is not None or time.monotonic()-preload_started>45:
-                    raise RuntimeError('CPU preload service failed to start')
-                time.sleep(.05)
-            rss=[line for line in Path(f'/proc/{cpu_launcher.pid}/status').read_text().splitlines() if line.startswith('VmRSS:')]
-            event('cpu_launcher_ready',server_pid=cpu_launcher.pid,preload_seconds=time.monotonic()-preload_started,cpu_rss=rss)
+            external_socket = config["external_cpu_launcher_socket"]
+            if external_socket:
+                socket_path = Path(external_socket).expanduser()
+                socket_deadline = min(deadline, time.monotonic() + 45)
+                while not socket_path.is_socket():
+                    if time.monotonic() >= socket_deadline:
+                        raise RuntimeError(f'external CPU launcher socket is unavailable: {socket_path}')
+                    time.sleep(.05)
+                event('cpu_launcher_external_ready', socket=str(socket_path),
+                      generation_offset=config["cpu_launcher_generation_offset"])
+            else:
+                stream=(out/'cpu_launcher.log').open('w',encoding='utf-8');log_handles.append(stream)
+                preload_started=time.monotonic()
+                cpu_launcher=sp.Popen([config['python'],'-m','shift_full.launch_server','--socket',str(out/'cpu_launcher.sock')],
+                                      env=env,cwd=root,stdout=stream,stderr=sp.STDOUT,start_new_session=True)
+                while not (out/'cpu_launcher.sock').exists():
+                    if cpu_launcher.poll() is not None or time.monotonic()-preload_started>45:
+                        raise RuntimeError('CPU preload service failed to start')
+                    time.sleep(.05)
+                rss=[line for line in Path(f'/proc/{cpu_launcher.pid}/status').read_text().splitlines() if line.startswith('VmRSS:')]
+                event('cpu_launcher_ready',server_pid=cpu_launcher.pid,preload_seconds=time.monotonic()-preload_started,cpu_rss=rss)
         training = launch()
         event("supervisor_ready", mode=config["mode"], target_steps=config["target_steps"])
 

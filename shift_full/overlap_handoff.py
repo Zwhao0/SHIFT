@@ -9,6 +9,7 @@ import torch
 import torch.distributed as dist
 from shift_full.planned_handoff import PlannedHandoff,EpochGate
 from shift_full.transport import PackedGPUTransport
+from shift_full.planned_state import validate_state, validate_relay
 
 class RetiredReplica(Exception):pass
 
@@ -24,6 +25,7 @@ class FrozenTransport(PackedGPUTransport):
 class OverlapHandoff(PlannedHandoff):
  def __init__(self,*args,**kw):
   self.presend=None;self.prepared_step=None;self.relay_payload=None;self.relay_done=False;self.fallback=False
+  self.shadow_result=None
   super().__init__(*args,**kw)
   self.base_epoch=self.round;self.new_epoch=self.round+1;self.gate=EpochGate(self.base_epoch)
  @property
@@ -37,9 +39,11 @@ class OverlapHandoff(PlannedHandoff):
    return manager,False
   if not self.request_seen and self.coord.check(['request']):
    self.request_seen=True;self.emit('planned_request_seen',step=self.progress['updates'])
-  if self.role=='A' and self.rank==0 and self.coord.check(['arm']) and not self.coord.check(['cut']):
+  if self.role=='A' and self.rank==0 and (self.coord.check(['arm']) or self.coord.check(['fixed_cut'])) and not self.coord.check(['cut']):
    if not self.coord.check([f'prepared/C/{r}' for r in range(self.local_world)]):raise RuntimeError('target not prepared')
-   self.coord.set('cut',str(self.progress['updates']+2));self.emit('planned_cut_selected',step=self.progress['updates']+2)
+   selected=int(self.coord.get('fixed_cut')) if self.coord.check(['fixed_cut']) else self.progress['updates']+2
+   if selected<self.progress['updates']+2:raise RuntimeError('fixed cut lacks two-boundary notice')
+   self.coord.set('cut',str(selected));self.emit('planned_cut_selected',step=selected)
   if not self.coord.check(['cut']):return manager,False
   self.cut=int(self.coord.get('cut'))
   if self.progress['updates']<self.cut:return manager,False
@@ -66,7 +70,7 @@ class OverlapHandoff(PlannedHandoff):
       with torch.cuda.stream(torch.cuda.Stream()):
        ready.wait();packing=time.monotonic();tr.freeze(payload,self.cut)
        if any(t._version!=version for t,version in versions):raise RuntimeError('state mutated during precopy read window')
-       self.emit('planned_precopy_frozen',step=self.cut,seconds=time.monotonic()-packing,mode='readonly_window')
+       self.emit('planned_precopy_frozen',step=self.cut,seconds=time.monotonic()-packing,mode='readonly_window',source_readonly_guard=True,state_schema=2)
        tr.send_checkpoint([1],self.cut,None,timedelta(seconds=60))
       del tr.frozen
       self.emit('planned_precopy_sent',step=self.cut)
@@ -89,27 +93,41 @@ class OverlapHandoff(PlannedHandoff):
    time.sleep(.01)
   self.cut=int(self.coord.get('cut'))
   payload=self.transport().recv_checkpoint(0,'<packed-gpu>',self.cut,timedelta(seconds=60))
-  if payload['step']!=self.cut or self.layout_manifest(payload['manifest'])!=self.layout_manifest(self.manifest()) or payload['planned_epoch']!=self.new_epoch:
-   self.emit('planned_precopy_rejected',step=self.cut);self.coord.set('cancel','stale state')
+  try:
+   validate_state(payload,rank=self.rank,step=self.cut,audit=self.args.audit_state,epoch=self.new_epoch)
+   if self.layout_manifest(payload['manifest'])!=self.layout_manifest(self.manifest()):raise ValueError('state manifest mismatch')
+  except ValueError as exc:
+   self.emit('planned_precopy_rejected',step=self.cut,error=str(exc));self.coord.set('cancel','stale state')
   else:
-   self.emit('planned_restore_sources',step=self.cut,shared_source='B',role_source='B',source_physical='C' if self.round%2 else 'B');self.load(payload)
+   self.emit('planned_restore_sources',step=self.cut,shared_source='B',role_source='B',source_physical=self.hosts['B']);self.load(payload)
    self.emit('planned_precopy_loaded',step=self.cut);self.coord.set(f'preloaded/{self.rank}',str(self.cut))
+   if getattr(self.args,'planned_shadow_recompute',False):
+    # Synchronous owner-thread callback; receiver still has no Manager.
+    self.shadow_result=self.shadow_recompute(payload['hashes'])
   del payload
   self.coord.wait(['decision'])
   if self.coord.get('decision')==b'abort':
    self.close_prepared();self.emit('planned_cancelled',step=self.cut);return False
   self.wait_freeze()
   self.relay_payload=self.transport().recv_checkpoint(0,'<packed-gpu>',self.cut,timedelta(seconds=60))
-  if self.relay_payload['step']!=self.cut or self.relay_payload['sample_step']!=self.cut+1:raise RuntimeError('stale relay')
   from shift_full.planned_train import digest
-  valid=not self.args.audit_state or digest(self.relay_payload['gradients'])==self.relay_payload['gradient_hash']
+  try:
+   validate_relay(self.relay_payload,rank=self.rank,step=self.cut,epoch=self.new_epoch,digest=digest,audit=self.args.audit_state)
+   if getattr(self.args,'planned_shadow_recompute',False):
+    result=self.shadow_result;packet=self.relay_payload
+    matches=bool(result and all(result[k]==packet[k] for k in ('gradient_hash','parameter_gradient_hash','tail_hash','sample_ids')))
+    self.emit('planned_shadow_compared',step=self.cut,exact=matches,shadow=result,
+              source={k:packet[k] for k in ('gradient_hash','parameter_gradient_hash','tail_hash','sample_ids')})
+    if not matches:raise ValueError('shadow full gradient/tail/sample mismatch')
+   valid=True
+  except (ValueError,KeyError):valid=False
   self.coord.set(f'relay_{"ok" if valid else "rejected"}/{self.rank}','1')
   if not valid:self.emit('planned_relay_rejected',step=self.cut)
   self.coord.wait(['activation_decision'])
   if self.coord.get('activation_decision')==b'AB':
    self.close_prepared();self.emit('planned_activation_rejected',step=self.cut);self.relay_payload=None;return False
   self.coord.set(f'loaded/{self.rank}',str(self.cut));self.emit('planned_state_ready',step=self.cut,epoch=self.new_epoch)
-  self.gate.activate(self.new_epoch,self.cut,self.progress['updates'],True);self.args.lighthouse=f'http://10.10.4.2:{31410+self.offset}'
+  self.gate.activate(self.new_epoch,self.cut,self.progress['updates'],True);self.args.lighthouse=f'http://{self.control_host}:{31410+self.offset}'
   self.retired_pgs.extend(self.channels.values());self.channels={};self.start_retired_cleanup()
   return True
  def is_relay_step(self):return self.cut is not None and self.progress['updates']==self.cut and not self.relay_done
@@ -123,6 +141,7 @@ class OverlapHandoff(PlannedHandoff):
   from shift_full.planned_train import digest
   if self.role=='C':
    packet=self.relay_payload
+   validate_relay(packet,rank=self.rank,step=self.cut,epoch=self.new_epoch,digest=digest,audit=self.args.audit_state)
    if len(gradients)!=len(packet['gradients']):raise RuntimeError('relay bucket count mismatch')
    for dst,src in zip(gradients,packet['gradients']):
     if dst.shape!=src.shape or dst.dtype!=src.dtype:raise RuntimeError('relay bucket manifest mismatch')
@@ -159,10 +178,17 @@ class OverlapHandoff(PlannedHandoff):
    if self.presend.is_alive():raise RuntimeError('precopy sender timed out')
    self.check();self.coord.wait([f'preloaded/{self.rank}'])
    tail=self.export.role_metadata() if hasattr(self.export,'role_metadata') else dict(self.metadata(),**self.rng_snapshot())
-   packet=dict(step=self.cut,sample_step=self.cut+1,sample_ids=sample_ids,gradients=gradients,tail=tail,gradient_hash=digest(gradients) if self.args.audit_state else None)
+   tail.update(planned_epoch=self.new_epoch,planned_role=1)
+   validate_state(tail,rank=self.rank,step=self.cut,full=False,epoch=self.new_epoch)
+   packet=dict(schema=2,planned_epoch=self.new_epoch,planned_role=1,tail_hash=digest(tail) if self.args.audit_state else None,step=self.cut,sample_step=self.cut+1,sample_ids=sample_ids,gradients=gradients,tail=tail,gradient_hash=digest(gradients) if self.args.audit_state else None)
+   if getattr(self.args,'planned_shadow_recompute',False):
+    # Stage parameters are owned by the trainer; its diagnostic hook captures
+    # the complete named main_grad signature at the same pre-outer point.
+    packet['parameter_gradient_hash']=self.shadow_parameter_hash()
    if getattr(self.args,'planned_inject','healthy')=='relay-reject' and self.rank==0:packet['gradient_hash']='invalid'
    self.transport().send_checkpoint([1],self.cut,packet,timedelta(seconds=60))
-   self.emit('planned_gradient_sent',step=self.cut,sample_ids=sample_ids,gradient_hash=packet['gradient_hash'],tail_hash=digest(tail) if self.args.audit_state else None)
+   self.emit('planned_gradient_sent',step=self.cut,sample_ids=sample_ids,gradient_hash=packet['gradient_hash'],tail_hash=digest(tail) if self.args.audit_state else None,
+             **({'parameter_gradient_hash':packet['parameter_gradient_hash']} if getattr(self.args,'planned_shadow_recompute',False) else {}))
    self.coord.wait(['activation_decision'])
    if self.coord.get('activation_decision')==b'AB':return self.recover_ab(manager,make_manager)
    self.coord.wait([f'loaded/{self.rank}']);self.retired_pgs.extend(self.channels.values());self.channels={}
@@ -182,7 +208,7 @@ class OverlapHandoff(PlannedHandoff):
   self.coord.wait(['activation_decision'])
   if self.coord.get('activation_decision')==b'AB':return self.recover_ab(manager,make_manager)
   self.coord.wait([f'loaded/{r}' for r in range(self.local_world)])
-  self.gate.activate(self.new_epoch,self.cut,self.cut,True);self.args.lighthouse=f'http://10.10.4.2:{31410+self.offset}';self.start_retired_cleanup()
+  self.gate.activate(self.new_epoch,self.cut,self.cut,True);self.args.lighthouse=f'http://{self.control_host}:{31410+self.offset}';self.start_retired_cleanup()
   manager=make_manager();manager.start_quorum();manager.wait_quorum();self.relay_done=True
   self.emit('planned_epoch_activated',step=self.cut,epoch=self.new_epoch)
   return manager,False
@@ -195,7 +221,7 @@ class OverlapHandoff(PlannedHandoff):
   self.retired_pgs.extend(self.channels.values());self.channels={}
   if self.epoch_store is None:self.epoch_store=dist.TCPStore(self.args.host_ip,31600+self.offset,None,self.rank==0,timeout=timedelta(seconds=60),wait_for_workers=False)
   self.gate.activate(self.new_epoch,self.cut,self.cut,True);self.gate.members=('A','B')
-  self.args.lighthouse=f'http://10.10.4.2:{31411+self.offset}'
+  self.args.lighthouse=f'http://{self.control_host}:{31411+self.offset}'
   manager=make_manager();manager.start_quorum();manager.wait_quorum();self.start_retired_cleanup()
   try:self.authorize(old_manager)
   except ValueError:pass

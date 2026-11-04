@@ -141,9 +141,9 @@ def main():
     if (root / 'physical_node3').exists():
         physical_errors = []
         counts = {}
-        expected = {'physical_node0': (0, '10.10.4.2'),
-                    'physical_node1': (1, '10.10.4.1'),
-                    'physical_node3': (1, '10.10.4.3')}
+        expected = {'physical_node0': (0, '192.0.2.10'),
+                    'physical_node1': (1, '192.0.2.11'),
+                    'physical_node3': (1, '192.0.2.13')}
         for label, (rid, ip) in expected.items():
             paths = sorted((root / label).glob('events_g*_r*.jsonl'))
             counts[label] = len(paths)

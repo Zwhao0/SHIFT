@@ -1,9 +1,0 @@
-{"kind": "endpoint_launched", "time": 1793639819.722101, "physical_node": "node0", "physical_ip": "10.10.4.2", "rid": 0, "generation": 0, "container": "flash1022-run", "runtime": "greyhound", "namespace": null}
-{"kind": "endpoint_launched", "time": 1793639820.02621, "physical_node": "node1", "physical_ip": "10.10.4.1", "rid": 1, "generation": 0, "container": "shift-rdma-node1", "runtime": "greyhound", "namespace": null}
-{"kind": "launched", "time": 1793639820.026459, "physical_endpoints": ["node0", "node1"]}
-{"kind": "all_ready", "time": 1793639839.324126, "generations": [0, 0], "physical_nodes": ["node0", "node1"]}
-{"kind": "start_released", "time": 1793639839.477758, "physical_node": "node0", "rid": 0, "generation": 0}
-{"kind": "start_released", "time": 1793639839.655435, "physical_node": "node1", "rid": 1, "generation": 0}
-{"kind": "all_stopped", "time": 1793639856.3410869, "generations": [0, 0], "physical_nodes": ["node0", "node1"]}
-{"kind": "complete", "time": 1793639856.341347, "faults": 0, "requested_faults": 0}
-{"kind": "collected", "time": 1793639861.9280279, "physical_nodes": ["node0", "node1"]}

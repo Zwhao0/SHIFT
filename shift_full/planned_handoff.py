@@ -9,6 +9,7 @@ import torch
 import torch.distributed as dist
 from shift_full.prepared_pg import PreparedNCCL
 from shift_full.transport import PackedGPUTransport
+from shift_full.planned_state import validate_state, role_hosts, merge_role_state
 
 class EpochGate:
  def __init__(self,epoch=0):self.epoch=epoch;self.members=('A','B');self.step=None;self.ready=False
@@ -25,10 +26,11 @@ class PlannedHandoff:
  def __init__(self,args,rank,event,export,load,progress,manifest,rng_snapshot):
   self.local_world=dist.get_world_size();self.args=args;self.rank=rank;self.device=torch.cuda.current_device();self.emit=event;self.export=export;self.load=load;self.progress=progress;self.role=args.planned_role;self.variant=args.planned_variant;self.source=args.planned_source;self.gate=EpochGate();self.threads=[];self.errors=[];self.channels={};self.candidate=None;self.cut=None;self.cancelled=False;self.request_seen=False;self.rng_snapshot=rng_snapshot;self.manifest=manifest;self.deferred=self.variant in ('p1d','p1f','p2');self.old_epoch_revoked=False;self.retired_pgs=[];self.cleanup_thread=None;self.cleanup_cancel=threading.Event()
   self.round=getattr(args,'planned_round',0);self.offset=20*self.round
-  self.source_host='10.10.4.3' if self.round%2 else '10.10.4.1'
+  self.hosts=role_hosts(args.planned_hosts,self.round);self.control_host=self.hosts['A']
+  self.source_host=self.hosts['B']
   self.coord_prefix=f'round/{self.round}' if getattr(args,'planned_cycles',1)>1 else ''
   self.coord_raw=getattr(args,'_coord_raw',None)
-  if self.coord_raw is None:self.coord_raw=dist.TCPStore('10.10.4.2',31402,None,self.role=='A' and rank==0,timeout=timedelta(seconds=180),wait_for_workers=False)
+  if self.coord_raw is None:self.coord_raw=dist.TCPStore(self.control_host,31402,None,self.role=='A' and rank==0,timeout=timedelta(seconds=180),wait_for_workers=False)
   self.coord=dist.PrefixStore(self.coord_prefix,self.coord_raw) if self.coord_prefix else self.coord_raw
   self.epoch_store=dist.TCPStore(args.host_ip,31600+self.offset,None,rank==0,timeout=timedelta(seconds=60),wait_for_workers=False) if self.role in ('A','C') else None
   # One background worker establishes common PGs in a fixed order.
@@ -41,7 +43,7 @@ class PlannedHandoff:
  @property
  def activated(self):return bool(self.gate.epoch)
  def control_client(self,seconds):
-  raw=dist.TCPStore('10.10.4.2',31402,None,False,timeout=timedelta(seconds=seconds))
+  raw=dist.TCPStore(self.control_host,31402,None,False,timeout=timedelta(seconds=seconds))
   prefix=getattr(self,'coord_prefix','')
   return dist.PrefixStore(prefix,raw) if prefix else raw
  def prepare_all(self):
@@ -73,7 +75,7 @@ class PlannedHandoff:
   self.check()
  def prepare_channel(self,name,source,port):
   from torchft import ProcessGroupNCCL
-  host='10.10.4.2' if source=='A' else self.source_host
+  host=self.hosts[source]
   port+=self.offset
   store=dist.TCPStore(host,port,None,self.role==source and self.rank==0,timeout=timedelta(seconds=90),wait_for_workers=False)
   # TCPStore serializes requests per client: a background wait must not
@@ -90,7 +92,7 @@ class PlannedHandoff:
   return True
  def prepare_candidate(self):
   port=31403+self.offset
-  store=dist.TCPStore('10.10.4.2',port,None,self.role=='A' and self.rank==0,timeout=timedelta(seconds=90),wait_for_workers=False)
+  store=dist.TCPStore(self.control_host,port,None,self.role=='A' and self.rank==0,timeout=timedelta(seconds=90),wait_for_workers=False)
   # TCPStore serializes requests per client: a background wait must not
   # monopolize the training thread's check/set connection.
   waiter=self.control_client(180)
@@ -98,7 +100,7 @@ class PlannedHandoff:
    if waiter.check(['cancel']):return False
    time.sleep(.02)
   pg=PreparedNCCL(0 if self.role=='A' else 1,[self.rank,self.local_world+self.rank],self.emit,timeout=timedelta(seconds=60));pg._owned_store=store
-  pg.prepare(f'10.10.4.2:{port}/ac/{self.rank}',f'shift{0 if self.role=="A" else 1}',self.rank,self.local_world);self.candidate=pg
+  pg.prepare(f'{self.control_host}:{port}/ac/{self.rank}',f'shift{0 if self.role=="A" else 1}',self.rank,self.local_world);self.candidate=pg
  def ready_receiver(self):
   self.join();self.emit('planned_local_ready',manifest=self.manifest(),cuda_allocated_bytes=torch.cuda.memory_allocated(),cuda_peak_allocated_bytes=torch.cuda.max_memory_allocated(),cpu_maxrss_kib=__import__('resource').getrusage(__import__('resource').RUSAGE_SELF).ru_maxrss)
   self.coord.set(f'prepared/C/{self.rank}','1')
@@ -111,7 +113,7 @@ class PlannedHandoff:
   self.coord.set(f'loaded/{self.rank}',str(self.cut));self.emit('planned_state_ready',step=self.cut,epoch=1)
   if self.variant=='p0':self.prepare_candidate()
   self.gate.activate(1,self.cut,self.progress['updates'],True)
-  self.args.lighthouse='http://10.10.4.2:31410'
+  self.args.lighthouse=f'http://{self.control_host}:31410'
   self.start_retired_cleanup()
   return True
  def close_prepared(self):
@@ -121,7 +123,8 @@ class PlannedHandoff:
  def wait_freeze(self):self.coord.wait([f'freeze/{r}/{i}' for r in ('A','B') for i in range(self.local_world)])
  def metadata(self,payload=None):
   payload=payload or self.export()
-  return {k:payload[k] for k in ('torch_rng','cuda_rng','python_rng','all_buffers','source_rank','step','progress')}
+  validate_state(payload,rank=self.rank,audit=self.args.audit_state)
+  return dict({k:payload[k] for k in ('schema','torch_rng','cuda_rng','python_rng','tracker_rng','all_buffers','source_rank','step','progress')},planned_epoch=1,planned_role=1)
  def final_transfer(self):
   k=self.cut;timeout=timedelta(seconds=90)
   def transport(name):return PackedGPUTransport(self.channels[name],torch.device('cuda',self.device),timeout,self.emit)
@@ -138,13 +141,11 @@ class PlannedHandoff:
     role=transport('role').recv_checkpoint(0,'<packed-gpu>',k,timeout)
     torch.cuda.current_stream().synchronize();self.coord.set(f'role_loaded/{self.rank}','1')
    payload=transport('state').recv_checkpoint(0,'<packed-gpu>',k,timeout)
-   if payload['step']!=k or payload['planned_epoch']!=1 or payload['planned_role']!=1 or self.layout_manifest(payload['manifest'])!=self.layout_manifest(self.manifest()):raise RuntimeError('state version/role/manifest mismatch')
+   validate_state(payload,rank=self.rank,step=k,audit=self.args.audit_state,epoch=1)
+   if self.layout_manifest(payload['manifest'])!=self.layout_manifest(self.manifest()):raise RuntimeError('state manifest mismatch')
    if role:
-    if role['step']!=k:raise RuntimeError('B role metadata stale')
-    payload.update(role)
-    # Shared state comes from A, role-specific RNG/cursor comes from B.
-    from shift_full.train import digest
-    if payload['hashes']:payload['hashes'].update(cpu_rng=digest(role['torch_rng']),cuda_rng=digest(role['cuda_rng']),python_rng=digest(role['python_rng']),buffers=digest(role['all_buffers']))
+    from shift_full.planned_train import digest
+    payload=merge_role_state(payload,role,rank=self.rank,step=k,epoch=1,digest=digest,audit=self.args.audit_state)
    payload['role_source_replica']=1
    self.emit('planned_restore_sources',step=k,shared_source=self.source,role_source='B')
    self.load(payload)
@@ -192,7 +193,7 @@ class PlannedHandoff:
    self.emit('planned_standby_verified',step=k)
    return None,True
   if self.variant=='p0':self.prepare_candidate()
-  self.gate.activate(1,k,k,True);self.args.lighthouse='http://10.10.4.2:31410'
+  self.gate.activate(1,k,k,True);self.args.lighthouse=f'http://{self.control_host}:31410'
   self.start_retired_cleanup()
   return None,False
  def authorize(self,manager):

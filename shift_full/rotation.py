@@ -210,7 +210,7 @@ class Rotation(Session):
         if audit:
             for rank in range(8):
                 a, b = roles[0,rank][first_step]['hashes'], roles[1,rank][first_step]['hashes']
-                if len(a) != 7 or a != b:
+                if not {'model','optimizer','scheduler','progress','cpu_rng','cuda_rng','python_rng'} <= set(a) or a != b:
                     raise RuntimeError(f'first joint state mismatch rank={rank} step={first_step}')
         healthy_commits = [e for e in self.rows(data,healthy,0,'commit') if e['time']>fault_at]
         if not healthy_commits or any(e['pid'] != healthy_pids[r] for r in range(8)

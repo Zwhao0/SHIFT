@@ -1,0 +1,405 @@
+{
+  "release": "v3",
+  "date": "2026-11-04",
+  "performance_pass": false,
+  "flat_tolerance_pass": false,
+  "functional_scope": "See RESULTS_V3.md; bounded tested cases only",
+  "steady": {
+    "fixed_window": [
+      11,
+      80
+    ],
+    "rank_steps": 15360,
+    "comparisons": {
+      "flat->nativeft": {
+        "baseline": "flat",
+        "candidate": "nativeft",
+        "metrics": {
+          "step_seconds": {
+            "run_values": {
+              "flat": [
+                0.7365978851465376,
+                0.7305271539704076,
+                0.727818344742991,
+                0.7207671744050458
+              ],
+              "nativeft": [
+                0.783712940919213,
+                0.7798421940500183,
+                0.7974948158071908,
+                0.7736235722200945
+              ]
+            },
+            "pairs_percent": [
+              6.39630614243516,
+              6.7506101329134705,
+              9.57333262722364,
+              7.3333525293627355
+            ],
+            "paired_percent_mean": 7.513400357983752,
+            "paired_percent_t95": [
+              5.243375771611768,
+              9.783424944355737
+            ],
+            "pooled_overhead_percent": 7.509763412930481
+          },
+          "commit_interval_seconds": {
+            "run_values": {
+              "flat": [
+                0.7366830717738984,
+                0.7305512647161128,
+                0.7279077412344382,
+                0.7208500714340647
+              ],
+              "nativeft": [
+                0.7838514083331185,
+                0.7799654403152609,
+                0.7975782078807242,
+                0.7737466588982248
+              ]
+            },
+            "pairs_percent": [
+              6.402799028032646,
+              6.763957299882328,
+              9.571332010858114,
+              7.338084514429921
+            ],
+            "paired_percent_mean": 7.519043213300753,
+            "paired_percent_t95": [
+              5.257342783282397,
+              9.78074364331911
+            ],
+            "pooled_overhead_percent": 7.515437458638408
+          },
+          "elapsed_seconds": {
+            "run_values": {
+              "flat": [
+                51.32221809588373,
+                50.924454695079476,
+                50.798700153362006,
+                50.26937124598771
+              ],
+              "nativeft": [
+                54.22448675427586,
+                53.91751525597647,
+                55.20357891405001,
+                53.541344507131726
+              ]
+            },
+            "pairs_percent": [
+              5.654994593121265,
+              5.877452353331125,
+              8.671243058168043,
+              6.50888041772586
+            ],
+            "paired_percent_mean": 6.678142605586573,
+            "paired_percent_t95": [
+              4.4869035749917,
+              8.869381636181446
+            ],
+            "pooled_overhead_percent": 6.6754535167488305
+          }
+        },
+        "confidence_note": "Exploratory t95 over four run pairs; all fixed11_80 steps retained, ranks/steps are not repetitions. Triad order and hashes frozen before launch. Framework vs adapter attribution uses comparable local paths, not full Titan equivalence."
+      },
+      "nativeft->shift": {
+        "baseline": "nativeft",
+        "candidate": "shift",
+        "metrics": {
+          "step_seconds": {
+            "run_values": {
+              "nativeft": [
+                0.783712940919213,
+                0.7798421940500183,
+                0.7974948158071908,
+                0.7736235722200945
+              ],
+              "shift": [
+                0.7763586079801565,
+                0.7858569067653401,
+                0.7845772130182013,
+                0.7957500787418602
+              ]
+            },
+            "pairs_percent": [
+              -0.9383962615738595,
+              0.7712730551401759,
+              -1.6197726346239505,
+              2.8601127623695044
+            ],
+            "paired_percent_mean": 0.2683042303279676,
+            "paired_percent_t95": [
+              -2.913002439764259,
+              3.449610900420194
+            ],
+            "pooled_overhead_percent": 0.2510399711903366
+          },
+          "commit_interval_seconds": {
+            "run_values": {
+              "nativeft": [
+                0.7838514083331185,
+                0.7799654403152609,
+                0.7975782078807242,
+                0.7737466588982248
+              ],
+              "shift": [
+                0.7764512821483159,
+                0.7859255005838349,
+                0.7846884274306442,
+                0.7958731915020117
+              ]
+            },
+            "pairs_percent": [
+              -0.9440725762729918,
+              0.7641441479977473,
+              -1.6161149242442274,
+              2.8596611499807967
+            ],
+            "paired_percent_mean": 0.2659044493653312,
+            "paired_percent_t95": [
+              -2.914134969368187,
+              3.445943868098849
+            ],
+            "pooled_overhead_percent": 0.2486868838851075
+          },
+          "elapsed_seconds": {
+            "run_values": {
+              "nativeft": [
+                54.22448675427586,
+                53.91751525597647,
+                55.20357891405001,
+                53.541344507131726
+              ],
+              "shift": [
+                53.64094966184348,
+                54.29504337068647,
+                54.30654988437891,
+                55.00672007538378
+              ]
+            },
+            "pairs_percent": [
+              -1.0761505131007376,
+              0.7001956839399304,
+              -1.624947235880747,
+              2.736904688780961
+            ],
+            "paired_percent_mean": 0.1840006559348517,
+            "paired_percent_t95": [
+              -2.950890354078548,
+              3.318891665948251
+            ],
+            "pooled_overhead_percent": 0.1670628877871838
+          }
+        },
+        "confidence_note": "Exploratory t95 over four run pairs; all fixed11_80 steps retained, ranks/steps are not repetitions. Triad order and hashes frozen before launch. Framework vs adapter attribution uses comparable local paths, not full Titan equivalence."
+      },
+      "flat->shift": {
+        "baseline": "flat",
+        "candidate": "shift",
+        "metrics": {
+          "step_seconds": {
+            "run_values": {
+              "flat": [
+                0.7365978851465376,
+                0.7305271539704076,
+                0.727818344742991,
+                0.7207671744050458
+              ],
+              "shift": [
+                0.7763586079801565,
+                0.7858569067653401,
+                0.7845772130182013,
+                0.7957500787418602
+              ]
+            },
+            "pairs_percent": [
+              5.3978871831418695,
+              7.57394882506639,
+              7.798493770482406,
+              10.403207443334072
+            ],
+            "paired_percent_mean": 7.793384305506184,
+            "paired_percent_t95": [
+              4.5326372709625184,
+              11.05413134004985
+            ],
+            "pooled_overhead_percent": 7.7796558920290915
+          },
+          "commit_interval_seconds": {
+            "run_values": {
+              "flat": [
+                0.7366830717738984,
+                0.7305512647161128,
+                0.7279077412344382,
+                0.7208500714340647
+              ],
+              "shift": [
+                0.7764512821483159,
+                0.7859255005838349,
+                0.7846884274306442,
+                0.7958731915020117
+              ]
+            },
+            "pairs_percent": [
+              5.398279382022131,
+              7.57978783176021,
+              7.800533361537432,
+              10.407590016422619
+            ],
+            "paired_percent_mean": 7.796547647935598,
+            "paired_percent_t95": [
+              4.533410843818028,
+              11.059684452053169
+            ],
+            "pooled_overhead_percent": 7.782814249749737
+          },
+          "elapsed_seconds": {
+            "run_values": {
+              "flat": [
+                51.32221809588373,
+                50.924454695079476,
+                50.798700153362006,
+                50.26937124598771
+              ],
+              "shift": [
+                53.64094966184348,
+                54.29504337068647,
+                54.30654988437891,
+                55.00672007538378
+              ]
+            },
+            "pairs_percent": [
+              4.517987826690839,
+              6.618801704974708,
+              6.905392697897095,
+              9.423926959846707
+            ],
+            "paired_percent_mean": 6.866527297352337,
+            "paired_percent_t95": [
+              3.668365777135104,
+              10.06468881756957
+            ],
+            "pooled_overhead_percent": 6.853668609953978
+          }
+        },
+        "confidence_note": "Exploratory t95 over four run pairs; all fixed11_80 steps retained, ranks/steps are not repetitions. Triad order and hashes frozen before launch. Framework vs adapter attribution uses comparable local paths, not full Titan equivalence."
+      }
+    },
+    "pooled": {
+      "flat": {
+        "count": 280,
+        "mean": 0.7289276395662455,
+        "p50": 0.6782944535370916,
+        "p95": 1.2712146335921717,
+        "maximum": 1.5852641868405044,
+        "samples_per_second": 10.9750262793718,
+        "step_variance": 0.026978054926284554
+      },
+      "nativeft": {
+        "count": 280,
+        "mean": 0.7836683807491291,
+        "p50": 0.7310555200092494,
+        "p95": 1.2977683520177379,
+        "maximum": 1.3631841018795967,
+        "samples_per_second": 10.208399619686825,
+        "step_variance": 0.022209332363094712
+      },
+      "shift": {
+        "count": 280,
+        "mean": 0.7856357016263895,
+        "p50": 0.7306376505293883,
+        "p95": 1.2940859714522959,
+        "maximum": 1.3984052273444831,
+        "samples_per_second": 10.182836629545655,
+        "step_variance": 0.021721231234608507
+      }
+    },
+    "pooled_overhead_percent": 7.509763412930481,
+    "pairs_percent": [
+      6.39630614243516,
+      6.7506101329134705,
+      9.57333262722364,
+      7.3333525293627355
+    ],
+    "paired_percent_t95": [
+      5.243375771611768,
+      9.783424944355737
+    ]
+  },
+  "cold": {
+    "cold_seconds": [
+      18.118334770202637,
+      18.295409679412842
+    ],
+    "n": 2,
+    "baseline_n": 1,
+    "baseline_seconds": 21.389271,
+    "all_functional_pass": true,
+    "performance_pass": false,
+    "default_enabled": false,
+    "formal_injections": 12,
+    "historical_diagnostic_injections": 5
+  },
+  "staged_slow": {
+    "freeze_to_joint_seconds": [
+      2.262413,
+      2.161504
+    ],
+    "commit_gap_seconds": [
+      7.157995,
+      6.814702
+    ],
+    "total_migration_time": false
+  },
+  "sources": [
+    {
+      "path": "results/v3_b1_20261103_pdtri01/reanalyzed.json",
+      "bytes": 886654,
+      "sha256": "ffe3520b08e8f65594440c5f6bb4269bff52c22e30829adbdb0f68a76092e4ce",
+      "included": false
+    },
+    {
+      "path": "results/v3_b1_20261103_pdtri01/critical_attribution.json",
+      "bytes": 818395,
+      "sha256": "78c24573d9bb83b334b2290170cc131174bd34852790f2eb245a75497f6fe414",
+      "included": false
+    },
+    {
+      "path": "results/v3_p_20261103/p11_repeat_checked.json",
+      "bytes": 1263,
+      "sha256": "c8058a15c503ce8aee5c562edd3e5592fee40f21b0c32d265b165b7ef1735aa9",
+      "included": false
+    },
+    {
+      "path": "results/v3_p_20261103/p14_screening_checked.json",
+      "bytes": 30645,
+      "sha256": "74cd02449ef11b6deeb81655fad7922cf6022f00aec270213de5d9ffaf204a23",
+      "included": false
+    },
+    {
+      "path": "results/v3_b1_20261103/pdtri01_source_provenance.json",
+      "bytes": 13738,
+      "sha256": "3ef0f4ccb43c104547ea97de1795ed7fb7af0a66314d157568fd04ecbe27421c",
+      "included": false
+    },
+    {
+      "path": "results/v3_b1_20261103/pdtri01-evidence.tgz",
+      "bytes": 23894673,
+      "sha256": "0f98dda478f081d14a3836e2e7d108e23d2b1edd1ea5b6f2d2f69015ca5c86fe",
+      "included": false
+    },
+    {
+      "path": "results/v3_b2_20261103/p11cold01-evidence.tgz",
+      "bytes": 1519355,
+      "sha256": "2fa40937d4b0a95cd8cee716614a6dd76ba1f87340124594f3f2c8c9d3c0df41",
+      "included": false
+    },
+    {
+      "path": "results/v3_b2_20261103/p11cold02-evidence.tgz",
+      "bytes": 1506314,
+      "sha256": "b40afa63fee1e33bf3894320e742d0467c9230bae324e951ce8e0f182585a8a4",
+      "included": false
+    }
+  ],
+  "raw_evidence_public": false
+}

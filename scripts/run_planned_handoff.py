@@ -28,10 +28,12 @@ class PlannedSession(Session):
  def launch_role(self,role,base):
   node={'A':'node0','B':'node1','C':'node3'}[role];rid=0 if role=='A' else 1;gen=1 if role=='C' else 0
   self.config=copy.deepcopy(base);
-  if base['entry_module']=='shift_full.planned_train':self.config['train_args']+=['--planned-role',role]
+  if base['entry_module']=='shift_full.planned_train':
+   self.config['train_args']+=['--planned-role',role]
+   if '--planned-hosts' not in self.config['train_args']:self.config['train_args']+=['--planned-hosts',json.dumps({r:self.endpoints[n].ip for r,n in zip(('A','B','C'),('node0','node1','node3'))})]
   self.start_supervisor(rid,self.endpoints[node],gen)
  def set_key(self,key,value):
-  code=f'from datetime import timedelta;import torch.distributed as d;s=d.TCPStore("10.10.4.2",31402,None,False,timeout=timedelta(seconds=15));s.set({key!r},str({value!r}))'
+  code=f'from datetime import timedelta;import torch.distributed as d;s=d.TCPStore("192.0.2.10",31402,None,False,timeout=timedelta(seconds=15));s.set({key!r},str({value!r}))'
   self.execute_endpoint(self.endpoints['node0'],[self.config['python'],'-c',code])
 
 def main():

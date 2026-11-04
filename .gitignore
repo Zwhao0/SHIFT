@@ -10,3 +10,18 @@ results/*
 !results/v1/
 !results/v2/
 !results/v2_1/
+# Private execution state retained locally
+AGENTS.md
+handoff.md
+CURRENT_PLAN.md
+FAIL_SLOW_PLAN.md
+OPTIMIZATION_NOTES.md
+SERVER_CLEANUP.md
+v3_plan.md
+v3_progress.json
+v3_supervision.json
+docs/v3_*.md
+!docs/v3_reproduce.md
+!docs/v3_optimization_record.md
+scripts/screen_v3_p14.py
+scripts/cleanup_v3_p14_identity.py

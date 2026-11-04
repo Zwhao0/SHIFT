@@ -15,7 +15,7 @@ def run(a):
  out=Path('/workspace/SHIFT/results')/a.session;log=(out/'events.jsonl').open('w',buffering=1)
  role=('A','B','C')[a.rid];rid=int(role!='A')
  def event(kind,**kw):log.write(json.dumps(dict(kind=kind,role=role,rid=rid,rank=0,pid=__import__('os').getpid(),monotonic=time.monotonic(),**kw))+'\n')
- args=SimpleNamespace(planned_role=role,planned_variant='p2',planned_source='B',host_ip=a.host,lighthouse='http://10.10.4.2:31300',audit_state=True)
+ args=SimpleNamespace(planned_role=role,planned_variant='p2',planned_source='B',host_ip=a.host,lighthouse='http://192.0.2.10:31300',audit_state=True)
  model=torch.nn.Linear(16,8).cuda()
  with torch.no_grad():
   for p in model.parameters():p.fill_(.125)

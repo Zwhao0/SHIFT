@@ -14,6 +14,11 @@ HASH_FIELDS = {
 }
 
 
+def valid_hash_fields(value):
+    # Preserve historical seven-field evidence; schema 2 adds explicit buffers/tracker.
+    return set(value) in (HASH_FIELDS, HASH_FIELDS | {'buffers', 'tracker_rng'})
+
+
 def _number(value):
     try:
         result = float(value)
@@ -201,7 +206,7 @@ def _hashes_ok(row):
     expected = row.get("expected_hashes", row.get("expected"))
     actual = row.get("actual_hashes", row.get("actual"))
     valid_shape = (isinstance(expected, dict) and isinstance(actual, dict)
-                   and set(expected) == HASH_FIELDS and set(actual) == HASH_FIELDS)
+                   and valid_hash_fields(expected) and valid_hash_fields(actual))
     return bool(valid_shape and expected == actual and row.get("hashes_match") is True)
 
 
@@ -242,14 +247,14 @@ def _role_hashes_match(roles, step, errors, require_audit):
         if all(isinstance(item, dict) for item in pair):
             if not require_audit and pair[0] == {} and pair[1] == {}:
                 continue
-            if set(pair[0]) != HASH_FIELDS or set(pair[1]) != HASH_FIELDS or pair[0] != pair[1]:
+            if not valid_hash_fields(pair[0]) or not valid_hash_fields(pair[1]) or pair[0] != pair[1]:
                 all_ok = False
                 errors.append(f"first joint step {step} rank {rank}: state hashes are missing fields or differ")
             else:
                 checked += 1
         elif require_audit:
             all_ok = False
-            errors.append(f"first joint step {step} rank {rank}: missing 7-field hashes")
+            errors.append(f"first joint step {step} rank {rank}: missing complete hashes")
         else:
             all_ok = False
             errors.append(f"first joint step {step} rank {rank}: missing paired hash dictionaries")
@@ -571,12 +576,12 @@ def verify(result_dir, expected_faults, minimum_duration=None, require_audit=Tru
             continue
         audited_joint_steps.append(step)
         for rank in RANKS:
-            if set(states[0,rank])!=HASH_FIELDS or states[0,rank]!=states[1,rank]:
+            if not valid_hash_fields(states[0,rank]) or states[0,rank]!=states[1,rank]:
                 errors.append(f'steady-state joint hash mismatch step{step} rank{rank}')
     if require_audit:
         for rank in RANKS:
             initial=[_matching_rows(roles.get((rid,0,rank),[]),'ready') for rid in (0,1)]
-            if not all(initial) or set(initial[0][-1].get('hashes',{}))!=HASH_FIELDS or initial[0][-1]['hashes']!=initial[1][-1].get('hashes'):
+            if not all(initial) or not valid_hash_fields(initial[0][-1].get('hashes',{})) or initial[0][-1]['hashes']!=initial[1][-1].get('hashes'):
                 errors.append(f'initial full-state mismatch rank{rank}')
 
     if len(faults) != expected_faults:

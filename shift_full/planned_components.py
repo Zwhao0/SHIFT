@@ -14,7 +14,7 @@ def run(a):
  def event(kind,**kw):
   with lock:log.write(json.dumps(dict(kind=kind,rid=a.rid,pid=os.getpid(),mono=time.monotonic(),**kw))+'\n')
  dist.init_process_group('nccl',init_method=f'tcp://{a.host}:31301',rank=0,world_size=1,timeout=timedelta(seconds=40))
- coord=dist.TCPStore('10.10.4.2',31302,3,a.rid==0,timeout=timedelta(seconds=60),wait_for_workers=False)
+ coord=dist.TCPStore('192.0.2.10',31302,3,a.rid==0,timeout=timedelta(seconds=60),wait_for_workers=False)
  from torchft import Manager,ProcessGroupNCCL
  from torchft.manager import WorldSizeMode
  # A real, distinguishable role-specific random sample sequence.
@@ -38,14 +38,14 @@ def run(a):
   if v['epoch']!=1 or v['role']!=1 or v['step']!=int(coord.get('cut')):raise RuntimeError('stale state/epoch')
   model.load_state_dict(v['model']);opt.load_state_dict(v['optimizer']);sched.load_state_dict(v['scheduler']);progress=v['step'];torch.cuda.synchronize();event('state_loaded',step=progress,hashes=hashes())
  def manager(pg,rid,epoch):
-  m=Manager(pg=pg,state_dict=state,load_state_dict=load,min_replica_size=2,world_size_mode=WorldSizeMode.FIXED_WITH_SPARES,use_async_quorum=False,init_sync=False,rank=0,world_size=1,store_addr=a.host,store_port=31301,replica_id=f'component{rid}',hostname=a.host,lighthouse_addr=f'http://10.10.4.2:{31300 if epoch==0 else 31310}',timeout=timedelta(seconds=30),quorum_timeout=timedelta(seconds=40),max_retries=0)
+  m=Manager(pg=pg,state_dict=state,load_state_dict=load,min_replica_size=2,world_size_mode=WorldSizeMode.FIXED_WITH_SPARES,use_async_quorum=False,init_sync=False,rank=0,world_size=1,store_addr=a.host,store_port=31301,replica_id=f'component{rid}',hostname=a.host,lighthouse_addr=f'http://192.0.2.10:{31300 if epoch==0 else 31310}',timeout=timedelta(seconds=30),quorum_timeout=timedelta(seconds=40),max_retries=0)
   m.load_state_dict(dict(step=progress,batches_committed=progress*2));return m
  candidate=None;candidate_thread=None;candidate_error=[];statepg=None;state_thread=None
  # Independent B-C state channel: not the future training group.
  def prepare_state():
   nonlocal statepg
-  torch.cuda.set_device(0);store=dist.TCPStore('10.10.4.1',31304,2,a.rid==1,timeout=timedelta(seconds=40),wait_for_workers=False)
-  pg=ProcessGroupNCCL(timeout=timedelta(seconds=30));pg._state_store=store;pg.configure('10.10.4.1:31304/state','state'+str(a.rid),0 if a.rid==1 else 1,2)
+  torch.cuda.set_device(0);store=dist.TCPStore('192.0.2.11',31304,2,a.rid==1,timeout=timedelta(seconds=40),wait_for_workers=False)
+  pg=ProcessGroupNCCL(timeout=timedelta(seconds=30));pg._state_store=store;pg.configure('192.0.2.11:31304/state','state'+str(a.rid),0 if a.rid==1 else 1,2)
   v=torch.ones(1,device='cuda');pg.allreduce([v],dist.AllreduceOptions()).wait();torch.cuda.synchronize();statepg=pg;event('state_channel_ready')
  def prepare_candidate():
   nonlocal candidate
@@ -53,9 +53,9 @@ def run(a):
    torch.cuda.set_device(0)
    with torch.cuda.stream(torch.cuda.Stream()):
     # TCPStore lifetime is retained by the PG client and store object below.
-    store=dist.TCPStore('10.10.4.2',31303,2,a.rid==0,timeout=timedelta(seconds=40),wait_for_workers=False)
+    store=dist.TCPStore('192.0.2.10',31303,2,a.rid==0,timeout=timedelta(seconds=40),wait_for_workers=False)
     pg=PreparedNCCL(0 if a.rid==0 else 1,[0,1],event);pg._candidate_store=store
-    pg.prepare('10.10.4.2:31303/candidate',f'component{0 if a.rid==0 else 1}',0,1);candidate=pg
+    pg.prepare('192.0.2.10:31303/candidate',f'component{0 if a.rid==0 else 1}',0,1);candidate=pg
   except BaseException as e:candidate_error.append(repr(e));event('candidate_error',error=repr(e))
  event('ready')
  while not (out/'START').exists():time.sleep(.02)

@@ -69,7 +69,7 @@ def main():
     parser.add_argument("--replica", type=int, required=True, choices=(0, 1))
     parser.add_argument("--generation", type=int, required=True)
     parser.add_argument("--host-ip", required=True)
-    parser.add_argument("--lighthouse", default="http://10.10.4.2:29771")
+    parser.add_argument("--lighthouse", default="http://192.0.2.10:29771")
     parser.add_argument("--root", default="/workspace/SHIFT")
     parser.add_argument("--max-seconds", type=int, default=900)
     parser.add_argument("--target-steps", "--steps", dest="steps", type=int, default=1_000_000)

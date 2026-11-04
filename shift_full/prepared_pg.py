@@ -5,9 +5,9 @@ This intentionally rejects later reconfiguration; it is not a fault-recovery PG.
 """
 from datetime import timedelta
 import torch
-from torchft import ProcessGroupNCCL
+from shift_full.compat import RecoveryNCCL
 
-class PreparedNCCL(ProcessGroupNCCL):
+class PreparedNCCL(RecoveryNCCL):
  def __init__(self,rank,global_ranks,event,timeout=timedelta(seconds=30)):
   super().__init__(timeout=timeout);self.expected_rank=rank;self.expected_global=list(global_ranks);self.emit=event;self.prepared=False;self.bound_quorum=None;self.native_creations=0
  def prepare(self,store_addr,replica_id,group_rank,group_world_size):

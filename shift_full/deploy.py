@@ -18,7 +18,7 @@ def main():
     archive.parent.mkdir(exist_ok=True)
     with tarfile.open(archive,'w:gz') as tar:
         for name in ['shift_full','shift_min','configs','scripts','vendor/bin','runtime/torch214-manifest',
-                     'README.md','RESULTS.md','AGENTS.md','handoff.md','CURRENT_PLAN.md','OPTIMIZATION_NOTES.md']:
+                     'README.md','RESULTS_V3.md','docs/v3_reproduce.md','evidence/v3']:
             path = session.root/name
             if path.exists():
                 tar.add(path, arcname=name, filter=lambda info: None if '__pycache__' in info.name else info)

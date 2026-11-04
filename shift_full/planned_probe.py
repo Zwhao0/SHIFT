@@ -40,8 +40,8 @@ def main():
  def traced(*args,**kw):
   configs.append([args[2],args[3],args[4]]);event('configure',rank=args[2],world=args[3],quorum=args[4]);return configure(*args,**kw)
  pg.configure=traced
- m=Manager(pg=pg,state_dict=state,load_state_dict=load,min_replica_size=2,world_size_mode=WorldSizeMode.FIXED_WITH_SPARES,use_async_quorum=False,init_sync=False,rank=0,world_size=1,store_addr=a.host,store_port=31301,replica_id=f'probe{a.rid}',hostname=a.host,lighthouse_addr='http://10.10.4.2:31300',timeout=timedelta(seconds=30),quorum_timeout=timedelta(seconds=40),max_retries=0,checkpoint_transport=HTTP(timedelta(seconds=30),0))
- coord=dist.TCPStore('10.10.4.2',31302,3,a.rid==0,timeout=timedelta(seconds=40),wait_for_workers=False)
+ m=Manager(pg=pg,state_dict=state,load_state_dict=load,min_replica_size=2,world_size_mode=WorldSizeMode.FIXED_WITH_SPARES,use_async_quorum=False,init_sync=False,rank=0,world_size=1,store_addr=a.host,store_port=31301,replica_id=f'probe{a.rid}',hostname=a.host,lighthouse_addr='http://192.0.2.10:31300',timeout=timedelta(seconds=30),quorum_timeout=timedelta(seconds=40),max_retries=0,checkpoint_transport=HTTP(timedelta(seconds=30),0))
+ coord=dist.TCPStore('192.0.2.10',31302,3,a.rid==0,timeout=timedelta(seconds=40),wait_for_workers=False)
  event('ready')
  while not (out/'START').exists(): time.sleep(.02)
  # C joins after AB have nonempty Adam state, then skips ALL forward/backward.

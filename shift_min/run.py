@@ -9,9 +9,9 @@ import sys
 import time
 
 
-NODES = [dict(ip='10.10.4.2', container='flash1022-run', sock='ssh-h2.sock', sudo=False),
-         dict(ip='10.10.4.1', container='flash1022-data16', sock='ssh-h1.sock', sudo=True)]
-SERVER_ROOT = '/home/campus/zhangweihao/SHIFT'
+NODES = [dict(ip='192.0.2.10', container='flash1022-run', sock='ssh-h2.sock', sudo=False),
+         dict(ip='192.0.2.11', container='flash1022-data16', sock='ssh-h1.sock', sudo=True)]
+SERVER_ROOT = '/workspace/SHIFT'
 CONTAINER_ROOT = '/workspace/SHIFT'
 
 

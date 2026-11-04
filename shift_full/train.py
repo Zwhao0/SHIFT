@@ -17,6 +17,13 @@ import types
 import torch
 import torch.distributed as dist
 from shift_full.compat import install_baby_event_fix, install_managed_callback_fix, bootstrap_legacy_core
+from shift_full.reference_audit import (
+    parse_reference_dump_steps,
+    reference_anchor_path,
+    reference_dump_payload,
+    should_dump_reference,
+    validate_reference_anchor,
+)
 if os.environ.get("SHIFT_BABY_COMPAT") == "1":
     install_baby_event_fix()  # Inherited by the isolated subprocess backend.
     install_managed_callback_fix()
@@ -35,6 +42,8 @@ def cpu_tree(value):
 
 
 def digest(value):
+    from shift_full.state_digest import configured_engine, digest_staged
+    if configured_engine() == "staged":return digest_staged(value)
     h = hashlib.sha256()
 
     def add(v):
@@ -73,11 +82,11 @@ def main():
     p.add_argument('--replica', type=int, required=True)
     p.add_argument('--generation', type=int, required=True)
     p.add_argument('--host-ip', required=True)
-    p.add_argument('--lighthouse', default='http://10.10.4.2:29771')
+    p.add_argument('--lighthouse', default='http://192.0.2.10:29771')
     p.add_argument('--root', default='/workspace/SHIFT')
     p.add_argument('--flash', default='/workspace/FLASH1022')
     p.add_argument('--max-seconds', type=int, default=900)
-    p.add_argument('--mode', choices=['shift', 'flat'], default='shift')
+    p.add_argument('--mode', choices=['shift', 'nativeft', 'flat'], default='shift')
     p.add_argument('--backend', choices=['nccl', 'unified', 'blocking', 'baby', 'gloo', 'hybrid'], default='hybrid')
     p.add_argument('--transport', choices=['gpu', 'http'], default='gpu')
     p.add_argument('--steps', '--target-steps', dest='steps', type=int, default=1000000)
@@ -91,9 +100,16 @@ def main():
     p.add_argument('--fp32', action='store_true')
     p.add_argument('--data', choices=['pattern','random'], default='pattern')
     p.add_argument('--reference-dump', action='store_true')
+    p.add_argument('--reference-dump-steps', type=parse_reference_dump_steps,
+                   help='comma-separated committed update numbers to save as full tensors')
     p.add_argument('--reference-ranks', default='0,1,2,3,4,5,6,7')
     p.add_argument('--reference-anchor')
     p.add_argument('--reference-anchor-step', type=int, default=1)
+    p.add_argument('--reference-anchor-save', help='directory for full schema-2 per-rank anchors')
+    p.add_argument('--reference-anchor-save-step', type=int, default=1,
+                   help='committed update to save as the schema-2 anchor')
+    p.add_argument('--reference-signatures', action='store_true',
+                   help='log compact full-state numerical signatures after every committed update')
     p.add_argument('--audit-routing', action='store_true')
     p.add_argument('--checkpoint-step', type=int, default=0)
     p.add_argument('--checkpoint-cold', action='store_true')
@@ -102,13 +118,29 @@ def main():
     p.add_argument('--bucket-size', type=int, default=2_097_152)
     p.add_argument('--communication-timeout', type=float, default=10)
     p.add_argument('--profile-timings', action='store_true')
+    p.add_argument('--trace-events', action='store_true', help='read CUDA events only after the existing step sync')
+    p.add_argument('--bucket-ready-trace', action='store_true', help='diagnostic streams/events; not performance evidence')
+    p.add_argument('--timeline-trace-step', type=int, default=0, help='one-step CPU/CUDA diagnostic on replica0 ranks0/4; not performance evidence')
     p.add_argument('--local-group-sync', action='store_true')
     p.add_argument('--eager-groups', action='store_true')
+    p.add_argument('--gradient-probe-step', type=int, default=0, help='bounded single-update gradient slices; diagnostic only')
     p.add_argument('--bucket-hook', action='store_true')
     p.add_argument('--warmup-before-join', action='store_true')
-    p.add_argument('--standby', choices=('cpu', 'gpu'))
+    p.add_argument('--standby', choices=('cpu', 'gpu', 'generic'))
     p.add_argument('--strict-fp32', action='store_true')
     args = p.parse_args()
+    if args.reference_dump_steps is not None and not args.reference_dump:
+        p.error('--reference-dump-steps requires --reference-dump')
+    try:
+        reference_rank_set = frozenset(int(value.strip()) for value in args.reference_ranks.split(','))
+    except ValueError:
+        p.error('--reference-ranks must be comma-separated non-negative integers')
+    if not reference_rank_set or any(value < 0 for value in reference_rank_set):
+        p.error('--reference-ranks must be comma-separated non-negative integers')
+    if args.reference_anchor_step < 0:
+        p.error('--reference-anchor-step must be non-negative')
+    if args.reference_anchor_save_step < 1:
+        p.error('--reference-anchor-save-step must be positive')
     if args.strict_fp32:
         args.fp32=True
         torch.backends.cuda.matmul.allow_tf32=False
@@ -132,11 +164,15 @@ def main():
         event('phase', name=name, seconds=time.monotonic()-started)
         return time.monotonic()
 
-    def standby_gate(mode):
+    def standby_gate(mode, **ready_fields):
         import resource
-        event('standby_ready', mode=mode, cpu_maxrss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
-              cuda_allocated_bytes=torch.cuda.memory_allocated() if mode=='gpu' else 0,
-              role_manifest=role_manifest() if mode=='gpu' else None)
+        fields = dict(
+            cpu_maxrss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
+            cuda_allocated_bytes=torch.cuda.memory_allocated() if mode=='gpu' else 0,
+            role_manifest=role_manifest() if mode=='gpu' else None,
+        )
+        fields.update(ready_fields)
+        event('standby_ready', mode=mode, **fields)
         until=time.monotonic()+args.max_seconds
         while not (out/'ACTIVATE').exists():
             if (out/'STOP').exists() or time.monotonic()>until:
@@ -159,8 +195,48 @@ def main():
     logging.basicConfig(level=logging.WARNING)
     rank = int(os.environ['LOCAL_RANK'])
     torch.set_num_threads(1)
+    overlap_imports = os.environ.get('SHIFT_OVERLAP_CPU_IMPORTS', '0')
+    if overlap_imports not in ('0', '1'):
+        raise ValueError('invalid SHIFT_OVERLAP_CPU_IMPORTS')
+    cpu_imports = None
+    if overlap_imports == '1':
+        if not legacy_namespace:
+            raise RuntimeError('CPU import overlap requires the isolated legacy namespace')
+        import sys
+        sys.path.insert(0, args.flash)
+        from flash_v1 import megatron_adapter
+        from flash_v1.pipeline_adapter import StageModel, forward_step
+        from flash_v1.tensor_parallel import patch_tensor_parallel
+        from flash_v1.train import load_model, patch_moe, MODEL_ID, REVISION
+        from shift_full.cold_imports import CPUImports
+        cpu_imports = CPUImports(megatron_adapter)
     torch.cuda.set_device(device_rank)
     phase_started = phase('runtime_cuda_setup', phase_started)
+    if cpu_imports is not None:
+        imported_components, import_timing = cpu_imports.result()
+        event('cpu_import_overlap', **import_timing,
+              elapsed_overlap_seconds=max(0, min(import_timing['end_monotonic'], phase_started)-import_timing['start_monotonic']),
+              performance_evidence=False)
+        del cpu_imports
+        phase_started = phase('cpu_import_join', phase_started)
+    run_common_warmup = (
+        args.standby == 'generic'
+        or (args.standby is None and os.environ.get('SHIFT_COMMON_GPU_WARMUP') == '1')
+    )
+    if run_common_warmup:
+        common_started = time.monotonic()
+        from shift_full.common_warmup import warmup as common_warmup
+        common_metrics = common_warmup(torch.device('cuda', device_rank))
+        common_metrics['common_warmup_seconds'] = time.monotonic() - common_started
+        if dist.is_initialized():
+            raise RuntimeError('common GPU warmup unexpectedly initialized training process groups')
+        if args.standby == 'generic':
+            standby_gate('generic', model_loaded=False, training_groups_initialized=False,
+                         **common_metrics)
+        else:
+            event('common_gpu_warmup', mode='active', model_loaded=False,
+                  training_groups_initialized=False, **common_metrics)
+        phase_started = time.monotonic()
     nccl_options = None
     if args.backend == 'unified':
         nccl_options = dist.ProcessGroupNCCL.Options()
@@ -186,12 +262,27 @@ def main():
     from flash_v1.tensor_parallel import patch_tensor_parallel
     from flash_v1.train import load_model, patch_moe, MODEL_ID, REVISION
     phase_started = phase('adapter_imports', phase_started)
-    state, _, _ = megatron_adapter.core()
-    from megatron.core.distributed import finalize_model_grads
-    from megatron.core.pipeline_parallel.schedules import get_forward_backward_func
+    if overlap_imports == '1':
+        state, finalize_model_grads, get_forward_backward_func = imported_components
+        del imported_components
+    else:
+        state, _, _ = megatron_adapter.core()
+        from megatron.core.distributed import finalize_model_grads
+        from megatron.core.pipeline_parallel.schedules import get_forward_backward_func
     phase_started = phase('megatron_imports', phase_started)
     topology_out = out / f'topology_g{args.generation}'
     topology_out.mkdir(parents=True, exist_ok=True)
+    overlap_cpu_load = os.environ.get('SHIFT_OVERLAP_CPU_MODEL_LOAD', '0')
+    if overlap_cpu_load not in ('0', '1'):
+        raise ValueError('invalid SHIFT_OVERLAP_CPU_MODEL_LOAD')
+    cpu_model_load = None
+    if overlap_cpu_load == '1':
+        # This pinned group/topology path consumes no Torch/Python RNG. Only
+        # CPU checkpoint construction runs in the helper; every PG stays here.
+        torch.manual_seed(2026)
+        random.seed(2026)
+        from shift_full.cold_cpu_load import CPUModelLoad
+        cpu_model_load = CPUModelLoad(lambda:load_model(Path(args.flash) / 'models/qwen_moe'))
     new_group = dist.new_group
     def local_new_group(*pos, **kwargs):
         kwargs['use_local_synchronization'] = True
@@ -204,9 +295,17 @@ def main():
     assert dist.get_world_size(expert_dp) == (2 if args.mode == 'flat' else 1)
     assert dist.get_world_size(dense) == (4 if args.mode == 'flat' else 2)
     phase_started = phase('parallel_groups', phase_started)
-    torch.manual_seed(2026)
-    random.seed(2026)
-    full = load_model(Path(args.flash) / 'models/qwen_moe')
+    # Reset CPU/CUDA/Python RNG after common prewarm and topology setup.
+    if cpu_model_load is None:
+        torch.manual_seed(2026)
+        random.seed(2026)
+        full = load_model(Path(args.flash) / 'models/qwen_moe')
+    else:
+        full, load_timing = cpu_model_load.result()
+        event('cpu_model_load_overlap', **load_timing,
+              elapsed_overlap_seconds=max(0, min(load_timing['end_monotonic'], phase_started)-load_timing['start_monotonic']),
+              performance_evidence=False)
+        del cpu_model_load
     phase_started = phase('full_model_load', phase_started)
     total_parameters = sum(v.numel() for v in full.parameters())
     if args.fp32:
@@ -246,22 +345,17 @@ def main():
                           min_boundary_margin=float(margin.min()),zero_margins=int((margin==0).sum()),
                           near_ties_1e6=int((margin<1e-6).sum()),tokens=margin.numel())
                 module.register_forward_hook(route_hook)
-    if args.reference_anchor:
-        anchor_started=time.monotonic()
-        anchor_path=Path(args.reference_anchor)/f'reference_step{args.reference_anchor_step}_r{rank}.pt'
-        anchor=torch.load(anchor_path,map_location='cpu',weights_only=False,mmap=True)
-        stage.load_state_dict(anchor['model']);optimizer.load_state_dict(anchor['optimizer']);scheduler.load_state_dict(anchor['scheduler'])
-        progress['updates']=args.reference_anchor_step
-        del anchor
-        event('reference_anchor_loaded',step=progress['updates'],path=str(anchor_path))
-        phase_started=phase('reference_anchor_load',anchor_started)
+    from megatron.core.tensor_parallel.random import get_cuda_rng_tracker
+    from shift_full.state_inventory import buffer_manifest, restore_buffers, tracker_snapshot, restore_tracker
+    rng_tracker = get_cuda_rng_tracker()
     boundary_rng = None
     audit_joint_pending = False
     manager = None
+    reference_manager_state = None
 
     def rng_snapshot():
         return dict(torch_rng=torch.get_rng_state(), cuda_rng=torch.cuda.get_rng_state(),
-                    python_rng=random.getstate())
+                    python_rng=random.getstate(), tracker_rng=tracker_snapshot(rng_tracker))
 
     def current_hashes(rng=None):
         torch.cuda.current_stream().synchronize()
@@ -269,7 +363,8 @@ def main():
         return dict(model=digest(stage.state_dict()), optimizer=digest(optimizer.state_dict()),
                     scheduler=digest(scheduler.state_dict()), progress=digest(progress),
                     cpu_rng=digest(rng['torch_rng']), cuda_rng=digest(rng['cuda_rng']),
-                    python_rng=digest(rng['python_rng']))
+                    python_rng=digest(rng['python_rng']), buffers=digest(dict(stage.named_buffers())),
+                    tracker_rng=digest(rng['tracker_rng']))
 
     def export_state():
         nonlocal audit_joint_pending
@@ -279,12 +374,21 @@ def main():
         assert step == progress['updates'], (step, progress)
         audit_joint_pending = True
         rng = boundary_rng['rng'] if boundary_rng and boundary_rng['step'] == step else rng_snapshot()
-        payload = dict(model=stage.state_dict(),
+        frozen = boundary_rng if boundary_rng and boundary_rng['step'] == step else None
+        if frozen:
+            frozen['copy_ready'].synchronize()
+        all_buffers = frozen['buffers'] if frozen else {n: b.detach().clone() for n,b in stage.named_buffers()}
+        model_state = stage.state_dict()
+        for name, value in all_buffers.items():
+            if name in model_state: model_state[name] = value
+        payload = dict(model=model_state, all_buffers=all_buffers,
                        optimizer=optimizer.state_dict(),
                        scheduler=scheduler.state_dict(), progress=dict(progress),
                        **rng, source_replica=args.replica,
                        source_rank=rank, step=step)
         payload['hashes'] = current_hashes(rng) if args.audit_state else {}
+        if args.audit_state:
+            payload['hashes'].update(model=digest(model_state), buffers=digest(all_buffers))
         if args.transport == 'http':
             payload = cpu_tree(payload)
         event('snapshot', step=step, hashes=payload['hashes'],
@@ -298,6 +402,7 @@ def main():
         assert payload['step'] == payload['progress']['updates']
         assert payload['step'] == (manager.current_step() if manager else payload['step'])
         stage.load_state_dict(payload['model'], strict=True)
+        restore_buffers(stage, payload['all_buffers'])
         optimizer.load_state_dict(payload['optimizer'])
         scheduler.load_state_dict(payload['scheduler'])
         progress.update(payload['progress'])
@@ -305,6 +410,7 @@ def main():
         torch.set_rng_state(payload['torch_rng'])
         torch.cuda.set_rng_state(payload['cuda_rng'])
         random.setstate(payload['python_rng'])
+        restore_tracker(rng_tracker, payload['tracker_rng'])
         torch.cuda.current_stream().synchronize()
         loaded_at = time.monotonic()
         event('state_loaded',step=payload['step'],load_seconds=loaded_at-load_started,
@@ -317,6 +423,35 @@ def main():
               optimizer_tensors=tensor_count(optimizer.state_dict().get('state', {})),
               cuda_allocated_bytes=torch.cuda.memory_allocated(device_rank), cuda_peak_allocated_bytes=torch.cuda.max_memory_allocated(device_rank))
         assert matches, 'Restored state differs from source snapshot'
+
+    # Reference anchors are applied only after Megatron's RNG tracker exists.
+    # The same local-rank file is loaded by each replica on its own host.
+    if args.reference_anchor:
+        anchor_started = time.monotonic()
+        anchor_path = reference_anchor_path(args.reference_anchor, rank, args.reference_anchor_step)
+        anchor = torch.load(anchor_path, map_location='cpu', weights_only=False, mmap=True)
+        validate_reference_anchor(anchor, expected_rank=rank, expected_step=args.reference_anchor_step)
+        stage.load_state_dict(anchor['model'], strict=True)
+        restore_buffers(stage, anchor['all_buffers'])
+        optimizer.load_state_dict(anchor['optimizer'])
+        scheduler.load_state_dict(anchor['scheduler'])
+        progress.clear()
+        progress.update(anchor['progress'])
+        torch.set_rng_state(anchor['torch_rng'])
+        torch.cuda.set_rng_state(anchor['cuda_rng'])
+        random.setstate(anchor['python_rng'])
+        restore_tracker(rng_tracker, anchor['tracker_rng'])
+        reference_manager_state = dict(anchor['manager_state'])
+        restored_hashes = current_hashes()
+        if restored_hashes != anchor['hashes']:
+            raise RuntimeError(
+                f"schema-2 reference anchor restoration mismatch: "
+                f"expected {anchor['hashes']}, got {restored_hashes}"
+            )
+        event('reference_anchor_loaded', step=progress['updates'], path=str(anchor_path),
+              schema=2, hashes_match=True)
+        del anchor
+        phase_started = phase('reference_anchor_load', anchor_started)
 
     if args.warmup_before_join:
         warm_started=time.monotonic()
@@ -336,7 +471,7 @@ def main():
             warming_up=False
         torch.cuda.current_stream().synchronize()
         optimizer.zero_grad(set_to_none=True);ddp.zero_grad_buffer()
-        torch.set_rng_state(saved_rng['torch_rng']);torch.cuda.set_rng_state(saved_rng['cuda_rng']);random.setstate(saved_rng['python_rng'])
+        torch.set_rng_state(saved_rng['torch_rng']);torch.cuda.set_rng_state(saved_rng['cuda_rng']);random.setstate(saved_rng['python_rng']);restore_tracker(rng_tracker, saved_rng['tracker_rng'])
         if before_hash is not None: assert before_hash==digest(stage.state_dict()),'warmup changed model state'
         phase_started=phase('local_cuda_warmup',warm_started)
 
@@ -362,11 +497,11 @@ def main():
             finally:
                 self._global_ranks, self._group_rank = saved
 
-    if args.mode == 'shift':
+    if args.mode != 'flat':
         if args.backend in ('nccl', 'unified', 'blocking', 'baby'):
             from torchft import ProcessGroupNCCL, ProcessGroupBabyNCCL
-            from shift_full.compat import BlockingNCCL
-            cls = ProcessGroupBabyNCCL if args.backend == 'baby' else BlockingNCCL if args.backend == 'blocking' else ProcessGroupNCCL
+            from shift_full.compat import BlockingNCCL, RecoveryNCCL
+            cls = ProcessGroupBabyNCCL if args.backend == 'baby' else BlockingNCCL if args.backend == 'blocking' else RecoveryNCCL
             pg = cls(timeout=timedelta(seconds=30 if args.backend == "baby" else args.communication_timeout))
         elif args.backend == 'hybrid':
             from shift_full.compat import HybridGloo
@@ -398,7 +533,12 @@ def main():
                           hostname=args.host_ip, lighthouse_addr=args.lighthouse,
                           replica_id=f'shift{args.replica}', checkpoint_transport=transport, max_retries=8)
         if args.reference_anchor:
-            manager.load_state_dict(dict(step=progress['updates'],batches_committed=progress['updates']*2))
+            manager.load_state_dict(reference_manager_state)
+            if manager.current_step() != progress['updates']:
+                raise RuntimeError(
+                    f"reference anchor manager step {manager.current_step()} "
+                    f"does not match progress {progress['updates']}"
+                )
 
     if args.resume_checkpoint and args.generation > 0:
         resume_started = time.monotonic()
@@ -408,16 +548,52 @@ def main():
         load_state(payload)
         event('checkpoint_resumed', step=progress['updates'], seconds=time.monotonic()-resume_started)
 
+    managed_pg = None
+    if args.mode == 'nativeft':
+        from torchft.process_group import ManagedProcessGroup
+        managed_pg = ManagedProcessGroup(manager)
     phase_started = phase('manager_init', phase_started)
-    # The native finalizer waits intra-replica buckets, then sums tied PP grads.
-    # Both dense and routed-expert buffers need the second reduction. In this
-    # vendor, expert gradients use dense-DP normalization, retained unchanged.
+    # original_finish is DDP's buffer-only sync. finalize_model_grads calls it
+    # before the TP/PP tail, which starts only after this wrapper's final waits.
+    # Both dense and expert buffers need outer AVG; this vendor's expert grads
+    # retain their native dense-DP normalization.
     original_finish = ddp.finish_grad_sync
     buffers = list(ddp.buffers) + list(ddp.expert_parallel_buffers)
+    gradient_probe = None
+    if args.gradient_probe_step:
+        if args.gradient_probe_step != 2 or args.steps != 2 or progress['updates'] != 1 or not args.reference_anchor or args.reference_dump or args.timeline_trace_step:
+            raise ValueError('gradient probe requires original anchor single commit2 without dumps/profile')
+        from shift_full.gradient_probe import GradientProbe
+        gradient_probe = GradientProbe(torch, dist, stage, buffers, 2, progress,
+            dict(replica=args.replica, rank=rank, physical_rank=args.replica*8+rank,
+                 pp=state.get_pipeline_model_parallel_rank(), tp=dist.get_rank(state.get_tensor_model_parallel_group()),
+                 ep=dist.get_rank(ep), global_layer_offset=state.get_pipeline_model_parallel_rank()*len(stage.decoder.layers),
+                 sequence_parallel=stage.config.sequence_parallel,
+                 tied_embeddings=stage.share_embeddings_and_output_weights, mode=args.mode))
+    from shift_full.bucket_finalizer import BucketFinalizer
+    bucket_finalizer = BucketFinalizer(original_finish, buffers, args.bucket_hook) if manager else None
+    ready_trace = None
+    if args.bucket_ready_trace:
+        if not args.trace_events or not args.measure_step:
+            raise ValueError('--bucket-ready-trace requires --trace-events --measure-step')
+        from shift_full.bucket_ready_trace import BucketReadyTrace
+        ready_trace = BucketReadyTrace([b for buf in buffers for b in buf.buckets], torch.cuda)
     cross_calls = [0]
     cross_timings = {}
 
+    step_gpu_events = {}
+    def gpu_mark(name):
+        if args.trace_events:
+            if name not in step_gpu_events: step_gpu_events[name] = torch.cuda.Event(enable_timing=True)
+            step_gpu_events[name].record()
+
     def finish_grad_sync(_self):
+        gpu_mark('local_finish_begin')
+        if not manager:
+            original_finish()
+            if gradient_probe: gradient_probe.capture('post_outer')
+            gpu_mark('outer_finish_end')
+            return
         entered = time.monotonic()
         gpu_started = torch.cuda.Event(enable_timing=True) if args.profile_timings else None
         gpu_done = torch.cuda.Event(enable_timing=True) if args.profile_timings else None
@@ -431,36 +607,23 @@ def main():
             value = bucket.grad_data if args.backend not in ('gloo', 'hybrid') else bucket.grad_data.detach().float().cpu()
             d2h_seconds += time.monotonic()-before
             before = time.monotonic()
-            pending.append((bucket.grad_data, value, manager.allreduce(value)))
+            work = (managed_pg.allreduce([value], dist.ReduceOp.AVG) if managed_pg is not None
+                    else manager.allreduce(value))
+            pending.append((bucket.grad_data, value, work))
             dispatch_seconds += time.monotonic()-before
-        patched = []
         if args.bucket_hook:
-            # Preserve both native DDP and buffer finalizers. Inject only after
-            # each bucket's own finish has established local gradient readiness.
-            for buffer in buffers:
-                for bucket in buffer.buckets:
-                    original = bucket.finish_grad_sync
-                    previous = bucket.__dict__.get('finish_grad_sync')
-                    def finish_bucket(this, native=original):
-                        native()
-                        enqueue(this)
-                    patched.append((bucket, previous))
-                    bucket.finish_grad_sync = types.MethodType(finish_bucket, bucket)
-        try:
+            bucket_finalizer.run(enqueue)
+        else:
             original_finish()
-        finally:
-            for bucket, previous in patched:
-                if previous is None: del bucket.finish_grad_sync
-                else: bucket.finish_grad_sync = previous
         intra_done = time.monotonic()
         if not args.bucket_hook:
-            for buffer in buffers:
-                for bucket in buffer.buckets: enqueue(bucket)
+            for bucket in bucket_finalizer.buckets: enqueue(bucket)
         waiting = time.monotonic()
         for target, cpu, work in pending:
             work.wait()
             if args.backend in ('gloo', 'hybrid'):
                 target.copy_(cpu)
+        if gradient_probe: gradient_probe.capture('post_outer')
         finished = time.monotonic()
         cross_timings.update(intra_finish_cpu_seconds=intra_done-entered,
                              cross_d2h_cpu_seconds=d2h_seconds, cross_dispatch_cpu_seconds=dispatch_seconds,
@@ -468,13 +631,14 @@ def main():
         if gpu_done:
             gpu_done.record(); gpu_done.synchronize()
             cross_timings['cross_gpu_seconds'] = gpu_started.elapsed_time(gpu_done)/1000
+        gpu_mark('outer_finish_end')
         cross_calls[0] += len(pending)
 
-    if args.mode == 'shift':
+    if manager or args.trace_events or gradient_probe:
         ddp.finish_grad_sync = types.MethodType(finish_grad_sync, ddp)
     initial = current_hashes() if args.audit_state else {}
     phase_started = phase('initial_audit', phase_started)
-    event('ready', physical_rank=args.replica * 8 + rank,
+    event('ready', digest_engine=os.environ.get('SHIFT_DIGEST_ENGINE','reference'), overlap_cpu_model_load=overlap_cpu_load == '1', overlap_cpu_imports=overlap_imports == '1', physical_rank=args.replica * 8 + rank,
           layout='node_local_pp', tp=2, pp=2, ep=2, local_dense_dp=dist.get_world_size(dense),
           local_expert_dp=dist.get_world_size(expert_dp), model_id=MODEL_ID, model_revision=REVISION,
           full_parameters=total_parameters, local_parameters=sum(v.numel() for v in stage.parameters()),
@@ -482,8 +646,11 @@ def main():
           cuda_version=torch.version.cuda, nccl_version=torch.cuda.nccl.version(),
           global_rank=dist.get_rank(), world_size=dist.get_world_size(), legacy_core_namespace=legacy_namespace,
           transport=args.transport, cross_gradient=args.backend, mode=args.mode, fp32=args.fp32,
+          sync_quorum=args.sync_quorum,eager_groups=args.eager_groups,
           cuda_device=device_rank,visible_devices=os.environ.get('CUDA_VISIBLE_DEVICES'),
-          role_manifest=role_manifest(),
+          role_manifest=role_manifest(), state_schema=2,
+          state_inventory=dict(buffers=buffer_manifest(stage), tracker_keys=sorted(rng_tracker.get_states()),
+                               tracker_class=type(rng_tracker).__name__, snapshot='boundary buffers + RNG; parameter/Adam read-only until quorum finishes'),
           matmul_allow_tf32=torch.backends.cuda.matmul.allow_tf32,
           float32_matmul_precision=torch.get_float32_matmul_precision(),
           cpu_maxrss_kib=__import__('resource').getrusage(__import__('resource').RUSAGE_SELF).ru_maxrss,
@@ -494,7 +661,13 @@ def main():
             raise RuntimeError('Stopped or timed out before START')
         time.sleep(0.1)
     schedule = get_forward_backward_func()
+    from contextlib import nullcontext
+    timeline = None
+    if args.timeline_trace_step and args.replica == 0 and rank in (0, 4):
+        from shift_full.step_timeline import StepTimeline
+        timeline = StepTimeline(torch, args.timeline_trace_step, out, rank)
     attempts = 0
+    previous_commit_end = None
     recovery_requested = False
     def requested_stop():
         marker = out / 'STOP'
@@ -505,10 +678,15 @@ def main():
     try:
         while not requested_stop() and time.monotonic() < deadline and progress['updates'] < args.steps:
             iteration_started = time.monotonic()
+            if timeline: timeline.begin(progress['updates']+1)
             torch.cuda.current_stream().synchronize()
             boundary_done = time.monotonic()
             if manager:
-                boundary_rng = dict(step=progress['updates'], rng=rng_snapshot())
+                frozen_buffers = {n: b.detach().clone() for n,b in stage.named_buffers()}
+                copy_ready = torch.cuda.Event()
+                copy_ready.record()
+                boundary_rng = dict(step=progress['updates'], rng=rng_snapshot(),
+                                    buffers=frozen_buffers, copy_ready=copy_ready)
                 if args.generation>0 and not recovery_requested:
                     event('recovery_request',step=progress['updates'])
                     recovery_requested=True
@@ -546,35 +724,76 @@ def main():
                               + sample % 8) % 32 + 100
                 batches.append(dict(input_ids=tokens[:, :-1].contiguous(),
                                     next_token_labels=tokens[:, 1:].contiguous()))
-            if args.reference_dump: event('batch_plan',step=step,sample_ids=sample_ids)
+            if args.reference_dump or args.reference_signatures:
+                event('batch_plan',step=step,sample_ids=sample_ids)
             started = time.monotonic()
+            if ready_trace: ready_trace.begin()
+            gpu_mark('schedule_begin')
             before_calls = cross_calls[0]
-            metrics = schedule(forward_step_func=forward_step, data_iterator=iter(batches),
-                               model=ddp, num_microbatches=count,
-                               seq_length=args.seq_len + stage.extra_positions(1), micro_batch_size=1)
+            with timeline.scope('schedule') if timeline else nullcontext():
+                metrics = schedule(forward_step_func=forward_step, data_iterator=iter(batches),
+                                   model=ddp, num_microbatches=count,
+                                   seq_length=args.seq_len + stage.extra_positions(1), micro_batch_size=1)
+            if gradient_probe:
+                gradient_probe.capture('post_tail')
+                event('gradient_probe', **gradient_probe.result())
             for parameter in stage.parameters():
                 parameter.grad = parameter.main_grad
             # A bad numeric result must never be counted as a valid update.
+            gpu_mark('schedule_end')
             schedule_done = time.monotonic()
-            finite = bool(torch.stack([torch.isfinite(b.grad_data).all() for buf in buffers for b in buf.buckets]).all())
+            with timeline.scope('finite') if timeline else nullcontext():
+                finite = bool(torch.stack([torch.isfinite(b.grad_data).all() for buf in buffers for b in buf.buckets]).all())
             if not finite:
                 if manager:
                     manager.report_error(RuntimeError('nonfinite gradients'))
                 else:
                     raise RuntimeError('nonfinite gradients in baseline')
             gradient_checked = time.monotonic()
-            gradients = cpu_tree({name: p.main_grad for name, p in stage.named_parameters()}) if args.reference_dump and args.replica == 0 and rank in {int(r) for r in args.reference_ranks.split(',')} else None
+            dump_selected = should_dump_reference(
+                enabled=args.reference_dump,
+                selected_steps=args.reference_dump_steps,
+                next_step=progress['updates'] + 1,
+                replica=args.replica,
+                rank=rank,
+                selected_ranks=reference_rank_set,
+            )
+            gradients = cpu_tree({name: parameter.main_grad for name, parameter in stage.named_parameters()}) if dump_selected else None
             decision_started = time.monotonic()
-            commit = manager.should_commit() if manager else True
+            with timeline.scope('should_commit') if timeline else nullcontext():
+                commit = manager.should_commit() if manager else True
             decision_done = time.monotonic()
+            gradient_signature_hash = None
+            if args.reference_signatures and commit:
+                gradient_signature_hash = digest(
+                    {name: parameter.main_grad for name, parameter in stage.named_parameters()}
+                )
             timings = dict(schedule_seconds=schedule_done-started, gradient_check_seconds=gradient_checked-schedule_done,
                            decision_seconds=decision_done-decision_started)
             attempts += 1
             if commit:
-                optimizer.step()
-                scheduler.step()
+                gpu_mark('optimizer_begin')
+                with timeline.scope('optimizer') if timeline else nullcontext():
+                    optimizer.step()
+                    scheduler.step()
+                gpu_mark('optimizer_end')
+                optimizer_done = time.monotonic()
                 if args.measure_step:
                     torch.cuda.current_stream().synchronize()
+                step_sync_done = time.monotonic()
+                if ready_trace:
+                    event('bucket_ready_diagnostic', step=progress['updates']+1,
+                          performance_evidence=False,
+                          buckets=ready_trace.collect(step_gpu_events['schedule_begin'],
+                              step_gpu_events['local_finish_begin'], step_gpu_events['outer_finish_end']))
+                timings.update(optimizer_enqueue_seconds=optimizer_done-decision_done,
+                               final_sync_seconds=step_sync_done-optimizer_done)
+                if args.trace_events:
+                    if not args.measure_step: raise ValueError('--trace-events requires --measure-step')
+                    for label, begin, end in [('schedule', 'schedule_begin', 'schedule_end'),
+                                               ('local_and_outer', 'local_finish_begin', 'outer_finish_end'),
+                                               ('optimizer', 'optimizer_begin', 'optimizer_end')]:
+                        timings[label+'_event_seconds'] = step_gpu_events[begin].elapsed_time(step_gpu_events[end])/1000
                 progress['updates'] += 1
                 actual_participants=manager.num_participants() if manager else 2
                 contributed=manager.is_participating() if manager else True
@@ -582,9 +801,28 @@ def main():
                 hashes = current_hashes() if ((args.hash_every and progress['updates'] % args.hash_every == 0) or audit_joint) else {}
                 if audit_joint: audit_joint_pending=False
                 if gradients is not None:
-                    torch.save(dict(gradients=gradients, model=cpu_tree(stage.state_dict()),
-                                    optimizer=cpu_tree(optimizer.state_dict()), scheduler=scheduler.state_dict()),
-                               out / f'reference_step{progress["updates"]}_r{rank}.pt')
+                    dump_path = out / f'reference_step{progress["updates"]}_r{rank}.pt'
+                    torch.save(reference_dump_payload(
+                        gradients,
+                        cpu_tree(stage.state_dict()),
+                        cpu_tree(optimizer.state_dict()),
+                        scheduler.state_dict(),
+                    ), dump_path)
+                if args.reference_signatures:
+                    manager_step = manager.current_step() if manager else progress['updates']
+                    if manager_step != progress['updates']:
+                        raise RuntimeError(
+                            f"reference signature manager step {manager_step} "
+                            f"does not match progress {progress['updates']}"
+                        )
+                    signature_hashes = current_hashes()
+                    signature_hashes['gradients'] = gradient_signature_hash
+                    event('reference_signature', schema=1, step=progress['updates'],
+                          input_step=step, manager_step=manager_step, progress=dict(progress), sample_ids=sample_ids,
+                          hashes=signature_hashes)
+                commit_end = time.monotonic()
+                timings['commit_interval_seconds'] = commit_end-previous_commit_end if previous_commit_end else None
+                previous_commit_end = commit_end
                 event('commit', step=progress['updates'], updates=progress['updates'],
                       participants=actual_participants, contributed=contributed, hashes=hashes, model_hash=hashes.get('model'),
                       sample_ids=sample_ids, fixed_batch=args.fixed_batch,
@@ -595,9 +833,56 @@ def main():
                       seconds=time.monotonic() - iteration_started, compute_seconds=time.monotonic()-started,
                       loss=[float(m['loss']) for m in metrics] if metrics else [], **timings, **cross_timings)
             else:
+                if ready_trace: ready_trace.discard()
                 event('skipped', step=step, error=str(manager.errored()), **timings)
+            if timeline:
+                captured = timeline.end(commit)
+                if captured: event('timeline_diagnostic', **captured)
             if manager:
                 assert manager.current_step() == progress['updates']
+            if (args.reference_anchor_save and commit
+                    and progress['updates'] == args.reference_anchor_save_step):
+                anchor_path = reference_anchor_path(args.reference_anchor_save, rank)
+                anchor_path.parent.mkdir(parents=True, exist_ok=True)
+                torch.cuda.current_stream().synchronize()
+                anchor_step = manager.current_step() if manager else progress['updates']
+                if anchor_step != progress['updates']:
+                    raise RuntimeError(
+                        f"reference anchor manager step {anchor_step} "
+                        f"does not match progress {progress['updates']}"
+                    )
+                anchor_buffers = {name: value.detach().clone() for name, value in stage.named_buffers()}
+                anchor_model = stage.state_dict()
+                for name, value in anchor_buffers.items():
+                    if name in anchor_model:
+                        anchor_model[name] = value
+                anchor_rng = rng_snapshot()
+                anchor = cpu_tree(dict(
+                    schema=2,
+                    model=anchor_model,
+                    all_buffers=anchor_buffers,
+                    optimizer=optimizer.state_dict(),
+                    scheduler=scheduler.state_dict(),
+                    progress=dict(progress),
+                    **anchor_rng,
+                    source_replica=args.replica,
+                    source_rank=rank,
+                    step=anchor_step,
+                ))
+                anchor['manager_state'] = dict(
+                    step=anchor_step,
+                    batches_committed=anchor_step * 2,
+                )
+                anchor['hashes'] = current_hashes(anchor_rng)
+                validate_reference_anchor(anchor, expected_rank=rank, expected_step=progress['updates'])
+                temporary_path = anchor_path.with_name(f'.{anchor_path.name}.{os.getpid()}.tmp')
+                torch.save(anchor, temporary_path)
+                with temporary_path.open('rb') as handle:
+                    os.fsync(handle.fileno())
+                os.replace(temporary_path, anchor_path)
+                event('reference_anchor_saved', step=anchor_step, path=str(anchor_path),
+                      schema=2, bytes=anchor_path.stat().st_size)
+                del anchor
             if args.checkpoint_step and progress['updates'] == args.checkpoint_step and commit:
                 torch.cuda.synchronize()
                 start_save = time.monotonic()
@@ -635,6 +920,7 @@ def main():
     finally:
         # Peers may see STOP at slightly different iterations; the supervisor
         # performs bounded teardown of only its own process group.
+        if timeline: timeline.close()
         log.flush()
 
 

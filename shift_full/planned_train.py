@@ -35,6 +35,8 @@ def cpu_tree(value):
 
 
 def digest(value):
+    from shift_full.state_digest import configured_engine, digest_staged
+    if configured_engine() == "staged":return digest_staged(value)
     h = hashlib.sha256()
 
     def add(v):
@@ -73,7 +75,7 @@ def main():
     p.add_argument('--replica', type=int, required=True)
     p.add_argument('--generation', type=int, required=True)
     p.add_argument('--host-ip', required=True)
-    p.add_argument('--lighthouse', default='http://10.10.4.2:29771')
+    p.add_argument('--lighthouse', default='http://192.0.2.10:29771')
     p.add_argument('--root', default='/workspace/SHIFT')
     p.add_argument('--flash', default='/workspace/FLASH1022')
     p.add_argument('--max-seconds', type=int, default=900)
@@ -91,6 +93,7 @@ def main():
     p.add_argument('--fp32', action='store_true')
     p.add_argument('--data', choices=['pattern','random'], default='pattern')
     p.add_argument('--reference-dump', action='store_true')
+    p.add_argument('--reference-signatures', action='store_true')
     p.add_argument('--reference-ranks', default='0,1,2,3,4,5,6,7')
     p.add_argument('--reference-anchor')
     p.add_argument('--reference-anchor-step', type=int, default=1)
@@ -114,8 +117,25 @@ def main():
     p.add_argument('--planned-inject',choices=['healthy','prepare-fail','ready-timeout','stale-state','relay-reject','slow-compute'],default='healthy')
     p.add_argument('--planned-slow-ms',type=float,default=250)
     p.add_argument('--planned-cycles',type=int,default=1)
+    p.add_argument('--planned-hosts',required=True,help='JSON mapping of initial A/B/C to three host addresses')
+    p.add_argument('--planned-shadow-recompute',action='store_true',help='diagnostic only; original B relay remains sole contribution')
+    p.add_argument('--planned-ownership-recompute',action='store_true',help='experimental default-off single-epoch contribution ownership')
     args = p.parse_args()
+    if args.planned_shadow_recompute and args.planned_ownership_recompute:
+        p.error('choose one recompute mode')
+    if (args.planned_shadow_recompute or args.planned_ownership_recompute) and not (args.planned_variant=='p2' and args.planned_cycles==1
+            and args.planned_source=='B' and args.planned_inject=='slow-compute'
+            and (args.reference_anchor or (args.planned_role=='C' and args.generation>0))
+            and args.reference_signatures and args.audit_state and args.audit_routing
+            and args.fixed_batch and args.sync_quorum and args.mode=='shift'
+            and args.seq_len==512 and args.microbatches==2 and not args.fp32 and not args.strict_fp32
+            and args.data=='pattern' and args.backend=='nccl' and args.bucket_size==67108864):
+        p.error('shadow requires one p2 B-source slow-compute formal-anchor audited fixed-batch cycle')
     if args.planned_cycles<1 or (args.planned_cycles>1 and args.planned_variant!='p2'):p.error('cycles require p2 and a positive count')
+    from shift_full.planned_state import role_hosts
+    try:args.planned_hosts=json.loads(args.planned_hosts);role_hosts(args.planned_hosts,0)
+    except (ValueError,TypeError):p.error('planned-hosts requires three distinct A/B/C addresses')
+    args.planned_initial_role=args.planned_role
     args.planned_round=0
     if args.strict_fp32:
         args.fp32=True
@@ -239,6 +259,7 @@ def main():
                                            weight_decay=g['weight_decay']) for g in optimizer.param_groups])
     progress = {'updates': 0}
     warming_up = False
+    shadow_active = [False]
     if args.audit_routing:
         route_calls = {}
         for name, module in stage.named_modules():
@@ -253,24 +274,22 @@ def main():
                     event('routing',step=progress['updates'],layer=layer,call=call,topk_hash=digest(indices),
                           sorted_topk_hash=digest(indices.sort(dim=-1).values),
                           min_boundary_margin=float(margin.min()),zero_margins=int((margin==0).sum()),
-                          near_ties_1e6=int((margin<1e-6).sum()),tokens=margin.numel())
+                          near_ties_1e6=int((margin<1e-6).sum()),tokens=margin.numel(),
+                          **({'shadow':True} if shadow_active[0] else {}))
                 module.register_forward_hook(route_hook)
-    if args.reference_anchor:
-        anchor_started=time.monotonic()
-        anchor_path=Path(args.reference_anchor)/f'reference_step{args.reference_anchor_step}_r{rank}.pt'
-        anchor=torch.load(anchor_path,map_location='cpu',weights_only=False,mmap=True)
-        stage.load_state_dict(anchor['model']);optimizer.load_state_dict(anchor['optimizer']);scheduler.load_state_dict(anchor['scheduler'])
-        progress['updates']=args.reference_anchor_step
-        del anchor
-        event('reference_anchor_loaded',step=progress['updates'],path=str(anchor_path))
-        phase_started=phase('reference_anchor_load',anchor_started)
+    from megatron.core.tensor_parallel.random import get_cuda_rng_tracker
+    from shift_full.state_inventory import buffer_manifest, restore_buffers, tracker_snapshot, restore_tracker
+    from shift_full.planned_state import validate_state
+    from shift_full.reference_audit import reference_anchor_path, validate_reference_anchor
+    rng_tracker = get_cuda_rng_tracker()
+    reference_manager_state = None
     boundary_rng = None
     audit_joint_pending = False
     manager = None
 
     def rng_snapshot():
         return dict(torch_rng=torch.get_rng_state(), cuda_rng=torch.cuda.get_rng_state(),
-                    python_rng=random.getstate())
+                    python_rng=random.getstate(), tracker_rng=tracker_snapshot(rng_tracker))
 
     def current_hashes(rng=None):
         torch.cuda.current_stream().synchronize()
@@ -278,7 +297,7 @@ def main():
         return dict(model=digest(stage.state_dict()), buffers=digest(dict(stage.named_buffers())), optimizer=digest(optimizer.state_dict()),
                     scheduler=digest(scheduler.state_dict()), progress=digest(progress),
                     cpu_rng=digest(rng['torch_rng']), cuda_rng=digest(rng['cuda_rng']),
-                    python_rng=digest(rng['python_rng']))
+                    python_rng=digest(rng['python_rng']), tracker_rng=digest(rng['tracker_rng']))
 
     def export_state():
         nonlocal audit_joint_pending
@@ -288,12 +307,19 @@ def main():
         assert step == progress['updates'], (step, progress)
         audit_joint_pending = True
         rng = boundary_rng['rng'] if boundary_rng and boundary_rng['step'] == step else rng_snapshot()
-        payload = dict(model=stage.state_dict(), all_buffers=dict(stage.named_buffers()),
+        frozen = boundary_rng if boundary_rng and boundary_rng['step'] == step else None
+        all_buffers = frozen['buffers'] if frozen else {n:b.detach().clone() for n,b in stage.named_buffers()}
+        if frozen: frozen['copy_ready'].synchronize()
+        model_state = stage.state_dict()
+        for name,value in all_buffers.items():
+            if name in model_state:model_state[name]=value
+        payload = dict(schema=2, model=model_state, all_buffers=all_buffers,
                        optimizer=optimizer.state_dict(),
                        scheduler=scheduler.state_dict(), progress=dict(progress),
                        **rng, source_replica=args.replica,
                        source_rank=rank, step=step)
         payload['hashes'] = current_hashes(rng) if args.audit_state else {}
+        if args.audit_state:payload['hashes'].update(model=digest(model_state),buffers=digest(all_buffers))
         if args.transport == 'http':
             payload = cpu_tree(payload)
         event('snapshot', step=step, hashes=payload['hashes'],
@@ -303,20 +329,19 @@ def main():
     def load_state(payload):
         nonlocal audit_joint_pending
         load_started = time.monotonic()
-        assert payload['source_rank'] == rank
+        validate_state(payload, rank=rank, audit=args.audit_state)
         assert payload['step'] == payload['progress']['updates']
         assert payload['step'] == (manager.current_step() if manager else payload['step'])
         stage.load_state_dict(payload['model'], strict=True)
-        target_buffers=dict(stage.named_buffers())
-        if set(target_buffers)!=set(payload['all_buffers']):raise RuntimeError('buffer manifest mismatch')
-        for name,value in payload['all_buffers'].items():target_buffers[name].copy_(value)
+        restore_buffers(stage,payload['all_buffers'])
         optimizer.load_state_dict(payload['optimizer'])
         scheduler.load_state_dict(payload['scheduler'])
-        progress.update(payload['progress'])
+        progress.clear();progress.update(payload['progress'])
         audit_joint_pending = True
         torch.set_rng_state(payload['torch_rng'])
         torch.cuda.set_rng_state(payload['cuda_rng'])
         random.setstate(payload['python_rng'])
+        restore_tracker(rng_tracker,payload['tracker_rng'])
         torch.cuda.current_stream().synchronize()
         loaded_at = time.monotonic()
         event('state_loaded',step=payload['step'],load_seconds=loaded_at-load_started,
@@ -330,9 +355,26 @@ def main():
               cuda_allocated_bytes=torch.cuda.memory_allocated(device_rank), cuda_peak_allocated_bytes=torch.cuda.max_memory_allocated(device_rank))
         assert matches, 'Restored state differs from source snapshot'
 
-    if args.warmup_before_join:
+    if args.reference_anchor:
+        anchor_started=time.monotonic()
+        anchor_path=reference_anchor_path(args.reference_anchor,rank,args.reference_anchor_step)
+        anchor=torch.load(anchor_path,map_location='cpu',weights_only=False,mmap=True)
+        validate_reference_anchor(anchor,expected_rank=rank,expected_step=args.reference_anchor_step)
+        stage.load_state_dict(anchor['model'],strict=True);restore_buffers(stage,anchor['all_buffers'])
+        optimizer.load_state_dict(anchor['optimizer']);scheduler.load_state_dict(anchor['scheduler'])
+        progress.clear();progress.update(anchor['progress'])
+        torch.set_rng_state(anchor['torch_rng']);torch.cuda.set_rng_state(anchor['cuda_rng'])
+        random.setstate(anchor['python_rng']);restore_tracker(rng_tracker,anchor['tracker_rng'])
+        reference_manager_state=dict(anchor['manager_state'])
+        if current_hashes()!=anchor['hashes']:raise RuntimeError('schema-2 reference anchor restoration mismatch')
+        event('reference_anchor_loaded',step=progress['updates'],schema=2,hashes_match=True)
+        del anchor
+        phase_started=phase('reference_anchor_load',anchor_started)
+
+    if args.warmup_before_join or ((args.planned_shadow_recompute or args.planned_ownership_recompute) and args.planned_role=='C'):
         warm_started=time.monotonic()
         saved_rng=rng_snapshot()
+        saved_buffers={n:b.detach().clone() for n,b in stage.named_buffers()}
         before_hash=digest(stage.state_dict()) if args.audit_state else None
         optimizer.zero_grad(set_to_none=True);ddp.zero_grad_buffer()
         warm_batches=[]
@@ -348,17 +390,150 @@ def main():
             warming_up=False
         torch.cuda.current_stream().synchronize()
         optimizer.zero_grad(set_to_none=True);ddp.zero_grad_buffer()
-        torch.set_rng_state(saved_rng['torch_rng']);torch.cuda.set_rng_state(saved_rng['cuda_rng']);random.setstate(saved_rng['python_rng'])
+        torch.set_rng_state(saved_rng['torch_rng']);torch.cuda.set_rng_state(saved_rng['cuda_rng']);random.setstate(saved_rng['python_rng']);restore_tracker(rng_tracker,saved_rng['tracker_rng']);restore_buffers(stage,saved_buffers)
         if before_hash is not None: assert before_hash==digest(stage.state_dict()),'warmup changed model state'
         phase_started=phase('local_cuda_warmup',warm_started)
 
     # Distinct logical-rid RNG streams; model initialization is already complete.
-    torch.manual_seed(70000+100*args.replica+rank);random.seed(80000+100*args.replica+rank)
-    export_state.role_metadata=lambda:dict(all_buffers=dict(stage.named_buffers()),source_rank=rank,step=progress['updates'],progress=dict(progress),**rng_snapshot())
+    if not args.reference_anchor:
+        torch.manual_seed(70000+100*args.replica+rank);random.seed(80000+100*args.replica+rank)
+    export_state.role_metadata=lambda:dict(schema=2,all_buffers=dict(stage.named_buffers()),source_rank=rank,step=progress['updates'],progress=dict(progress),**rng_snapshot())
     from shift_full.planned_handoff import PlannedHandoff
     if args.planned_variant=='p2':
         from shift_full.overlap_handoff import OverlapHandoff as PlannedHandoff
+    if args.planned_ownership_recompute:
+        from shift_full.ownership_handoff import OwnershipHandoff as PlannedHandoff
     handoff=PlannedHandoff(args,rank,event,export_state,load_state,progress,role_manifest,rng_snapshot)
+    forward_counter=[0]
+    def count_forward(*_):forward_counter[0]+=1
+    stage.register_forward_pre_hook(count_forward)
+    if args.planned_ownership_recompute:
+        # Include native local DDP/TP/PP/EP handles in the alias exclusion set.
+        handoff.local_pgs=[dist.group.WORLD,ep,expert_dp,dense,
+            state.get_tensor_model_parallel_group(),state.get_pipeline_model_parallel_group()]
+        def source_contribution(samples,gradients):
+            torch.cuda.current_stream().synchronize()
+            tail=dict(export_state.role_metadata(),planned_epoch=handoff.new_epoch,planned_role=1)
+            return dict(sample_ids=samples,gradient_hash=digest(gradients),
+                parameter_gradient_hash=digest({n:p.main_grad for n,p in stage.named_parameters()}),tail_hash=digest(tail))
+        handoff.source_contribution=source_contribution
+        def capture_owner_guard():
+            from torch.utils._pytree import tree_flatten
+            def inventory():
+                return [t for t in tree_flatten((list(stage.parameters()),dict(stage.named_buffers()),
+                    optimizer.state_dict(),[b.grad_data for buf in list(ddp.buffers)+list(ddp.expert_parallel_buffers) for b in buf.buckets],
+                    {n:p.main_grad for n,p in stage.named_parameters()}))[0] if isinstance(t,torch.Tensor)]
+            versions=[(t,t._version) for t in inventory()]
+            def metadata():
+                return digest((export_state.role_metadata(),scheduler.state_dict(),optimizer.state_dict()['param_groups']))
+            expected=metadata()
+            def unchanged():
+                tensors=inventory()
+                return (len(tensors)==len(versions) and all(t is old and t._version==v for t,(old,v) in zip(tensors,versions))
+                        and metadata()==expected)
+            return unchanged
+        handoff.capture_owner_guard=capture_owner_guard
+    if args.planned_shadow_recompute and args.planned_role=='B':
+        handoff.shadow_parameter_hash=lambda:digest({n:p.main_grad for n,p in stage.named_parameters()})
+    if args.planned_role=='C':
+        # Defined before ready_receiver, using only already-initialized local
+        # state. No late Manager/finalizer/apply_tail closure is reachable here.
+        def shadow_recompute(expected_hashes, *, retain=False):
+            from shift_full.planned_shadow import validate_descriptor, shadow_transaction
+            key='ownership_descriptor' if retain else 'shadow_descriptor'
+            descriptor=json.loads(handoff.coord.get(f'{key}/{rank}'))
+            sample_ids=validate_descriptor(descriptor,rank=rank,step=progress['updates'],epoch=handoff.new_epoch,
+                seq_len=args.seq_len,microbatches=args.microbatches,data=args.data,vocab_size=stage.hf_config.vocab_size)
+            if descriptor['local_data_rank']!=state.get_data_parallel_rank():
+                raise ValueError('shadow local data role mismatch')
+            owner=threading.get_ident();started=time.monotonic()
+            saved_rng=rng_snapshot();saved_buffers={n:b.detach().clone() for n,b in stage.named_buffers()}
+            saved_routes=dict(route_calls)
+            local_buffers=list(ddp.buffers)+list(ddp.expert_parallel_buffers)
+            def clear():
+                optimizer.zero_grad(set_to_none=True);ddp.zero_grad_buffer()
+            def execute():
+                shadow_active[0]=not retain;route_calls.clear()
+                if retain:event('planned_ownership_recompute_begin',step=handoff.cut)
+                batches=[]
+                for sample in sample_ids:
+                    if args.data=='random':
+                        generator=torch.Generator(device='cuda').manual_seed(100_000+sample)
+                        tokens=torch.randint(0,stage.hf_config.vocab_size,(1,args.seq_len+1),device='cuda',generator=generator)
+                    else:
+                        tokens=(torch.arange(args.seq_len+1,device='cuda').view(1,-1)+sample%8)%32+100
+                    batches.append(dict(input_ids=tokens[:,:-1].contiguous(),next_token_labels=tokens[:,1:].contiguous()))
+                get_forward_backward_func()(forward_step_func=forward_step,data_iterator=iter(batches),model=ddp,
+                    num_microbatches=len(sample_ids),seq_length=args.seq_len+stage.extra_positions(1),micro_batch_size=1)
+            versions=[]
+            retained_tail=[None]
+            retained_metadata=[None]
+            initial_audit=[None]
+            def inventory():
+                from torch.utils._pytree import tree_flatten
+                return [t for t in tree_flatten((list(stage.parameters()),dict(stage.named_buffers()),optimizer.state_dict(),
+                    [b.grad_data for buf in local_buffers for b in buf.buckets],
+                    {n:p.main_grad for n,p in stage.named_parameters()}))[0] if isinstance(t,torch.Tensor)]
+            def capture():
+                torch.cuda.current_stream().synchronize();ready=time.monotonic()
+                tail=dict(export_state.role_metadata(),planned_epoch=handoff.new_epoch,planned_role=1)
+                result=dict(sample_ids=sample_ids,descriptor=descriptor,
+                    gradient_hash=digest([b.grad_data for buf in local_buffers for b in buf.buckets]),
+                    parameter_gradient_hash=digest({n:p.main_grad for n,p in stage.named_parameters()}),tail_hash=digest(tail))
+                if retain:
+                    result.update(initial_audit=initial_audit[0],started_mono=started)
+                    versions.extend((t,t._version) for t in inventory())
+                    retained_tail[0]=result['tail_hash']
+                    retained_metadata[0]=digest((scheduler.state_dict(),optimizer.state_dict()['param_groups']))
+                event('planned_ownership_computed' if retain else 'planned_shadow_computed',step=handoff.cut,preouter_seconds=ready-started,
+                    capture_seconds=time.monotonic()-ready,gradient_hash=result['gradient_hash'],
+                    parameter_gradient_hash=result['parameter_gradient_hash'],tail_hash=result['tail_hash'],
+                    sample_ids=sample_ids,descriptor=descriptor,owner_thread=owner,
+                    cuda_allocated_bytes=torch.cuda.memory_allocated(),cuda_peak_allocated_bytes=torch.cuda.max_memory_allocated())
+                return result
+            def restore():
+                torch.cuda.current_stream().synchronize()
+                shadow_active[0]=False;route_calls.clear();route_calls.update(saved_routes)
+                restore_buffers(stage,saved_buffers)
+                torch.set_rng_state(saved_rng['torch_rng']);torch.cuda.set_rng_state(saved_rng['cuda_rng'])
+                random.setstate(saved_rng['python_rng']);restore_tracker(rng_tracker,saved_rng['tracker_rng'])
+            def verify():
+                hashes=current_hashes()
+                buckets=[b for buf in local_buffers for b in buf.buckets]
+                clean=all(not b.params_with_grad and b.communication_handle is None and not b.communication_issued for b in buckets)
+                clean=clean and all(buf.is_last_microbatch for buf in local_buffers)
+                clean=clean and all(p.grad is None and not p.grad_added_to_main_grad for p in stage.parameters() if p.requires_grad)
+                clean=clean and all(not bool(buf.grad_data.count_nonzero()) for buf in local_buffers)
+                event('planned_shadow_rollback',step=handoff.cut,hashes=hashes,hashes_match=hashes==expected_hashes,
+                    ddp_clean=clean,seconds=time.monotonic()-started,owner_thread=threading.get_ident())
+                if hashes!=expected_hashes or not clean or threading.get_ident()!=owner:
+                    raise RuntimeError('shadow rollback state/DDP/owner mismatch')
+            if retain:
+                from shift_full.ownership_runtime import retain_contribution
+                def audit_initial():
+                    before=time.monotonic();hashes=current_hashes()
+                    initial_audit[0]=dict(hashes=hashes,seconds=time.monotonic()-before,
+                        boundary_step=handoff.cut,before_forward=True)
+                    event('planned_ownership_initial_audit',step=handoff.cut,hashes=hashes,
+                        hashes_match=hashes==expected_hashes,seconds=time.monotonic()-before,before_forward=True)
+                    if hashes!=expected_hashes:raise RuntimeError('ownership initial state mismatch')
+                def unchanged():
+                    tail=dict(export_state.role_metadata(),planned_epoch=handoff.new_epoch,planned_role=1)
+                    tensors=inventory()
+                    return (len(tensors)==len(versions) and
+                            all(t is previous and t._version==v for t,(previous,v) in zip(tensors,versions)) and
+                            digest(tail)==retained_tail[0] and progress['updates']==handoff.cut and
+                            digest((scheduler.state_dict(),optimizer.state_dict()['param_groups']))==retained_metadata[0])
+                try:
+                    return retain_contribution(config=stage.config,ddp=ddp,audit_initial=audit_initial,
+                        execute=execute,capture=capture,unchanged=unchanged,restore=restore,clear=clear,verify=verify)
+                finally:
+                    shadow_active[0]=False
+            return shadow_transaction(config=stage.config,ddp=ddp,execute=execute,capture=capture,
+                restore=restore,clear=clear,verify=verify)
+        if args.planned_shadow_recompute:handoff.shadow_recompute=shadow_recompute
+        # Selected only by the opt-in production coordinator above.
+        handoff.ownership_recompute=lambda expected:shadow_recompute(expected,retain=True)
     if args.planned_role=='C':
         if not handoff.ready_receiver():
             event('stopped',step=progress['updates'],attempts=0,reason='planned_cancelled')
@@ -387,8 +562,8 @@ def main():
     def make_manager():
         if args.backend in ('nccl', 'unified', 'blocking', 'baby'):
             from torchft import ProcessGroupNCCL, ProcessGroupBabyNCCL
-            from shift_full.compat import BlockingNCCL
-            cls = ProcessGroupBabyNCCL if args.backend == 'baby' else BlockingNCCL if args.backend == 'blocking' else ProcessGroupNCCL
+            from shift_full.compat import BlockingNCCL, RecoveryNCCL
+            cls = ProcessGroupBabyNCCL if args.backend == 'baby' else BlockingNCCL if args.backend == 'blocking' else RecoveryNCCL
             pg = cls(timeout=timedelta(seconds=30 if args.backend == "baby" else args.communication_timeout))
         elif args.backend == 'hybrid':
             from shift_full.compat import HybridGloo
@@ -415,19 +590,23 @@ def main():
             transport = PackedGPUTransport(pg.gpu_pg if args.backend == 'hybrid' else pg, torch.device('cuda', device_rank), timedelta(seconds=90), event)
         else:
             transport = ReachableHTTPTransport(timedelta(seconds=90), 0)
-        manager = Manager(pg=pg, load_state_dict=load_state, state_dict=export_state,
+        manager = Manager(pg=pg, load_state_dict=handoff.forbidden_load if getattr(handoff,'building_manager',False) else load_state, state_dict=export_state,
                           min_replica_size=2, world_size_mode=WorldSizeMode.FIXED_WITH_SPARES, use_async_quorum=not args.sync_quorum,
                           init_sync=False, timeout=timedelta(seconds=90),
                           quorum_timeout=timedelta(seconds=180), connect_timeout=timedelta(seconds=20),
                           hostname=args.host_ip, lighthouse_addr=args.lighthouse,
-                          store_addr=args.host_ip,store_port=31600+handoff.offset if handoff.activated else int(os.environ['MASTER_PORT']),
-                          replica_id=f'shift{args.replica}', checkpoint_transport=transport, max_retries=8)
-        if args.reference_anchor or handoff.gate.epoch:
+                          store_addr=args.host_ip,store_port=getattr(handoff,'manager_store_port',31600+handoff.offset) if handoff.activated else int(os.environ['MASTER_PORT']),
+                          replica_id=(f'shift-own-{handoff.ticket().nonce}-{"AB" if handoff.fallback else "AC"}-{args.replica}'
+                                      if args.planned_ownership_recompute and handoff.activated else f'shift{args.replica}'),
+                          checkpoint_transport=transport, max_retries=8)
+        if reference_manager_state is not None and not handoff.gate.epoch:
+            manager.load_state_dict(reference_manager_state)
+        elif handoff.gate.epoch:
             manager.load_state_dict(dict(step=progress['updates'],batches_committed=progress['updates']*2))
 
         manager._shift_epoch=handoff.gate.epoch
         return manager
-    if args.mode=='shift': manager=make_manager()
+    if args.mode=='shift' and not (args.planned_ownership_recompute and args.planned_role=='C'): manager=make_manager()
 
     if args.resume_checkpoint and args.generation > 0:
         resume_started = time.monotonic()
@@ -437,21 +616,18 @@ def main():
         load_state(payload)
         event('checkpoint_resumed', step=progress['updates'], seconds=time.monotonic()-resume_started)
 
-    if args.planned_role=='C':
+    if args.planned_role=='C' and not args.planned_ownership_recompute:
         event('planned_epoch_activated',step=progress['updates'],epoch=1)
     phase_started = phase('manager_init', phase_started)
     # The native finalizer waits intra-replica buckets, then sums tied PP grads.
     # Both dense and routed-expert buffers need the second reduction. In this
     # vendor, expert gradients use dense-DP normalization, retained unchanged.
-    forward_counter=[0]
-    def count_forward(*_):forward_counter[0]+=1
-    stage.register_forward_pre_hook(count_forward)
     original_finish = ddp.finish_grad_sync
     buffers = list(ddp.buffers) + list(ddp.expert_parallel_buffers)
     cross_calls = [0]
     cross_timings = {}
 
-    def finish_grad_sync(_self):
+    def finish_grad_sync(_self, *, local_finished=False):
         nonlocal manager
         entered = time.monotonic()
         gpu_started = torch.cuda.Event(enable_timing=True) if args.profile_timings else None
@@ -469,7 +645,13 @@ def main():
             pending.append((bucket.grad_data, value, manager.allreduce(value)))
             dispatch_seconds += time.monotonic()-before
         relay = args.planned_variant=='p2' and handoff.is_relay_step()
-        if relay:
+        if local_finished:
+            handoff.authorize(manager)
+            for buffer in buffers:
+                for bucket in buffer.buckets:enqueue(bucket)
+            handoff.emit('planned_ac_outer_begin',step=progress['updates'])
+            intra_done=time.monotonic()
+        elif relay:
             if args.planned_role!='C': original_finish()
             manager,retired=handoff.at_gradient(manager,[b.grad_data for buf in buffers for b in buf.buckets],make_manager,sample_ids,apply_tail)
             if retired:
@@ -518,26 +700,35 @@ def main():
         cross_calls[0] += len(pending)
 
     def apply_tail(tail):
-        target=dict(stage.named_buffers())
-        if set(target)!=set(tail['all_buffers']):raise RuntimeError('relay buffer mismatch')
-        for name,t in tail['all_buffers'].items():target[name].copy_(t)
-        torch.set_rng_state(tail['torch_rng']);torch.cuda.set_rng_state(tail['cuda_rng']);random.setstate(tail['python_rng'])
+        validate_state(tail,rank=rank,step=progress['updates'],full=False,epoch=handoff.new_epoch)
+        restore_buffers(stage,tail['all_buffers'])
+        torch.set_rng_state(tail['torch_rng']);torch.cuda.set_rng_state(tail['cuda_rng']);random.setstate(tail['python_rng']);restore_tracker(rng_tracker,tail['tracker_rng'])
         return dict(tail,all_buffers=dict(stage.named_buffers()),progress=dict(progress),**rng_snapshot())
 
     if args.mode == 'shift':
         ddp.finish_grad_sync = types.MethodType(finish_grad_sync, ddp)
-    initial = current_hashes() if args.audit_state else {}
-    phase_started = phase('initial_audit', phase_started)
-    event('ready', physical_rank=args.replica * 8 + rank,
+    if args.planned_ownership_recompute and args.planned_role=='C':
+        manager=handoff.finish_receiver(make_manager)
+        if manager is None:
+            handoff.start_retired_cleanup();handoff.finish_retired_cleanup()
+            event('stopped',step=progress['updates'],attempts=0,reason='ownership_pre_activation_AB')
+            handoff.cancel_cleanup_on_exit();dist.barrier();dist.destroy_process_group();return
+    initial = (handoff.initial_audit['hashes'] if args.planned_ownership_recompute and args.planned_role=='C'
+               else current_hashes() if args.audit_state else {})
+    phase_started = phase('ownership_activation' if args.planned_ownership_recompute and args.planned_role=='C' else 'initial_audit', phase_started)
+    event('ready', digest_engine=os.environ.get('SHIFT_DIGEST_ENGINE','reference'), physical_rank=args.replica * 8 + rank,
           layout='node_local_pp', tp=2, pp=2, ep=2, local_dense_dp=dist.get_world_size(dense),
           local_expert_dp=dist.get_world_size(expert_dp), model_id=MODEL_ID, model_revision=REVISION,
           full_parameters=total_parameters, local_parameters=sum(v.numel() for v in stage.parameters()),
           tp_manifest=tp_manifest, hashes=initial, torch_version=torch.__version__,
+          initial_audit_receipt=handoff.initial_audit if args.planned_ownership_recompute and args.planned_role=='C' else None,
           cuda_version=torch.version.cuda, nccl_version=torch.cuda.nccl.version(),
           global_rank=dist.get_rank(), world_size=dist.get_world_size(), legacy_core_namespace=legacy_namespace,
           transport=args.transport, cross_gradient=args.backend, mode=args.mode, fp32=args.fp32,
           cuda_device=device_rank,visible_devices=os.environ.get('CUDA_VISIBLE_DEVICES'),
-          role_manifest=role_manifest(),
+          role_manifest=role_manifest(), state_schema=2,
+          state_inventory=dict(buffers=buffer_manifest(stage),tracker_keys=sorted(rng_tracker.get_states()),
+                               tracker_class=type(rng_tracker).__name__,snapshot='boundary buffers/RNG; model/Adam read-only before relay'),
           matmul_allow_tf32=torch.backends.cuda.matmul.allow_tf32,
           float32_matmul_precision=torch.get_float32_matmul_precision(),
           cpu_maxrss_kib=__import__('resource').getrusage(__import__('resource').RUSAGE_SELF).ru_maxrss,
@@ -549,6 +740,7 @@ def main():
         time.sleep(0.1)
     schedule = get_forward_backward_func()
     attempts = 0
+    last_commit_mono = None
     recovery_requested = False
     def requested_stop():
         limit=out/'TRAIN_UNTIL'
@@ -572,8 +764,8 @@ def main():
         old=handoff;old.finish_retired_cleanup()
         args._coord_raw=raw;args.planned_round=r
         # Only the second logical DP slot changes physical owner.
-        physical=os.environ.get('SHIFT_PHYSICAL_NODE')
-        args.planned_role='A' if args.replica==0 else ('C' if (physical=='node1')==(r%2==1) else 'B')
+        initial_role=args.planned_initial_role
+        args.planned_role='A' if initial_role=='A' else (initial_role if r%2==0 else ('C' if initial_role=='B' else 'B'))
         handoff=PlannedHandoff(args,rank,event,export_state,load_state,progress,role_manifest,rng_snapshot)
         del old;gc.collect()
         event('planned_round_started',step=progress['updates'],role=args.planned_role,epoch=handoff.gate.epoch,cuda_allocated_bytes=torch.cuda.memory_allocated(),cuda_reserved_bytes=torch.cuda.memory_reserved(),threads=len(__import__('os').listdir('/proc/self/task')))
@@ -585,23 +777,29 @@ def main():
         while not requested_stop() and time.monotonic() < deadline and progress['updates'] < args.steps:
             if args.planned_cycles>1:advance_round()
             handoff.check()
-            iteration_started = time.monotonic()
+            retained_step=(args.planned_ownership_recompute and args.planned_role=='C'
+                and handoff.contribution.state=='activated' and not handoff.contribution.finish_started)
+            iteration_started = handoff.contribution.result['started_mono'] if retained_step else time.monotonic()
             torch.cuda.current_stream().synchronize()
             boundary_done = time.monotonic()
             if not handoff.activated:
-                boundary_rng = dict(step=progress['updates'], rng=rng_snapshot())
+                boundary_rng = dict(step=progress['updates'], rng=rng_snapshot(),
+                                    buffers={n:b.detach().clone() for n,b in stage.named_buffers()},copy_ready=torch.cuda.Event())
+                boundary_rng['copy_ready'].record()
                 manager,retired=handoff.boundary(manager)
                 if retired: break
                 if manager is None:
                     manager=make_manager()
                     event('planned_epoch_activated',step=progress['updates'],epoch=1)
-            if manager:
-                boundary_rng = dict(step=progress['updates'], rng=rng_snapshot())
+            if manager and not retained_step:
+                boundary_rng = dict(step=progress['updates'], rng=rng_snapshot(),
+                                    buffers={n:b.detach().clone() for n,b in stage.named_buffers()},copy_ready=torch.cuda.Event())
+                boundary_rng['copy_ready'].record()
                 if args.generation>0 and not recovery_requested:
                     event('recovery_request',step=progress['updates'])
                     recovery_requested=True
                 handoff.authorize(manager)
-                manager.start_quorum()
+                manager.start_quorum(allow_heal=False) if args.planned_ownership_recompute and handoff.activated else manager.start_quorum()
                 if args.fixed_batch:
                     if not args.sync_quorum:
                         raise ValueError('fixed batch requires synchronous quorum')
@@ -613,8 +811,9 @@ def main():
             if participants!=2:raise RuntimeError('planned handoff requires exactly two contributors')
             event('begin', step=step, participants=participants,
                   boundary_sync_seconds=boundary_done-iteration_started, quorum_seconds=time.monotonic()-boundary_done)
-            optimizer.zero_grad(set_to_none=True)
-            ddp.zero_grad_buffer()
+            if not retained_step:
+                optimizer.zero_grad(set_to_none=True)
+                ddp.zero_grad_buffer()
             if args.mode == 'flat':
                 data_rank = state.get_data_parallel_rank()
             else:
@@ -624,7 +823,7 @@ def main():
             dense_size = 2 * participants if args.fixed_batch else 4
             batches = []
             sample_ids = []
-            for micro in range(count):
+            for micro in range(0 if retained_step else count):
                 sample = step * (args.microbatches * 4) + micro * dense_size + data_rank
                 sample_ids.append(sample)
                 if args.data == 'random':
@@ -636,15 +835,31 @@ def main():
                               + sample % 8) % 32 + 100
                 batches.append(dict(input_ids=tokens[:, :-1].contiguous(),
                                     next_token_labels=tokens[:, 1:].contiguous()))
-            if args.reference_dump: event('batch_plan',step=step,sample_ids=sample_ids)
-            started = time.monotonic()
+            if retained_step:sample_ids=handoff.contribution.result['sample_ids']
+            if args.reference_dump or args.reference_signatures: event('batch_plan',step=step,sample_ids=sample_ids)
+            if ((args.planned_shadow_recompute or args.planned_ownership_recompute) and args.planned_role=='B'
+                    and handoff.prepared_step==progress['updates'] and handoff.is_relay_step()):
+                descriptor=dict(schema=1,rank=rank,step=step,epoch=handoff.new_epoch,
+                    participants=participants,replica_index=replica_index,local_data_rank=state.get_data_parallel_rank(),
+                    sample_ids=sample_ids,seq_len=args.seq_len,microbatches=args.microbatches,
+                    data=args.data,vocab_size=stage.hf_config.vocab_size,seed_base=100_000)
+                if args.planned_ownership_recompute:
+                    handoff.reserve_descriptor(manager,descriptor,handoff.local_pgs)
+                else:
+                    handoff.coord.set(f'shadow_descriptor/{rank}',json.dumps(descriptor))
+                    event('planned_shadow_descriptor',step=step,descriptor=descriptor)
+            started = handoff.contribution.result['started_mono'] if retained_step else time.monotonic()
             before_calls = cross_calls[0]
-            before_forward=forward_counter[0]
+            before_forward=0 if retained_step else forward_counter[0]
             if args.planned_inject=='slow-compute' and args.planned_role=='B' and not handoff.activated and handoff.request_seen:
                 delay_started=time.monotonic();time.sleep(args.planned_slow_ms/1000)
                 event('planned_compute_delay',step=step,seconds=time.monotonic()-delay_started)
             try:
-                if args.planned_variant=='p2' and args.planned_role=='C' and handoff.is_relay_step():
+                if retained_step:
+                    metrics=[]
+                    handoff.contribution.finish(native_finalizer=stage.config.finalize_model_grads_func,
+                        outer=lambda:finish_grad_sync(ddp,local_finished=True))
+                elif args.planned_variant=='p2' and args.planned_role=='C' and handoff.is_relay_step():
                     metrics=[]
                     stage.config.finalize_model_grads_func([ddp])
                 else:
@@ -673,6 +888,7 @@ def main():
             handoff.authorize(manager)
             commit = manager.should_commit() if manager else True
             decision_done = time.monotonic()
+            gradient_signature_hash = digest({name:p.main_grad for name,p in stage.named_parameters()}) if args.reference_signatures and commit else None
             timings = dict(schedule_seconds=schedule_done-started, gradient_check_seconds=gradient_checked-schedule_done,
                            decision_seconds=decision_done-decision_started)
             attempts += 1
@@ -691,7 +907,14 @@ def main():
                     torch.save(dict(gradients=gradients, model=cpu_tree(stage.state_dict()),
                                     optimizer=cpu_tree(optimizer.state_dict()), scheduler=scheduler.state_dict()),
                                out / f'reference_step{progress["updates"]}_r{rank}.pt')
-                event('commit', step=progress['updates'], updates=progress['updates'],
+                if args.reference_signatures:
+                    manager_step=manager.current_step() if manager else progress['updates']
+                    if manager_step!=progress['updates']:raise RuntimeError('reference signature manager step mismatch')
+                    signature_hashes=current_hashes();signature_hashes['gradients']=gradient_signature_hash
+                    event('reference_signature',schema=1,step=progress['updates'],input_step=step,manager_step=manager_step,progress=dict(progress),sample_ids=sample_ids,hashes=signature_hashes)
+                committed_at=time.monotonic()
+                event('commit', commit_interval_seconds=None if last_commit_mono is None else committed_at-last_commit_mono,
+                      step=progress['updates'], updates=progress['updates'],
                       participants=actual_participants, contributed=contributed, hashes=hashes, model_hash=hashes.get('model'),
                       sample_ids=sample_ids, fixed_batch=args.fixed_batch,
                       global_batch=args.microbatches*4 if args.fixed_batch else args.microbatches*2*actual_participants,
@@ -702,6 +925,7 @@ def main():
                       cross_calls=cross_calls[0] - before_calls, finite_gradients=finite,
                       seconds=time.monotonic() - iteration_started, compute_seconds=time.monotonic()-started,
                       loss=[float(m['loss']) for m in metrics] if metrics else [], **timings, **cross_timings, **handoff.commit_fields(manager))
+                last_commit_mono=committed_at
                 handoff.committed()
             else:
                 event('skipped', step=step, error=str(manager.errored()), **timings)
@@ -718,7 +942,7 @@ def main():
                 event('checkpoint_saved', step=progress['updates'], seconds=time.monotonic()-start_save, bytes=checkpoint.stat().st_size)
                 load_started = time.monotonic()
                 loaded = torch.load(checkpoint, weights_only=False)
-                stage.load_state_dict(loaded['model']); optimizer.load_state_dict(loaded['optimizer']); scheduler.load_state_dict(loaded['scheduler'])
+                load_state(loaded)
                 torch.cuda.synchronize()
                 event('checkpoint_loaded', step=progress['updates'], seconds=time.monotonic()-load_started,
                       cache='warm_after_save', hashes_match=not args.audit_state or current_hashes()==payload.get('hashes'))
@@ -728,7 +952,7 @@ def main():
                         os.posix_fadvise(handle.fileno(), 0, 0, os.POSIX_FADV_DONTNEED)
                     load_started = time.monotonic()
                     loaded = torch.load(checkpoint, weights_only=False)
-                    stage.load_state_dict(loaded['model']); optimizer.load_state_dict(loaded['optimizer']); scheduler.load_state_dict(loaded['scheduler'])
+                    load_state(loaded)
                     torch.cuda.current_stream().synchronize()
                     event('checkpoint_loaded_cold', step=progress['updates'], seconds=time.monotonic()-load_started,
                           cache='fadvise_dontneed_advisory', hashes_match=not args.audit_state or current_hashes()==payload.get('hashes'))

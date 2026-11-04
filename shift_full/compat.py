@@ -1,4 +1,7 @@
 """Runtime compatibility fixes for the pinned torchFT 0.2.0 wheel."""
+from contextlib import contextmanager
+from datetime import timedelta
+
 import torch
 
 
@@ -105,13 +108,75 @@ def bootstrap_legacy_core(flash):
 
 from torchft import ProcessGroupNCCL
 
-class BlockingNCCL(ProcessGroupNCCL):
+@contextmanager
+def cancelling_timeout(callback, timeout):
+    """Cancel the pinned TorchFT timer even when the guarded call raises.
+
+    TorchFT 0.2.0's context generator cancels only on normal exit. Resume it
+    normally in finally so an old operation cannot later abort a new group.
+    """
+    from torchft.process_group import context_timeout
+    guard = context_timeout(callback, timeout)
+    guard.__enter__()
+    try:
+        yield
+    finally:
+        guard.__exit__(None, None, None)
+
+
+from torchft.process_group import _WorkAcceleratorTimeout
+
+
+class RecoveryWork(_WorkAcceleratorTimeout):
+    @classmethod
+    @contextmanager
+    def _stream_timeout(cls, pg, timeout):
+        from torchft.process_group import stream_timeout
+        with cancelling_timeout(pg.abort, timeout):
+            yield
+        stream_timeout(pg.abort, timeout)
+
+
+class RecoveryNCCL(ProcessGroupNCCL):
+    """Keep fast gradient deadlines separate from checkpoint P2P deadlines."""
+    checkpoint_timeout = timedelta(seconds=90)
+
+    @contextmanager
+    def _run_context(self):
+        with cancelling_timeout(self.abort, self._timeout):
+            yield
+
+    def _wrap_work(self, work, opts):
+        if not self._use_abort:
+            return work
+        timeout = self._timeout
+        if hasattr(opts, 'timeout') and opts.timeout.total_seconds() > 0:
+            timeout = opts.timeout
+        return RecoveryWork(self, work, timeout)
+
+    def _checkpoint_work(self, operation, tensors, peer, tag):
+        # Never mutate the shared timeout: gradient submissions retain their
+        # own deadline even if another thread is transferring a checkpoint.
+        with cancelling_timeout(self.abort, self.checkpoint_timeout):
+            work = operation(tensors, peer, tag)
+        if not self._use_abort:
+            return work
+        return RecoveryWork(self, work, self.checkpoint_timeout)
+
+    def send(self, tensors, dst_rank, tag):
+        return self._checkpoint_work(self.parent.send, tensors, dst_rank, tag)
+
+    def recv(self, tensors, src_rank, tag):
+        return self._checkpoint_work(self.parent.recv, tensors, src_rank, tag)
+
+
+class BlockingNCCL(RecoveryNCCL):
     def _create_pg(self, store, rank, world_size):
         from torch.distributed import ProcessGroupNCCL as NativeNCCL, ProcessGroup
         self._errored = None
         opts = NativeNCCL.Options()
         opts.config.blocking = True
-        opts._timeout = self._timeout
+        opts._timeout = max(self._timeout, self.checkpoint_timeout)
         group = ProcessGroup(store, rank, world_size)
         group._set_default_backend(ProcessGroup.BackendType.NCCL)
         backend = NativeNCCL(store, rank, world_size, opts)

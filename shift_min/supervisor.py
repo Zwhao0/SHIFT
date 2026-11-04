@@ -37,7 +37,7 @@ def main():
     p.add_argument('--session', required=True)
     p.add_argument('--replica', type=int, required=True)
     p.add_argument('--host-ip', required=True)
-    p.add_argument('--lighthouse-ip', default='10.10.4.2')
+    p.add_argument('--lighthouse-ip', default='192.0.2.10')
     p.add_argument('--root', default='/workspace/SHIFT')
     p.add_argument('--seconds', type=int, default=900)
     a = p.parse_args()

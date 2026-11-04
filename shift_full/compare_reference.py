@@ -495,6 +495,25 @@ def main() -> int:
     load_errors: list[dict[str, str]] = []
     failed_pairs: list[str] = []
 
+    def save_report(complete: bool) -> bool:
+        checks = {
+            "files_present": {"pass": not missing, "missing": missing},
+            "loads_succeeded": {"pass": not load_errors, "errors": load_errors},
+            "all_rank_step_comparisons_pass": {
+                "pass": not failed_pairs, "failed_pairs": failed_pairs,
+            },
+        }
+        passed = complete and all(check["pass"] for check in checks.values())
+        report = dict(pass_=passed, complete=complete, steps=args.steps, ranks=list(args.ranks),
+                      tolerances=TOLERANCES, checks=checks, byrank=byrank)
+        report['pass'] = report.pop('pass_')
+        dest = args.output if complete else args.output.with_suffix('.partial.json')
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        temporary = dest.with_suffix(dest.suffix + '.tmp')
+        temporary.write_text(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False)+'\n')
+        temporary.replace(dest)
+        return passed
+
     for step in args.steps:
         step_results: dict[str, Any] = {}
         byrank[str(step)] = step_results
@@ -511,6 +530,7 @@ def main() -> int:
                     "missing_files": absent,
                 }
                 failed_pairs.append(f"step{step}/rank{rank}")
+                save_report(False)
                 continue
 
             baseline = shifted = None
@@ -538,28 +558,9 @@ def main() -> int:
             finally:
                 del baseline, shifted
                 gc.collect()
+            save_report(False)
 
-    checks = {
-        "files_present": {"pass": not missing, "missing": missing},
-        "loads_succeeded": {"pass": not load_errors, "errors": load_errors},
-        "all_rank_step_comparisons_pass": {
-            "pass": not failed_pairs,
-            "failed_pairs": failed_pairs,
-        },
-    }
-    passed = all(check["pass"] for check in checks.values())
-    report = {
-        "pass": passed,
-        "steps": args.steps,
-        "ranks": list(args.ranks),
-        "tolerances": TOLERANCES,
-        "checks": checks,
-        "byrank": byrank,
-    }
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    with args.output.open("w", encoding="utf-8") as stream:
-        json.dump(report, stream, ensure_ascii=False, indent=2, allow_nan=False)
-        stream.write("\n")
+    passed = save_report(True)
     return 0 if passed else 1
 
 

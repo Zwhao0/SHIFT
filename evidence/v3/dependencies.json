@@ -1,0 +1,61 @@
+{
+  "sha256": {
+    "flash_v1/megatron_adapter.py": "c1da9ff1db8628290bdfdf372a43c5043d3f93ee04c7a6be3b4d94a5c4e3d76e",
+    "flash_v1/pipeline_adapter.py": "1f48735f9db94874323da17595145e27ef2abaf82f0f68b34c798b19e6969dd0",
+    "flash_v1/tensor_parallel.py": "4f7b21c5a962eae5eb39c517885a32690142a2dcfbf736d95e3d14d2ecb35e60",
+    "flash_v1/train.py": "7670f58409f92b8095368202eb97de682fca2f1004c23b6080df451c26d08490",
+    "Greyhound-master/Megatron-LM/megatron/core/distributed/distributed_data_parallel.py": "5dc93b7f0019c51d3b624aac92c1ddcc81572734de4d1da2a143db36dcbe8029",
+    "Greyhound-master/Megatron-LM/megatron/core/distributed/grad_buffer.py": "ec9465366ba85312a63dcd5e781a65222a1424adf97273a2a55859597bf8e50b",
+    "Greyhound-master/Megatron-LM/megatron/core/distributed/finalize_model_grads.py": "051790f45f896159d6c98fe6e911fbb8bb969119addd854ae14434a6aacad820"
+  },
+  "git": {},
+  "models": [
+    {
+      "relative_path": "models/qwen_moe/SOURCE.txt",
+      "source": "bayliner1980/Qwen2.5-0.5B-MoE-A0.3B\nrevision=4b89028ef7376d0e92acbbc4a7f560c2374aeec0\nsha256=6c1673e92522af47907eb8e1825142061a367ec5993e4060554fbce271f683be\n"
+    }
+  ],
+  "model": {
+    "config.json": {
+      "bytes": 1654,
+      "sha256": "c3efb3a767f9ad61efdfa1bf1d248ca4ab19120a2586cbe0f3a6da6c8762bcb4"
+    },
+    "SOURCE.txt": {
+      "bytes": 158,
+      "sha256": "d3ee3e1020b6df67a6f077c373d3ed4aaddd359227412d3238621e98672c116e"
+    },
+    "model.safetensors": {
+      "bytes": 989730216,
+      "sha256": "6c1673e92522af47907eb8e1825142061a367ec5993e4060554fbce271f683be"
+    }
+  },
+  "versions": {
+    "python": "3.12.3",
+    "torch": "2.14.1+cu130",
+    "torchft": "0.2.0",
+    "nccl": "2.30.7",
+    "transformers": "4.53.2"
+  },
+  "reference_pins": {
+    "torchft_upstream": {
+      "sha": "eff90963bcbb7d85313308fabffd365d449bc93f",
+      "tree": "58a23edbb4cee5c6ba44f7d33327a5c3865463e9",
+      "repo": "meta-pytorch/torchft",
+      "date": "2026-10-28T19:22:32Z"
+    },
+    "torchft_installed_tag": {
+      "repo": "meta-pytorch/torchft",
+      "tag": "v0.2.0",
+      "sha": "b8a096f9f23589ec93e988e2368a934cab01b890"
+    },
+    "torchtitan": {
+      "sha": "01586df70d7599d59a87663f39670a8c694924c3",
+      "tree": "dac659ff39dde24d541ec9999d34cee8452d6511",
+      "repo": "pytorch/torchtitan",
+      "date": "2026-11-03T09:54:59Z"
+    }
+  },
+  "external_source_available_in_existing_environment": true,
+  "complete_external_git_head_known": false,
+  "torch_wheel_sha256": "5359b255ac68c0cabb8293952b38e00f0d1a570815cd87f19b61af702c071410"
+}

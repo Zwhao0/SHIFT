@@ -6,7 +6,7 @@ from shift_full.planned_handoff import EpochGate, PlannedHandoff
 
 class PlannedProtocolTest(unittest.TestCase):
  def handoff(self,role):
-  h=PlannedHandoff.__new__(PlannedHandoff);h.role=role;h.gate=EpochGate();h.old_epoch_revoked=False;return h
+  h=PlannedHandoff.__new__(PlannedHandoff);h.role=role;h.control_host='localhost';h.gate=EpochGate();h.old_epoch_revoked=False;return h
  def test_fence_denies_old_manager_before_new_activation(self):
   for role in ('A','B'):
    h=self.handoff(role);old=SimpleNamespace(_shift_epoch=0);h.authorize(old)

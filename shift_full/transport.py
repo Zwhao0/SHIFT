@@ -165,6 +165,8 @@ class PackedGPUTransport(CheckpointTransport[object]):
         timeout: timedelta,
     ) -> None:
         start = time.perf_counter()
+        leaves, _ = tree_flatten(state_dict)
+        versions = [(t, t._version) for t in leaves if isinstance(t, torch.Tensor)]
         metadata_bytes, groups, tensor_count, cpu_tensor_bytes = self._pack(
             state_dict, step
         )
@@ -192,6 +194,10 @@ class PackedGPUTransport(CheckpointTransport[object]):
             work.wait(wait_timeout)
 
         torch.cuda.current_stream(self._device).synchronize()
+        if any(t._version != version for t, version in versions):
+            raise RuntimeError('checkpoint source mutated before packing/send completed')
+        if self._event is not None:
+            self._event('snapshot_readonly_verified', step=step, tensors=len(versions))
         self._emit(
             "transport_send",
             step,

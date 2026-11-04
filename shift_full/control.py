@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from shift_full.event_reader import merge, remote_code
 
 CONTAINER_ROOT = '/workspace/SHIFT'
-HOST_ROOT = '/home/campus/zhangweihao/SHIFT'
+HOST_ROOT = '/workspace/SHIFT'
 
 
 @dataclass(frozen=True)
@@ -31,13 +31,13 @@ class Endpoint:
 def endpoints_from_env(env=None):
     env = os.environ if env is None else env
     return {
-        'node0': Endpoint('node0', env.get('SHIFT_NODE0_IP', '10.10.4.2'),
+        'node0': Endpoint('node0', env.get('SHIFT_NODE0_IP', '192.0.2.10'),
                           env.get('SHIFT_NODE0_CONTAINER', 'flash1022-run'), 'ssh-h2.sock',
                           host_root=env.get('SHIFT_NODE0_HOST_ROOT', HOST_ROOT)),
-        'node1': Endpoint('node1', env.get('SHIFT_NODE1_IP', '10.10.4.1'),
+        'node1': Endpoint('node1', env.get('SHIFT_NODE1_IP', '192.0.2.11'),
                           env.get('SHIFT_NODE1_CONTAINER', 'shift-rdma-node1'), 'ssh-h1.sock',
                           sudo='noninteractive', host_root=env.get('SHIFT_NODE1_HOST_ROOT', HOST_ROOT)),
-        'node3': Endpoint('node3', env.get('SHIFT_NODE3_IP', '10.10.4.3'),
+        'node3': Endpoint('node3', env.get('SHIFT_NODE3_IP', '192.0.2.13'),
                           env.get('SHIFT_NODE3_CONTAINER', 'shift-rdma-node3'), 'ssh-h3.sock',
                           runtime='nerdctl', namespace=env.get('SHIFT_NODE3_NAMESPACE', 'shift'),
                           sudo='password', host_root=env.get('SHIFT_NODE3_HOST_ROOT', HOST_ROOT)),

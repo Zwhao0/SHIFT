@@ -18,10 +18,12 @@ _MAX_REQUEST = 1024 * 1024
 class LaunchProcess:
     """Small Popen-like handle backed by the server's atomic exit record."""
 
-    def __init__(self, pid, status_path, generation):
+    def __init__(self, pid, status_path, generation, started_time=None):
         self.pid = int(pid)
         self.status_path = Path(status_path)
         self.generation = int(generation)
+        self.started_time = (float(started_time) if isinstance(started_time, (int, float))
+                             and not isinstance(started_time, bool) else None)
         self.returncode = None
 
     def poll(self):
@@ -61,9 +63,11 @@ class LaunchProcess:
         self.send_signal(signal.SIGKILL)
 
 
-def launch(socket_path, args, log, generation):
+def launch(socket_path, args, log, generation, env=None):
     """Request a launch and return a small process-compatible handle."""
     request = {"args": list(args), "log": os.fspath(log), "generation": int(generation)}
+    if env is not None:
+        request["env"] = env
     with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as client:
         client.settimeout(15)
         client.connect(os.fspath(socket_path))
@@ -82,7 +86,8 @@ def launch(socket_path, args, log, generation):
     info = packet.get("launch")
     if not isinstance(info, dict):
         raise RuntimeError(f"invalid launch response: {packet!r}")
-    return LaunchProcess(info["pid"], info["status_path"], request["generation"])
+    return LaunchProcess(info["pid"], info["status_path"], request["generation"],
+                         info.get("started_time"))
 
 
 def _reply(conn, packet):
@@ -110,10 +115,13 @@ def _write_exit(status_path, pid, generation, returncode):
     os.replace(temp_path, status_path)
 
 
-def _child_agent(conn, listener, args, log_path):
+def _child_agent(conn, listener, args, log_path, env):
     try:
         conn.close()
         listener.close()
+        # The server may serve multiple sessions; apply per-launch variables
+        # only after fork so they cannot leak into its parent or later agents.
+        os.environ.update(env)
         fd = os.open(log_path, os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o600)
         os.dup2(fd, 1)
         os.dup2(fd, 2)
@@ -141,12 +149,18 @@ def _handle_launch(conn, listener, socket_path, active, used_generations, fast_l
         args = request.get("args")
         log = request.get("log")
         generation = request.get("generation")
+        env = request.get("env", {})
         if not isinstance(args, list) or not all(isinstance(arg, str) for arg in args):
             raise ValueError("args must be a list of strings")
         if not isinstance(log, str) or not log:
             raise ValueError("log must be a non-empty path")
         if not isinstance(generation, int) or isinstance(generation, bool) or generation < 0:
             raise ValueError("generation must be a non-negative integer")
+        if (not isinstance(env, dict)
+                or not all(isinstance(key, str) and key and "=" not in key and "\0" not in key
+                           and isinstance(value, str) and "\0" not in value
+                           for key, value in env.items())):
+            raise ValueError("env must be a mapping of valid environment variable names to strings")
         if active:
             raise RuntimeError("an agent is already active")
         if generation in used_generations:
@@ -165,12 +179,14 @@ def _handle_launch(conn, listener, socket_path, active, used_generations, fast_l
             raise RuntimeError("server CUDA initialized before agent fork")
         sys.stdout.flush()
         sys.stderr.flush()
+        started_time = time.time()
         pid = os.fork()
         if pid == 0:
-            _child_agent(conn, listener, args, str(log_path))
+            _child_agent(conn, listener, args, str(log_path), env)
         active[pid] = generation
         used_generations.add(generation)
-        _reply(conn, {"launch": {"pid": pid, "status_path": str(status_path)}})
+        _reply(conn, {"launch": {"pid": pid, "status_path": str(status_path),
+                                 "started_time": started_time}})
     except Exception as exc:
         try:
             _reply(conn, {"error": f"{type(exc).__name__}: {exc}"})
