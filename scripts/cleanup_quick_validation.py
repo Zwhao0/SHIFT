@@ -1,4 +1,4 @@
-"""Remove regenerable experiment data only after all six saved audits pass."""
+"""Remove regenerable experiment data only after all supplied audits pass."""
 import argparse
 from dataclasses import replace
 import json
@@ -12,7 +12,7 @@ def main():
     p.add_argument('--evidence',type=Path,default=Path('evidence/v4/quick_validation.json'))
     p.add_argument('--output',type=Path,default=Path('evidence/v4/quick_cleanup.json'))
     a=p.parse_args();saved=json.loads(a.evidence.read_text());runs=saved['runs']
-    assert len(runs)==6 and all(r['functional_pass'] and r['resources_clean'] for r in runs)
+    assert runs and all(r['functional_pass'] and r['resources_clean'] for r in runs)
     root=Path(__file__).resolve().parents[1]
     baseline=json.loads((root/'runtime/v3-reproduce/company_gpu_baseline.json').read_text())['nodes']
     s=Session.__new__(Session);s.root=root;s._sudo_password=None
@@ -33,7 +33,7 @@ active=subprocess.check_output(['systemctl','list-units','--no-legend','--plain'
 assert not active,'active SHIFT units'
 for p in Path('/proc').iterdir():
  if not p.name.isdigit():continue
- try:args=(p/'cmdline').read_bytes().decode(errors='replace').split('\\0')
+ try:args=(p/'cmdline').read_bytes().decode(errors='replace').split(chr(0))
  except OSError:continue
  assert not any(x.startswith('shift_full.') for x in args),'SHIFT worker remains'
 ledger=r/'results/v1_acceptance_20261103/formal_injection_ledger.json'

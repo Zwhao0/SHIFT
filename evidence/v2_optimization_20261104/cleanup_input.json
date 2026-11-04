@@ -1,0 +1,34 @@
+{
+  "runs": [
+    {
+      "name": "v2_q2_v2b0",
+      "functional_pass": true,
+      "resources_clean": true
+    },
+    {
+      "name": "v2_q2_v2n0",
+      "functional_pass": true,
+      "resources_clean": true
+    },
+    {
+      "name": "v2_q2_v2p0",
+      "functional_pass": true,
+      "resources_clean": true
+    },
+    {
+      "name": "v2_q2_v2r0",
+      "functional_pass": true,
+      "resources_clean": true
+    },
+    {
+      "name": "v2_q2_v2r1",
+      "functional_pass": true,
+      "resources_clean": true
+    },
+    {
+      "name": "v1_quick_20261104_v2reg1",
+      "functional_pass": true,
+      "resources_clean": true
+    }
+  ]
+}

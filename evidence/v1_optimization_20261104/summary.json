@@ -1,0 +1,3769 @@
+{
+  "schema": 1,
+  "runs": [
+    {
+      "name": "v1_quick_20261104_o1_b30",
+      "type": "v1",
+      "functional_pass": true,
+      "resources_clean": true,
+      "requested_trigger": 10,
+      "actual_cut_or_restore_step": 10,
+      "first_joint_step": 12,
+      "goal": 17,
+      "request_to_first_joint_observed_seconds": 39.033824348822236,
+      "controller_stage_seconds": [
+        {
+          "start": "kill_marker_request",
+          "end": "kill_ack_observed",
+          "seconds": 1.59239719575271
+        },
+        {
+          "start": "kill_ack_observed",
+          "end": "old_cleanup_observed",
+          "seconds": 0.94007751904428
+        },
+        {
+          "start": "old_cleanup_observed",
+          "end": "replacement_ready_observed",
+          "seconds": 11.817406196147203
+        },
+        {
+          "start": "replacement_ready_observed",
+          "end": "restored_observed",
+          "seconds": 22.633737433701754
+        },
+        {
+          "start": "restored_observed",
+          "end": "first_joint_observed",
+          "seconds": 2.050206004176289
+        }
+      ],
+      "local_stage_duration_statistics": {
+        "initial/reconfigure_end/seconds": {
+          "n": 24,
+          "mean": 0.30671230775866815,
+          "median": 0.16442052071215585,
+          "min": 0.12495110498275608,
+          "max": 1.3166509210132062
+        },
+        "initial/transport_send/seconds": {
+          "n": 8,
+          "mean": 0.14348501578206196,
+          "median": 0.14454733836464584,
+          "min": 0.12701727403327823,
+          "max": 0.15682522486895323
+        },
+        "replacement/adapter_imports": {
+          "n": 8,
+          "mean": 0.001422288827598095,
+          "median": 0.001435801386833191,
+          "min": 0.0013071820139884949,
+          "max": 0.0014735329896211624
+        },
+        "replacement/cuda_ddp_optimizer": {
+          "n": 8,
+          "mean": 0.08489465527236462,
+          "median": 0.08355839003343135,
+          "min": 0.08034624601714313,
+          "max": 0.09164382703602314
+        },
+        "replacement/default_process_group": {
+          "n": 8,
+          "mean": 0.00493159715551883,
+          "median": 0.00500058603938669,
+          "min": 0.004479764029383659,
+          "max": 0.005181997083127499
+        },
+        "replacement/full_model_load": {
+          "n": 8,
+          "mean": 1.3518064111995045,
+          "median": 1.3367929621599615,
+          "min": 1.2996134739369154,
+          "max": 1.435091172112152
+        },
+        "replacement/initial_audit": {
+          "n": 8,
+          "mean": 0.3936376750061754,
+          "median": 0.391860036412254,
+          "min": 0.3816762419883162,
+          "max": 0.40329970396123827
+        },
+        "replacement/manager_init": {
+          "n": 8,
+          "mean": 0.05545199802145362,
+          "median": 0.06355174502823502,
+          "min": 0.005706470925360918,
+          "max": 0.10121027403511107
+        },
+        "replacement/megatron_imports": {
+          "n": 8,
+          "mean": 1.806004255748121,
+          "median": 1.810607694555074,
+          "min": 1.7498132470063865,
+          "max": 1.842131364857778
+        },
+        "replacement/model_partition": {
+          "n": 8,
+          "mean": 0.17502123676240444,
+          "median": 0.17539316648617387,
+          "min": 0.1726597601082176,
+          "max": 0.17849291488528252
+        },
+        "replacement/parallel_groups": {
+          "n": 8,
+          "mean": 2.7317951687437017,
+          "median": 2.660766027518548,
+          "min": 2.6314642829820514,
+          "max": 3.2422174050007015
+        },
+        "replacement/python_imports": {
+          "n": 8,
+          "mean": 0.18156608403660357,
+          "median": 0.18167941004503518,
+          "min": 0.1723061460070312,
+          "max": 0.18789544701576233
+        },
+        "replacement/reconfigure_end/seconds": {
+          "n": 8,
+          "mean": 0.6664291050983593,
+          "median": 0.5582005784381181,
+          "min": 0.2529715260025114,
+          "max": 1.3164515760727227
+        },
+        "replacement/restored/audit_seconds": {
+          "n": 8,
+          "mean": 1.150652169890236,
+          "median": 1.1491900669643655,
+          "min": 1.1168145870324224,
+          "max": 1.1930522350594401
+        },
+        "replacement/restored/load_seconds": {
+          "n": 8,
+          "mean": 0.025655720732174814,
+          "median": 0.025749253924004734,
+          "min": 0.023094251984730363,
+          "max": 0.02882137894630432
+        },
+        "replacement/runtime_cuda_setup": {
+          "n": 8,
+          "mean": 0.0001931954175233841,
+          "median": 0.00019204989075660706,
+          "min": 0.0001693300437182188,
+          "max": 0.00021152407862246037
+        },
+        "replacement/state_loaded/load_seconds": {
+          "n": 8,
+          "mean": 0.025655720732174814,
+          "median": 0.025749253924004734,
+          "min": 0.023094251984730363,
+          "max": 0.02882137894630432
+        },
+        "replacement/transport_recv/seconds": {
+          "n": 8,
+          "mean": 2.1177005211357027,
+          "median": 2.1809127734741196,
+          "min": 1.8186645910609514,
+          "max": 2.376582593191415
+        }
+      },
+      "local_stage_note": "Worker-local durations can overlap; extrema across ranks are not additive controller phases.",
+      "step_statistics": {
+        "startup_steps_1_2": {
+          "worker_seconds": {
+            "n": 32,
+            "mean": 10.851431102637434,
+            "median": 10.84765233611688,
+            "min": 6.79748323909007,
+            "max": 14.894682141952217
+          },
+          "worker_commit_intervals": {
+            "n": 16,
+            "mean": 6.890062224803842,
+            "median": 6.901725943549536,
+            "min": 6.7977756439941,
+            "max": 6.950534190051258
+          },
+          "max_worker_seconds_by_step": {
+            "1": 14.894682141952217,
+            "2": 6.949691588059068
+          },
+          "max_worker_seconds": {
+            "n": 2,
+            "mean": 10.922186865005642,
+            "median": 10.922186865005642,
+            "min": 6.949691588059068,
+            "max": 14.894682141952217
+          },
+          "worker_samples_per_step": {
+            "1": 16,
+            "2": 16
+          }
+        },
+        "warm_before_request": {
+          "worker_seconds": {
+            "n": 128,
+            "mean": 7.130422009521681,
+            "median": 7.056685351068154,
+            "min": 3.6530682879965752,
+            "max": 11.898840871173888
+          },
+          "worker_commit_intervals": {
+            "n": 128,
+            "mean": 7.130746703406658,
+            "median": 7.056965204072185,
+            "min": 3.653630494954996,
+            "max": 11.898806613869965
+          },
+          "max_worker_seconds_by_step": {
+            "3": 7.012488740961999,
+            "4": 11.898840871173888,
+            "5": 7.254037323989905,
+            "6": 3.827799136284739,
+            "7": 8.181992976926267,
+            "8": 4.619374293019064,
+            "9": 10.187779164989479,
+            "10": 4.518271930981427
+          },
+          "max_worker_seconds": {
+            "n": 8,
+            "mean": 7.187573054790846,
+            "median": 7.133263032475952,
+            "min": 3.827799136284739,
+            "max": 11.898840871173888
+          },
+          "worker_samples_per_step": {
+            "3": 16,
+            "4": 16,
+            "5": 16,
+            "6": 16,
+            "7": 16,
+            "8": 16,
+            "9": 16,
+            "10": 16
+          }
+        },
+        "request_to_cut_training": {
+          "worker_seconds": {
+            "n": 0
+          },
+          "worker_commit_intervals": {
+            "n": 0
+          },
+          "max_worker_seconds_by_step": {},
+          "max_worker_seconds": {
+            "n": 0
+          },
+          "worker_samples_per_step": {}
+        },
+        "first_recovered_step": {
+          "worker_seconds": {
+            "n": 16,
+            "mean": 2.796484020756907,
+            "median": 2.787503176019527,
+            "min": 2.145677517866716,
+            "max": 3.463323439937085
+          },
+          "worker_commit_intervals": {
+            "n": 16,
+            "mean": 2.79676535105682,
+            "median": 2.787891858140938,
+            "min": 2.1458172919228673,
+            "max": 3.4635451869107783
+          },
+          "max_worker_seconds_by_step": {
+            "12": 3.463323439937085
+          },
+          "max_worker_seconds": {
+            "n": 1,
+            "mean": 3.463323439937085,
+            "median": 3.463323439937085,
+            "min": 3.463323439937085,
+            "max": 3.463323439937085
+          },
+          "worker_samples_per_step": {
+            "12": 16
+          }
+        },
+        "subsequent_recovered_steps": {
+          "worker_seconds": {
+            "n": 80,
+            "mean": 0.8625115422473755,
+            "median": 0.8167501538991928,
+            "min": 0.7938557020388544,
+            "max": 1.1030651018954813
+          },
+          "worker_commit_intervals": {
+            "n": 80,
+            "mean": 0.8627056939789327,
+            "median": 0.81693448824808,
+            "min": 0.7941019618883729,
+            "max": 1.1032825009897351
+          },
+          "max_worker_seconds_by_step": {
+            "13": 1.1030651018954813,
+            "14": 0.8464559519197792,
+            "15": 0.8234714649152011,
+            "16": 0.8085933891125023,
+            "17": 0.8260449070949107
+          },
+          "max_worker_seconds": {
+            "n": 5,
+            "mean": 0.8815261629875749,
+            "median": 0.8260449070949107,
+            "min": 0.8085933891125023,
+            "max": 1.1030651018954813
+          },
+          "worker_samples_per_step": {
+            "13": 16,
+            "14": 16,
+            "15": 16,
+            "16": 16,
+            "17": 16
+          }
+        },
+        "healthy_solo_during_recovery": {
+          "worker_seconds": {
+            "n": 16,
+            "mean": 12.695203322378802,
+            "median": 12.693730773520656,
+            "min": 3.49232066096738,
+            "max": 21.89796903496608
+          },
+          "worker_commit_intervals": {
+            "n": 8,
+            "mean": 36.2366041020141,
+            "median": 36.22846101899631,
+            "min": 36.21942448616028,
+            "max": 36.2614631219767
+          },
+          "max_worker_seconds_by_step": {
+            "11": 21.89796903496608
+          },
+          "max_worker_seconds": {
+            "n": 1,
+            "mean": 21.89796903496608,
+            "median": 21.89796903496608,
+            "min": 21.89796903496608,
+            "max": 21.89796903496608
+          },
+          "worker_samples_per_step": {
+            "11": 16
+          }
+        }
+      },
+      "evidence_file": "o1_b30_timing.json",
+      "evidence_sha256": "3ded9b73d555bf52d87671eebd3684737dda19d96965ef42089f1740abb7fe30",
+      "limitations": [
+        "Cold spare; healthy replica can commit solo during recovery.",
+        "Only first joint commit has nine-state hash audit; five post-recovery commits checked.",
+        "Controller observation includes polling/SSH; wrapper import precedes train import phase."
+      ],
+      "v1_details": {
+        "local_spans": {
+          "recv_to_load_callback": {
+            "n": 8,
+            "min": 0.10818693204782903,
+            "mean": 0.319506554515101,
+            "max": 0.9868417200632393
+          },
+          "recv_to_loaded": {
+            "n": 8,
+            "min": 0.1346896889153868,
+            "mean": 0.3451623891305644,
+            "max": 1.0099628039170057
+          },
+          "ready_to_restored": {
+            "n": 8,
+            "min": 21.702603704994544,
+            "mean": 21.983114666771144,
+            "max": 22.404497934971005
+          }
+        },
+        "donor_commit_gap_to_first_joint": {
+          "n": 8,
+          "min": 3.389790965244174,
+          "mean": 3.429932366590947,
+          "max": 3.4635451869107783
+        },
+        "controls": {
+          "seed": 1182328,
+          "trigger": 10,
+          "post_steps": 6,
+          "communication_timeout": 30.0,
+          "cold_launcher": false,
+          "digest_engine": null,
+          "overlap_cpu_model_load": null,
+          "recovery_gradient_only": null,
+          "overlap_cold_cleanup": null
+        }
+      }
+    },
+    {
+      "name": "v1_quick_20261104_o1_cleanbase",
+      "type": "v1",
+      "functional_pass": true,
+      "resources_clean": true,
+      "requested_trigger": 10,
+      "actual_cut_or_restore_step": 25,
+      "first_joint_step": 26,
+      "goal": 31,
+      "request_to_first_joint_observed_seconds": 25.11563945421949,
+      "controller_stage_seconds": [
+        {
+          "start": "kill_marker_request",
+          "end": "kill_ack_observed",
+          "seconds": 1.6013649431988597
+        },
+        {
+          "start": "kill_ack_observed",
+          "end": "old_cleanup_observed",
+          "seconds": 0.9212858057580888
+        },
+        {
+          "start": "old_cleanup_observed",
+          "end": "replacement_ready_observed",
+          "seconds": 10.582139401230961
+        },
+        {
+          "start": "replacement_ready_observed",
+          "end": "restored_observed",
+          "seconds": 9.30592809105292
+        },
+        {
+          "start": "restored_observed",
+          "end": "first_joint_observed",
+          "seconds": 2.704921212978661
+        }
+      ],
+      "local_stage_duration_statistics": {
+        "initial/reconfigure_end/seconds": {
+          "n": 40,
+          "mean": 0.3288577552855713,
+          "median": 0.20602843258529902,
+          "min": 0.1047042969148606,
+          "max": 0.9577263430692255
+        },
+        "initial/transport_send/seconds": {
+          "n": 8,
+          "mean": 0.14223363006021827,
+          "median": 0.14165808004327118,
+          "min": 0.12642316287383437,
+          "max": 0.15529495012015104
+        },
+        "replacement/adapter_imports": {
+          "n": 8,
+          "mean": 0.0014249905943870544,
+          "median": 0.0014358579646795988,
+          "min": 0.0013403298798948526,
+          "max": 0.0014709050301462412
+        },
+        "replacement/cuda_ddp_optimizer": {
+          "n": 8,
+          "mean": 0.08979299970087595,
+          "median": 0.08762491005472839,
+          "min": 0.08509392105042934,
+          "max": 0.09950799611397088
+        },
+        "replacement/default_process_group": {
+          "n": 8,
+          "mean": 0.005191983334952965,
+          "median": 0.005129940458573401,
+          "min": 0.004760012961924076,
+          "max": 0.005877540912479162
+        },
+        "replacement/full_model_load": {
+          "n": 8,
+          "mean": 1.3115280736237764,
+          "median": 1.3176173811079934,
+          "min": 1.2533743989188224,
+          "max": 1.348486197879538
+        },
+        "replacement/initial_audit": {
+          "n": 8,
+          "mean": 0.3904613859485835,
+          "median": 0.3902466893196106,
+          "min": 0.38789744302630424,
+          "max": 0.3930936739780009
+        },
+        "replacement/manager_init": {
+          "n": 8,
+          "mean": 0.02612338087055832,
+          "median": 0.01308866951148957,
+          "min": 0.0056621599942445755,
+          "max": 0.09275935497134924
+        },
+        "replacement/megatron_imports": {
+          "n": 8,
+          "mean": 1.8044799215276726,
+          "median": 1.8096758760511875,
+          "min": 1.7480637889821082,
+          "max": 1.85194407007657
+        },
+        "replacement/model_partition": {
+          "n": 8,
+          "mean": 0.1731428024941124,
+          "median": 0.17491553095169365,
+          "min": 0.16569804097525775,
+          "max": 0.17677317094057798
+        },
+        "replacement/parallel_groups": {
+          "n": 8,
+          "mean": 1.8467439179948997,
+          "median": 1.7716695799026638,
+          "min": 1.7193707269616425,
+          "max": 2.3427430300507694
+        },
+        "replacement/python_imports": {
+          "n": 8,
+          "mean": 0.1848595394694712,
+          "median": 0.18740629602689296,
+          "min": 0.16535627702251077,
+          "max": 0.19517952296882868
+        },
+        "replacement/reconfigure_end/seconds": {
+          "n": 16,
+          "mean": 0.44397893868153915,
+          "median": 0.37709166191052645,
+          "min": 0.09795371210202575,
+          "max": 0.9611651909071952
+        },
+        "replacement/restored/audit_seconds": {
+          "n": 8,
+          "mean": 1.1592136952385772,
+          "median": 1.1579797085141763,
+          "min": 1.1550713549368083,
+          "max": 1.1658191659953445
+        },
+        "replacement/restored/load_seconds": {
+          "n": 8,
+          "mean": 0.02674377671792172,
+          "median": 0.02674468990880996,
+          "min": 0.02383480593562126,
+          "max": 0.03062920505180955
+        },
+        "replacement/runtime_cuda_setup": {
+          "n": 8,
+          "mean": 0.00019420019816607237,
+          "median": 0.00019391195382922888,
+          "min": 0.00016944203525781631,
+          "max": 0.00021404307335615158
+        },
+        "replacement/state_loaded/load_seconds": {
+          "n": 8,
+          "mean": 0.02674377671792172,
+          "median": 0.02674468990880996,
+          "min": 0.02383480593562126,
+          "max": 0.03062920505180955
+        },
+        "replacement/transport_recv/seconds": {
+          "n": 8,
+          "mean": 1.7131644430046435,
+          "median": 1.709252009051852,
+          "min": 1.6879059050697833,
+          "max": 1.7333214189857244
+        }
+      },
+      "local_stage_note": "Worker-local durations can overlap; extrema across ranks are not additive controller phases.",
+      "step_statistics": {
+        "startup_steps_1_2": {
+          "worker_seconds": {
+            "n": 32,
+            "mean": 3.2351024165218405,
+            "median": 3.22827304713428,
+            "min": 0.9285167510388419,
+            "max": 5.568496503983624
+          },
+          "worker_commit_intervals": {
+            "n": 16,
+            "mean": 0.9613506860696361,
+            "median": 0.9612415060400963,
+            "min": 0.9303998750401661,
+            "max": 1.013130018953234
+          },
+          "max_worker_seconds_by_step": {
+            "1": 5.568496503983624,
+            "2": 1.0142729440703988
+          },
+          "max_worker_seconds": {
+            "n": 2,
+            "mean": 3.2913847240270115,
+            "median": 3.2913847240270115,
+            "min": 1.0142729440703988,
+            "max": 5.568496503983624
+          },
+          "worker_samples_per_step": {
+            "1": 16,
+            "2": 16
+          }
+        },
+        "warm_before_request": {
+          "worker_seconds": {
+            "n": 128,
+            "mean": 0.8393287955859705,
+            "median": 0.8323417331557721,
+            "min": 0.7656200820347294,
+            "max": 0.9373407070524991
+          },
+          "worker_commit_intervals": {
+            "n": 128,
+            "mean": 0.839554620072704,
+            "median": 0.8325460106134415,
+            "min": 0.7657765160547569,
+            "max": 0.9374761210056022
+          },
+          "max_worker_seconds_by_step": {
+            "3": 0.9373407070524991,
+            "4": 0.8714640247635543,
+            "5": 0.915093929041177,
+            "6": 0.8389550680294633,
+            "7": 0.8440580610185862,
+            "8": 0.821775842923671,
+            "9": 0.7899853489361703,
+            "10": 0.7885313392616808
+          },
+          "max_worker_seconds": {
+            "n": 8,
+            "mean": 0.8509005401283503,
+            "median": 0.8415065645240247,
+            "min": 0.7885313392616808,
+            "max": 0.9373407070524991
+          },
+          "worker_samples_per_step": {
+            "3": 16,
+            "4": 16,
+            "5": 16,
+            "6": 16,
+            "7": 16,
+            "8": 16,
+            "9": 16,
+            "10": 16
+          }
+        },
+        "request_to_cut_training": {
+          "worker_seconds": {
+            "n": 16,
+            "mean": 0.7778620093595237,
+            "median": 0.7797216940089129,
+            "min": 0.7668467303737998,
+            "max": 0.7908095638267696
+          },
+          "worker_commit_intervals": {
+            "n": 16,
+            "mean": 0.7780778171727434,
+            "median": 0.7799110431806184,
+            "min": 0.7669872269034386,
+            "max": 0.7908459743484855
+          },
+          "max_worker_seconds_by_step": {
+            "11": 0.7908095638267696
+          },
+          "max_worker_seconds": {
+            "n": 1,
+            "mean": 0.7908095638267696,
+            "median": 0.7908095638267696,
+            "min": 0.7908095638267696,
+            "max": 0.7908095638267696
+          },
+          "worker_samples_per_step": {
+            "11": 16
+          }
+        },
+        "first_recovered_step": {
+          "worker_seconds": {
+            "n": 16,
+            "mean": 4.2093586270930246,
+            "median": 4.210512385587208,
+            "min": 2.235208459896967,
+            "max": 6.1804290120489895
+          },
+          "worker_commit_intervals": {
+            "n": 8,
+            "mean": 10.894119663280435,
+            "median": 10.8937144537922,
+            "min": 10.868338842876256,
+            "max": 10.91424631793052
+          },
+          "max_worker_seconds_by_step": {
+            "26": 6.1804290120489895
+          },
+          "max_worker_seconds": {
+            "n": 1,
+            "mean": 6.1804290120489895,
+            "median": 6.1804290120489895,
+            "min": 6.1804290120489895,
+            "max": 6.1804290120489895
+          },
+          "worker_samples_per_step": {
+            "26": 16
+          }
+        },
+        "subsequent_recovered_steps": {
+          "worker_seconds": {
+            "n": 80,
+            "mean": 0.8180443797376938,
+            "median": 0.801111918175593,
+            "min": 0.7615533310454339,
+            "max": 0.95267676981166
+          },
+          "worker_commit_intervals": {
+            "n": 80,
+            "mean": 0.8182972648355644,
+            "median": 0.8013311366084963,
+            "min": 0.7617509909905493,
+            "max": 0.9529462400823832
+          },
+          "max_worker_seconds_by_step": {
+            "27": 0.95267676981166,
+            "28": 0.841113809030503,
+            "29": 0.813508803024888,
+            "30": 0.7881516648922116,
+            "31": 0.7722241838928312
+          },
+          "max_worker_seconds": {
+            "n": 5,
+            "mean": 0.8335350461304187,
+            "median": 0.813508803024888,
+            "min": 0.7722241838928312,
+            "max": 0.95267676981166
+          },
+          "worker_samples_per_step": {
+            "27": 16,
+            "28": 16,
+            "29": 16,
+            "30": 16,
+            "31": 16
+          }
+        },
+        "healthy_solo_during_recovery": {
+          "worker_seconds": {
+            "n": 112,
+            "mean": 0.7832323405060119,
+            "median": 0.7588863188866526,
+            "min": 0.6955060209147632,
+            "max": 0.9664394133724272
+          },
+          "worker_commit_intervals": {
+            "n": 112,
+            "mean": 0.9807550259782667,
+            "median": 0.759054443333298,
+            "min": 0.69563107797876,
+            "max": 3.6470104102045298
+          },
+          "max_worker_seconds_by_step": {
+            "12": 0.8826915118843317,
+            "13": 0.8333972077816725,
+            "14": 0.7460688697174191,
+            "15": 0.7480753711424768,
+            "16": 0.7669680737890303,
+            "17": 0.7935244701802731,
+            "18": 0.8543511619791389,
+            "19": 0.8485202342271805,
+            "20": 0.7715812330134213,
+            "21": 0.7584782848134637,
+            "22": 0.9664394133724272,
+            "23": 0.72523496998474,
+            "24": 0.7343603959307075,
+            "25": 0.727352999150753
+          },
+          "max_worker_seconds": {
+            "n": 14,
+            "mean": 0.7969317283547882,
+            "median": 0.7692746534012258,
+            "min": 0.72523496998474,
+            "max": 0.9664394133724272
+          },
+          "worker_samples_per_step": {
+            "12": 8,
+            "13": 8,
+            "14": 8,
+            "15": 8,
+            "16": 8,
+            "17": 8,
+            "18": 8,
+            "19": 8,
+            "20": 8,
+            "21": 8,
+            "22": 8,
+            "23": 8,
+            "24": 8,
+            "25": 8
+          }
+        }
+      },
+      "evidence_file": "o1_cleanbase_timing.json",
+      "evidence_sha256": "a62f21c4e146deecda18c1213de1147352a387c6ad6a9084875591104a7d89d8",
+      "limitations": [
+        "Cold spare; healthy replica can commit solo during recovery.",
+        "Only first joint commit has nine-state hash audit; five post-recovery commits checked.",
+        "Controller observation includes polling/SSH; wrapper import precedes train import phase."
+      ],
+      "v1_details": {
+        "local_spans": {
+          "recv_to_load_callback": {
+            "n": 8,
+            "min": 4.814751442056149,
+            "mean": 4.968919739709236,
+            "max": 5.106918508885428
+          },
+          "recv_to_loaded": {
+            "n": 8,
+            "min": 4.842378142056987,
+            "mean": 4.995662051747786,
+            "max": 5.135161771904677
+          },
+          "ready_to_restored": {
+            "n": 8,
+            "min": 9.464692099951208,
+            "mean": 9.485501540504629,
+            "max": 9.496906358050182
+          }
+        },
+        "donor_commit_gap_to_first_joint": {
+          "n": 8,
+          "min": 10.868338842876256,
+          "mean": 10.894119663280435,
+          "max": 10.91424631793052
+        },
+        "controls": {
+          "seed": 1182328,
+          "trigger": 10,
+          "post_steps": 6,
+          "communication_timeout": 2,
+          "cold_launcher": false,
+          "digest_engine": "reference",
+          "overlap_cpu_model_load": "0",
+          "recovery_gradient_only": null,
+          "overlap_cold_cleanup": null
+        }
+      }
+    },
+    {
+      "name": "v1_quick_20261104_o1_final0",
+      "type": "v1",
+      "functional_pass": true,
+      "resources_clean": true,
+      "requested_trigger": 10,
+      "actual_cut_or_restore_step": 23,
+      "first_joint_step": 24,
+      "goal": 29,
+      "request_to_first_joint_observed_seconds": 21.263727648649365,
+      "controller_stage_seconds": [
+        {
+          "start": "kill_marker_request",
+          "end": "kill_ack_observed",
+          "seconds": 1.5898385769687593
+        },
+        {
+          "start": "kill_ack_observed",
+          "end": "old_cleanup_observed",
+          "seconds": 0.9326603431254625
+        },
+        {
+          "start": "old_cleanup_observed",
+          "end": "replacement_ready_observed",
+          "seconds": 8.02179925981909
+        },
+        {
+          "start": "replacement_ready_observed",
+          "end": "restored_observed",
+          "seconds": 8.658047955017537
+        },
+        {
+          "start": "restored_observed",
+          "end": "first_joint_observed",
+          "seconds": 2.0613815137185156
+        }
+      ],
+      "local_stage_duration_statistics": {
+        "initial/reconfigure_end/seconds": {
+          "n": 40,
+          "mean": 0.33422796869708693,
+          "median": 0.2169909467920661,
+          "min": 0.10693500796332955,
+          "max": 0.8026300109922886
+        },
+        "initial/transport_send/seconds": {
+          "n": 8,
+          "mean": 0.19667182315606624,
+          "median": 0.14981333049945533,
+          "min": 0.13366756681352854,
+          "max": 0.3644570140168071
+        },
+        "replacement/adapter_imports": {
+          "n": 8,
+          "mean": 0.002069324749754742,
+          "median": 0.001432072021998465,
+          "min": 0.0014196459669619799,
+          "max": 0.004795887973159552
+        },
+        "replacement/cuda_ddp_optimizer": {
+          "n": 8,
+          "mean": 0.09584905096562579,
+          "median": 0.0955323469825089,
+          "min": 0.09230417385697365,
+          "max": 0.09962747595272958
+        },
+        "replacement/default_process_group": {
+          "n": 8,
+          "mean": 0.14771869199466892,
+          "median": 0.005982782575301826,
+          "min": 0.004354123026132584,
+          "max": 0.7774262698367238
+        },
+        "replacement/full_model_load": {
+          "n": 8,
+          "mean": 9.804504225030541e-05,
+          "median": 7.51010375097394e-05,
+          "min": 6.905896589159966e-05,
+          "max": 0.00020824908278882504
+        },
+        "replacement/initial_audit": {
+          "n": 8,
+          "mean": 0.2466085054911673,
+          "median": 0.2466767249861732,
+          "min": 0.24302088283002377,
+          "max": 0.2501349349040538
+        },
+        "replacement/manager_init": {
+          "n": 8,
+          "mean": 0.008981812628917396,
+          "median": 0.009144026902504265,
+          "min": 0.007341743912547827,
+          "max": 0.010813690954819322
+        },
+        "replacement/megatron_imports": {
+          "n": 8,
+          "mean": 1.8262287804973312,
+          "median": 1.8081839085789397,
+          "min": 1.8010155640076846,
+          "max": 1.9235358159057796
+        },
+        "replacement/model_partition": {
+          "n": 8,
+          "mean": 0.174247199553065,
+          "median": 0.17420513811521232,
+          "min": 0.17337486799806356,
+          "max": 0.1752550289966166
+        },
+        "replacement/parallel_groups": {
+          "n": 8,
+          "mean": 2.088923931005411,
+          "median": 2.1863276085350662,
+          "min": 1.7447779059875757,
+          "max": 2.201025024987757
+        },
+        "replacement/python_imports": {
+          "n": 8,
+          "mean": 0.18901313614333048,
+          "median": 0.19179598661139607,
+          "min": 0.17829332710243762,
+          "max": 0.1940447399392724
+        },
+        "replacement/reconfigure_end/seconds": {
+          "n": 16,
+          "mean": 0.4290655749209691,
+          "median": 0.38452552049420774,
+          "min": 0.08154827682301402,
+          "max": 0.8097414090298116
+        },
+        "replacement/restored/audit_seconds": {
+          "n": 8,
+          "mean": 0.5910427652706858,
+          "median": 0.5960229879710823,
+          "min": 0.5704080741852522,
+          "max": 0.606307968031615
+        },
+        "replacement/restored/load_seconds": {
+          "n": 8,
+          "mean": 0.025881230627419427,
+          "median": 0.026370833511464298,
+          "min": 0.02330644684843719,
+          "max": 0.028901172801852226
+        },
+        "replacement/runtime_cuda_setup": {
+          "n": 8,
+          "mean": 0.0001902194053400308,
+          "median": 0.00018947641365230083,
+          "min": 0.00016645900905132294,
+          "max": 0.00021260813809931278
+        },
+        "replacement/state_loaded/load_seconds": {
+          "n": 8,
+          "mean": 0.025881230627419427,
+          "median": 0.026370833511464298,
+          "min": 0.02330644684843719,
+          "max": 0.028901172801852226
+        },
+        "replacement/transport_recv/seconds": {
+          "n": 8,
+          "mean": 1.031263773824321,
+          "median": 1.007289205561392,
+          "min": 0.9276972310617566,
+          "max": 1.2199675010051578
+        }
+      },
+      "local_stage_note": "Worker-local durations can overlap; extrema across ranks are not additive controller phases.",
+      "step_statistics": {
+        "startup_steps_1_2": {
+          "worker_seconds": {
+            "n": 32,
+            "mean": 3.2955476326060307,
+            "median": 3.248480825452134,
+            "min": 1.0023171519860625,
+            "max": 5.628272862988524
+          },
+          "worker_commit_intervals": {
+            "n": 16,
+            "mean": 1.033679321721138,
+            "median": 1.0375894120079465,
+            "min": 1.0040775509551167,
+            "max": 1.0565523230470717
+          },
+          "max_worker_seconds_by_step": {
+            "1": 5.628272862988524,
+            "2": 1.0562552041374147
+          },
+          "max_worker_seconds": {
+            "n": 2,
+            "mean": 3.3422640335629694,
+            "median": 3.3422640335629694,
+            "min": 1.0562552041374147,
+            "max": 5.628272862988524
+          },
+          "worker_samples_per_step": {
+            "1": 16,
+            "2": 16
+          }
+        },
+        "warm_before_request": {
+          "worker_seconds": {
+            "n": 128,
+            "mean": 0.8232992264265704,
+            "median": 0.8298800531774759,
+            "min": 0.7508770729182288,
+            "max": 0.9297477309592068
+          },
+          "worker_commit_intervals": {
+            "n": 128,
+            "mean": 0.8235018042396405,
+            "median": 0.8302815984934568,
+            "min": 0.7514173260424286,
+            "max": 0.9298369279131293
+          },
+          "max_worker_seconds_by_step": {
+            "3": 0.8895674759987742,
+            "4": 0.84743413887918,
+            "5": 0.9297477309592068,
+            "6": 0.8627709788270295,
+            "7": 0.8379421000136063,
+            "8": 0.7816206030547619,
+            "9": 0.7717810409376398,
+            "10": 0.7758914860896766
+          },
+          "max_worker_seconds": {
+            "n": 8,
+            "mean": 0.8370944443449844,
+            "median": 0.8426881194463931,
+            "min": 0.7717810409376398,
+            "max": 0.9297477309592068
+          },
+          "worker_samples_per_step": {
+            "3": 16,
+            "4": 16,
+            "5": 16,
+            "6": 16,
+            "7": 16,
+            "8": 16,
+            "9": 16,
+            "10": 16
+          }
+        },
+        "request_to_cut_training": {
+          "worker_seconds": {
+            "n": 16,
+            "mean": 0.7491083370114211,
+            "median": 0.7484323314856738,
+            "min": 0.735762313939631,
+            "max": 0.7584608462639153
+          },
+          "worker_commit_intervals": {
+            "n": 16,
+            "mean": 0.7493066647075466,
+            "median": 0.7486338604940102,
+            "min": 0.7358617871068418,
+            "max": 0.7584555293433368
+          },
+          "max_worker_seconds_by_step": {
+            "11": 0.7584608462639153
+          },
+          "max_worker_seconds": {
+            "n": 1,
+            "mean": 0.7584608462639153,
+            "median": 0.7584608462639153,
+            "min": 0.7584608462639153,
+            "max": 0.7584608462639153
+          },
+          "worker_samples_per_step": {
+            "11": 16
+          }
+        },
+        "first_recovered_step": {
+          "worker_seconds": {
+            "n": 16,
+            "mean": 3.5237449642590946,
+            "median": 3.529410046990961,
+            "min": 1.7625108908396214,
+            "max": 5.282693496439606
+          },
+          "worker_commit_intervals": {
+            "n": 8,
+            "mean": 9.350331076304428,
+            "median": 9.358122358098626,
+            "min": 9.304188692942262,
+            "max": 9.382621513213962
+          },
+          "max_worker_seconds_by_step": {
+            "24": 5.282693496439606
+          },
+          "max_worker_seconds": {
+            "n": 1,
+            "mean": 5.282693496439606,
+            "median": 5.282693496439606,
+            "min": 5.282693496439606,
+            "max": 5.282693496439606
+          },
+          "worker_samples_per_step": {
+            "24": 16
+          }
+        },
+        "subsequent_recovered_steps": {
+          "worker_seconds": {
+            "n": 80,
+            "mean": 0.8918366242491175,
+            "median": 0.8874718334991485,
+            "min": 0.8328290488570929,
+            "max": 0.9817489529959857
+          },
+          "worker_commit_intervals": {
+            "n": 80,
+            "mean": 0.8920450172648998,
+            "median": 0.8876332441577688,
+            "min": 0.8330277376808226,
+            "max": 0.9820063370279968
+          },
+          "max_worker_seconds_by_step": {
+            "25": 0.9817489529959857,
+            "26": 0.9031332680024207,
+            "27": 0.860104062827304,
+            "28": 0.8926011498551816,
+            "29": 0.8825393910519779
+          },
+          "max_worker_seconds": {
+            "n": 5,
+            "mean": 0.9040253649465739,
+            "median": 0.8926011498551816,
+            "min": 0.860104062827304,
+            "max": 0.9817489529959857
+          },
+          "worker_samples_per_step": {
+            "25": 16,
+            "26": 16,
+            "27": 16,
+            "28": 16,
+            "29": 16
+          }
+        },
+        "healthy_solo_during_recovery": {
+          "worker_seconds": {
+            "n": 96,
+            "mean": 0.7530038551970696,
+            "median": 0.7018122028093785,
+            "min": 0.6692588170990348,
+            "max": 1.1408915319480002
+          },
+          "worker_commit_intervals": {
+            "n": 96,
+            "mean": 0.9829165436967742,
+            "median": 0.7020255841780454,
+            "min": 0.669141027610749,
+            "max": 3.596417143009603
+          },
+          "max_worker_seconds_by_step": {
+            "12": 0.8390734409913421,
+            "13": 0.7385477959178388,
+            "14": 0.7192010623402894,
+            "15": 0.7905461229383945,
+            "16": 0.7127377479337156,
+            "17": 0.7158588990569115,
+            "18": 0.6985210459679365,
+            "19": 1.1408915319480002,
+            "20": 0.7029873337596655,
+            "21": 0.697622322011739,
+            "22": 0.7023652498610318,
+            "23": 0.7498323833569884
+          },
+          "max_worker_seconds": {
+            "n": 12,
+            "mean": 0.7673487446736544,
+            "median": 0.7175299806986004,
+            "min": 0.697622322011739,
+            "max": 1.1408915319480002
+          },
+          "worker_samples_per_step": {
+            "12": 8,
+            "13": 8,
+            "14": 8,
+            "15": 8,
+            "16": 8,
+            "17": 8,
+            "18": 8,
+            "19": 8,
+            "20": 8,
+            "21": 8,
+            "22": 8,
+            "23": 8
+          }
+        }
+      },
+      "evidence_file": "o1_final0_timing.json",
+      "evidence_sha256": "123c646ac77e6816dc5fd0cfed8a8bab97d38a334458d2c43cf35ac140664d2d",
+      "limitations": [
+        "Cold spare; healthy replica can commit solo during recovery.",
+        "Only first joint commit has nine-state hash audit; five post-recovery commits checked.",
+        "Controller observation includes polling/SSH; wrapper import precedes train import phase."
+      ],
+      "v1_details": {
+        "local_spans": {
+          "recv_to_load_callback": {
+            "n": 8,
+            "min": 4.883502044016495,
+            "mean": 5.098872630274855,
+            "max": 5.22827391512692
+          },
+          "recv_to_loaded": {
+            "n": 8,
+            "min": 4.907117217080668,
+            "mean": 5.1247523534693755,
+            "max": 5.251580438110977
+          },
+          "ready_to_restored": {
+            "n": 8,
+            "min": 8.582787103950977,
+            "mean": 8.613462341891136,
+            "max": 8.647023973986506
+          }
+        },
+        "donor_commit_gap_to_first_joint": {
+          "n": 8,
+          "min": 9.304188692942262,
+          "mean": 9.350331076304428,
+          "max": 9.382621513213962
+        },
+        "controls": {
+          "seed": 1182328,
+          "trigger": 10,
+          "post_steps": 6,
+          "communication_timeout": 2,
+          "cold_launcher": true,
+          "digest_engine": "staged",
+          "overlap_cpu_model_load": "1",
+          "recovery_gradient_only": null,
+          "overlap_cold_cleanup": null
+        }
+      }
+    },
+    {
+      "name": "v1_quick_20261104_o1_final1",
+      "type": "v1",
+      "functional_pass": true,
+      "resources_clean": true,
+      "requested_trigger": 12,
+      "actual_cut_or_restore_step": 24,
+      "first_joint_step": 25,
+      "goal": 40,
+      "request_to_first_joint_observed_seconds": 20.140665079001337,
+      "controller_stage_seconds": [
+        {
+          "start": "kill_marker_request",
+          "end": "kill_ack_observed",
+          "seconds": 1.5939003038220108
+        },
+        {
+          "start": "kill_ack_observed",
+          "end": "old_cleanup_observed",
+          "seconds": 0.24845572421327233
+        },
+        {
+          "start": "old_cleanup_observed",
+          "end": "replacement_ready_observed",
+          "seconds": 7.699877587147057
+        },
+        {
+          "start": "replacement_ready_observed",
+          "end": "restored_observed",
+          "seconds": 9.089008390903473
+        },
+        {
+          "start": "restored_observed",
+          "end": "first_joint_observed",
+          "seconds": 1.5094230729155242
+        }
+      ],
+      "local_stage_duration_statistics": {
+        "initial/reconfigure_end/seconds": {
+          "n": 40,
+          "mean": 0.33943521144683475,
+          "median": 0.22203968954272568,
+          "min": 0.09060489782132208,
+          "max": 0.6969101000577211
+        },
+        "initial/transport_send/seconds": {
+          "n": 8,
+          "mean": 0.2646503751311684,
+          "median": 0.25993235647911206,
+          "min": 0.13170052005443722,
+          "max": 0.44583392702043056
+        },
+        "replacement/adapter_imports": {
+          "n": 8,
+          "mean": 0.0018548869993537664,
+          "median": 0.0014301708433777094,
+          "min": 0.0014083008281886578,
+          "max": 0.004818943329155445
+        },
+        "replacement/cuda_ddp_optimizer": {
+          "n": 8,
+          "mean": 0.08933828474255279,
+          "median": 0.08931167121045291,
+          "min": 0.08805929170921445,
+          "max": 0.09139643283560872
+        },
+        "replacement/default_process_group": {
+          "n": 8,
+          "mean": 0.01761418260866776,
+          "median": 0.004911754280328751,
+          "min": 0.00482648191973567,
+          "max": 0.10604874975979328
+        },
+        "replacement/full_model_load": {
+          "n": 8,
+          "mean": 9.689939906820655e-05,
+          "median": 8.679600432515144e-05,
+          "min": 8.327607065439224e-05,
+          "max": 0.00015310198068618774
+        },
+        "replacement/initial_audit": {
+          "n": 8,
+          "mean": 0.24732540507102385,
+          "median": 0.24867942743003368,
+          "min": 0.24050494004040956,
+          "max": 0.2504802537150681
+        },
+        "replacement/manager_init": {
+          "n": 8,
+          "mean": 0.05719215580029413,
+          "median": 0.07102295104414225,
+          "min": 0.00594811188057065,
+          "max": 0.07754729734733701
+        },
+        "replacement/megatron_imports": {
+          "n": 8,
+          "mean": 1.8252766742371023,
+          "median": 1.8187119234353304,
+          "min": 1.7799724750220776,
+          "max": 1.8682847321033478
+        },
+        "replacement/model_partition": {
+          "n": 8,
+          "mean": 0.193238127452787,
+          "median": 0.17882553162053227,
+          "min": 0.17294499883428216,
+          "max": 0.24392154719680548
+        },
+        "replacement/parallel_groups": {
+          "n": 8,
+          "mean": 1.789149935299065,
+          "median": 1.784738534130156,
+          "min": 1.7350100371986628,
+          "max": 1.8970304750837386
+        },
+        "replacement/python_imports": {
+          "n": 8,
+          "mean": 0.1922603354905732,
+          "median": 0.19256643787957728,
+          "min": 0.1891064797528088,
+          "max": 0.1948119569569826
+        },
+        "replacement/reconfigure_end/seconds": {
+          "n": 16,
+          "mean": 0.386074323032517,
+          "median": 0.3624105534981936,
+          "min": 0.08797184098511934,
+          "max": 0.7123369378969073
+        },
+        "replacement/restored/audit_seconds": {
+          "n": 8,
+          "mean": 0.5921338612097315,
+          "median": 0.5957762855105102,
+          "min": 0.5719220191240311,
+          "max": 0.6161333434283733
+        },
+        "replacement/restored/load_seconds": {
+          "n": 8,
+          "mean": 0.025720327044837177,
+          "median": 0.025318866595625877,
+          "min": 0.02345946803689003,
+          "max": 0.02844036929309368
+        },
+        "replacement/runtime_cuda_setup": {
+          "n": 8,
+          "mean": 0.00019471149425953627,
+          "median": 0.00019488297402858734,
+          "min": 0.00018391991034150124,
+          "max": 0.00021424703299999237
+        },
+        "replacement/state_loaded/load_seconds": {
+          "n": 8,
+          "mean": 0.025720327044837177,
+          "median": 0.025318866595625877,
+          "min": 0.02345946803689003,
+          "max": 0.02844036929309368
+        },
+        "replacement/transport_recv/seconds": {
+          "n": 8,
+          "mean": 1.139696950733196,
+          "median": 1.1296882710885257,
+          "min": 1.0071905930526555,
+          "max": 1.3133955621160567
+        }
+      },
+      "local_stage_note": "Worker-local durations can overlap; extrema across ranks are not additive controller phases.",
+      "step_statistics": {
+        "startup_steps_1_2": {
+          "worker_seconds": {
+            "n": 32,
+            "mean": 3.3018271861110406,
+            "median": 3.3020746274851263,
+            "min": 0.9585322290658951,
+            "max": 5.644383301958442
+          },
+          "worker_commit_intervals": {
+            "n": 16,
+            "mean": 1.0203010265395278,
+            "median": 1.0288690760498866,
+            "min": 0.9604199829045683,
+            "max": 1.0609634089050815
+          },
+          "max_worker_seconds_by_step": {
+            "1": 5.644383301958442,
+            "2": 1.0606261300854385
+          },
+          "max_worker_seconds": {
+            "n": 2,
+            "mean": 3.35250471602194,
+            "median": 3.35250471602194,
+            "min": 1.0606261300854385,
+            "max": 5.644383301958442
+          },
+          "worker_samples_per_step": {
+            "1": 16,
+            "2": 16
+          }
+        },
+        "warm_before_request": {
+          "worker_seconds": {
+            "n": 160,
+            "mean": 0.7965456486694166,
+            "median": 0.7922794304904528,
+            "min": 0.7321692931000143,
+            "max": 0.8788055470213294
+          },
+          "worker_commit_intervals": {
+            "n": 160,
+            "mean": 0.7967427698560641,
+            "median": 0.7921531314495951,
+            "min": 0.7323428399395198,
+            "max": 0.8787880511954427
+          },
+          "max_worker_seconds_by_step": {
+            "3": 0.8788055470213294,
+            "4": 0.8462437381967902,
+            "5": 0.8272159120533615,
+            "6": 0.8391381569672376,
+            "7": 0.8577713590348139,
+            "8": 0.784160164068453,
+            "9": 0.7685397579334676,
+            "10": 0.7625238370383158,
+            "11": 0.7722907771822065,
+            "12": 0.7609489399474114
+          },
+          "max_worker_seconds": {
+            "n": 10,
+            "mean": 0.8097638189443387,
+            "median": 0.8056880380609073,
+            "min": 0.7609489399474114,
+            "max": 0.8788055470213294
+          },
+          "worker_samples_per_step": {
+            "3": 16,
+            "4": 16,
+            "5": 16,
+            "6": 16,
+            "7": 16,
+            "8": 16,
+            "9": 16,
+            "10": 16,
+            "11": 16,
+            "12": 16
+          }
+        },
+        "request_to_cut_training": {
+          "worker_seconds": {
+            "n": 16,
+            "mean": 0.734696967760101,
+            "median": 0.734729265968781,
+            "min": 0.729170878068544,
+            "max": 0.7426847298629582
+          },
+          "worker_commit_intervals": {
+            "n": 16,
+            "mean": 0.7349487166502513,
+            "median": 0.7350771870696917,
+            "min": 0.7293091089231893,
+            "max": 0.7428797541651875
+          },
+          "max_worker_seconds_by_step": {
+            "13": 0.7426847298629582
+          },
+          "max_worker_seconds": {
+            "n": 1,
+            "mean": 0.7426847298629582,
+            "median": 0.7426847298629582,
+            "min": 0.7426847298629582,
+            "max": 0.7426847298629582
+          },
+          "worker_samples_per_step": {
+            "13": 16
+          }
+        },
+        "first_recovered_step": {
+          "worker_seconds": {
+            "n": 16,
+            "mean": 3.587858201986819,
+            "median": 3.6028797366307117,
+            "min": 1.6824712008237839,
+            "max": 5.484183270018548
+          },
+          "worker_commit_intervals": {
+            "n": 8,
+            "mean": 9.486385550466366,
+            "median": 9.48534309695242,
+            "min": 9.478856715955772,
+            "max": 9.503082972136326
+          },
+          "max_worker_seconds_by_step": {
+            "25": 5.484183270018548
+          },
+          "max_worker_seconds": {
+            "n": 1,
+            "mean": 5.484183270018548,
+            "median": 5.484183270018548,
+            "min": 5.484183270018548,
+            "max": 5.484183270018548
+          },
+          "worker_samples_per_step": {
+            "25": 16
+          }
+        },
+        "subsequent_recovered_steps": {
+          "worker_seconds": {
+            "n": 240,
+            "mean": 0.8109947660317024,
+            "median": 0.8343302764697,
+            "min": 0.7081434638239443,
+            "max": 0.9496055550407618
+          },
+          "worker_commit_intervals": {
+            "n": 240,
+            "mean": 0.8111922443660053,
+            "median": 0.8345776175847277,
+            "min": 0.7082933099009097,
+            "max": 0.9498978632036597
+          },
+          "max_worker_seconds_by_step": {
+            "26": 0.9496055550407618,
+            "27": 0.8645798920188099,
+            "28": 0.8399169412441552,
+            "29": 0.7799264909699559,
+            "30": 0.7908172896131873,
+            "31": 0.7692826020065695,
+            "32": 0.9309952729381621,
+            "33": 0.7486205766908824,
+            "34": 0.8449477809481323,
+            "35": 0.8554761158302426,
+            "36": 0.9238948412239552,
+            "37": 0.8535176599398255,
+            "38": 0.7229530699551105,
+            "39": 0.7226172401569784,
+            "40": 0.7295994898304343
+          },
+          "max_worker_seconds": {
+            "n": 15,
+            "mean": 0.8217833878938109,
+            "median": 0.8399169412441552,
+            "min": 0.7226172401569784,
+            "max": 0.9496055550407618
+          },
+          "worker_samples_per_step": {
+            "26": 16,
+            "27": 16,
+            "28": 16,
+            "29": 16,
+            "30": 16,
+            "31": 16,
+            "32": 16,
+            "33": 16,
+            "34": 16,
+            "35": 16,
+            "36": 16,
+            "37": 16,
+            "38": 16,
+            "39": 16,
+            "40": 16
+          }
+        },
+        "healthy_solo_during_recovery": {
+          "worker_seconds": {
+            "n": 88,
+            "mean": 0.7261974056481532,
+            "median": 0.6910628430196084,
+            "min": 0.6620570590021089,
+            "max": 1.0237732260720804
+          },
+          "worker_commit_intervals": {
+            "n": 88,
+            "mean": 0.9716063741613074,
+            "median": 0.6912446354981512,
+            "min": 0.6621519130421802,
+            "max": 3.4930982780642807
+          },
+          "max_worker_seconds_by_step": {
+            "14": 0.7892444540048018,
+            "15": 0.7197378310374916,
+            "16": 0.7258311819750816,
+            "17": 0.7047551199793816,
+            "18": 1.0237732260720804,
+            "19": 0.6963445500005037,
+            "20": 0.6985622979700565,
+            "21": 0.6988070730585605,
+            "22": 0.6982653180602938,
+            "23": 0.6897110760910437,
+            "24": 0.6723474669270217
+          },
+          "max_worker_seconds": {
+            "n": 11,
+            "mean": 0.7379435995614834,
+            "median": 0.6988070730585605,
+            "min": 0.6723474669270217,
+            "max": 1.0237732260720804
+          },
+          "worker_samples_per_step": {
+            "14": 8,
+            "15": 8,
+            "16": 8,
+            "17": 8,
+            "18": 8,
+            "19": 8,
+            "20": 8,
+            "21": 8,
+            "22": 8,
+            "23": 8,
+            "24": 8
+          }
+        }
+      },
+      "evidence_file": "o1_final1_timing.json",
+      "evidence_sha256": "97cf4ddbaae6601e11db5b7d4a49be1714a7f4799c6603b0ce94dd736b12d385",
+      "limitations": [
+        "Cold spare; healthy replica can commit solo during recovery.",
+        "Only first joint commit has nine-state hash audit; five post-recovery commits checked.",
+        "Controller observation includes polling/SSH; wrapper import precedes train import phase."
+      ],
+      "v1_details": {
+        "local_spans": {
+          "recv_to_load_callback": {
+            "n": 8,
+            "min": 5.191731539089233,
+            "mean": 5.3537874078028835,
+            "max": 5.502182993106544
+          },
+          "recv_to_loaded": {
+            "n": 8,
+            "min": 5.215289803221822,
+            "mean": 5.379506596713327,
+            "max": 5.530619055964053
+          },
+          "ready_to_restored": {
+            "n": 8,
+            "min": 8.63301026262343,
+            "mean": 8.658733863790985,
+            "max": 8.677529447246343
+          }
+        },
+        "donor_commit_gap_to_first_joint": {
+          "n": 8,
+          "min": 9.478856715955772,
+          "mean": 9.486385550466366,
+          "max": 9.503082972136326
+        },
+        "controls": {
+          "seed": 6761565,
+          "trigger": 12,
+          "post_steps": 16,
+          "communication_timeout": 2,
+          "cold_launcher": true,
+          "digest_engine": "staged",
+          "overlap_cpu_model_load": "1",
+          "recovery_gradient_only": null,
+          "overlap_cold_cleanup": null
+        }
+      }
+    },
+    {
+      "name": "v1_quick_20261104_o1_launch",
+      "type": "v1",
+      "functional_pass": true,
+      "resources_clean": true,
+      "requested_trigger": 10,
+      "actual_cut_or_restore_step": 24,
+      "first_joint_step": 25,
+      "goal": 30,
+      "request_to_first_joint_observed_seconds": 24.446238037664443,
+      "controller_stage_seconds": [
+        {
+          "start": "kill_marker_request",
+          "end": "kill_ack_observed",
+          "seconds": 1.6100054988637567
+        },
+        {
+          "start": "kill_ack_observed",
+          "end": "old_cleanup_observed",
+          "seconds": 0.9105478739365935
+        },
+        {
+          "start": "old_cleanup_observed",
+          "end": "replacement_ready_observed",
+          "seconds": 9.917081530205905
+        },
+        {
+          "start": "replacement_ready_observed",
+          "end": "restored_observed",
+          "seconds": 9.308189761824906
+        },
+        {
+          "start": "restored_observed",
+          "end": "first_joint_observed",
+          "seconds": 2.7004133728332818
+        }
+      ],
+      "local_stage_duration_statistics": {
+        "initial/reconfigure_end/seconds": {
+          "n": 40,
+          "mean": 0.3438373443961609,
+          "median": 0.19643509201705456,
+          "min": 0.08810021495446563,
+          "max": 1.0515099922195077
+        },
+        "initial/transport_send/seconds": {
+          "n": 8,
+          "mean": 0.145953931089025,
+          "median": 0.1452808640897274,
+          "min": 0.13626224314793944,
+          "max": 0.1582085620611906
+        },
+        "replacement/adapter_imports": {
+          "n": 8,
+          "mean": 0.002345693006645888,
+          "median": 0.0019083709921687841,
+          "min": 0.0014239600859582424,
+          "max": 0.0048784068785607815
+        },
+        "replacement/cuda_ddp_optimizer": {
+          "n": 8,
+          "mean": 0.08641782330232672,
+          "median": 0.08376971911638975,
+          "min": 0.08283327310346067,
+          "max": 0.09674365306273103
+        },
+        "replacement/default_process_group": {
+          "n": 8,
+          "mean": 0.46160953913931735,
+          "median": 0.5709921920206398,
+          "min": 0.005258720135316253,
+          "max": 0.7463188928086311
+        },
+        "replacement/full_model_load": {
+          "n": 8,
+          "mean": 1.3281506335479207,
+          "median": 1.3052006339421496,
+          "min": 1.2837228800635785,
+          "max": 1.4170044211205095
+        },
+        "replacement/initial_audit": {
+          "n": 8,
+          "mean": 0.3941327969369013,
+          "median": 0.3944102799287066,
+          "min": 0.3829584280028939,
+          "max": 0.4021977228112519
+        },
+        "replacement/manager_init": {
+          "n": 8,
+          "mean": 0.09516502762562595,
+          "median": 0.11666409345343709,
+          "min": 0.011508736060932279,
+          "max": 0.13941962691023946
+        },
+        "replacement/megatron_imports": {
+          "n": 8,
+          "mean": 1.8034654616203625,
+          "median": 1.7882860699901357,
+          "min": 1.752722404897213,
+          "max": 1.93085896410048
+        },
+        "replacement/model_partition": {
+          "n": 8,
+          "mean": 0.17358025116845965,
+          "median": 0.17424694111105055,
+          "min": 0.16891902894712985,
+          "max": 0.17781453486531973
+        },
+        "replacement/parallel_groups": {
+          "n": 8,
+          "mean": 2.0542034562386107,
+          "median": 1.997562465025112,
+          "min": 1.7479052729904652,
+          "max": 2.509356847964227
+        },
+        "replacement/python_imports": {
+          "n": 8,
+          "mean": 0.18772425045608543,
+          "median": 0.19011734542436898,
+          "min": 0.17780962400138378,
+          "max": 0.1917194309644401
+        },
+        "replacement/reconfigure_end/seconds": {
+          "n": 16,
+          "mean": 0.45420485630165786,
+          "median": 0.38839596149045974,
+          "min": 0.07552815694361925,
+          "max": 1.0527535809669644
+        },
+        "replacement/restored/audit_seconds": {
+          "n": 8,
+          "mean": 1.151622285542544,
+          "median": 1.1546847064746544,
+          "min": 1.1249248289968818,
+          "max": 1.1675222080666572
+        },
+        "replacement/restored/load_seconds": {
+          "n": 8,
+          "mean": 0.025608155847294256,
+          "median": 0.025634441408328712,
+          "min": 0.023437948897480965,
+          "max": 0.02803865191526711
+        },
+        "replacement/runtime_cuda_setup": {
+          "n": 8,
+          "mean": 0.0001911215076688677,
+          "median": 0.00018659152556210756,
+          "min": 0.00018451805226504803,
+          "max": 0.0002126570325344801
+        },
+        "replacement/state_loaded/load_seconds": {
+          "n": 8,
+          "mean": 0.025608155847294256,
+          "median": 0.025634441408328712,
+          "min": 0.023437948897480965,
+          "max": 0.02803865191526711
+        },
+        "replacement/transport_recv/seconds": {
+          "n": 8,
+          "mean": 1.745284038799582,
+          "median": 1.7433185280533507,
+          "min": 1.7263619750738144,
+          "max": 1.7750653540715575
+        }
+      },
+      "local_stage_note": "Worker-local durations can overlap; extrema across ranks are not additive controller phases.",
+      "step_statistics": {
+        "startup_steps_1_2": {
+          "worker_seconds": {
+            "n": 32,
+            "mean": 3.2684361193169025,
+            "median": 3.2452082380186766,
+            "min": 0.9498344659805298,
+            "max": 5.60329802997876
+          },
+          "worker_commit_intervals": {
+            "n": 16,
+            "mean": 0.9811307078125537,
+            "median": 0.9820511385332793,
+            "min": 0.9501499203033745,
+            "max": 1.0067051589721814
+          },
+          "max_worker_seconds_by_step": {
+            "1": 5.60329802997876,
+            "2": 1.0063977800309658
+          },
+          "max_worker_seconds": {
+            "n": 2,
+            "mean": 3.3048479050048627,
+            "median": 3.3048479050048627,
+            "min": 1.0063977800309658,
+            "max": 5.60329802997876
+          },
+          "worker_samples_per_step": {
+            "1": 16,
+            "2": 16
+          }
+        },
+        "warm_before_request": {
+          "worker_seconds": {
+            "n": 128,
+            "mean": 0.8486138569478499,
+            "median": 0.8461666238727048,
+            "min": 0.7755032470449805,
+            "max": 0.9679795759730041
+          },
+          "worker_commit_intervals": {
+            "n": 128,
+            "mean": 0.8488372677065854,
+            "median": 0.8457678544800729,
+            "min": 0.7759199501015246,
+            "max": 0.9680518039967865
+          },
+          "max_worker_seconds_by_step": {
+            "3": 0.8786406409926713,
+            "4": 0.8494586390443146,
+            "5": 0.9679795759730041,
+            "6": 0.8936685610096902,
+            "7": 0.8770051193423569,
+            "8": 0.8141694250516593,
+            "9": 0.8096111150225624,
+            "10": 0.7966119288466871
+          },
+          "max_worker_seconds": {
+            "n": 8,
+            "mean": 0.8608931256603682,
+            "median": 0.8632318791933358,
+            "min": 0.7966119288466871,
+            "max": 0.9679795759730041
+          },
+          "worker_samples_per_step": {
+            "3": 16,
+            "4": 16,
+            "5": 16,
+            "6": 16,
+            "7": 16,
+            "8": 16,
+            "9": 16,
+            "10": 16
+          }
+        },
+        "request_to_cut_training": {
+          "worker_seconds": {
+            "n": 16,
+            "mean": 0.7777262491435977,
+            "median": 0.7783479819190688,
+            "min": 0.7693700580857694,
+            "max": 0.789392776787281
+          },
+          "worker_commit_intervals": {
+            "n": 16,
+            "mean": 0.7779675802376005,
+            "median": 0.7785598707851022,
+            "min": 0.7696266202256083,
+            "max": 0.7894595935940742
+          },
+          "max_worker_seconds_by_step": {
+            "11": 0.789392776787281
+          },
+          "max_worker_seconds": {
+            "n": 1,
+            "mean": 0.789392776787281,
+            "median": 0.789392776787281,
+            "min": 0.789392776787281,
+            "max": 0.789392776787281
+          },
+          "worker_samples_per_step": {
+            "11": 16
+          }
+        },
+        "first_recovered_step": {
+          "worker_seconds": {
+            "n": 16,
+            "mean": 4.195226333409664,
+            "median": 4.220174056012183,
+            "min": 2.323897587135434,
+            "max": 6.055168153252453
+          },
+          "worker_commit_intervals": {
+            "n": 8,
+            "mean": 10.90566018287791,
+            "median": 10.90754780638963,
+            "min": 10.884690862149,
+            "max": 10.926348001230508
+          },
+          "max_worker_seconds_by_step": {
+            "25": 6.055168153252453
+          },
+          "max_worker_seconds": {
+            "n": 1,
+            "mean": 6.055168153252453,
+            "median": 6.055168153252453,
+            "min": 6.055168153252453,
+            "max": 6.055168153252453
+          },
+          "worker_samples_per_step": {
+            "25": 16
+          }
+        },
+        "subsequent_recovered_steps": {
+          "worker_seconds": {
+            "n": 80,
+            "mean": 0.8451826728327433,
+            "median": 0.8241672243457288,
+            "min": 0.7986494221258909,
+            "max": 0.9817592054605484
+          },
+          "worker_commit_intervals": {
+            "n": 80,
+            "mean": 0.845429321861593,
+            "median": 0.8243657255079597,
+            "min": 0.7988813770934939,
+            "max": 0.9819872132502496
+          },
+          "max_worker_seconds_by_step": {
+            "26": 0.9817592054605484,
+            "27": 0.8542332139331847,
+            "28": 0.8309580250643194,
+            "29": 0.8109429869800806,
+            "30": 0.8294995459727943
+          },
+          "max_worker_seconds": {
+            "n": 5,
+            "mean": 0.8614785954821855,
+            "median": 0.8309580250643194,
+            "min": 0.8109429869800806,
+            "max": 0.9817592054605484
+          },
+          "worker_samples_per_step": {
+            "26": 16,
+            "27": 16,
+            "28": 16,
+            "29": 16,
+            "30": 16
+          }
+        },
+        "healthy_solo_during_recovery": {
+          "worker_seconds": {
+            "n": 104,
+            "mean": 0.7931965095026848,
+            "median": 0.7705355365760624,
+            "min": 0.7047840389423072,
+            "max": 1.0231278520077467
+          },
+          "worker_commit_intervals": {
+            "n": 104,
+            "mean": 1.0061215081547674,
+            "median": 0.7707586584147066,
+            "min": 0.7049321769736707,
+            "max": 3.6655392409302294
+          },
+          "max_worker_seconds_by_step": {
+            "12": 0.9036808628588915,
+            "13": 0.8922486528754234,
+            "14": 0.7106907786801457,
+            "15": 0.730861862655729,
+            "16": 0.7940404172986746,
+            "17": 0.7821455583907664,
+            "18": 0.7977447919547558,
+            "19": 0.7873379280790687,
+            "20": 0.7707636458799243,
+            "21": 0.7619218081235886,
+            "22": 1.0231278520077467,
+            "23": 0.7746561542153358,
+            "24": 0.7574768038466573
+          },
+          "max_worker_seconds": {
+            "n": 13,
+            "mean": 0.8066690089897468,
+            "median": 0.7821455583907664,
+            "min": 0.7106907786801457,
+            "max": 1.0231278520077467
+          },
+          "worker_samples_per_step": {
+            "12": 8,
+            "13": 8,
+            "14": 8,
+            "15": 8,
+            "16": 8,
+            "17": 8,
+            "18": 8,
+            "19": 8,
+            "20": 8,
+            "21": 8,
+            "22": 8,
+            "23": 8,
+            "24": 8
+          }
+        }
+      },
+      "evidence_file": "o1_launch_timing.json",
+      "evidence_sha256": "a73c66bcb80fd59419c006e6f1cdb4e62a46ad2dc35a6d01327dcf63dedd6671",
+      "limitations": [
+        "Cold spare; healthy replica can commit solo during recovery.",
+        "Only first joint commit has nine-state hash audit; five post-recovery commits checked.",
+        "Controller observation includes polling/SSH; wrapper import precedes train import phase."
+      ],
+      "v1_details": {
+        "local_spans": {
+          "recv_to_load_callback": {
+            "n": 8,
+            "min": 4.597171324072406,
+            "mean": 4.827601983124623,
+            "max": 4.98266594693996
+          },
+          "recv_to_loaded": {
+            "n": 8,
+            "min": 4.6252058651298285,
+            "mean": 4.853209598019021,
+            "max": 5.009512691991404
+          },
+          "ready_to_restored": {
+            "n": 8,
+            "min": 9.28444848000072,
+            "mean": 9.321909463527845,
+            "max": 9.341798834968358
+          }
+        },
+        "donor_commit_gap_to_first_joint": {
+          "n": 8,
+          "min": 10.884690862149,
+          "mean": 10.90566018287791,
+          "max": 10.926348001230508
+        },
+        "controls": {
+          "seed": 1182328,
+          "trigger": 10,
+          "post_steps": 6,
+          "communication_timeout": 2,
+          "cold_launcher": true,
+          "digest_engine": "reference",
+          "overlap_cpu_model_load": "0",
+          "recovery_gradient_only": null,
+          "overlap_cold_cleanup": null
+        }
+      }
+    },
+    {
+      "name": "v4_o1_pp",
+      "type": "v4",
+      "functional_pass": true,
+      "resources_clean": true,
+      "requested_trigger": 6,
+      "actual_cut_or_restore_step": 11,
+      "first_joint_step": 12,
+      "goal": 16,
+      "request_to_first_joint_observed_seconds": 27.01615323824808,
+      "controller_stage_seconds": [
+        {
+          "start": "request",
+          "end": "boundary",
+          "seconds": 11.941388010978699
+        },
+        {
+          "start": "boundary",
+          "end": "snapshot_ready",
+          "seconds": 1.1607088753953576
+        },
+        {
+          "start": "snapshot_ready",
+          "end": "freeze",
+          "seconds": 1.1243123216554523
+        },
+        {
+          "start": "freeze",
+          "end": "candidate_validated_decision",
+          "seconds": 4.3376014502719045
+        },
+        {
+          "start": "candidate_validated_decision",
+          "end": "inner_connected",
+          "seconds": 2.123737190850079
+        },
+        {
+          "start": "inner_connected",
+          "end": "activation",
+          "seconds": 1.2439024751074612
+        },
+        {
+          "start": "activation",
+          "end": "first_common_step_A0_proxy",
+          "seconds": 3.5284498878754675
+        },
+        {
+          "start": "first_common_step_A0_proxy",
+          "end": "all_rank_commit_observed",
+          "seconds": 1.5560530261136591
+        }
+      ],
+      "local_stage_duration_statistics": {
+        "connected": {
+          "n": 28,
+          "mean": 1.4787874337385543,
+          "median": 1.6199539927765727,
+          "min": 0.2638460732996464,
+          "max": 2.0788049530237913
+        },
+        "groups_closed": {
+          "n": 12,
+          "mean": 0.913131539709866,
+          "median": 0.7814076349604875,
+          "min": 0.13156705303117633,
+          "max": 1.8583971941843629
+        },
+        "outer_begin": {
+          "n": 256,
+          "mean": 1.6486578186941188,
+          "median": 1.1617326738778502,
+          "min": 0.9426508939359337,
+          "max": 6.7590115261264145
+        },
+        "outer_closed": {
+          "n": 17,
+          "mean": 1.0517443133627666,
+          "median": 1.0451210660394281,
+          "min": 1.0293480050750077,
+          "max": 1.0952929290942848
+        },
+        "outer_commit": {
+          "n": 256,
+          "mean": 0.020524941995972767,
+          "median": 0.0076970316004008055,
+          "min": 0.0021248669363558292,
+          "max": 0.3537614829838276
+        },
+        "outer_quorum_wait": {
+          "n": 256,
+          "mean": 0.17007566338998004,
+          "median": 7.52406194806099e-05,
+          "min": 4.7720037400722504e-05,
+          "max": 5.834473569178954
+        },
+        "outer_ready": {
+          "n": 20,
+          "mean": 0.03536825263872743,
+          "median": 0.0258297398686409,
+          "min": 0.008336933795362711,
+          "max": 0.1143049499951303
+        },
+        "peer_outer_gradient_ready": {
+          "n": 8,
+          "mean": 6.718776048190193,
+          "median": 6.672587759792805,
+          "min": 6.606916261836886,
+          "max": 6.998069416964427
+        },
+        "restored": {
+          "n": 4,
+          "mean": 1.1757919589872472,
+          "median": 1.1855289490194991,
+          "min": 1.1397974309511483,
+          "max": 1.1923125069588423
+        },
+        "snapshot_ready": {
+          "n": 32,
+          "mean": 1.1705289847232052,
+          "median": 1.1714808975812048,
+          "min": 1.1417054198682308,
+          "max": 1.2010883570183069
+        },
+        "standby_cpu_model_ready": {
+          "n": 4,
+          "mean": 1.2596709994249977,
+          "median": 1.2612834493629634,
+          "min": 1.24906528997235,
+          "max": 1.267051809001714
+        },
+        "standby_gpu_warmed": {
+          "n": 4,
+          "mean": 2.648836390755605,
+          "median": 2.64863236004021,
+          "min": 2.635707068024203,
+          "max": 2.6623737749177963
+        },
+        "transport_recv": {
+          "n": 4,
+          "mean": 0.16304273722926155,
+          "median": 0.16268542548641562,
+          "min": 0.16010484704747796,
+          "max": 0.16669525089673698
+        },
+        "transport_send": {
+          "n": 4,
+          "mean": 0.15299712325213477,
+          "median": 0.15291318309027702,
+          "min": 0.14982181484811008,
+          "max": 0.15634031197987497
+        }
+      },
+      "local_stage_note": "Worker-local durations can overlap; extrema across ranks are not additive controller phases.",
+      "step_statistics": {
+        "startup_steps_1_2": {
+          "worker_seconds": {
+            "n": 32,
+            "mean": 5.174530494521605,
+            "median": 5.141798253636807,
+            "min": 2.4695171830244362,
+            "max": 7.889464351115748
+          },
+          "worker_commit_intervals": {
+            "n": 16,
+            "mean": 2.546422846164205,
+            "median": 2.553419809904881,
+            "min": 2.4706439541187137,
+            "max": 2.5940960282459855
+          },
+          "max_worker_seconds_by_step": {
+            "1": 7.889464351115748,
+            "2": 2.5933087351731956
+          },
+          "max_worker_seconds": {
+            "n": 2,
+            "mean": 5.241386543144472,
+            "median": 5.241386543144472,
+            "min": 2.5933087351731956,
+            "max": 7.889464351115748
+          },
+          "worker_samples_per_step": {
+            "1": 16,
+            "2": 16
+          }
+        },
+        "warm_before_request": {
+          "worker_seconds": {
+            "n": 64,
+            "mean": 2.553147177091887,
+            "median": 2.500704917940311,
+            "min": 2.4742838689126074,
+            "max": 2.751413593068719
+          },
+          "worker_commit_intervals": {
+            "n": 64,
+            "mean": 2.5538649307163723,
+            "median": 2.5013617950025946,
+            "min": 2.4750041079241782,
+            "max": 2.7523117009550333
+          },
+          "max_worker_seconds_by_step": {
+            "3": 2.524668124038726,
+            "4": 2.522648657904938,
+            "5": 2.751413593068719,
+            "6": 2.5120581020601094
+          },
+          "max_worker_seconds": {
+            "n": 4,
+            "mean": 2.577697119268123,
+            "median": 2.523658390971832,
+            "min": 2.5120581020601094,
+            "max": 2.751413593068719
+          },
+          "worker_samples_per_step": {
+            "3": 16,
+            "4": 16,
+            "5": 16,
+            "6": 16
+          }
+        },
+        "request_to_cut_training": {
+          "worker_seconds": {
+            "n": 80,
+            "mean": 2.5088645664945943,
+            "median": 2.4504226706922054,
+            "min": 2.3729644659906626,
+            "max": 2.871725889155641
+          },
+          "worker_commit_intervals": {
+            "n": 80,
+            "mean": 2.509567973355297,
+            "median": 2.451060046441853,
+            "min": 2.3737687380053103,
+            "max": 2.872468379093334
+          },
+          "max_worker_seconds_by_step": {
+            "7": 2.4556809552013874,
+            "8": 2.4142114482820034,
+            "9": 2.7191431098617613,
+            "10": 2.871725889155641,
+            "11": 2.479541711974889
+          },
+          "max_worker_seconds": {
+            "n": 5,
+            "mean": 2.5880606228951364,
+            "median": 2.479541711974889,
+            "min": 2.4142114482820034,
+            "max": 2.871725889155641
+          },
+          "worker_samples_per_step": {
+            "7": 16,
+            "8": 16,
+            "9": 16,
+            "10": 16,
+            "11": 16
+          }
+        },
+        "first_recovered_step": {
+          "worker_seconds": {
+            "n": 16,
+            "mean": 6.378582113116863,
+            "median": 6.263380240183324,
+            "min": 3.1353154461830854,
+            "max": 9.840978651773185
+          },
+          "worker_commit_intervals": {
+            "n": 0
+          },
+          "max_worker_seconds_by_step": {
+            "12": 9.840978651773185
+          },
+          "max_worker_seconds": {
+            "n": 1,
+            "mean": 9.840978651773185,
+            "median": 9.840978651773185,
+            "min": 9.840978651773185,
+            "max": 9.840978651773185
+          },
+          "worker_samples_per_step": {
+            "12": 16
+          }
+        },
+        "subsequent_recovered_steps": {
+          "worker_seconds": {
+            "n": 64,
+            "mean": 2.4014284239419794,
+            "median": 2.3878581874305382,
+            "min": 2.338093056809157,
+            "max": 2.518432327080518
+          },
+          "worker_commit_intervals": {
+            "n": 64,
+            "mean": 2.402190147633519,
+            "median": 2.388679518480785,
+            "min": 2.3387084091082215,
+            "max": 2.519302163971588
+          },
+          "max_worker_seconds_by_step": {
+            "13": 2.518432327080518,
+            "14": 2.448524686973542,
+            "15": 2.434492084896192,
+            "16": 2.381284617818892
+          },
+          "max_worker_seconds": {
+            "n": 4,
+            "mean": 2.445683429192286,
+            "median": 2.441508385934867,
+            "min": 2.381284617818892,
+            "max": 2.518432327080518
+          },
+          "worker_samples_per_step": {
+            "13": 16,
+            "14": 16,
+            "15": 16,
+            "16": 16
+          }
+        }
+      },
+      "evidence_file": "o1_pp_timing.json",
+      "evidence_sha256": "41075d456ccef9286cfe1df82fc09300351798227e0e2e8068d7539189dbc1ab",
+      "limitations": [
+        "replicas share hosts; independent host fault domains are not demonstrated",
+        "signatures and snapshots perturb timing; no general communication replay or zero-memory claim",
+        "peer checkpoint recovery covers after-freeze/before-ready source loss; transfer failures fail-stop",
+        "raw events and logs removed after independent audit; SHA256 signatures cannot reconstruct trajectories"
+      ]
+    },
+    {
+      "name": "v2_q2_o1_v2",
+      "type": "v2",
+      "functional_pass": true,
+      "resources_clean": true,
+      "requested_trigger": 9,
+      "actual_cut_or_restore_step": 22,
+      "first_joint_step": 23,
+      "goal": 27,
+      "request_to_first_joint_observed_seconds": 31.684511296916753,
+      "controller_stage_seconds": [
+        {
+          "start": "REQUEST",
+          "end": "c_local_ready",
+          "seconds": 18.800162963569164
+        },
+        {
+          "start": "c_local_ready",
+          "end": "cut_selected",
+          "seconds": 2.6991276531480253
+        },
+        {
+          "start": "cut_selected",
+          "end": "first_joint_commit_observed",
+          "seconds": 10.185220680199564
+        }
+      ],
+      "local_stage_duration_statistics": {
+        "candidate/adapter_imports": {
+          "n": 8,
+          "mean": 0.0014283868949860334,
+          "median": 0.0014328459510579705,
+          "min": 0.0013677079696208239,
+          "max": 0.0014725308865308762
+        },
+        "candidate/cuda_ddp_optimizer": {
+          "n": 8,
+          "mean": 0.09228627666016109,
+          "median": 0.09387714706826955,
+          "min": 0.07920331205241382,
+          "max": 0.09553860407322645
+        },
+        "candidate/default_process_group": {
+          "n": 8,
+          "mean": 0.005012499197619036,
+          "median": 0.005113337654620409,
+          "min": 0.004464155063033104,
+          "max": 0.005470944102853537
+        },
+        "candidate/full_model_load": {
+          "n": 8,
+          "mean": 1.31599407910835,
+          "median": 1.3023979378631338,
+          "min": 1.2998686991631985,
+          "max": 1.3973794910125434
+        },
+        "candidate/initial_audit": {
+          "n": 8,
+          "mean": 1.1415136478608474,
+          "median": 1.1381569770164788,
+          "min": 1.1225043928716332,
+          "max": 1.1690172138623893
+        },
+        "candidate/local_cuda_warmup": {
+          "n": 8,
+          "mean": 6.019509604841005,
+          "median": 6.029434210038744,
+          "min": 5.9595463359728456,
+          "max": 6.04354127892293
+        },
+        "candidate/manager_init": {
+          "n": 8,
+          "mean": 10.598354761605151,
+          "median": 10.59610905800946,
+          "min": 10.46686288388446,
+          "max": 10.739119133912027
+        },
+        "candidate/megatron_imports": {
+          "n": 8,
+          "mean": 1.8023559137945995,
+          "median": 1.804063116083853,
+          "min": 1.7780510541051626,
+          "max": 1.8372461679391563
+        },
+        "candidate/model_partition": {
+          "n": 8,
+          "mean": 0.16173031667131,
+          "median": 0.16241662541870028,
+          "min": 0.1542308828793466,
+          "max": 0.1691352599300444
+        },
+        "candidate/parallel_groups": {
+          "n": 8,
+          "mean": 1.8283509234606754,
+          "median": 1.7995571568608284,
+          "min": 1.7487646599765867,
+          "max": 2.106385004008189
+        },
+        "candidate/python_imports": {
+          "n": 8,
+          "mean": 0.19135842492687516,
+          "median": 0.1819807825377211,
+          "min": 0.17239168006926775,
+          "max": 0.22601348906755447
+        },
+        "candidate/runtime_cuda_setup": {
+          "n": 8,
+          "mean": 0.0002933335490524769,
+          "median": 0.0002936880337074399,
+          "min": 0.00027103396132588387,
+          "max": 0.00031249294988811016
+        },
+        "reconfigure_end/seconds": {
+          "n": 32,
+          "mean": 0.05820537513500312,
+          "median": 0.04880082095041871,
+          "min": 0.00011853710748255253,
+          "max": 0.1471341431606561
+        },
+        "restored/audit_seconds": {
+          "n": 8,
+          "mean": 1.133631035714643,
+          "median": 1.1354827239410952,
+          "min": 1.1204509118106216,
+          "max": 1.1473971409723163
+        },
+        "restored/load_seconds": {
+          "n": 8,
+          "mean": 0.024889568565413356,
+          "median": 0.025628499570302665,
+          "min": 0.022966508055105805,
+          "max": 0.027222024044021964
+        },
+        "state_loaded/load_seconds": {
+          "n": 8,
+          "mean": 0.024889568565413356,
+          "median": 0.025628499570302665,
+          "min": 0.022966508055105805,
+          "max": 0.027222024044021964
+        },
+        "transport_recv/seconds": {
+          "n": 8,
+          "mean": 1.7970899454958271,
+          "median": 1.8082909064833075,
+          "min": 1.6541015410330147,
+          "max": 1.9401784101501107
+        },
+        "transport_send/seconds": {
+          "n": 8,
+          "mean": 0.2545111900253687,
+          "median": 0.2507112445309758,
+          "min": 0.14225222798995674,
+          "max": 0.382105004042387
+        }
+      },
+      "local_stage_note": "Worker-local durations can overlap; extrema across ranks are not additive controller phases.",
+      "step_statistics": {
+        "startup_steps_1_2": {
+          "worker_seconds": {
+            "n": 32,
+            "mean": 2.3037408441959997,
+            "median": 2.2914945050142705,
+            "min": 2.0524075659923255,
+            "max": 2.6082983650267124
+          },
+          "worker_commit_intervals": {
+            "n": 16,
+            "mean": 2.0701629201939795,
+            "median": 2.0661646025255322,
+            "min": 2.052977568935603,
+            "max": 2.0974584340583533
+          },
+          "max_worker_seconds_by_step": {
+            "1": 2.6082983650267124,
+            "2": 2.09642619616352
+          },
+          "max_worker_seconds": {
+            "n": 2,
+            "mean": 2.3523622805951163,
+            "median": 2.3523622805951163,
+            "min": 2.09642619616352,
+            "max": 2.6082983650267124
+          },
+          "worker_samples_per_step": {
+            "1": 16,
+            "2": 16
+          }
+        },
+        "warm_before_request": {
+          "worker_seconds": {
+            "n": 112,
+            "mean": 1.940665029257486,
+            "median": 1.9220271185040474,
+            "min": 1.8860639883205295,
+            "max": 2.078446854837239
+          },
+          "worker_commit_intervals": {
+            "n": 112,
+            "mean": 1.9412382071916778,
+            "median": 1.9225411794614047,
+            "min": 1.8866066792979836,
+            "max": 2.0788267119787633
+          },
+          "max_worker_seconds_by_step": {
+            "3": 2.078446854837239,
+            "4": 1.9457269622944295,
+            "5": 1.9554594210349023,
+            "6": 1.9277447797358036,
+            "7": 1.9407770563848317,
+            "8": 1.9482874809764326,
+            "9": 1.9348270480986685
+          },
+          "max_worker_seconds": {
+            "n": 7,
+            "mean": 1.9616099433374725,
+            "median": 1.9457269622944295,
+            "min": 1.9277447797358036,
+            "max": 2.078446854837239
+          },
+          "worker_samples_per_step": {
+            "3": 16,
+            "4": 16,
+            "5": 16,
+            "6": 16,
+            "7": 16,
+            "8": 16,
+            "9": 16
+          }
+        },
+        "request_to_cut_training": {
+          "worker_seconds": {
+            "n": 208,
+            "mean": 1.9271872144857367,
+            "median": 1.9124561364296824,
+            "min": 1.8225445989519358,
+            "max": 2.194239931181073
+          },
+          "worker_commit_intervals": {
+            "n": 208,
+            "mean": 1.9277792825909832,
+            "median": 1.9130557739408687,
+            "min": 1.8226149338297546,
+            "max": 2.19478459097445
+          },
+          "max_worker_seconds_by_step": {
+            "10": 1.949067768175155,
+            "11": 1.9366713529452682,
+            "12": 1.9360334652010351,
+            "13": 2.194239931181073,
+            "14": 1.9915071742143482,
+            "15": 1.8972353469580412,
+            "16": 1.9346928517334163,
+            "17": 1.8809918910264969,
+            "18": 1.9536643829196692,
+            "19": 2.0113751110620797,
+            "20": 1.9081257157959044,
+            "21": 1.8829933549277484,
+            "22": 1.9396367110311985
+          },
+          "max_worker_seconds": {
+            "n": 13,
+            "mean": 1.9550950043978026,
+            "median": 1.9366713529452682,
+            "min": 1.8809918910264969,
+            "max": 2.194239931181073
+          },
+          "worker_samples_per_step": {
+            "10": 16,
+            "11": 16,
+            "12": 16,
+            "13": 16,
+            "14": 16,
+            "15": 16,
+            "16": 16,
+            "17": 16,
+            "18": 16,
+            "19": 16,
+            "20": 16,
+            "21": 16,
+            "22": 16
+          }
+        },
+        "first_recovered_step": {
+          "worker_seconds": {
+            "n": 16,
+            "mean": 4.404626523682964,
+            "median": 4.441975011024624,
+            "min": 2.1765344419982284,
+            "max": 6.507904731202871
+          },
+          "worker_commit_intervals": {
+            "n": 8,
+            "mean": 6.489748583408073,
+            "median": 6.495599670568481,
+            "min": 6.459884776268154,
+            "max": 6.508398348931223
+          },
+          "max_worker_seconds_by_step": {
+            "23": 6.507904731202871
+          },
+          "max_worker_seconds": {
+            "n": 1,
+            "mean": 6.507904731202871,
+            "median": 6.507904731202871,
+            "min": 6.507904731202871,
+            "max": 6.507904731202871
+          },
+          "worker_samples_per_step": {
+            "23": 16
+          }
+        },
+        "subsequent_recovered_steps": {
+          "worker_seconds": {
+            "n": 64,
+            "mean": 1.9674418322829297,
+            "median": 1.9354477315209806,
+            "min": 1.885662365006283,
+            "max": 2.123590008355677
+          },
+          "worker_commit_intervals": {
+            "n": 64,
+            "mean": 1.9685933537584788,
+            "median": 1.9359991354867816,
+            "min": 1.887050259159878,
+            "max": 2.124401217792183
+          },
+          "max_worker_seconds_by_step": {
+            "24": 2.123590008355677,
+            "25": 1.9774197430815548,
+            "26": 1.9349660379812121,
+            "27": 1.9844492888078094
+          },
+          "max_worker_seconds": {
+            "n": 4,
+            "mean": 2.0051062695565633,
+            "median": 1.980934515944682,
+            "min": 1.9349660379812121,
+            "max": 2.123590008355677
+          },
+          "worker_samples_per_step": {
+            "24": 16,
+            "25": 16,
+            "26": 16,
+            "27": 16
+          }
+        }
+      },
+      "evidence_file": "o1_v2_timing.json",
+      "evidence_sha256": "a1ddbb47ab7335d7525dcee7e0d5b1a089409e3bad442fff18aab252a68646c4",
+      "limitations": [
+        "P1f chooses actual cut after preparation; request trigger and actual cut differ.",
+        "Hash every step, fixed random batch8; logical-rid RNG streams differ across DP replicas.",
+        "Nine-state B-to-C restore; A/C shared model/optimizer/scheduler, membership and samples independently checked."
+      ]
+    },
+    {
+      "name": "v1_quick_20261104_o2_grad0",
+      "type": "v1",
+      "functional_pass": true,
+      "resources_clean": true,
+      "requested_trigger": 10,
+      "actual_cut_or_restore_step": 23,
+      "first_joint_step": 25,
+      "goal": 30,
+      "request_to_first_joint_observed_seconds": 25.068779447115958,
+      "controller_stage_seconds": [
+        {
+          "start": "kill_marker_request",
+          "end": "kill_ack_observed",
+          "seconds": 1.587681403849274
+        },
+        {
+          "start": "kill_ack_observed",
+          "end": "old_cleanup_observed",
+          "seconds": 0.9171705110929906
+        },
+        {
+          "start": "old_cleanup_observed",
+          "end": "replacement_ready_observed",
+          "seconds": 8.650290485005826
+        },
+        {
+          "start": "replacement_ready_observed",
+          "end": "restored_observed",
+          "seconds": 4.1949514341540635
+        },
+        {
+          "start": "restored_observed",
+          "end": "first_joint_observed",
+          "seconds": 9.718685613013804
+        }
+      ],
+      "local_stage_duration_statistics": {
+        "initial/reconfigure_end/seconds": {
+          "n": 40,
+          "mean": 0.3571656821120996,
+          "median": 0.2672008400550112,
+          "min": 0.07711156317964196,
+          "max": 0.7169181569479406
+        },
+        "initial/transport_send/seconds": {
+          "n": 8,
+          "mean": 0.1908556306734681,
+          "median": 0.14195150160230696,
+          "min": 0.13167576398700476,
+          "max": 0.3493958949111402
+        },
+        "replacement/adapter_imports": {
+          "n": 8,
+          "mean": 0.0019013751007150859,
+          "median": 0.0014304124051705003,
+          "min": 0.0013896329328417778,
+          "max": 0.0047563170082867146
+        },
+        "replacement/cuda_ddp_optimizer": {
+          "n": 8,
+          "mean": 0.09679307893384248,
+          "median": 0.09669960441533476,
+          "min": 0.09195383288897574,
+          "max": 0.10564115294255316
+        },
+        "replacement/default_process_group": {
+          "n": 8,
+          "mean": 0.17108312450000085,
+          "median": 0.007446103496477008,
+          "min": 0.004947528941556811,
+          "max": 0.6677879299968481
+        },
+        "replacement/full_model_load": {
+          "n": 8,
+          "mean": 9.946571663022041e-05,
+          "median": 8.379947394132614e-05,
+          "min": 7.011601701378822e-05,
+          "max": 0.0002209329977631569
+        },
+        "replacement/initial_audit": {
+          "n": 8,
+          "mean": 0.24566167674493045,
+          "median": 0.24579159740824252,
+          "min": 0.24364343099296093,
+          "max": 0.24902142910286784
+        },
+        "replacement/manager_init": {
+          "n": 8,
+          "mean": 0.00872510951012373,
+          "median": 0.00902672903612256,
+          "min": 0.005818542093038559,
+          "max": 0.010867633856832981
+        },
+        "replacement/megatron_imports": {
+          "n": 8,
+          "mean": 1.8003953825100325,
+          "median": 1.7960143691161647,
+          "min": 1.7488743290305138,
+          "max": 1.8721855878829956
+        },
+        "replacement/model_partition": {
+          "n": 8,
+          "mean": 0.17466337943915278,
+          "median": 0.17482364806346595,
+          "min": 0.172698742011562,
+          "max": 0.176411306951195
+        },
+        "replacement/parallel_groups": {
+          "n": 8,
+          "mean": 2.220459240867058,
+          "median": 2.3717918059555814,
+          "min": 1.759635493857786,
+          "max": 2.385298112174496
+        },
+        "replacement/python_imports": {
+          "n": 8,
+          "mean": 0.1899322624958586,
+          "median": 0.19161688757594675,
+          "min": 0.18372792401351035,
+          "max": 0.19415666698478162
+        },
+        "replacement/reconfigure_end/seconds": {
+          "n": 16,
+          "mean": 0.5185779332532547,
+          "median": 0.6267473094630986,
+          "min": 0.07881371001712978,
+          "max": 0.72097929706797
+        },
+        "replacement/restored/audit_seconds": {
+          "n": 8,
+          "mean": 0.5906940383720212,
+          "median": 0.5727238435065374,
+          "min": 0.569403117056936,
+          "max": 0.6442904870491475
+        },
+        "replacement/restored/load_seconds": {
+          "n": 8,
+          "mean": 0.030767656746320426,
+          "median": 0.02623427356593311,
+          "min": 0.02339637093245983,
+          "max": 0.04912524297833443
+        },
+        "replacement/runtime_cuda_setup": {
+          "n": 8,
+          "mean": 0.0001978115178644657,
+          "median": 0.00019725202582776546,
+          "min": 0.00018611596897244453,
+          "max": 0.00021072197705507278
+        },
+        "replacement/state_loaded/load_seconds": {
+          "n": 8,
+          "mean": 0.030767656746320426,
+          "median": 0.02623427356593311,
+          "min": 0.02339637093245983,
+          "max": 0.04912524297833443
+        },
+        "replacement/transport_recv/seconds": {
+          "n": 8,
+          "mean": 1.0340663923998363,
+          "median": 0.9868489864747971,
+          "min": 0.9274396169930696,
+          "max": 1.2007780270650983
+        }
+      },
+      "local_stage_note": "Worker-local durations can overlap; extrema across ranks are not additive controller phases.",
+      "step_statistics": {
+        "startup_steps_1_2": {
+          "worker_seconds": {
+            "n": 32,
+            "mean": 3.2928928451947286,
+            "median": 3.291654687607661,
+            "min": 0.9508224478922784,
+            "max": 5.6307742989156395
+          },
+          "worker_commit_intervals": {
+            "n": 16,
+            "mean": 0.9951883201429155,
+            "median": 1.0044903161469847,
+            "min": 0.9527622889727354,
+            "max": 1.0244557179976255
+          },
+          "max_worker_seconds_by_step": {
+            "1": 5.6307742989156395,
+            "2": 1.0238645439967513
+          },
+          "max_worker_seconds": {
+            "n": 2,
+            "mean": 3.3273194214561954,
+            "median": 3.3273194214561954,
+            "min": 1.0238645439967513,
+            "max": 5.6307742989156395
+          },
+          "worker_samples_per_step": {
+            "1": 16,
+            "2": 16
+          }
+        },
+        "warm_before_request": {
+          "worker_seconds": {
+            "n": 128,
+            "mean": 0.8328321369808691,
+            "median": 0.834515166003257,
+            "min": 0.7719063519034535,
+            "max": 0.9159509518649429
+          },
+          "worker_commit_intervals": {
+            "n": 128,
+            "mean": 0.833045159753965,
+            "median": 0.8347369643161073,
+            "min": 0.7724940420594066,
+            "max": 0.9159259279258549
+          },
+          "max_worker_seconds_by_step": {
+            "3": 0.897122782189399,
+            "4": 0.9159509518649429,
+            "5": 0.8430573211517185,
+            "6": 0.8096530078910291,
+            "7": 0.8668901219498366,
+            "8": 0.8645354381296784,
+            "9": 0.7937721507623792,
+            "10": 0.7929880628362298
+          },
+          "max_worker_seconds": {
+            "n": 8,
+            "mean": 0.8479962295969017,
+            "median": 0.8537963796406984,
+            "min": 0.7929880628362298,
+            "max": 0.9159509518649429
+          },
+          "worker_samples_per_step": {
+            "3": 16,
+            "4": 16,
+            "5": 16,
+            "6": 16,
+            "7": 16,
+            "8": 16,
+            "9": 16,
+            "10": 16
+          }
+        },
+        "request_to_cut_training": {
+          "worker_seconds": {
+            "n": 16,
+            "mean": 0.764480001933407,
+            "median": 0.7635269396705553,
+            "min": 0.7567331020254642,
+            "max": 0.7740452908910811
+          },
+          "worker_commit_intervals": {
+            "n": 16,
+            "mean": 0.7646307098766556,
+            "median": 0.7636637925170362,
+            "min": 0.7568999889772385,
+            "max": 0.7735868492163718
+          },
+          "max_worker_seconds_by_step": {
+            "11": 0.7740452908910811
+          },
+          "max_worker_seconds": {
+            "n": 1,
+            "mean": 0.7740452908910811,
+            "median": 0.7740452908910811,
+            "min": 0.7740452908910811,
+            "max": 0.7740452908910811
+          },
+          "worker_samples_per_step": {
+            "11": 16
+          }
+        },
+        "first_recovered_step": {
+          "worker_seconds": {
+            "n": 16,
+            "mean": 4.638660404030816,
+            "median": 4.615589059423655,
+            "min": 1.9604116121772677,
+            "max": 7.471613611094654
+          },
+          "worker_commit_intervals": {
+            "n": 16,
+            "mean": 9.839357211560127,
+            "median": 9.819458279525861,
+            "min": 9.349538005888462,
+            "max": 10.471130802761763
+          },
+          "max_worker_seconds_by_step": {
+            "25": 7.471613611094654
+          },
+          "max_worker_seconds": {
+            "n": 1,
+            "mean": 7.471613611094654,
+            "median": 7.471613611094654,
+            "min": 7.471613611094654,
+            "max": 7.471613611094654
+          },
+          "worker_samples_per_step": {
+            "25": 16
+          }
+        },
+        "subsequent_recovered_steps": {
+          "worker_seconds": {
+            "n": 80,
+            "mean": 0.8529742382874247,
+            "median": 0.8388469195924699,
+            "min": 0.7275309260003269,
+            "max": 0.9649728261865675
+          },
+          "worker_commit_intervals": {
+            "n": 80,
+            "mean": 0.8531994763790862,
+            "median": 0.8390427093254402,
+            "min": 0.7279225192032754,
+            "max": 0.9651973210275173
+          },
+          "max_worker_seconds_by_step": {
+            "26": 0.9649728261865675,
+            "27": 0.9127649709116668,
+            "28": 0.8530483660288155,
+            "29": 0.8236515680328012,
+            "30": 0.7987084330525249
+          },
+          "max_worker_seconds": {
+            "n": 5,
+            "mean": 0.8706292328424752,
+            "median": 0.8530483660288155,
+            "min": 0.7987084330525249,
+            "max": 0.9649728261865675
+          },
+          "worker_samples_per_step": {
+            "26": 16,
+            "27": 16,
+            "28": 16,
+            "29": 16,
+            "30": 16
+          }
+        },
+        "healthy_solo_during_recovery": {
+          "worker_seconds": {
+            "n": 112,
+            "mean": 1.058467007903216,
+            "median": 0.7268175694625825,
+            "min": 0.681628592312336,
+            "max": 3.4839474288746715
+          },
+          "worker_commit_intervals": {
+            "n": 104,
+            "mean": 1.0872156156603103,
+            "median": 0.7227170749101788,
+            "min": 0.6818333109840751,
+            "max": 3.6109127630479634
+          },
+          "max_worker_seconds_by_step": {
+            "12": 0.8555972520262003,
+            "13": 0.7524722800590098,
+            "14": 0.7118039652705193,
+            "15": 0.733949180226773,
+            "16": 0.7204872239381075,
+            "17": 0.7402020739391446,
+            "18": 0.7465503192506731,
+            "19": 0.9255150742828846,
+            "20": 0.7134270491078496,
+            "21": 0.7074415683746338,
+            "22": 0.718266952317208,
+            "23": 0.9702497366815805,
+            "24": 3.4839474288746715
+          },
+          "max_worker_seconds": {
+            "n": 13,
+            "mean": 0.9830700080268658,
+            "median": 0.7402020739391446,
+            "min": 0.7074415683746338,
+            "max": 3.4839474288746715
+          },
+          "worker_samples_per_step": {
+            "12": 8,
+            "13": 8,
+            "14": 8,
+            "15": 8,
+            "16": 8,
+            "17": 8,
+            "18": 8,
+            "19": 8,
+            "20": 8,
+            "21": 8,
+            "22": 8,
+            "23": 8,
+            "24": 16
+          }
+        }
+      },
+      "evidence_file": "o2_grad0_timing.json",
+      "evidence_sha256": "18e561a485a318e2bebb143680a47b43d98a4b48ff58f5870ae49ca7eed7af93",
+      "limitations": [
+        "Cold spare; healthy replica can commit solo during recovery.",
+        "Only first joint commit has nine-state hash audit; five post-recovery commits checked.",
+        "Controller observation includes polling/SSH; wrapper import precedes train import phase."
+      ],
+      "v1_details": {
+        "local_spans": {
+          "recv_to_load_callback": {
+            "n": 8,
+            "min": 0.3765996820293367,
+            "mean": 0.561464288708521,
+            "max": 0.7048234739340842
+          },
+          "recv_to_loaded": {
+            "n": 8,
+            "min": 0.3999966930132359,
+            "mean": 0.5922325848368928,
+            "max": 0.7308998468797654
+          },
+          "ready_to_restored": {
+            "n": 8,
+            "min": 4.107234365073964,
+            "mean": 4.15276528801769,
+            "max": 4.257417066022754
+          }
+        },
+        "donor_commit_gap_to_first_joint": {
+          "n": 8,
+          "min": 10.233996761962771,
+          "mean": 10.29812692583073,
+          "max": 10.471130802761763
+        },
+        "controls": {
+          "seed": 1182328,
+          "trigger": 10,
+          "post_steps": 6,
+          "communication_timeout": 2,
+          "cold_launcher": true,
+          "digest_engine": "staged",
+          "overlap_cpu_model_load": "1",
+          "recovery_gradient_only": true,
+          "overlap_cold_cleanup": null
+        }
+      }
+    },
+    {
+      "name": "v1_quick_20261104_o3_early0",
+      "type": "v1",
+      "functional_pass": true,
+      "resources_clean": true,
+      "requested_trigger": 10,
+      "actual_cut_or_restore_step": 22,
+      "first_joint_step": 23,
+      "goal": 28,
+      "request_to_first_joint_observed_seconds": 21.238761194050312,
+      "controller_stage_seconds": [
+        {
+          "start": "kill_marker_request",
+          "end": "kill_ack_observed",
+          "seconds": 1.6010512397624552
+        },
+        {
+          "start": "kill_ack_observed",
+          "end": "old_cleanup_observed",
+          "seconds": 0.43519140407443047
+        },
+        {
+          "start": "old_cleanup_observed",
+          "end": "replacement_ready_observed",
+          "seconds": 8.459105815272778
+        },
+        {
+          "start": "replacement_ready_observed",
+          "end": "restored_observed",
+          "seconds": 9.321449731942266
+        },
+        {
+          "start": "restored_observed",
+          "end": "first_joint_observed",
+          "seconds": 1.4219630029983819
+        }
+      ],
+      "local_stage_duration_statistics": {
+        "initial/reconfigure_end/seconds": {
+          "n": 40,
+          "mean": 0.32849839495611377,
+          "median": 0.21499382751062512,
+          "min": 0.09391291998326778,
+          "max": 0.8530957130715251
+        },
+        "initial/transport_send/seconds": {
+          "n": 8,
+          "mean": 0.2565988680580631,
+          "median": 0.2549470355734229,
+          "min": 0.1389385568909347,
+          "max": 0.37181334430351853
+        },
+        "replacement/adapter_imports": {
+          "n": 8,
+          "mean": 0.002486113313352689,
+          "median": 0.002211336395703256,
+          "min": 0.001427606912329793,
+          "max": 0.004821134964004159
+        },
+        "replacement/cuda_ddp_optimizer": {
+          "n": 8,
+          "mean": 0.09682663655257784,
+          "median": 0.09665066446177661,
+          "min": 0.09033820289187133,
+          "max": 0.10586147895082831
+        },
+        "replacement/default_process_group": {
+          "n": 8,
+          "mean": 0.41920652525732294,
+          "median": 0.39819284505210817,
+          "min": 0.0056365858763456345,
+          "max": 0.7105326089076698
+        },
+        "replacement/full_model_load": {
+          "n": 8,
+          "mean": 9.923952165991068e-05,
+          "median": 9.261502418667078e-05,
+          "min": 8.803000673651695e-05,
+          "max": 0.00013911398127675056
+        },
+        "replacement/initial_audit": {
+          "n": 8,
+          "mean": 0.24846918453113176,
+          "median": 0.24908751156181097,
+          "min": 0.2463135658763349,
+          "max": 0.2497929350938648
+        },
+        "replacement/manager_init": {
+          "n": 8,
+          "mean": 0.016118418716359884,
+          "median": 0.01642903045285493,
+          "min": 0.006711527006700635,
+          "max": 0.022796398028731346
+        },
+        "replacement/megatron_imports": {
+          "n": 8,
+          "mean": 1.7929020334850065,
+          "median": 1.7889876660192385,
+          "min": 1.7451868990901858,
+          "max": 1.8347274281550199
+        },
+        "replacement/model_partition": {
+          "n": 8,
+          "mean": 0.1752982274920214,
+          "median": 0.17531493247952312,
+          "min": 0.17472812999039888,
+          "max": 0.17609818186610937
+        },
+        "replacement/parallel_groups": {
+          "n": 8,
+          "mean": 2.2168966178724077,
+          "median": 2.230357920867391,
+          "min": 1.9063156670890749,
+          "max": 2.6651904571335763
+        },
+        "replacement/python_imports": {
+          "n": 8,
+          "mean": 0.192557950533228,
+          "median": 0.19182365841697901,
+          "min": 0.180338870966807,
+          "max": 0.20240384782664478
+        },
+        "replacement/reconfigure_end/seconds": {
+          "n": 16,
+          "mean": 0.40224108393886127,
+          "median": 0.2985369823873043,
+          "min": 0.09066686686128378,
+          "max": 0.8558780271559954
+        },
+        "replacement/restored/audit_seconds": {
+          "n": 8,
+          "mean": 0.5982842576340772,
+          "median": 0.6034406950930133,
+          "min": 0.5746122479904443,
+          "max": 0.6120326751843095
+        },
+        "replacement/restored/load_seconds": {
+          "n": 8,
+          "mean": 0.02663885839865543,
+          "median": 0.026377863017842174,
+          "min": 0.023645451990887523,
+          "max": 0.030599087942391634
+        },
+        "replacement/runtime_cuda_setup": {
+          "n": 8,
+          "mean": 0.00019429207895882428,
+          "median": 0.00019137200433760881,
+          "min": 0.00018392596393823624,
+          "max": 0.0002106709871441126
+        },
+        "replacement/state_loaded/load_seconds": {
+          "n": 8,
+          "mean": 0.02663885839865543,
+          "median": 0.026377863017842174,
+          "min": 0.023645451990887523,
+          "max": 0.030599087942391634
+        },
+        "replacement/transport_recv/seconds": {
+          "n": 8,
+          "mean": 1.1144410763517953,
+          "median": 1.1241548215039074,
+          "min": 0.9626683581154794,
+          "max": 1.2244919398799539
+        }
+      },
+      "local_stage_note": "Worker-local durations can overlap; extrema across ranks are not additive controller phases.",
+      "step_statistics": {
+        "startup_steps_1_2": {
+          "worker_seconds": {
+            "n": 32,
+            "mean": 3.329523340864398,
+            "median": 3.3383399804588407,
+            "min": 1.0024226419627666,
+            "max": 5.633972458075732
+          },
+          "worker_commit_intervals": {
+            "n": 16,
+            "mean": 1.0643927792116301,
+            "median": 1.0730476002208889,
+            "min": 1.0045239618048072,
+            "max": 1.0936413859017193
+          },
+          "max_worker_seconds_by_step": {
+            "1": 5.633972458075732,
+            "2": 1.09323972905986
+          },
+          "max_worker_seconds": {
+            "n": 2,
+            "mean": 3.363606093567796,
+            "median": 3.363606093567796,
+            "min": 1.09323972905986,
+            "max": 5.633972458075732
+          },
+          "worker_samples_per_step": {
+            "1": 16,
+            "2": 16
+          }
+        },
+        "warm_before_request": {
+          "worker_seconds": {
+            "n": 128,
+            "mean": 0.8383612185880338,
+            "median": 0.8452693030703813,
+            "min": 0.7705014781095088,
+            "max": 0.9481304846704006
+          },
+          "worker_commit_intervals": {
+            "n": 128,
+            "mean": 0.8385776472696307,
+            "median": 0.8454459593631327,
+            "min": 0.7709083580411971,
+            "max": 0.9482270707376301
+          },
+          "max_worker_seconds_by_step": {
+            "3": 0.9481304846704006,
+            "4": 0.9007970800157636,
+            "5": 0.8758716420270503,
+            "6": 0.8479238669387996,
+            "7": 0.8605295792222023,
+            "8": 0.8069397318176925,
+            "9": 0.7917460969183594,
+            "10": 0.781241926830262
+          },
+          "max_worker_seconds": {
+            "n": 8,
+            "mean": 0.8516475510550663,
+            "median": 0.854226723080501,
+            "min": 0.781241926830262,
+            "max": 0.9481304846704006
+          },
+          "worker_samples_per_step": {
+            "3": 16,
+            "4": 16,
+            "5": 16,
+            "6": 16,
+            "7": 16,
+            "8": 16,
+            "9": 16,
+            "10": 16
+          }
+        },
+        "request_to_cut_training": {
+          "worker_seconds": {
+            "n": 16,
+            "mean": 0.7803390047338326,
+            "median": 0.7816305459709838,
+            "min": 0.7722686640918255,
+            "max": 0.7866486550774425
+          },
+          "worker_commit_intervals": {
+            "n": 16,
+            "mean": 0.7805759630864486,
+            "median": 0.7817349198739976,
+            "min": 0.7725813882425427,
+            "max": 0.7867225420195609
+          },
+          "max_worker_seconds_by_step": {
+            "11": 0.7866486550774425
+          },
+          "max_worker_seconds": {
+            "n": 1,
+            "mean": 0.7866486550774425,
+            "median": 0.7866486550774425,
+            "min": 0.7866486550774425,
+            "max": 0.7866486550774425
+          },
+          "worker_samples_per_step": {
+            "11": 16
+          }
+        },
+        "first_recovered_step": {
+          "worker_seconds": {
+            "n": 16,
+            "mean": 3.904229570965981,
+            "median": 3.9179384445305914,
+            "min": 1.756635091966018,
+            "max": 6.048140137922019
+          },
+          "worker_commit_intervals": {
+            "n": 8,
+            "mean": 10.038952700444497,
+            "median": 10.03657011501491,
+            "min": 10.02965279808268,
+            "max": 10.050597622990608
+          },
+          "max_worker_seconds_by_step": {
+            "23": 6.048140137922019
+          },
+          "max_worker_seconds": {
+            "n": 1,
+            "mean": 6.048140137922019,
+            "median": 6.048140137922019,
+            "min": 6.048140137922019,
+            "max": 6.048140137922019
+          },
+          "worker_samples_per_step": {
+            "23": 16
+          }
+        },
+        "subsequent_recovered_steps": {
+          "worker_seconds": {
+            "n": 80,
+            "mean": 0.8933029559877468,
+            "median": 0.8816156371030957,
+            "min": 0.7985279238782823,
+            "max": 1.0306637319736183
+          },
+          "worker_commit_intervals": {
+            "n": 80,
+            "mean": 0.893533913124702,
+            "median": 0.8818283174186945,
+            "min": 0.7987151830457151,
+            "max": 1.0310908961109817
+          },
+          "max_worker_seconds_by_step": {
+            "24": 1.0306637319736183,
+            "25": 0.889337508007884,
+            "26": 0.9116457251366228,
+            "27": 0.8052356829866767,
+            "28": 0.8744581688661128
+          },
+          "max_worker_seconds": {
+            "n": 5,
+            "mean": 0.9022681633941829,
+            "median": 0.889337508007884,
+            "min": 0.8052356829866767,
+            "max": 1.0306637319736183
+          },
+          "worker_samples_per_step": {
+            "24": 16,
+            "25": 16,
+            "26": 16,
+            "27": 16,
+            "28": 16
+          }
+        },
+        "healthy_solo_during_recovery": {
+          "worker_seconds": {
+            "n": 88,
+            "mean": 0.753145474570126,
+            "median": 0.7199772587046027,
+            "min": 0.677379849832505,
+            "max": 0.9938852549530566
+          },
+          "worker_commit_intervals": {
+            "n": 88,
+            "mean": 1.004683311525944,
+            "median": 0.7201749719679356,
+            "min": 0.6776139931753278,
+            "max": 3.619578983169049
+          },
+          "max_worker_seconds_by_step": {
+            "12": 0.867303276900202,
+            "13": 0.744349850807339,
+            "14": 0.703603230882436,
+            "15": 0.7211329499259591,
+            "16": 0.7101717912591994,
+            "17": 0.7445838702842593,
+            "18": 0.7228094330057502,
+            "19": 0.9938852549530566,
+            "20": 0.7971834936179221,
+            "21": 0.7002527383156121,
+            "22": 0.7020699209533632
+          },
+          "max_worker_seconds": {
+            "n": 11,
+            "mean": 0.7643041646277363,
+            "median": 0.7228094330057502,
+            "min": 0.7002527383156121,
+            "max": 0.9938852549530566
+          },
+          "worker_samples_per_step": {
+            "12": 8,
+            "13": 8,
+            "14": 8,
+            "15": 8,
+            "16": 8,
+            "17": 8,
+            "18": 8,
+            "19": 8,
+            "20": 8,
+            "21": 8,
+            "22": 8
+          }
+        }
+      },
+      "evidence_file": "o3_early0_timing.json",
+      "evidence_sha256": "8b5329e1faf759b1cd0be88073299b9ea2a08983354cb165872203df32b42937",
+      "limitations": [
+        "Cold spare; healthy replica can commit solo during recovery.",
+        "Only first joint commit has nine-state hash audit; five post-recovery commits checked.",
+        "Controller observation includes polling/SSH; wrapper import precedes train import phase."
+      ],
+      "v1_details": {
+        "local_spans": {
+          "recv_to_load_callback": {
+            "n": 8,
+            "min": 5.6519320260267705,
+            "mean": 5.79209675398306,
+            "max": 6.079123321920633
+          },
+          "recv_to_loaded": {
+            "n": 8,
+            "min": 5.675577544141561,
+            "mean": 5.81873593677301,
+            "max": 6.1065940679982305
+          },
+          "ready_to_restored": {
+            "n": 8,
+            "min": 9.199673443101346,
+            "mean": 9.230815806018654,
+            "max": 9.262670712079853
+          }
+        },
+        "donor_commit_gap_to_first_joint": {
+          "n": 8,
+          "min": 10.02965279808268,
+          "mean": 10.038952700444497,
+          "max": 10.050597622990608
+        },
+        "controls": {
+          "seed": 1182328,
+          "trigger": 10,
+          "post_steps": 6,
+          "communication_timeout": 2,
+          "cold_launcher": true,
+          "digest_engine": "staged",
+          "overlap_cpu_model_load": "1",
+          "recovery_gradient_only": null,
+          "overlap_cold_cleanup": true
+        }
+      }
+    }
+  ],
+  "failures": [
+    {
+      "file": "failure_base0.json",
+      "name": "v1_quick_20261104_o1_base0"
+    },
+    {
+      "file": "failure_base0_r1.json",
+      "name": "v1_quick_20261104_o1_base0_r1"
+    },
+    {
+      "file": "failure_o1_h30.json",
+      "name": "v1_quick_20261104_o1_h30"
+    },
+    {
+      "file": "failure_o1_z30.json",
+      "name": "v1_quick_20261104_o1_z30"
+    }
+  ],
+  "limitations": [
+    "Shared company workload changed; historical times are not matched performance controls.",
+    "Original 2s-deadline baseline failures retained. Later comparisons explicitly declare the 30s deadline.",
+    "Few runs and short post windows cannot establish absence of performance regression.",
+    "Controller intervals include SSH/polling; worker-local spans overlap and cannot be added across hosts."
+  ],
+  "selected_profile": {
+    "cold_launcher": true,
+    "digest_engine": "staged",
+    "overlap_cpu_model_load": true,
+    "communication_timeout": 2,
+    "training_algorithm_changed": false
+  },
+  "additional_candidates_rejected": [
+    {
+      "name": "o2_grad0",
+      "functional_pass": true,
+      "seconds": 25.068779447115958,
+      "reason": "Native gradient-only recovery is correct but slower; cold compute moved onto the critical path."
+    },
+    {
+      "name": "o3_early0",
+      "functional_pass": true,
+      "seconds": 21.238761194050312,
+      "reason": "0.025s difference from21.264s is within controller observation uncertainty."
+    }
+  ],
+  "user_comparison_requirement": "One common training engine/workload with different recovery decisions. Existing v1/v2/v4 entries, batches, data, audit frequency and physical placement differ; these quick tests do not establish cross-strategy performance rankings.",
+  "retest_decision": "User canceled redundant reruns after exact restoration of the already audited selected sources."
+}

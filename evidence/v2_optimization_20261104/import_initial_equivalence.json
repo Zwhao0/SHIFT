@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "common_pre_cut_steps": 0,
+  "common_committed_steps": 0,
+  "includes_migration": false,
+  "roles": 2,
+  "ranks_per_role": 8,
+  "state_fields": 9,
+  "compared_worker_states": 16,
+  "signatures": [
+    {
+      "run": "v2_q2_v2n0",
+      "sha256": "19b7edcb048b64f3796c2c5cdc4a43c8108c89fdc671797907116bd8ec471a10"
+    },
+    {
+      "run": "v2_q2_v2i0",
+      "sha256": "19b7edcb048b64f3796c2c5cdc4a43c8108c89fdc671797907116bd8ec471a10"
+    }
+  ],
+  "mismatches": []
+}

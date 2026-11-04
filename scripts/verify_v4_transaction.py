@@ -157,11 +157,11 @@ def verify(root):
     between = summary.get('between_steps', 0)
     check(_is_int(first_cut) and first_cut > 0, 'positive initial cut')
     check(_is_int(post_steps) and post_steps > 0, 'positive final post steps')
-    check(_is_int(microbatches) and microbatches == 4, 'four microbatches/global batch 16')
+    check(_is_int(microbatches) and microbatches == (2 if summary.get('unified') else 4), 'microbatches match configured global batch')
     check(_is_int(between) and between >= 0, 'nonnegative between-round steps')
     topology = summary.get('topology')
-    check(isinstance(topology, dict) and topology.get('global_batch') == 16,
-          'fixed global batch 16')
+    check(isinstance(topology, dict) and topology.get('global_batch') == (8 if summary.get('unified') else 16),
+          'fixed global batch matches unified/legacy layout')
     first_cut = first_cut if _is_int(first_cut) and first_cut > 0 else 1
     post_steps = post_steps if _is_int(post_steps) and post_steps > 0 else 1
     between = between if _is_int(between) and between >= 0 else 0
@@ -333,8 +333,8 @@ def verify(root):
             step = commit.get('step')
             check(_is_int(step) and commit.get('phase') in ('before', 'after'),
                   f'integer commit step/phase replica{replica}/rank{rank}')
-            exp_samples = ([ (step - 1) * 16 + micro * 4 + replica * 2 + (rank % 4) // 2
-                             for micro in range(4)] if _is_int(step) and step > 0 else None)
+            exp_samples = ([ (step - 1) * microbatches * 4 + micro * 4 + replica * 2 + (rank % 4) // 2
+                             for micro in range(microbatches)] if _is_int(step) and step > 0 else None)
             check(commit.get('sample_ids') == exp_samples and commit.get('finite') is True,
                   f'sample IDs/finite replica{replica}/rank{rank}/step{step}')
             if commit.get('phase') == 'after':

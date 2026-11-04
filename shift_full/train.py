@@ -16,6 +16,8 @@ import types
 
 import torch
 import torch.distributed as dist
+from shift_full.training_core import (TrainingState, partition_model, configure_model,
+    sample_plan, make_batches, train_step, complete_step, initialize_rng)
 from shift_full.compat import install_baby_event_fix, install_managed_callback_fix, bootstrap_legacy_core
 from shift_full.reference_audit import (
     parse_reference_dump_steps,
@@ -94,6 +96,7 @@ def main():
     p.add_argument('--microbatches', type=int, default=2)
     p.add_argument('--hash-every', type=int, default=0)
     p.add_argument('--audit-state', action='store_true')
+    p.add_argument('--final-audit', action='store_true', help='development hashes after all measured commits')
     p.add_argument('--measure-step', action='store_true')
     p.add_argument('--sync-quorum', action='store_true')
     p.add_argument('--fixed-batch', action='store_true')
@@ -123,6 +126,7 @@ def main():
     p.add_argument('--timeline-trace-step', type=int, default=0, help='one-step CPU/CUDA diagnostic on replica0 ranks0/4; not performance evidence')
     p.add_argument('--local-group-sync', action='store_true')
     p.add_argument('--eager-groups', action='store_true')
+    p.add_argument('--recovery-timing', action='store_true', help='log bounded joining-thread milestones')
     p.add_argument('--gradient-probe-step', type=int, default=0, help='bounded single-update gradient slices; diagnostic only')
     p.add_argument('--bucket-hook', action='store_true')
     p.add_argument('--warmup-before-join', action='store_true')
@@ -310,17 +314,14 @@ def main():
     total_parameters = sum(v.numel() for v in full.parameters())
     if args.fp32:
         full.float()
-    patch_moe(full, ep)
-    stage = StageModel(full, state.get_pipeline_model_parallel_rank())
-    tp_manifest = patch_tensor_parallel(stage, state.get_tensor_model_parallel_group())
+    stage, tp_manifest = partition_model(full, ep=ep, tp=state.get_tensor_model_parallel_group(),
+        pp_rank=state.get_pipeline_model_parallel_rank(), StageModel=StageModel,
+        patch_moe=patch_moe, patch_tensor_parallel=patch_tensor_parallel)
     del full
     phase_started = phase('model_partition', phase_started)
-    stage.cuda()
-    ddp = megatron_adapter.wrap(stage, dense, expert_dp, args.bucket_size, config=stage.config)
-    stage.config.no_sync_func = ddp.no_sync
-    stage.config.finalize_model_grads_func = finalize_model_grads
-    optimizer = torch.optim.AdamW(stage.parameters(), lr=args.lr, foreach=False)
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=1000, gamma=0.98)
+    ddp, optimizer, scheduler = configure_model(stage, adapter=megatron_adapter, dense=dense,
+        expert_dp=expert_dp, finalize=finalize_model_grads, bucket_size=args.bucket_size,
+        lr=args.lr, scheduler_step=1000)
     phase_started = phase('cuda_ddp_optimizer', phase_started)
     def role_manifest():
         return dict(tp=2, pp=2, ep=2, etp=2, rank=rank,
@@ -353,18 +354,9 @@ def main():
     manager = None
     reference_manager_state = None
 
-    def rng_snapshot():
-        return dict(torch_rng=torch.get_rng_state(), cuda_rng=torch.cuda.get_rng_state(),
-                    python_rng=random.getstate(), tracker_rng=tracker_snapshot(rng_tracker))
-
-    def current_hashes(rng=None):
-        torch.cuda.current_stream().synchronize()
-        rng = rng if rng is not None else rng_snapshot()
-        return dict(model=digest(stage.state_dict()), optimizer=digest(optimizer.state_dict()),
-                    scheduler=digest(scheduler.state_dict()), progress=digest(progress),
-                    cpu_rng=digest(rng['torch_rng']), cuda_rng=digest(rng['cuda_rng']),
-                    python_rng=digest(rng['python_rng']), buffers=digest(dict(stage.named_buffers())),
-                    tracker_rng=digest(rng['tracker_rng']))
+    training_state = TrainingState(stage, optimizer, scheduler, progress, rng_tracker)
+    rng_snapshot = training_state.rng
+    current_hashes = training_state.hashes
 
     def export_state():
         nonlocal audit_joint_pending
@@ -378,14 +370,9 @@ def main():
         if frozen:
             frozen['copy_ready'].synchronize()
         all_buffers = frozen['buffers'] if frozen else {n: b.detach().clone() for n,b in stage.named_buffers()}
-        model_state = stage.state_dict()
-        for name, value in all_buffers.items():
-            if name in model_state: model_state[name] = value
-        payload = dict(model=model_state, all_buffers=all_buffers,
-                       optimizer=optimizer.state_dict(),
-                       scheduler=scheduler.state_dict(), progress=dict(progress),
-                       **rng, source_replica=args.replica,
-                       source_rank=rank, step=step)
+        payload = training_state.capture(rng=rng, all_buffers=all_buffers,
+            source_replica=args.replica, source_rank=rank)
+        model_state = payload['model']
         payload['hashes'] = current_hashes(rng) if args.audit_state else {}
         if args.audit_state:
             payload['hashes'].update(model=digest(model_state), buffers=digest(all_buffers))
@@ -398,19 +385,13 @@ def main():
     def load_state(payload):
         nonlocal audit_joint_pending
         load_started = time.monotonic()
+        if args.recovery_timing:
+            event('load_state_begin', step=payload['step'])
         assert payload['source_rank'] == rank
         assert payload['step'] == payload['progress']['updates']
         assert payload['step'] == (manager.current_step() if manager else payload['step'])
-        stage.load_state_dict(payload['model'], strict=True)
-        restore_buffers(stage, payload['all_buffers'])
-        optimizer.load_state_dict(payload['optimizer'])
-        scheduler.load_state_dict(payload['scheduler'])
-        progress.update(payload['progress'])
+        training_state.restore(payload)
         audit_joint_pending = True
-        torch.set_rng_state(payload['torch_rng'])
-        torch.cuda.set_rng_state(payload['cuda_rng'])
-        random.setstate(payload['python_rng'])
-        restore_tracker(rng_tracker, payload['tracker_rng'])
         torch.cuda.current_stream().synchronize()
         loaded_at = time.monotonic()
         event('state_loaded',step=payload['step'],load_seconds=loaded_at-load_started,
@@ -477,6 +458,8 @@ def main():
 
     if args.standby=='gpu':
         standby_gate('gpu')
+
+    if not args.reference_anchor: initialize_rng(rank % 8)
 
     from torchft import Manager, ProcessGroupGloo
     from torchft.checkpointing import HTTPTransport
@@ -669,6 +652,7 @@ def main():
     attempts = 0
     previous_commit_end = None
     recovery_requested = False
+    joining_commit_seen = False
     def requested_stop():
         marker = out / 'STOP'
         if not marker.exists():
@@ -708,48 +692,42 @@ def main():
             else:
                 replica_index = manager._participating_replica_rank if args.fixed_batch else args.replica
                 data_rank = (replica_index or 0) * 2 + state.get_data_parallel_rank()
-            count = args.microbatches * (2 // participants if args.fixed_batch else 1)
-            dense_size = 2 * participants if args.fixed_batch else 4
-            batches = []
-            sample_ids = []
-            for micro in range(count):
-                sample = step * (args.microbatches * 4) + micro * dense_size + data_rank
-                sample_ids.append(sample)
-                if args.data == 'random':
-                    generator = torch.Generator(device='cuda').manual_seed(100_000 + sample)
-                    tokens = torch.randint(0, stage.hf_config.vocab_size, (1, args.seq_len + 1),
-                                           device='cuda', generator=generator)
-                else:
-                    tokens = (torch.arange(args.seq_len + 1, device='cuda').view(1, -1)
-                              + sample % 8) % 32 + 100
-                batches.append(dict(input_ids=tokens[:, :-1].contiguous(),
-                                    next_token_labels=tokens[:, 1:].contiguous()))
+            sample_ids = sample_plan(step, microbatches=args.microbatches, participants=participants,
+                replica=0 if args.mode=='flat' else (replica_index or 0), local_data_rank=state.get_data_parallel_rank(),
+                fixed_batch=args.fixed_batch)
+            count = len(sample_ids)
+            batches = make_batches(sample_ids, seq_len=args.seq_len, vocab_size=stage.hf_config.vocab_size,
+                data=args.data)
             if args.reference_dump or args.reference_signatures:
                 event('batch_plan',step=step,sample_ids=sample_ids)
             started = time.monotonic()
+            joining_timing = args.recovery_timing and args.generation > 0 and not joining_commit_seen
+            if joining_timing:
+                event('join_schedule_begin', step=step)
             if ready_trace: ready_trace.begin()
             gpu_mark('schedule_begin')
             before_calls = cross_calls[0]
-            with timeline.scope('schedule') if timeline else nullcontext():
-                metrics = schedule(forward_step_func=forward_step, data_iterator=iter(batches),
-                                   model=ddp, num_microbatches=count,
-                                   seq_length=args.seq_len + stage.extra_positions(1), micro_batch_size=1)
+            def execute_step():
+                with timeline.scope('schedule') if timeline else nullcontext():
+                    return schedule(forward_step_func=forward_step, data_iterator=iter(batches),
+                        model=ddp, num_microbatches=count,
+                        seq_length=args.seq_len + stage.extra_positions(1), micro_batch_size=1)
+            transaction = train_step(stage, ddp, optimizer, scheduler, progress, execute=execute_step,
+                synchronize=args.measure_step, schedule_end=lambda:gpu_mark('schedule_end'),
+                finite_scope=(lambda:timeline.scope('finite')) if timeline else None,
+                optimizer_scope=(lambda:timeline.scope('optimizer')) if timeline else None, mark=gpu_mark)
+            computed = next(transaction)
+            metrics = computed.metrics
             if gradient_probe:
                 gradient_probe.capture('post_tail')
                 event('gradient_probe', **gradient_probe.result())
-            for parameter in stage.parameters():
-                parameter.grad = parameter.main_grad
-            # A bad numeric result must never be counted as a valid update.
-            gpu_mark('schedule_end')
-            schedule_done = time.monotonic()
-            with timeline.scope('finite') if timeline else nullcontext():
-                finite = bool(torch.stack([torch.isfinite(b.grad_data).all() for buf in buffers for b in buf.buckets]).all())
+            schedule_done = computed.schedule_done
+            if joining_timing: event('join_schedule_end', step=step)
+            finite = computed.finite
             if not finite:
-                if manager:
-                    manager.report_error(RuntimeError('nonfinite gradients'))
-                else:
-                    raise RuntimeError('nonfinite gradients in baseline')
-            gradient_checked = time.monotonic()
+                if manager: manager.report_error(RuntimeError('nonfinite gradients'))
+                else: raise RuntimeError('nonfinite gradients in baseline')
+            gradient_checked = computed.gradient_checked
             dump_selected = should_dump_reference(
                 enabled=args.reference_dump,
                 selected_steps=args.reference_dump_steps,
@@ -760,9 +738,13 @@ def main():
             )
             gradients = cpu_tree({name: parameter.main_grad for name, parameter in stage.named_parameters()}) if dump_selected else None
             decision_started = time.monotonic()
+            if joining_timing:
+                event('join_decision_begin', step=step)
             with timeline.scope('should_commit') if timeline else nullcontext():
                 commit = manager.should_commit() if manager else True
             decision_done = time.monotonic()
+            if joining_timing:
+                event('join_decision_end', step=progress['updates'], commit=commit)
             gradient_signature_hash = None
             if args.reference_signatures and commit:
                 gradient_signature_hash = digest(
@@ -772,17 +754,10 @@ def main():
                            decision_seconds=decision_done-decision_started)
             attempts += 1
             if commit:
-                gpu_mark('optimizer_begin')
-                with timeline.scope('optimizer') if timeline else nullcontext():
-                    optimizer.step()
-                    scheduler.step()
-                gpu_mark('optimizer_end')
-                optimizer_done = time.monotonic()
-                if args.measure_step:
-                    torch.cuda.current_stream().synchronize()
-                step_sync_done = time.monotonic()
+                update = complete_step(transaction, True)
+                optimizer_done, step_sync_done = update['optimizer_done'], update['step_sync_done']
                 if ready_trace:
-                    event('bucket_ready_diagnostic', step=progress['updates']+1,
+                    event('bucket_ready_diagnostic', step=progress['updates'],
                           performance_evidence=False,
                           buckets=ready_trace.collect(step_gpu_events['schedule_begin'],
                               step_gpu_events['local_finish_begin'], step_gpu_events['outer_finish_end']))
@@ -794,9 +769,10 @@ def main():
                                                ('local_and_outer', 'local_finish_begin', 'outer_finish_end'),
                                                ('optimizer', 'optimizer_begin', 'optimizer_end')]:
                         timings[label+'_event_seconds'] = step_gpu_events[begin].elapsed_time(step_gpu_events[end])/1000
-                progress['updates'] += 1
                 actual_participants=manager.num_participants() if manager else 2
                 contributed=manager.is_participating() if manager else True
+                if contributed:
+                    joining_commit_seen = True
                 audit_joint=args.audit_state and audit_joint_pending and actual_participants>=2 and contributed
                 hashes = current_hashes() if ((args.hash_every and progress['updates'] % args.hash_every == 0) or audit_joint) else {}
                 if audit_joint: audit_joint_pending=False
@@ -833,6 +809,7 @@ def main():
                       seconds=time.monotonic() - iteration_started, compute_seconds=time.monotonic()-started,
                       loss=[float(m['loss']) for m in metrics] if metrics else [], **timings, **cross_timings)
             else:
+                complete_step(transaction, False)
                 if ready_trace: ready_trace.discard()
                 event('skipped', step=step, error=str(manager.errored()), **timings)
             if timeline:
@@ -910,6 +887,8 @@ def main():
                           cache='fadvise_dontneed_advisory', hashes_match=not args.audit_state or current_hashes()==payload.get('hashes'))
                     del loaded
                 del payload
+        if args.final_audit:
+            event('final_audit', step=progress['updates'], hashes=current_hashes())
         event('stopped', step=progress['updates'], attempts=attempts)
         dist.barrier()
         if manager:

@@ -1,0 +1,21 @@
+{
+  "nodes": {
+    "node0": {
+      "scoped_key_installed": true,
+      "runners_verified": true
+    },
+    "node1": {
+      "scoped_key_installed": true,
+      "runners_verified": true
+    },
+    "node3": {
+      "scoped_key_installed": true,
+      "runners_verified": true
+    }
+  },
+  "source_sha256": {
+    "shift_full/planned_train.py": "6be0b4e7c2c47c9e1ed21bddd521a892e067eaa9684890477f53db8cab9363b2",
+    "scripts/quick_v2_remote.py": "b540ab9d16d7367937515236b54080c28d7e573fabc6cd84750ab9a53e7a5269",
+    "scripts/start_quick_recovery.py": "1364c5d9925eb13ef40fcf203ed3c873c82f29bb850c2fc6bd2b19def9a8c12b"
+  }
+}

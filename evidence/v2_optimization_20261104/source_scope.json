@@ -1,0 +1,42 @@
+{
+  "shift_full/train.py": {
+    "unchanged": true,
+    "sha256": "e0c2eba969662a9d89bee10aee04b274850588e07b8b3c9d5ffa91042a460aeb"
+  },
+  "shift_full/v4_train.py": {
+    "unchanged": true,
+    "sha256": "fa25723eb703180bf0e3eb27cd403b69a65ca78adc14be9f48b547832a2428d3"
+  },
+  "shift_full/v4_transaction_train.py": {
+    "unchanged": true,
+    "sha256": "e49c6f91d7a5acdb4bce40900def50b59525cd826b08cf981978f0b93b0442a0"
+  },
+  "shift_full/v4_reference.py": {
+    "unchanged": true,
+    "sha256": "356114c38c7f6fa20cf176aebeb54892f345c5d46dc4614139e28e2b734bc979"
+  },
+  "shift_full/supervisor.py": {
+    "unchanged": true,
+    "sha256": "ea683792cbf8adb1321c45c5860b9c17d4c3f564f0161daf3f011ff21e55088d"
+  },
+  "shift_full/cold_cpu_load.py": {
+    "unchanged": true,
+    "sha256": "672977f68ab5dbb26705cbc279960e2e46fda9c43221969262784d5f4ee515f6"
+  },
+  "shift_full/cold_launch.py": {
+    "unchanged": true,
+    "sha256": "99de083a77549799bd6b986f990d60f789cf9470adbb146a38497a413f335723"
+  },
+  "shift_full/prepared_pg.py": {
+    "unchanged": true,
+    "sha256": "f0ed5eef8b9dbbf881609421574608f666d14d648e4579e7b2c6d0cc54124688"
+  },
+  "shift_full/planned_handoff.py": {
+    "unchanged": true,
+    "sha256": "82c12f6b91174505e3c1af3c8c636fd014fcdf159a361b3b1ad93d15af76220c"
+  },
+  "scripts/v4_remote.py": {
+    "unchanged": true,
+    "sha256": "a540bf34b8212b4d62fecd52f6064e1c4f41cf9725b5a06763112f4302625ec9"
+  }
+}

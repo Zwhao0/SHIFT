@@ -48,9 +48,18 @@ def main():
     p.add_argument('--overlap-peer', action='store_true')
     p.add_argument('--retain-outer-managers', action='store_true')
     p.add_argument('--fail-restore-rank', type=int, default=-1)
+    p.add_argument('--trace-step',type=int,default=0)
+    p.add_argument('--deterministic',action='store_true')
+    p.add_argument('--post-layout', action='store_true', help='no-fault timing control for the final cross-host PP layout')
+    p.add_argument('--unified', action='store_true', help='batch8 random data; complete initial DP replica per host')
+    p.add_argument('--performance-no-audit', action='store_true')
+    p.add_argument('--seed', type=int, default=20261106)
     a = p.parse_args()
+    if a.post_layout and not (a.unified and a.reference_only and a.performance_no_audit):p.error('post-layout is a unified no-fault performance control only')
+    if a.unified and a.cross_node_tp:p.error('unified TP must remain within a node')
+    if a.performance_no_audit and (a.outer_audit or a.reference_run):p.error('performance run cannot consume audited reference')
     if a.transactional_switch:
-        a.outer_manager=True;a.overlap_peer=True
+        a.outer_manager=True;a.overlap_peer=True;a.retain_outer_managers=True
         if not a.reference_only:
             a.retain_outer_managers=True;a.gpu_prepare=True;a.gpu_warmup=True
             a.reuse_local_groups=True;a.preconnect_state=True;a.defer_source_local_close=True
@@ -76,7 +85,7 @@ def main():
         p.error('independent reference and Manager retention require outer Manager')
     if a.overlap_peer and (not a.outer_manager or (not a.reference_only and not a.retain_outer_managers)):
         p.error('peer overlap requires outer Manager retention (or reference-only)')
-    if a.reference_only and (a.reference_run or a.fail_restore_rank != -1 or a.retain_outer_managers):
+    if a.reference_only and (a.reference_run or a.fail_restore_rank != -1):
         p.error('reference-only cannot migrate, inject failure or consume a reference')
     if a.reference_run and (a.no_oracle or not all(x.isalnum() or x in '_-' for x in a.reference_run)):
         p.error('reference-run requires a valid suffix and oracle enabled')
@@ -87,7 +96,7 @@ def main():
     if a.transactional_switch and not a.reference_only:
         from scripts.v4_transaction_remote import main as transaction_main
         return transaction_main(a)
-    plan = Plan(cut=a.cut, post_steps=a.post_steps, seq_len=a.seq_len)
+    plan = Plan(cut=a.cut, post_steps=a.post_steps, seq_len=a.seq_len, microbatches=2 if a.unified else 4)
     name = 'v4_' + a.suffix
     out = ROOT / 'results' / name
     out.mkdir(parents=True, exist_ok=False)
@@ -101,10 +110,12 @@ def main():
     roles = dict(zip('ABC', (eps['node0'], eps['node1'], eps['node3'])))
     if a.outer_manager:
         roles.update(D=eps['node0'],E=eps['node1'])
+        if a.unified:roles.update(B=eps['node0'],D=eps['node1'])
+        if a.post_layout:roles['B']=eps['node3']
     if a.reference_only:roles.pop('C')
     units = []
     rows = {}
-    report = dict(name=name, functional_pass=False, oracle_exact=None, error=None,
+    report = dict(role_hosts={r:e.physical_node for r,e in roles.items()},post_layout=a.post_layout,unified=a.unified, performance_no_audit=a.performance_no_audit, seed=a.seed, initialization_seed=2026 if a.unified else a.seed, data='random' if a.unified else 'pattern', name=name, functional_pass=False, oracle_exact=None, error=None,
         topology=dict(tp=2, pp=2, ep=2, ranks=8, devices_per_node=4,
                       A='node0/PP0', B='node1/PP1', C='node3/standby_PP1'),
         plan=vars(plan), oracle=not (a.no_oracle or a.reference_only), gpu_prepare=a.gpu_prepare,gpu_warmup=a.gpu_warmup,slow_ms=a.slow_ms,
@@ -114,8 +125,9 @@ def main():
         reference_only=a.reference_only,reference_run=a.reference_run,retain_outer_managers=a.retain_outer_managers,overlap_peer=a.overlap_peer,transactional_switch=a.transactional_switch,cycles=a.cycles,cross_node_tp=a.cross_node_tp,
         source_stall_round=a.source_stall_round,source_deadline=a.source_deadline,
         between_steps=a.between_steps,cancel_round=a.cancel_round,stall_restore_rank=a.stall_restore_rank,restore_deadline=a.restore_deadline,fault_round=a.fault_round,affected_ranks=[1,3,5,7] if a.cross_node_tp else [4,5,6,7],
-        outer_manager=a.outer_manager,outer_audit=a.outer_audit or (a.outer_manager and not a.no_oracle),
+        outer_manager=a.outer_manager,outer_audit=not a.performance_no_audit and (a.outer_audit or (a.outer_manager and not a.no_oracle)),
         outer_timeout=a.outer_timeout,fail_restore_rank=a.fail_restore_rank,
+        trace_step=a.trace_step,deterministic=a.deterministic,
         limitations=['single replica; outer TorchFT DP isolation not exercised',
             'default and cross-host groups rebuilt; local reuse/preconnect are opt-in; extra snapshot memory',
             'adapter-specific standby-local rehearsal; not a general communication replay sandbox',
@@ -125,16 +137,19 @@ def main():
                       ROOT/'shift_full/compat.py',ROOT/'shift_full/v4_groups.py',ROOT/'shift_full/v4_reference.py',
                       ROOT/'scripts/v4_remote.py',ROOT/'scripts/verify_v4.py']})
     if a.outer_manager:
-        report['topology'].update(replicas=2,ranks_per_replica=8,ranks=16,global_batch=16,
+        report['topology'].update(replicas=2,ranks_per_replica=8,ranks=16,global_batch=8 if a.unified else 16,
             D='node0/GPU4..7/replica1_PP0',E='node1/GPU4..7/replica1_PP1',independent_fault_domains=False)
         report['limitations'][0]='two DP replicas share hosts; both pause and rebuild outer Managers at boundary'
         if a.reference_only:
-            report['limitations'][0]='independent no-migration reference; two replicas share hosts'
+            report['limitations'][0]='independent no-migration reference; complete replica per host' if a.unified else 'independent no-migration reference; two replicas share hosts'
         elif a.retain_outer_managers:
             report['limitations'][0]='two replicas share hosts; both pause; healthy Managers/services retained'
+        if a.post_layout:report['topology']['post_layout_control']=True
+        if a.unified:report['topology'].update(A='node0/GPU0..3/replica0_PP0',B='node0/GPU4..7/replica0_PP1',D='node1/GPU0..3/replica1_PP0',E='node1/GPU4..7/replica1_PP1', replica_hosts_distinct=True, independent_fault_domains=False)
+        if a.post_layout:report['topology'].update(B='node3/GPU0..3/replica0_PP1', C='unused in post-layout control')
         for filename in ('shift_full/v4_outer.py','scripts/verify_v4_outer.py','scripts/verify_v4_reference.py'):
             report['source_sha256'][filename]=hashlib.sha256((ROOT/filename).read_bytes()).hexdigest()
-    if a.transactional_switch:
+    if a.transactional_switch or a.reference_only:
         from shift_full.v4_reference import training_sources
         report['source_sha256'].update(training_sources(ROOT))
     def save():
@@ -148,7 +163,7 @@ def main():
             entries = [x.split(',',1) for x in raw.splitlines() if x.strip()]
             company = {pid.strip():proc.strip() for pid,proc in entries if 'VLLM::' in proc}
             extra = [pid.strip() for pid,proc in entries if 'VLLM::' not in proc]
-            result[n] = dict(company=company, extra_gpu=extra)
+            result[n] = dict(company=company, extra_gpu=extra, gpu_load=s.ssh(e,['nvidia-smi','--query-gpu=index,utilization.gpu,memory.used','--format=csv,noheader,nounits']).splitlines())
         return result
     def launch(e, suffix, role, config, host_role=None):
         unit = 'shift-v4-'+a.suffix+'-'+suffix
@@ -159,8 +174,8 @@ def main():
             '--property=StandardOutput=append:'+str(out/(suffix+'.host.log')),'--property=StandardError=inherit']
         env = dict(PYTHONPATH=str(ROOT)+':/workspace/FLASH1022',PYTHONDONTWRITEBYTECODE='1',
             PYTHONUNBUFFERED='1',OMP_NUM_THREADS='1',MALLOC_ARENA_MAX='2',
-            CPATH=str(ROOT/'runtime/python-headers'),CUDA_VISIBLE_DEVICES='4,5,6,7' if host_role in ('D','E') else '0,1,2,3',
-            NCCL_MAX_CTAS='4',NCCL_BUFFSIZE='1048576',NCCL_CUMEM_HOST_ENABLE='0',
+            CPATH=str(ROOT/'runtime/python-headers'),CUDA_VISIBLE_DEVICES='4,5,6,7' if host_role in (('E',) if a.post_layout else ('B','E') if a.unified else ('D','E')) else '0,1,2,3',
+            CUDA_DEVICE_MAX_CONNECTIONS='1',NCCL_MAX_CTAS='4',NCCL_BUFFSIZE='1048576',NCCL_CUMEM_HOST_ENABLE='0',
             NCCL_CUMEM_ENABLE='0',NCCL_NVLS_ENABLE='0',NCCL_DEBUG='WARN',
             NCCL_NET='IB',NCCL_IB_DISABLE='0',NCCL_SOCKET_IFNAME='bond0',GLOO_SOCKET_IFNAME='bond0',
             NCCL_IB_HCA='=mlx5_0:1,mlx5_1:1,mlx5_2:1,mlx5_3:1',NCCL_IB_GID_INDEX='3',
@@ -188,7 +203,7 @@ def main():
                 'print(json.dumps({f.name:f.read_text(errors="replace") for f in p.glob('+repr(role+'*.jsonl')+')}))')
             files = json.loads(s.ssh(e,['python3','-c',code]))
             data[role] = [json.loads(line) for content in files.values() for line in content.splitlines() if line.strip()]
-            if role not in ('A','D'):  # These workers already write on this host.
+            if e.physical_node != 'node0':  # Never rewrite a live local worker log.
                 for filename,content in files.items():
                     (out/filename).write_text(content)
         return data
@@ -202,14 +217,15 @@ def main():
             raise RuntimeError('expected idle SHIFT resources and eight existing company PIDs')
         config = dict(directory=str(out), flash='/workspace/FLASH1022',
             hosts={role:e.ip for role,e in roles.items()}, port=32750, timeout=120,
-            seconds=a.seconds, seed=20261106, plan=vars(plan), oracle=report['oracle'],
+            seconds=a.seconds, seed=2026 if a.unified else a.seed, unified=a.unified, data='random' if a.unified else 'pattern', performance_no_audit=a.performance_no_audit, plan=vars(plan), oracle=report['oracle'],
             reference_only=a.reference_only,reference_run=a.reference_run,retain_outer_managers=a.retain_outer_managers,overlap_peer=a.overlap_peer,transactional_switch=a.transactional_switch,cycles=a.cycles,cross_node_tp=a.cross_node_tp,
         source_stall_round=a.source_stall_round,source_deadline=a.source_deadline,
         between_steps=a.between_steps,cancel_round=a.cancel_round,stall_restore_rank=a.stall_restore_rank,restore_deadline=a.restore_deadline,fault_round=a.fault_round,affected_ranks=[1,3,5,7] if a.cross_node_tp else [4,5,6,7],
             gpu_prepare=a.gpu_prepare,gpu_warmup=a.gpu_warmup,slow_ms=a.slow_ms,
             reuse_local_groups=a.reuse_local_groups,preconnect_state=a.preconnect_state,
             defer_source_local_close=a.defer_source_local_close,outer_manager=a.outer_manager,
-            outer_audit=report['outer_audit'],outer_timeout=a.outer_timeout,fail_restore_rank=a.fail_restore_rank)
+            outer_audit=report['outer_audit'],outer_timeout=a.outer_timeout,fail_restore_rank=a.fail_restore_rank,
+            trace_step=a.trace_step,deterministic=a.deterministic)
         if a.reference_run:
             from shift_full.v4_reference import validate_compatibility
             refpath=ROOT/'results'/('v4_'+a.reference_run)/'reference_signatures.json'
@@ -279,8 +295,10 @@ def main():
         if a.reference_only:
             from shift_full.v4_reference import build_signatures
             report['functional_pass']=True
-            signatures=build_signatures(rows,report)
-            (out/'reference_signatures.json').write_text(json.dumps(signatures,sort_keys=True)+'\n')
+            if not a.performance_no_audit:
+                signatures=build_signatures(rows,report)
+                (out/'reference_signatures.json').write_text(json.dumps(signatures,sort_keys=True)+'\n')
+            report['step_max_seconds']={step:max(x['seconds'] for es in rows.values() for x in es if x['kind']=='commit' and x['step']==step) for step in range(1,plan.cut+plan.post_steps+1)}
         else:
             active_roles='ACDE' if a.outer_manager else 'AC'
             old_roles='ABDE' if a.outer_manager else 'AB'

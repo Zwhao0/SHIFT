@@ -1,0 +1,573 @@
+{
+  "schema": 1,
+  "resolved": true,
+  "scope": "V4 reference configuration/provenance fix only; phase2 not implemented.",
+  "fixes": [
+    "Reference and transactional migration use the same retained-Manager and async-quorum paths.",
+    "Reference-only manifests include all training dependencies.",
+    "Compatibility rejects missing/different execution profiles before launching training.",
+    "Reference mismatch events trigger immediate bounded cleanup instead of waiting for missing collected units."
+  ],
+  "training_profile": {
+    "cross_node_tp": false,
+    "deterministic": false,
+    "outer_audit": true,
+    "outer_manager": true,
+    "overlap_peer": true,
+    "retain_outer_managers": true,
+    "transactional_switch": true
+  },
+  "source_sha256": {
+    "shift_full/compat.py": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76",
+    "shift_full/planned_state.py": "2911ef24a2f5e7cb08e98d05b3397bf54afe6d4353194f1d0a02dc8e3ef6dede",
+    "shift_full/reference_audit.py": "7e489ee2d66a4a8fc9168e7de2ce915ee956f1daeb7c846fbceb0fede09a49ce",
+    "shift_full/state_digest.py": "fe2e8a941bef9dfe4b93c71c29c6245e609215fd7d12ac3d9891004f0b7d26b3",
+    "shift_full/state_inventory.py": "0eaa472d689bc83564e4d48c524ad5744297b227fb14e8fbb2575ef379edbe51",
+    "shift_full/train.py": "e0c2eba969662a9d89bee10aee04b274850588e07b8b3c9d5ffa91042a460aeb",
+    "shift_full/transport.py": "b03464786a4f8f6b8814f002b4649c1fb9a77e0985387e92e0f1ad17cee611e7",
+    "shift_full/v4_groups.py": "3ddd9c9d1499b23cb67b344f14cc5d52b4ca9ed06530d43378008624c71e36ad",
+    "shift_full/v4_metadata.py": "27ae20fa5a1c3c266ce649e7d6ef3c88bbd8b0565fcfeef02bbc7e16af7bf3a9",
+    "shift_full/v4_outer.py": "25f22ae888feb831df94c8fb0100b1041e57bfd4852b7d80695593614ebda6a0",
+    "shift_full/v4_protocol.py": "1c37d3b3fa65fd921620a2bd1034399e2c5dc3392d48dfbbc8c4e2a6399d89ad",
+    "shift_full/v4_reference.py": "1a1ea46c4496c75f55eda8f237f86e71bd10097d6610a7ac77d98f9e67fda0ca",
+    "shift_full/v4_train.py": "6ccd5e1be888105cbce4dcbfe5046dbacd04c1fbce22f2d2d433ca132426ff60",
+    "shift_full/v4_transaction.py": "e4aa2d63e68f6ea938b5698be25f5e97d8cc4b64ff4a03f27f82b23fcb62dfa8",
+    "shift_full/v4_transaction_train.py": "e49c6f91d7a5acdb4bce40900def50b59525cd826b08cf981978f0b93b0442a0"
+  },
+  "reference_source_sha256": {
+    "scripts/v4_remote.py": "27925ee010ff328b0441054d80333df2a62fb66681e4798276513cc071064f2a",
+    "scripts/verify_v4.py": "826ec940f60207595fb4bf92d08a85f91081594cef0e768f04263af72e8db4c8",
+    "scripts/verify_v4_outer.py": "0efa5136e9524f2900e95725ee92f2df4d44f842d0181e4c03e9b745aa2fcb6e",
+    "scripts/verify_v4_reference.py": "f4c09d18899c664442015c4ddf4a005e446c0a766fb640c8be5304753461892c",
+    "shift_full/compat.py": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76",
+    "shift_full/planned_state.py": "2911ef24a2f5e7cb08e98d05b3397bf54afe6d4353194f1d0a02dc8e3ef6dede",
+    "shift_full/reference_audit.py": "7e489ee2d66a4a8fc9168e7de2ce915ee956f1daeb7c846fbceb0fede09a49ce",
+    "shift_full/state_digest.py": "fe2e8a941bef9dfe4b93c71c29c6245e609215fd7d12ac3d9891004f0b7d26b3",
+    "shift_full/state_inventory.py": "0eaa472d689bc83564e4d48c524ad5744297b227fb14e8fbb2575ef379edbe51",
+    "shift_full/train.py": "e0c2eba969662a9d89bee10aee04b274850588e07b8b3c9d5ffa91042a460aeb",
+    "shift_full/transport.py": "b03464786a4f8f6b8814f002b4649c1fb9a77e0985387e92e0f1ad17cee611e7",
+    "shift_full/v4_groups.py": "3ddd9c9d1499b23cb67b344f14cc5d52b4ca9ed06530d43378008624c71e36ad",
+    "shift_full/v4_metadata.py": "27ae20fa5a1c3c266ce649e7d6ef3c88bbd8b0565fcfeef02bbc7e16af7bf3a9",
+    "shift_full/v4_outer.py": "25f22ae888feb831df94c8fb0100b1041e57bfd4852b7d80695593614ebda6a0",
+    "shift_full/v4_protocol.py": "1c37d3b3fa65fd921620a2bd1034399e2c5dc3392d48dfbbc8c4e2a6399d89ad",
+    "shift_full/v4_reference.py": "1a1ea46c4496c75f55eda8f237f86e71bd10097d6610a7ac77d98f9e67fda0ca",
+    "shift_full/v4_train.py": "6ccd5e1be888105cbce4dcbfe5046dbacd04c1fbce22f2d2d433ca132426ff60",
+    "shift_full/v4_transaction.py": "e4aa2d63e68f6ea938b5698be25f5e97d8cc4b64ff4a03f27f82b23fcb62dfa8",
+    "shift_full/v4_transaction_train.py": "e49c6f91d7a5acdb4bce40900def50b59525cd826b08cf981978f0b93b0442a0"
+  },
+  "matched_short_references": {
+    "profiles_equal": true,
+    "sources_equal": true,
+    "exact": true,
+    "mismatches": []
+  },
+  "full_reference_first8_matches_short_references": true,
+  "unit_tests": {
+    "passed": 63,
+    "failed": 0
+  },
+  "runs": [
+    {
+      "name": "v4_rf_a8",
+      "reference_only": true,
+      "functional_pass": true,
+      "resources_clean": true,
+      "independent_audit": {
+        "pass_all": true,
+        "errors": [],
+        "resources_clean": true,
+        "reference_only": true,
+        "logical_workers": 16,
+        "reference_rank_steps": 128,
+        "independent_gradient_audit": true
+      },
+      "steps": 8,
+      "canonical_signatures_sha256": "5f0834b1a3e43cc75141170b744028c7765c5e5660736822202893e6ac5b3bfa",
+      "raw_sha256": {
+        "D2.jsonl": "20e0e29e6fb6090bf9a6365b8623fe7ba25980aeb0b652ddccf8cc7fade4d191",
+        "B2.jsonl": "ded7b185e102560df4da87ce557147d8d78b9a2027b8805681febff3262b5d91",
+        "E3.jsonl": "9d33ef797f1c7b8412a525074adc9881aefe211c2b64f2af5d9ac72964c6381b",
+        "A1.jsonl": "26d8369865cb07429b8de6609252a1ab02ea267c9c355b234706914674e20a24",
+        "E2.jsonl": "5d059a3862ec1d1ab0ade159e9ff22685ee928cca821aa315e56487b0bf5f507",
+        "A3.jsonl": "7cff27d940349a15ded4b7354b954464666f762b39a09d0e743094dd7a629d95",
+        "A0.jsonl": "c8fb659d197f8cd7b56b2cc86c12a25b04293bab5a5c46ae39bf99f539b2669e",
+        "E1.jsonl": "e26a4fe2d156eb562d66712ee3011cbf4a31aded3a0a6698b59a6a60d482e232",
+        "D3.jsonl": "d7d55fdfbe2d06574e45945a77f21ed0fca95609e35883c74269d8c98ebabd85",
+        "D0.jsonl": "e3db2ceaa0b9a2f1d96d2b994b684f0a7203d43e507965c3bdfe3797a620c21a",
+        "D1.jsonl": "02a11745fc3e8fef35001fbadc425fa2c1a3dd48b06fc5cd9e3f6e1d89cf7b27",
+        "B3.jsonl": "ec211d5074a7bf47a0c8cc674eae622e8b93447ab356cf628ab8e682fb467570",
+        "B0.jsonl": "6f8f35d4ae5c851a5570ad4cac247536b5b948b4202da0ba24d882321d4260e3",
+        "E0.jsonl": "9bb6325539bbd9ee9b08f36ba10ad3a67a93c10d50309f1b285e0e7136e212f5",
+        "A2.jsonl": "a78d54aa7b974f62416ef2098bd1592d37924e19e6690b89eed97de3a65ad56d",
+        "B1.jsonl": "e9b61a7607ebe0b71976e5dcef8c0b373a1e621ac28dd7746fcf05abfb6353f6"
+      }
+    },
+    {
+      "name": "v4_rf_b8",
+      "reference_only": true,
+      "functional_pass": true,
+      "resources_clean": true,
+      "independent_audit": {
+        "pass_all": true,
+        "errors": [],
+        "resources_clean": true,
+        "reference_only": true,
+        "logical_workers": 16,
+        "reference_rank_steps": 128,
+        "independent_gradient_audit": true
+      },
+      "steps": 8,
+      "canonical_signatures_sha256": "ddd9f82de5d010860340705ed1d4c85c5e8ad9ea3466ada7c98a5bd539e2ef3f",
+      "raw_sha256": {
+        "D2.jsonl": "132c238460624419b48858acbd4de7c72316124fecdf77d1bb70702044f62853",
+        "B2.jsonl": "8d754c827ee31a21ac4a9b0896dec173a693f6b7cda3f808ce73e129ae550ff2",
+        "E3.jsonl": "b13c07edd41c8aec441550356ba39adc49c9d398c394d6b3c060905e35316efb",
+        "A1.jsonl": "3b0d524fa237f3a681bc871cbdeb71c3edf85a20d2a1950911160832379a2dac",
+        "E2.jsonl": "7b2fcbf4411aa02473def67688a2b3ed1b87edf7985715be0014999a8c1f28d6",
+        "A3.jsonl": "5ea75973064c94a04cb9a081656c1b6efe645609f0710c13d4ef6772a4b70585",
+        "A0.jsonl": "a5d40fb697e9190d4184303b4e4637fcbd14bb5a15703f5946736476cdc61047",
+        "E1.jsonl": "fbf7a133431f6f51032aac7e7cbdce4520e36b7b5a5b8f73ce714fc7cc7da416",
+        "D3.jsonl": "4a4e22915e36837c1d6c562eb78402f81d6f0a374b6bd848f2bad5a63ac55f9c",
+        "D0.jsonl": "6d6556203d5ce8f5db6363e4a2262ddc85048b574cb2f5fda2e1ac43e141fc6d",
+        "D1.jsonl": "1d84ab362f4233bb2a7de310ff23f1bf05ab9c88f665c32c106014292d91dae0",
+        "B3.jsonl": "6216ceae6b7dc01de90bb0b1ba1554fb8ba0ff57c28f5f4c0ae61fe1b24a1d80",
+        "B0.jsonl": "05b67f94656b619c00cb7f22b69f9feee69085e98d5357fb43b73fc54c4a17d7",
+        "E0.jsonl": "29f5db7cac2da9db46e7a5a3e288a725cb20ac34c0b3c39ba20d965d15e05602",
+        "A2.jsonl": "7bbf5162bf071152bdb0b93e917eba5c53ec72b6b37dfea11caacfddf6875637",
+        "B1.jsonl": "fe60484b1d71f423f9a4a4a2d3cb1375abdb41f97fb53d6ffe69ce014ae35115"
+      }
+    },
+    {
+      "name": "v4_rf_full24",
+      "reference_only": true,
+      "functional_pass": true,
+      "resources_clean": true,
+      "independent_audit": {
+        "pass_all": true,
+        "errors": [],
+        "resources_clean": true,
+        "reference_only": true,
+        "logical_workers": 16,
+        "reference_rank_steps": 384,
+        "independent_gradient_audit": true
+      },
+      "steps": 24,
+      "canonical_signatures_sha256": "61b80579b64a0727eaaf1ababe0f57627f18f41f914a5484edfd75ff964b85d1",
+      "raw_sha256": {
+        "D2.jsonl": "6d3b46cd98be8019cdfe10a4024296743ca5c70c1e64c9c33206c19dd114de86",
+        "B2.jsonl": "6c091a9f95b82aace20cebb8e4e0bdf78446a8863dadfdea9dfdba1881718ace",
+        "E3.jsonl": "bb3d9f4e610624be5b22547e66d853f062d38c6458d9d43bfa1a6a25da6925ba",
+        "A1.jsonl": "99cff476a679758c9067dcda32fc8cbebeeefb4bfd0ad80040c8c8e2a02810e1",
+        "E2.jsonl": "08129ef196bc8323f4bc4b1b787cd3041b79304455b4235feb0cb64cc63df61d",
+        "A3.jsonl": "f8a804c01e98b2a83d407f800a7f735aba08f941e4c5b72e1f7215a8f98664c1",
+        "A0.jsonl": "3c491fbd0632eea9b5469ff3ce816f225a89416acd612ada68664adbd73f847b",
+        "E1.jsonl": "4a1fb1f4183f171dc5fc744b88eceb968beee3cce9e094c0f178aafccb325b70",
+        "D3.jsonl": "ebdbfbd0eedf09ec7475e27125bddff1e2f862aaed90c1dd3d49a4a0bc8c9d22",
+        "D0.jsonl": "34e34bffaa6a82569ce266ba3cc13d1893ad5a38f530f01500c7203b00b8f132",
+        "D1.jsonl": "830d29df72d7a942d589056cd23d1e85aee741cb60876cbbbf5c585a9c7c781f",
+        "B3.jsonl": "51689805399a04d3741646aec1f0f9ae3205e7b9d480654c2ae14c40286d442e",
+        "B0.jsonl": "ce560134eb45f010d2db51502689e5f9cefeaf15fa16c0bc4c58eac7fd3d25a2",
+        "E0.jsonl": "37d988e52fd34c456228598557d585c4246311fad63fe36773a68e0d7d3c8ab3",
+        "A2.jsonl": "45313cd50cf035dec179cb4370d28c7f28aad472118946f7649f1bdcefd8df7b",
+        "B1.jsonl": "c8d67012bb7e261319a9e841e3e1cbf7aa62aef1acc3dafa728a17dce632106c"
+      }
+    },
+    {
+      "name": "v4_rf_switch",
+      "reference_only": false,
+      "functional_pass": true,
+      "resources_clean": true,
+      "independent_audit": {
+        "actual_auditor_sha256": "95d96dd0bc26d13b769d7f34a4be591eee966eae3e0029f9afff84105ff67766",
+        "commit_count": 256,
+        "cuts": [
+          11
+        ],
+        "cycles": 1,
+        "decisions": [
+          "replace"
+        ],
+        "errors": [],
+        "final_step": 16,
+        "logical_workers": 16,
+        "pass_all": true,
+        "peer_outer_gradient_ready_seconds": {
+          "round0/D/rank0": 6.3069845689460635,
+          "round0/D/rank1": 6.306200875900686,
+          "round0/D/rank2": 6.306207905057818,
+          "round0/D/rank3": 6.307017529848963,
+          "round0/E/rank4": 6.703273572027683,
+          "round0/E/rank5": 6.7039348219987005,
+          "round0/E/rank6": 6.7149282929021865,
+          "round0/E/rank7": 6.7219415018334985
+        },
+        "raw_sha256": {
+          "g0_A0.jsonl": "aa9671a46a86734b50d2a68ad53ea84c3f80061a82f76fdcc8a808f4192a7180",
+          "g0_A1.jsonl": "5c094a4e90fbd2415fcc38ea7b5900ecf151d8dd04a2a2671314f11b7e586e8e",
+          "g0_A2.jsonl": "635dd63abb96c54dda89b5fb752733e0a8bea624460a4f09911ee1361decd7e9",
+          "g0_A3.jsonl": "9e213ab16c661a7a29c1fe962c4725d73c36b8cd088b1ab06a1f131299e3227f",
+          "g0_B0.jsonl": "bb1d6de723383ae9a798f5700a9222ba0beb4e9a25aaaa90225b322cf62c8b9c",
+          "g0_B1.jsonl": "01e1264171262fb9bde0b934ffdc71a48fddeaa4ee72f61ff11cfe5c9b7fe403",
+          "g0_B2.jsonl": "ee2b5740aeab2676c97759365e7a47619b99958768d12f5bdb8611678784f9f5",
+          "g0_B3.jsonl": "27a191119f4cd3c648f17b945a1301426a0b97b918a0499815fbc915f59518a1",
+          "g0_C0.jsonl": "53283780be296246fe1f6f26ad2dc5dafbd005bbb21825e96567ebcdfcf1d3b0",
+          "g0_C1.jsonl": "4e26e76440576465ad92408fd5c19a1bd9849b54027904529dcb1c0f241ce9f9",
+          "g0_C2.jsonl": "0f29d8f7610a83e92853c8073c6484b662b715a8310b4b59aa4715f3a688d923",
+          "g0_C3.jsonl": "b8b5ec5a624fafa07629ecf3495f419f8af028bfd80321f6e9da9b5e452b01c6",
+          "g0_D0.jsonl": "cd6357fd795c17171bd28c25bd8b86917c5b5de3e631553073268f900ad9a0d3",
+          "g0_D1.jsonl": "497b0ff9c43e9cece9ebc1e21438ffd501c7d9c3a18ad19a21e6d3d8e99039fa",
+          "g0_D2.jsonl": "6a13768aa6082894b17559313a96a19996e8cb2004e55ded058ed0b41cbae9cf",
+          "g0_D3.jsonl": "7f6b7a153ad367307c2365dba2c62c04df4d6810e5e37a59fed602fa2108ebf0",
+          "g0_E0.jsonl": "81e9eae79cc6b457ceee2163bc2e55d8de06599ac25eed57aa4dcd723935f20a",
+          "g0_E1.jsonl": "3aa59f200af9913ea99ff1bc5754759b84007cd3bc613b5122bcc6d12599fa0a",
+          "g0_E2.jsonl": "9e4a1a578ba2eabcff58932c6b637487b9d7e8f5a4e8997d3630e6e6875918c1",
+          "g0_E3.jsonl": "690175734fc6e41ff411199352e2d4508ee1223d747f9808e4ab101d452b352b"
+        },
+        "reference_run": "rf_full24",
+        "resources_clean": true,
+        "transactional_switch": true
+      },
+      "timing": {
+        "name": "v4_rf_switch",
+        "type": "v4",
+        "functional_pass": true,
+        "resources_clean": true,
+        "requested_trigger": 6,
+        "actual_cut_or_restore_step": 11,
+        "first_joint_step": 12,
+        "goal": 16,
+        "request_to_first_joint_observed_seconds": 39.329620698001236,
+        "controller_stage_seconds": [
+          {
+            "start": "request",
+            "end": "boundary",
+            "seconds": 25.47347859106958
+          },
+          {
+            "start": "boundary",
+            "end": "snapshot_ready",
+            "seconds": 1.1520933122374117
+          },
+          {
+            "start": "snapshot_ready",
+            "end": "freeze",
+            "seconds": 1.1352632860653102
+          },
+          {
+            "start": "freeze",
+            "end": "candidate_validated_decision",
+            "seconds": 4.3927430678159
+          },
+          {
+            "start": "candidate_validated_decision",
+            "end": "inner_connected",
+            "seconds": 1.9760812758468091
+          },
+          {
+            "start": "inner_connected",
+            "end": "activation",
+            "seconds": 1.2021053871139884
+          },
+          {
+            "start": "activation",
+            "end": "first_common_step_A0_proxy",
+            "seconds": 3.5057384679093957
+          },
+          {
+            "start": "first_common_step_A0_proxy",
+            "end": "all_rank_commit_observed",
+            "seconds": 0.49211730994284153
+          }
+        ],
+        "local_stage_duration_statistics": {
+          "connected": {
+            "n": 28,
+            "mean": 1.7965916327001261,
+            "median": 1.8875353150069714,
+            "min": 0.22534386673942208,
+            "max": 3.4212456471286714
+          },
+          "groups_closed": {
+            "n": 20,
+            "mean": 1.35209853235865,
+            "median": 1.746448835125193,
+            "min": 0.11903769499622285,
+            "max": 2.692637089174241
+          },
+          "outer_begin": {
+            "n": 256,
+            "mean": 4.12566493286522,
+            "median": 2.9610223503550515,
+            "min": 0.9557754409033805,
+            "max": 14.159413864836097
+          },
+          "outer_closed": {
+            "n": 20,
+            "mean": 1.0528994989814238,
+            "median": 1.0376757259946316,
+            "min": 1.0307685597799718,
+            "max": 1.0985136539675295
+          },
+          "outer_commit": {
+            "n": 256,
+            "mean": 0.10637267257607164,
+            "median": 0.00815283297561109,
+            "min": 0.0018242448568344116,
+            "max": 0.6581719710957259
+          },
+          "outer_quorum_wait": {
+            "n": 256,
+            "mean": 0.16162637291381543,
+            "median": 8.659507147967815e-05,
+            "min": 5.4996926337480545e-05,
+            "max": 5.586309912847355
+          },
+          "outer_ready": {
+            "n": 20,
+            "mean": 0.025345945486333222,
+            "median": 0.024714441620744765,
+            "min": 0.009175785817205906,
+            "max": 0.04486750694923103
+          },
+          "peer_outer_gradient_ready": {
+            "n": 8,
+            "mean": 6.50881113356445,
+            "median": 6.505145550938323,
+            "min": 6.306200875900686,
+            "max": 6.7219415018334985
+          },
+          "restored": {
+            "n": 4,
+            "mean": 1.1785477017983794,
+            "median": 1.1771757894894108,
+            "min": 1.1703242301009595,
+            "max": 1.1895149981137365
+          },
+          "snapshot_ready": {
+            "n": 32,
+            "mean": 1.173703504340665,
+            "median": 1.1743502424797043,
+            "min": 1.1430197251029313,
+            "max": 1.2216492102015764
+          },
+          "standby_cpu_model_ready": {
+            "n": 4,
+            "mean": 1.3204914749367163,
+            "median": 1.310279875411652,
+            "min": 1.2704974878579378,
+            "max": 1.3909086610656232
+          },
+          "standby_gpu_warmed": {
+            "n": 4,
+            "mean": 7.460101260920055,
+            "median": 7.4648183634271845,
+            "min": 7.400568112963811,
+            "max": 7.510200203862041
+          },
+          "transport_recv": {
+            "n": 4,
+            "mean": 0.16037039528600872,
+            "median": 0.1603647080482915,
+            "min": 0.14897791016846895,
+            "max": 0.1717742548789829
+          },
+          "transport_send": {
+            "n": 4,
+            "mean": 0.14989301678724587,
+            "median": 0.14980195253156126,
+            "min": 0.13868914102204144,
+            "max": 0.16127902106381953
+          }
+        },
+        "local_stage_note": "Worker-local durations can overlap; extrema across ranks are not additive controller phases.",
+        "step_statistics": {
+          "startup_steps_1_2": {
+            "worker_seconds": {
+              "n": 32,
+              "mean": 8.598833762887807,
+              "median": 8.46062731789425,
+              "min": 4.239779772004113,
+              "max": 12.992060401011258
+            },
+            "worker_commit_intervals": {
+              "n": 16,
+              "mean": 4.2811344013607595,
+              "median": 4.2815914519596845,
+              "min": 4.240467621013522,
+              "max": 4.336740832775831
+            },
+            "max_worker_seconds_by_step": {
+              "1": 12.992060401011258,
+              "2": 4.335981837008148
+            },
+            "max_worker_seconds": {
+              "n": 2,
+              "mean": 8.664021119009703,
+              "median": 8.664021119009703,
+              "min": 4.335981837008148,
+              "max": 12.992060401011258
+            },
+            "worker_samples_per_step": {
+              "1": 16,
+              "2": 16
+            }
+          },
+          "warm_before_request": {
+            "worker_seconds": {
+              "n": 64,
+              "mean": 4.671927561113989,
+              "median": 2.485611305688508,
+              "min": 2.360178112052381,
+              "max": 11.347752100788057
+            },
+            "worker_commit_intervals": {
+              "n": 64,
+              "mean": 4.6726970435192925,
+              "median": 2.4862697867210954,
+              "min": 2.361751606920734,
+              "max": 11.348297496791929
+            },
+            "max_worker_seconds_by_step": {
+              "3": 11.347752100788057,
+              "4": 2.6286028870381415,
+              "5": 2.43379395455122,
+              "6": 2.418542027939111
+            },
+            "max_worker_seconds": {
+              "n": 4,
+              "mean": 4.707172742579132,
+              "median": 2.5311984207946807,
+              "min": 2.418542027939111,
+              "max": 11.347752100788057
+            },
+            "worker_samples_per_step": {
+              "3": 16,
+              "4": 16,
+              "5": 16,
+              "6": 16
+            }
+          },
+          "request_to_cut_training": {
+            "worker_seconds": {
+              "n": 80,
+              "mean": 5.158714266185416,
+              "median": 2.7504113427130505,
+              "min": 2.3364475541748106,
+              "max": 9.252725380007178
+            },
+            "worker_commit_intervals": {
+              "n": 80,
+              "mean": 5.159465077370987,
+              "median": 2.7511248735245317,
+              "min": 2.337265769019723,
+              "max": 9.25353771308437
+            },
+            "max_worker_seconds_by_step": {
+              "7": 9.252725380007178,
+              "8": 9.110475577879697,
+              "9": 2.6780449813231826,
+              "10": 2.844011981971562,
+              "11": 2.362852425314486
+            },
+            "max_worker_seconds": {
+              "n": 5,
+              "mean": 5.249622069299221,
+              "median": 2.844011981971562,
+              "min": 2.362852425314486,
+              "max": 9.252725380007178
+            },
+            "worker_samples_per_step": {
+              "7": 16,
+              "8": 16,
+              "9": 16,
+              "10": 16,
+              "11": 16
+            }
+          },
+          "first_recovered_step": {
+            "worker_seconds": {
+              "n": 16,
+              "mean": 6.29296709522896,
+              "median": 6.159477106994018,
+              "min": 3.1364660339895636,
+              "max": 9.700335002038628
+            },
+            "worker_commit_intervals": {
+              "n": 0
+            },
+            "max_worker_seconds_by_step": {
+              "12": 9.700335002038628
+            },
+            "max_worker_seconds": {
+              "n": 1,
+              "mean": 9.700335002038628,
+              "median": 9.700335002038628,
+              "min": 9.700335002038628,
+              "max": 9.700335002038628
+            },
+            "worker_samples_per_step": {
+              "12": 16
+            }
+          },
+          "subsequent_recovered_steps": {
+            "worker_seconds": {
+              "n": 64,
+              "mean": 9.492564369687898,
+              "median": 9.458346711006016,
+              "min": 2.3702976319473237,
+              "max": 16.744326445041224
+            },
+            "worker_commit_intervals": {
+              "n": 64,
+              "mean": 9.49333163918709,
+              "median": 9.458910929504782,
+              "min": 2.3714023379143327,
+              "max": 16.745142077095807
+            },
+            "max_worker_seconds_by_step": {
+              "13": 2.4598040650598705,
+              "14": 9.872313380939886,
+              "15": 16.744326445041224,
+              "16": 9.12105931667611
+            },
+            "max_worker_seconds": {
+              "n": 4,
+              "mean": 9.549375801929273,
+              "median": 9.496686348807998,
+              "min": 2.4598040650598705,
+              "max": 16.744326445041224
+            },
+            "worker_samples_per_step": {
+              "13": 16,
+              "14": 16,
+              "15": 16,
+              "16": 16
+            }
+          }
+        },
+        "evidence_file": "rf_switch_timing.json",
+        "evidence_sha256": "cfd3ec9dde4e67cf68b6c41b3cdffb93c012713859c66a70fc63cfd68f2ccbe7",
+        "limitations": [
+          "replicas share hosts; independent host fault domains are not demonstrated",
+          "signatures and snapshots perturb timing; no general communication replay or zero-memory claim",
+          "peer checkpoint recovery covers after-freeze/before-ready source loss; transfer failures fail-stop",
+          "raw events and logs removed after independent audit; SHA256 signatures cannot reconstruct trajectories"
+        ]
+      }
+    }
+  ],
+  "performance_note": "Strict per-step nine-state and native gradient audits enabled. Company-only GPUs measured100% after the run; do not compare these timings directly to earlier low-load performance trials.",
+  "current_v4_workload": {
+    "global_batch": 16,
+    "data": "pattern",
+    "microbatches": 4,
+    "seq_len": 512,
+    "initial_layout": "legacy cross-host PP with DP replicas sharing hosts"
+  },
+  "next_phase": {
+    "started": false,
+    "global_batch": 8,
+    "initial_layout": "A/B each full DP replica; C spare",
+    "normal_hashes": false
+  }
+}

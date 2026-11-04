@@ -40,9 +40,18 @@ def main():
     p.add_argument('--overlap-peer', action='store_true')
     p.add_argument('--retain-outer-managers', action='store_true')
     p.add_argument('--fail-restore-rank',type=int,default=-1)
+    p.add_argument('--trace-step',type=int,default=0)
+    p.add_argument('--deterministic',action='store_true')
+    p.add_argument('--post-layout', action='store_true', help='no-fault timing control for the final cross-host PP layout')
+    p.add_argument('--unified', action='store_true', help='batch8 random data; complete initial DP replica per host')
+    p.add_argument('--performance-no-audit', action='store_true')
+    p.add_argument('--seed', type=int, default=20261106)
     a=p.parse_args()
+    if a.post_layout and not (a.unified and a.reference_only and a.performance_no_audit):p.error('post-layout is a unified no-fault performance control only')
+    if a.unified and a.cross_node_tp:p.error('unified TP must remain within a node')
+    if a.performance_no_audit and (a.outer_audit or a.reference_run):p.error('performance run cannot consume audited reference')
     if a.transactional_switch:
-        a.outer_manager=True;a.overlap_peer=True
+        a.outer_manager=True;a.overlap_peer=True;a.retain_outer_managers=True
         if not a.reference_only:
             a.retain_outer_managers=True;a.gpu_prepare=True;a.gpu_warmup=True
             a.reuse_local_groups=True;a.preconnect_state=True;a.defer_source_local_close=True
@@ -68,7 +77,7 @@ def main():
         p.error('independent reference and Manager retention require outer Manager')
     if a.overlap_peer and (not a.outer_manager or (not a.reference_only and not a.retain_outer_managers)):
         p.error('peer overlap requires outer Manager retention (or reference-only)')
-    if a.reference_only and (a.reference_run or a.fail_restore_rank != -1 or a.retain_outer_managers):
+    if a.reference_only and (a.reference_run or a.fail_restore_rank != -1):
         p.error('reference-only cannot migrate, inject failure or consume a reference')
     if a.reference_run and (a.no_oracle or not all(x.isalnum() or x in '_-' for x in a.reference_run)):
         p.error('reference-run requires a valid suffix and oracle enabled')
@@ -79,6 +88,10 @@ def main():
     e=replace(endpoints_from_env()['node0'],socket=f'ssh-v4-start-{os.getpid()}.sock')
     root='/workspace/SHIFT';unit='shift-v4-'+a.suffix+'-controller'
     args=['--suffix',a.suffix,'--seq-len',str(a.seq_len),'--cut',str(a.cut),'--post-steps',str(a.post_steps)]
+    args+=['--seed',str(a.seed)]
+    if a.unified:args+=['--unified']
+    if a.post_layout:args+=['--post-layout']
+    if a.performance_no_audit:args+=['--performance-no-audit']
     if a.no_oracle:args+=['--no-oracle']
     if a.gpu_prepare:args+=['--gpu-prepare']
     if a.gpu_warmup:args+=['--gpu-warmup']
@@ -93,6 +106,8 @@ def main():
     if a.retain_outer_managers:args+=['--retain-outer-managers']
     if a.overlap_peer:args+=['--overlap-peer']
     if a.transactional_switch:args+=['--transactional-switch']
+    if a.deterministic:args+=['--deterministic']
+    args+=['--trace-step',str(a.trace_step)]
     if a.cross_node_tp:args+=['--cross-node-tp']
     args+=['--source-stall-round',str(a.source_stall_round),'--source-deadline',str(a.source_deadline)]
     args+=['--candidate-request-step',str(a.candidate_request_step)]

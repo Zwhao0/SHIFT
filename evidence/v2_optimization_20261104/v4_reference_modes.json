@@ -1,0 +1,178 @@
+{
+  "configurations": {
+    "v2ref1": {
+      "reference_only": true,
+      "transactional_switch": false,
+      "overlap_peer": false,
+      "retain_outer_managers": false,
+      "outer_audit": true,
+      "seed": 20261106,
+      "plan": {
+        "cut": 12,
+        "post_steps": 12,
+        "seq_len": 512,
+        "microbatches": 4
+      }
+    },
+    "v2ref2": {
+      "reference_only": true,
+      "transactional_switch": true,
+      "overlap_peer": true,
+      "retain_outer_managers": false,
+      "outer_audit": true,
+      "seed": 20261106,
+      "plan": {
+        "cut": 12,
+        "post_steps": 12,
+        "seq_len": 512,
+        "microbatches": 4
+      }
+    },
+    "v2pp1": {
+      "reference_only": false,
+      "transactional_switch": true,
+      "overlap_peer": true,
+      "retain_outer_managers": true,
+      "outer_audit": true,
+      "seed": 20261106,
+      "plan": {
+        "cut": 11,
+        "post_steps": 5,
+        "seq_len": 512,
+        "microbatches": 4
+      }
+    }
+  },
+  "reference_mismatch_count": 284,
+  "first_mismatches": [
+    {
+      "worker": "0/0",
+      "step": 7,
+      "fields": [
+        "model",
+        "optimizer"
+      ]
+    },
+    {
+      "worker": "0/1",
+      "step": 7,
+      "fields": [
+        "model",
+        "optimizer"
+      ]
+    },
+    {
+      "worker": "0/2",
+      "step": 7,
+      "fields": [
+        "model",
+        "optimizer"
+      ]
+    },
+    {
+      "worker": "0/3",
+      "step": 7,
+      "fields": [
+        "model",
+        "optimizer"
+      ]
+    },
+    {
+      "worker": "0/4",
+      "step": 7,
+      "fields": [
+        "model",
+        "optimizer"
+      ]
+    },
+    {
+      "worker": "0/6",
+      "step": 7,
+      "fields": [
+        "model",
+        "optimizer"
+      ]
+    },
+    {
+      "worker": "1/0",
+      "step": 7,
+      "fields": [
+        "model",
+        "optimizer"
+      ]
+    },
+    {
+      "worker": "1/1",
+      "step": 7,
+      "fields": [
+        "model",
+        "optimizer"
+      ]
+    },
+    {
+      "worker": "1/2",
+      "step": 7,
+      "fields": [
+        "model",
+        "optimizer"
+      ]
+    },
+    {
+      "worker": "1/3",
+      "step": 7,
+      "fields": [
+        "model",
+        "optimizer"
+      ]
+    },
+    {
+      "worker": "1/4",
+      "step": 7,
+      "fields": [
+        "model",
+        "optimizer"
+      ]
+    },
+    {
+      "worker": "1/6",
+      "step": 7,
+      "fields": [
+        "model",
+        "optimizer"
+      ]
+    },
+    {
+      "worker": "0/0",
+      "step": 8,
+      "fields": [
+        "model",
+        "optimizer"
+      ]
+    },
+    {
+      "worker": "0/1",
+      "step": 8,
+      "fields": [
+        "model",
+        "optimizer"
+      ]
+    },
+    {
+      "worker": "0/2",
+      "step": 8,
+      "fields": [
+        "model",
+        "optimizer"
+      ]
+    },
+    {
+      "worker": "0/3",
+      "step": 8,
+      "fields": [
+        "model",
+        "optimizer"
+      ]
+    }
+  ],
+  "migration_step7_matches_first_reference": true
+}

@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "common_pre_cut_steps": 22,
+  "roles": 2,
+  "ranks_per_role": 8,
+  "state_fields": 9,
+  "compared_worker_states": 368,
+  "signatures": [
+    {
+      "run": "v2_q2_v2b0",
+      "sha256": "4ab6f09ddf8413c1289ba490278de575875647f7c7952c62bff6c0d3ce76a089"
+    },
+    {
+      "run": "v2_q2_v2s0",
+      "sha256": "4ab6f09ddf8413c1289ba490278de575875647f7c7952c62bff6c0d3ce76a089"
+    }
+  ],
+  "mismatches": []
+}

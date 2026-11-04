@@ -1,0 +1,20 @@
+{
+  "name": "v4_v2ref",
+  "error": "TimeoutError: lighthouse startup timed out",
+  "cleanup_errors": [],
+  "functional_pass": false,
+  "source_sha256": {
+    "shift_full/v4_train.py": "fa25723eb703180bf0e3eb27cd403b69a65ca78adc14be9f48b547832a2428d3",
+    "shift_full/v4_protocol.py": "1c37d3b3fa65fd921620a2bd1034399e2c5dc3392d48dfbbc8c4e2a6399d89ad",
+    "shift_full/transport.py": "b03464786a4f8f6b8814f002b4649c1fb9a77e0985387e92e0f1ad17cee611e7",
+    "shift_full/compat.py": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76",
+    "shift_full/v4_groups.py": "3ddd9c9d1499b23cb67b344f14cc5d52b4ca9ed06530d43378008624c71e36ad",
+    "shift_full/v4_reference.py": "356114c38c7f6fa20cf176aebeb54892f345c5d46dc4614139e28e2b734bc979",
+    "scripts/v4_remote.py": "a540bf34b8212b4d62fecd52f6064e1c4f41cf9725b5a06763112f4302625ec9",
+    "scripts/verify_v4.py": "826ec940f60207595fb4bf92d08a85f91081594cef0e768f04263af72e8db4c8",
+    "shift_full/v4_outer.py": "25f22ae888feb831df94c8fb0100b1041e57bfd4852b7d80695593614ebda6a0",
+    "scripts/verify_v4_outer.py": "0efa5136e9524f2900e95725ee92f2df4d44f842d0181e4c03e9b745aa2fcb6e",
+    "scripts/verify_v4_reference.py": "f4c09d18899c664442015c4ddf4a005e446c0a766fb640c8be5304753461892c"
+  },
+  "log": "Traceback (most recent call last):\n  File \"/workspace/SHIFT/vendor/bin/torchft_lighthouse\", line 8, in <module>\n    sys.exit(lighthouse_main())\n             ^^^^^^^^^^^^^^^^^\nRuntimeError: Address already in use (os error 98)\n"
+}

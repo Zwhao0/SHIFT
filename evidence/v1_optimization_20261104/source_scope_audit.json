@@ -1,0 +1,59 @@
+{
+  "baseline_local": "42ef1778bbc5ab1406ed9b66fcf717c6bb65a629",
+  "unchanged_execution_sources": {
+    "shift_full/planned_train.py": {
+      "unchanged": true,
+      "sha256": "be5aa64ea39624ab85c6730d26512cd3e798760c85af8ad9fbb370bead3ddfea"
+    },
+    "shift_full/planned_handoff.py": {
+      "unchanged": true,
+      "sha256": "82c12f6b91174505e3c1af3c8c636fd014fcdf159a361b3b1ad93d15af76220c"
+    },
+    "shift_full/overlap_handoff.py": {
+      "unchanged": true,
+      "sha256": "8d1f969b00015eff1d689f0848f28c24fde193cc26392d276b21a5ed12e9b26e"
+    },
+    "shift_full/v4_train.py": {
+      "unchanged": true,
+      "sha256": "fa25723eb703180bf0e3eb27cd403b69a65ca78adc14be9f48b547832a2428d3"
+    },
+    "shift_full/v4_transaction_train.py": {
+      "unchanged": true,
+      "sha256": "e49c6f91d7a5acdb4bce40900def50b59525cd826b08cf981978f0b93b0442a0"
+    },
+    "shift_full/v4_transaction.py": {
+      "unchanged": true,
+      "sha256": "e4aa2d63e68f6ea938b5698be25f5e97d8cc4b64ff4a03f27f82b23fcb62dfa8"
+    },
+    "shift_full/v4_outer.py": {
+      "unchanged": true,
+      "sha256": "25f22ae888feb831df94c8fb0100b1041e57bfd4852b7d80695593614ebda6a0"
+    },
+    "shift_full/compat.py": {
+      "unchanged": true,
+      "sha256": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76"
+    },
+    "shift_full/transport.py": {
+      "unchanged": true,
+      "sha256": "b03464786a4f8f6b8814f002b4649c1fb9a77e0985387e92e0f1ad17cee611e7"
+    },
+    "shift_full/cold_launch.py": {
+      "unchanged": true,
+      "sha256": "99de083a77549799bd6b986f990d60f789cf9470adbb146a38497a413f335723"
+    },
+    "shift_full/cold_cpu_load.py": {
+      "unchanged": true,
+      "sha256": "672977f68ab5dbb26705cbc279960e2e46fda9c43221969262784d5f4ee515f6"
+    },
+    "shift_full/state_digest.py": {
+      "unchanged": true,
+      "sha256": "fe2e8a941bef9dfe4b93c71c29c6245e609215fd7d12ac3d9891004f0b7d26b3"
+    }
+  },
+  "unchanged_imported_train_functions": {
+    "digest": true,
+    "cpu_tree": true,
+    "tensor_count": true
+  },
+  "selected_change": "v1 entry options + joining-only timing instrumentation; existing cold launcher / CPU load overlap / staged digest selected explicitly"
+}

@@ -17,7 +17,9 @@
     "uncompressed_sha256": "1de495259d2eec874e37c7b6ac36ed05b5bb8d456f20566329f4bea9d9338267",
     "uncompressed_bytes": 390166,
     "compressed_bytes": 45788,
-    "contents": "Full 80-step/79-interval distribution, selected-rank trace summaries, all failed attempts per role, source SHAs and control attribution."
+    "contents": "Full 80-step/79-interval distribution, selected-rank trace summaries, all failed attempts per role, source SHAs and control attribution.",
+    "raw_removed": true,
+    "historical_public_source": "https://github.com/Zwhao0/SHIFT/blob/7c8fe1e/evidence/steady_20261104/full_report.json.gz"
   },
   "diagnostics": [
     {

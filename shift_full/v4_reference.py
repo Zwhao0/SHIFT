@@ -11,8 +11,15 @@ def training_sources(root):
     root=Path(root)
     files=set((root/'shift_full').glob('v4_*.py'))
     files.update(root/'shift_full'/name for name in ('transport.py','compat.py','train.py',
-        'state_inventory.py','state_digest.py','planned_state.py','reference_audit.py'))
+        'training_core.py','state_inventory.py','state_digest.py','planned_state.py','reference_audit.py'))
     return {str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(files)}
+
+
+def training_profile(config):
+    """Return the exact boolean execution profile used to build a reference."""
+    fields = ('outer_manager', 'outer_audit', 'overlap_peer', 'retain_outer_managers',
+              'transactional_switch', 'cross_node_tp', 'deterministic', 'unified', 'performance_no_audit')
+    return {field: bool(config.get(field, False)) for field in fields}
 
 
 def sample_ids(step, replica, rank, microbatches):
@@ -75,15 +82,23 @@ def build_signatures(rows, summary):
     return validate_signatures(dict(schema=1, run=summary['name'],
         steps=summary['plan']['cut'] + summary['plan']['post_steps'],
         seq_len=summary['plan']['seq_len'], microbatches=summary['plan']['microbatches'],
-        seed=20261106,cross_node_tp=bool(summary.get('cross_node_tp')),
+        seed=summary.get('initialization_seed',20261106),cross_node_tp=bool(summary.get('cross_node_tp')),
+        training_profile=training_profile(summary),
+        **({'data':summary['data']} if 'data' in summary else {}),
         source_sha256=summary['source_sha256'], workers=workers))
 
 
 def validate_compatibility(reference, config, sources):
     validate_signatures(reference)
+    expected_profile = training_profile(config)
+    profile = reference.get('training_profile')
+    if (not isinstance(profile, Mapping) or set(profile) != set(expected_profile) or
+        any(type(profile[key]) is not bool or profile[key] != value
+            for key, value in expected_profile.items())):
+        raise ValueError('independent reference training profile mismatch')
     if (reference['seq_len'] != config['plan']['seq_len'] or
         reference['microbatches'] != config['plan']['microbatches'] or
-        reference['seed'] != config['seed']):
+        reference['seed'] != config['seed'] or reference.get('data','pattern') != config.get('data','pattern')):
         raise ValueError('independent reference dimensions/seed mismatch')
     if bool(reference.get('cross_node_tp'))!=bool(config.get('cross_node_tp')):
         raise ValueError('independent reference physical TP layout mismatch')

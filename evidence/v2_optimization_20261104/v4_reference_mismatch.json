@@ -1,0 +1,384 @@
+{
+  "name": "v4_v2pp1",
+  "functional_pass": false,
+  "error": "independent reference mismatch before migration; controller interrupted to free owned resources",
+  "cleanup_errors": [],
+  "resources_clean": true,
+  "source_sha256": {
+    "shift_full/compat.py": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76",
+    "shift_full/planned_state.py": "2911ef24a2f5e7cb08e98d05b3397bf54afe6d4353194f1d0a02dc8e3ef6dede",
+    "shift_full/reference_audit.py": "7e489ee2d66a4a8fc9168e7de2ce915ee956f1daeb7c846fbceb0fede09a49ce",
+    "shift_full/state_digest.py": "fe2e8a941bef9dfe4b93c71c29c6245e609215fd7d12ac3d9891004f0b7d26b3",
+    "shift_full/state_inventory.py": "0eaa472d689bc83564e4d48c524ad5744297b227fb14e8fbb2575ef379edbe51",
+    "shift_full/train.py": "e0c2eba969662a9d89bee10aee04b274850588e07b8b3c9d5ffa91042a460aeb",
+    "shift_full/transport.py": "b03464786a4f8f6b8814f002b4649c1fb9a77e0985387e92e0f1ad17cee611e7",
+    "shift_full/v4_groups.py": "3ddd9c9d1499b23cb67b344f14cc5d52b4ca9ed06530d43378008624c71e36ad",
+    "shift_full/v4_metadata.py": "27ae20fa5a1c3c266ce649e7d6ef3c88bbd8b0565fcfeef02bbc7e16af7bf3a9",
+    "shift_full/v4_outer.py": "25f22ae888feb831df94c8fb0100b1041e57bfd4852b7d80695593614ebda6a0",
+    "shift_full/v4_protocol.py": "1c37d3b3fa65fd921620a2bd1034399e2c5dc3392d48dfbbc8c4e2a6399d89ad",
+    "shift_full/v4_reference.py": "356114c38c7f6fa20cf176aebeb54892f345c5d46dc4614139e28e2b734bc979",
+    "shift_full/v4_train.py": "fa25723eb703180bf0e3eb27cd403b69a65ca78adc14be9f48b547832a2428d3",
+    "shift_full/v4_transaction.py": "e4aa2d63e68f6ea938b5698be25f5e97d8cc4b64ff4a03f27f82b23fcb62dfa8",
+    "shift_full/v4_transaction_train.py": "e49c6f91d7a5acdb4bce40900def50b59525cd826b08cf981978f0b93b0442a0"
+  },
+  "mismatches": [
+    {
+      "worker": "g0_D2",
+      "step": 7,
+      "actual": {
+        "model": "e7befb8a1b1573af60ebc7aa47d7df2ded88bfc1396ca540be8fc52eac6edbce",
+        "optimizer": "46c234e575504800ec0866d33af83bd22b5ac018ada870abbea8762f1c804da5",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "expected": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "model": "5cfd0bd6ab7ef94fae1cb0036532546f2a784eb0eb64f5daa1ee57274499f3f4",
+        "optimizer": "c874f285215f95f4c2fa4bcbb5b55113f6cf7c8195664da98400cb19e04b4979",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "samples_match": true,
+      "manager_match": true
+    },
+    {
+      "worker": "g0_A0",
+      "step": 7,
+      "actual": {
+        "model": "f1aa5fe065ccc1144d7a55db650693a9ca1c08a25eecfee1a4e20f61a522fd37",
+        "optimizer": "96a6313caee648e44c7f987a804706d803442397204c0f43c0a7f6eec67802c1",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "expected": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "model": "4eeddab04134f64f0075602c68c8e52d1d316948a476c68ab664d8da8fdf10fe",
+        "optimizer": "c832b144aa69007c9305e3bdbc3a280ad242d08f5459493ccd23125d0a99a717",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "samples_match": true,
+      "manager_match": true
+    },
+    {
+      "worker": "g0_A1",
+      "step": 7,
+      "actual": {
+        "model": "176cf09de0667bf13075f54cc9d8931ea8695b438f3024a64636b8e87809c511",
+        "optimizer": "8f7e9a8a484dfaf698367e77e1a6e2e3bf1126be584fb2285b0ae1f97b8ec7e6",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "expected": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "model": "e4951555bf9d03d16eee9a2ae16f3721421fe41ca7d45d2f8d5455fe86fce9de",
+        "optimizer": "56223882b98a59d547e1867aab868881deda60164c590ff1d0f6c72947655db1",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "samples_match": true,
+      "manager_match": true
+    },
+    {
+      "worker": "g0_D1",
+      "step": 7,
+      "actual": {
+        "model": "176cf09de0667bf13075f54cc9d8931ea8695b438f3024a64636b8e87809c511",
+        "optimizer": "8f7e9a8a484dfaf698367e77e1a6e2e3bf1126be584fb2285b0ae1f97b8ec7e6",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "expected": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "model": "e4951555bf9d03d16eee9a2ae16f3721421fe41ca7d45d2f8d5455fe86fce9de",
+        "optimizer": "56223882b98a59d547e1867aab868881deda60164c590ff1d0f6c72947655db1",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "samples_match": true,
+      "manager_match": true
+    },
+    {
+      "worker": "g0_B0",
+      "step": 7,
+      "actual": {
+        "model": "455ea77993e7055a8b9a92a4fe50b86dffd6c1c636c0177782e89d9100532691",
+        "optimizer": "960686782a74426b2c100e7e7ce2f286aa27bb2513db889b4872b93faccab228",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "expected": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "model": "bdb0dae715d19927c6add20128f4b15b353cafa801e207fdeffbb3630979fb56",
+        "optimizer": "2423095ba4d98bf69e45b60539ec2a15779b36efd9d2632305a91335c44fe24f",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "samples_match": true,
+      "manager_match": true
+    },
+    {
+      "worker": "g0_A2",
+      "step": 7,
+      "actual": {
+        "model": "e7befb8a1b1573af60ebc7aa47d7df2ded88bfc1396ca540be8fc52eac6edbce",
+        "optimizer": "46c234e575504800ec0866d33af83bd22b5ac018ada870abbea8762f1c804da5",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "expected": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "model": "5cfd0bd6ab7ef94fae1cb0036532546f2a784eb0eb64f5daa1ee57274499f3f4",
+        "optimizer": "c874f285215f95f4c2fa4bcbb5b55113f6cf7c8195664da98400cb19e04b4979",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "samples_match": true,
+      "manager_match": true
+    },
+    {
+      "worker": "g0_D0",
+      "step": 7,
+      "actual": {
+        "model": "f1aa5fe065ccc1144d7a55db650693a9ca1c08a25eecfee1a4e20f61a522fd37",
+        "optimizer": "96a6313caee648e44c7f987a804706d803442397204c0f43c0a7f6eec67802c1",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "expected": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "model": "4eeddab04134f64f0075602c68c8e52d1d316948a476c68ab664d8da8fdf10fe",
+        "optimizer": "c832b144aa69007c9305e3bdbc3a280ad242d08f5459493ccd23125d0a99a717",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "samples_match": true,
+      "manager_match": true
+    },
+    {
+      "worker": "g0_E2",
+      "step": 7,
+      "actual": {
+        "model": "0c57887710aee54a65aae963fa13d404db0d5f6a8fb5baffa86ce65b05e6c7be",
+        "optimizer": "b69c51fb156af267ebc3a62ed0f0e69ae60eb996420952b7f9ccf574c37f495f",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "expected": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "model": "3fa75db5463ba5a19584be0459576572c250d3a4b61b64b81ea008148fd61fae",
+        "optimizer": "a7b40f66362e5a691add01b8d51e3c861f593d9b813fafd689eea7f37625ae20",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "samples_match": true,
+      "manager_match": true
+    },
+    {
+      "worker": "g0_A3",
+      "step": 7,
+      "actual": {
+        "model": "975e8de2ef1d30bc3ac24fd5c04271dcfee066a371a8ee5b140928c694f092b5",
+        "optimizer": "b1444de92a9ddf434990169590fce595a12f1524069509042f88b788c8a1fe53",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "expected": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "model": "a92aff97570eab19c5de3b4e2e9069823f52de1fe4e66948deb1071431068659",
+        "optimizer": "1c658e59f20abcfa9c6e40db23ac3ff9656d9d1af5d0237c8b51e8cc4d766248",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "samples_match": true,
+      "manager_match": true
+    },
+    {
+      "worker": "g0_B2",
+      "step": 7,
+      "actual": {
+        "model": "0c57887710aee54a65aae963fa13d404db0d5f6a8fb5baffa86ce65b05e6c7be",
+        "optimizer": "b69c51fb156af267ebc3a62ed0f0e69ae60eb996420952b7f9ccf574c37f495f",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "expected": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "model": "3fa75db5463ba5a19584be0459576572c250d3a4b61b64b81ea008148fd61fae",
+        "optimizer": "a7b40f66362e5a691add01b8d51e3c861f593d9b813fafd689eea7f37625ae20",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "samples_match": true,
+      "manager_match": true
+    },
+    {
+      "worker": "g0_E0",
+      "step": 7,
+      "actual": {
+        "model": "455ea77993e7055a8b9a92a4fe50b86dffd6c1c636c0177782e89d9100532691",
+        "optimizer": "960686782a74426b2c100e7e7ce2f286aa27bb2513db889b4872b93faccab228",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "expected": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "model": "bdb0dae715d19927c6add20128f4b15b353cafa801e207fdeffbb3630979fb56",
+        "optimizer": "2423095ba4d98bf69e45b60539ec2a15779b36efd9d2632305a91335c44fe24f",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "samples_match": true,
+      "manager_match": true
+    },
+    {
+      "worker": "g0_D3",
+      "step": 7,
+      "actual": {
+        "model": "975e8de2ef1d30bc3ac24fd5c04271dcfee066a371a8ee5b140928c694f092b5",
+        "optimizer": "b1444de92a9ddf434990169590fce595a12f1524069509042f88b788c8a1fe53",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "expected": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "ffb316bacbdc234be6c16bb3852dab427d6b9f6d5b7a74889107a9cfa1a4cd14",
+        "cuda_rng": "0b7f389b040a3f4c41a8d4a1580e421d4953c257ebb0bdabbd615ccd5d1922a0",
+        "model": "a92aff97570eab19c5de3b4e2e9069823f52de1fe4e66948deb1071431068659",
+        "optimizer": "1c658e59f20abcfa9c6e40db23ac3ff9656d9d1af5d0237c8b51e8cc4d766248",
+        "progress": "0fd763d9c89a0e6bc8bdec1c101d22520940fc774db1b651b75ca7095ea0a780",
+        "python_rng": "03f72d71a6ea2852299fabb4a0a50af8f63642b882a871dff5dda0249b1dc86b",
+        "scheduler": "3b08f7edd53fec43acb883014937f19ac14a4ee2abf88ca785086dc1e0e3a62c",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "samples_match": true,
+      "manager_match": true
+    }
+  ],
+  "raw_sha256": {
+    "g0_C0.jsonl": "53cb4f38278c74f156f8f48766c162f33678e5b147e0896ed8ab705c45383ae4",
+    "g0_D2.jsonl": "2ce18e9e2fdec3e4e3a708f899aeec672e2892a0073199bc14b111c07232d33d",
+    "g0_C2.jsonl": "a37dc3a7ff8823a150c8977f03af11588c1aba2e06a04ba21a1598c2fb510cfc",
+    "g0_A0.jsonl": "4e32c24acc31ee9938a2cc300992ab264e31de0445c4160240c54b48b614a531",
+    "g0_A1.jsonl": "4e1b3ab2cadb5cb4099e05f0f55bdad6995e7aec5be3bb80d6e54d2114348cc6",
+    "g0_D1.jsonl": "4d7a797971a8b8c047cb56d24c34cc5727d292fec860470653356d6bcfce2080",
+    "g0_B0.jsonl": "e9bf5ad72c6da0993b5d189d9815bab4ff97296939b4a5802c6e073bd76822c8",
+    "g0_A2.jsonl": "a902f9bfd5716224d6576ec55fe0f9c4b2e661c04cdea49f00b7853c6e5641bc",
+    "g0_D0.jsonl": "913da1f0e8de2643dae6e1cef17cc0ddc07320196dd2fb1ac51260432d56645d",
+    "g0_E2.jsonl": "0a8676325274e97c88a9ea1c7fa03baa3689ed602fcd8337b8c814d49a23e5f6",
+    "g0_C3.jsonl": "fdb3914c4428d4d1257c2833341a28e91755ed56b92fb178b99f57ad1eea1e55",
+    "g0_A3.jsonl": "f3e1340dbb75bc7adbdb92b6a0a4108517ed9ff313c9f94e1e1eb6fbad0d31d9",
+    "g0_B2.jsonl": "81e7267ef827e092cbfbcef988886cf6a6b85f82e9e51d26bbc60d948050482e",
+    "g0_E3.jsonl": "1b40bc97e09bc484112d0de1a04a7c4150333341568002ec73a83fd03dc7baa3",
+    "g0_E0.jsonl": "e303253224c317ecf3c66010a0b6d72dd77a18ffc54421369aad20b29023ad8d",
+    "g0_B3.jsonl": "34d56d447f704794372012989ed78ed41075f8b872add6b634ce6be4631fb334",
+    "g0_C1.jsonl": "a79f0755cb20590909d5dec29b1bc704e09fce4c59db616810443d8cc92508ed",
+    "g0_B1.jsonl": "f31d05e97b3fcf313c3d4bcbb0fc01b47d464edacca1d2f69f44c49d41e22137",
+    "g0_E1.jsonl": "c08965425da3b78d42c76125a14002a06e8c7cedb10f078736f0d619a1a2f097",
+    "g0_D3.jsonl": "1a424d62b78d69fa126ac7044204018b37aeacde5dd396773861135767690586"
+  }
+}

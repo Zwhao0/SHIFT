@@ -28,3 +28,15 @@ Preliminary failures are explicit in quick_failures.json: missing private GPU ba
 V2 q2_0 and q2_1 have minor startup-wrapper differences: the latter explicitly sets the CUDA device and microbatches=2 (the earlier default was also2). Training/P1f sources are unchanged. Per-run deployed SHA manifests and q2_0_runner_delta.patch preserve provenance. Do not attribute trial timing differences to the migration algorithm.
 
 Reuse existing private endpoints/environment. Run scripts.prepare_v3_controller before each trial, then scripts.start_v4 or scripts.start_quick_recovery. Never prepare while the training lock is held. Workers are memory-capped at0.12 and owned by exact bounded systemd units; company containers are untouched. After audit/export, delete regenerable raw/log/archive/trace/intermediate data and temporary authorization; retain source, installed environment/headers/model, private configs/seeds/manifests, initial BF16 anchors and comparison signatures.
+
+## V1 timing follow-up (same day)
+
+The retained v1 profile explicitly selects `--cold-launcher --digest-engine staged --overlap-cpu-model-load` through `scripts.start_quick_recovery`. It retains fresh cold workers, the original native forward/backward and full TP/PP gradient finalization, complete nine-state audits, the2s communication deadline and0.12 memory cap.
+
+Same-seed normal-load baseline→candidate:25.116→21.264s controller-observed recovery (exploratory15.34%, one matched pair). A second placement passed at20.141s; its following15 steps averaged0.822s versus0.810s pre-fault, with last10 averaging0.810s. All initial-role nine-state hashes match the baseline. The bounded healthy commit gap remains about9.4–9.5s.
+
+Fresh v2 and PP-only v4 regressions passed independent audits:31.685s and27.016s, respectively. Their post windows were2.005s vs1.962s pre, and2.446s vs2.578s pre. These are functional regressions under their declared workloads, not cross-strategy speedup evidence. V1/v2/v4 currently differ in entrypoint, input data, global batch, physical placement and auditing; the user's intended comparison requires a common training engine/workload with only recovery decisions varying.
+
+Additional v1 attempts were rejected: incomplete gradient paths failed guards/exact model-Adam hashes; a complete native gradient-only round passed correctness but took25.069s; overlapping cold launch with retired-generation cleanup passed but changed21.264s to21.239s, within observation uncertainty. All were reverted. Selected source identity was restored exactly; the user canceled redundant reruns. High-load baseline failures and the39.034s/30s-deadline diagnostic are retained without performance credit.
+
+See `evidence/v1_optimization_20261104/` for all timings, audits, initial signatures, source identities, failed attempts and cleanup. Original public V4 remains commit7c8fe1e; follow-up changes remain local. Regenerable raw was removed after export; current reference verification requires fresh raw on a future run.

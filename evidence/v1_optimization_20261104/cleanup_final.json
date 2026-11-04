@@ -1,0 +1,80 @@
+{
+  "nodes": {
+    "node0": {
+      "deleted_file_bytes": 7094775,
+      "removed_paths": [
+        "results/v1_quick_20261104_o3_early0",
+        "results/v1_quick_20261104_o2_grad0-node0.tgz",
+        "results/v1_quick_20261104_o3_early0-node0.tgz",
+        "results/v1_quick_20261104_o2_grad0",
+        "results/v3_a1_20261103",
+        "v1_quick_20261104_o3_early0-logs.tgz",
+        "v1_quick_20261104_o2_grad0-logs.tgz",
+        "runtime/v3-reproduce/o2_grad0.controller.log",
+        "runtime/v3-reproduce/o3_early0.controller.log",
+        "runtime/v1-controller/id_ed25519.pub",
+        "runtime/v1-controller/id_ed25519",
+        "runtime/v1-controller/credentials"
+      ],
+      "company_pid_count": 8,
+      "company_pids_unchanged": true,
+      "extra_gpu": 0,
+      "active_shift_units": 0,
+      "shift_workers": 0,
+      "temporary_authorization_markers": 0,
+      "environment_headers_model_preserved": true,
+      "initial_anchor_files_preserved": 8,
+      "formal_injection_ledger_preserved": true,
+      "new_injections_archived": 2,
+      "disk_free_bytes": 479644598272
+    },
+    "node1": {
+      "deleted_file_bytes": 728258,
+      "removed_paths": [
+        "results/v1_quick_20261104_o2_grad0",
+        "results/v1_quick_20261104_o3_early0-node1.tgz",
+        "results/v1_quick_20261104_o3_early0",
+        "results/v1_quick_20261104_o2_grad0-node1.tgz",
+        "v1_quick_20261104_o2_grad0-logs.tgz",
+        "v1_quick_20261104_o3_early0-logs.tgz"
+      ],
+      "company_pid_count": 8,
+      "company_pids_unchanged": true,
+      "extra_gpu": 0,
+      "active_shift_units": 0,
+      "shift_workers": 0,
+      "temporary_authorization_markers": 0,
+      "environment_headers_model_preserved": true,
+      "initial_anchor_files_preserved": 0,
+      "formal_injection_ledger_preserved": null,
+      "new_injections_archived": 0,
+      "disk_free_bytes": 521378029568
+    },
+    "node3": {
+      "deleted_file_bytes": 616889,
+      "removed_paths": [
+        "results/v1_quick_20261104_o2_grad0-node3.tgz",
+        "results/v1_quick_20261104_o3_early0",
+        "results/v1_quick_20261104_o2_grad0",
+        "results/v1_quick_20261104_o3_early0-node3.tgz",
+        "v1_quick_20261104_o2_grad0-logs.tgz",
+        "v1_quick_20261104_o3_early0-logs.tgz"
+      ],
+      "company_pid_count": 8,
+      "company_pids_unchanged": true,
+      "extra_gpu": 0,
+      "active_shift_units": 0,
+      "shift_workers": 0,
+      "temporary_authorization_markers": 0,
+      "environment_headers_model_preserved": true,
+      "initial_anchor_files_preserved": 8,
+      "formal_injection_ledger_preserved": null,
+      "new_injections_archived": 0,
+      "disk_free_bytes": 797761953792
+    }
+  },
+  "business_health_tested": false,
+  "all_resources_clean": true,
+  "deleted_file_bytes": 8439922,
+  "retained": "source, installed runtime/headers/model, private configs/seeds/manifests, initial anchor roles, comparison signatures and compact audited timing data"
+}

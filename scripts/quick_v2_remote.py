@@ -6,6 +6,7 @@ starts GPU work implicitly, or touches processes outside its exact systemd units
 import argparse
 import fcntl
 import json
+import os
 from pathlib import Path
 import subprocess as sp
 import time
@@ -20,10 +21,12 @@ SECONDS = 1200
 GOAL_SECONDS = ('seconds', 'compute_seconds', 'schedule_seconds',
                 'gradient_check_seconds', 'decision_seconds',
                 'commit_interval_seconds', 'boundary_sync_seconds',
-                'quorum_seconds', 'load_seconds', 'audit_seconds')
+                'quorum_seconds', 'load_seconds', 'audit_seconds',
+                'optimizer_seconds', 'step_sync_seconds', 'wait_seconds', 'elapsed_overlap_seconds')
 SOURCE_FILES = ['shift_full/' + name + '.py' for name in
-                ('planned_train', 'planned_handoff', 'overlap_handoff',
-                 'overlap_probe', 'prepared_pg', 'transport')]
+                ('training_core', 'train', 'planned_train', 'planned_handoff', 'overlap_handoff',
+                 'overlap_probe', 'prepared_pg', 'transport', 'state_digest',
+                 'cold_cpu_load', 'cold_launch', 'supervisor')]
 SHARED_HASHES = ('model', 'optimizer', 'scheduler')
 
 # This transient module runs in each torchrun worker before planned_train.
@@ -46,15 +49,17 @@ def _set_arg(args, flag, value):
         args[index + 1] = str(value)
 
 
-def config(trigger, post_steps):
+def config(trigger, post_steps, audit_every_step=False, audit_state=True, variant='p1f'):
     """Build the audited, deterministic-shape p1f random-data workload."""
     c = json.loads((ROOT / 'configs/v1_bench_shift.json').read_text())
     args = c['train_args']
     _set_arg(args, '--communication-timeout', 30)
     _set_arg(args, '--max-seconds', SECONDS - 60)
     _set_arg(args, '--microbatches', 2)
-    args += ['--audit-state', '--hash-every', '1', '--sync-quorum',
-             '--fixed-batch', '--data', 'random', '--planned-variant', 'p1f',
+    if audit_state:args.append('--audit-state')
+    else:args.append('--final-audit')
+    args += ['--hash-every', '1' if audit_every_step else '0', '--sync-quorum',
+             '--fixed-batch', '--data', 'random', '--planned-variant', variant,
              '--planned-source', 'B', '--planned-inject', 'healthy',
              '--planned-cycles', '1']
     c.update(entry_module='quick_v2_worker', target_steps=100000,
@@ -65,6 +70,8 @@ def config(trigger, post_steps):
              single_gpu_visibility=False, audit_initial=True,
              external_lighthouse=True)
     c['env'].update(TORCH_NCCL_NONBLOCKING_TIMEOUT='60',
+                    SHIFT_DIGEST_ENGINE=os.environ.get('SHIFT_DIGEST_ENGINE', 'reference'),
+                    SHIFT_OVERLAP_CPU_MODEL_LOAD=os.environ.get('SHIFT_OVERLAP_CPU_MODEL_LOAD', '0'),
                     CUDA_DEVICE_MAX_CONNECTIONS='1')
     c['requested_trigger'] = trigger
     c['post_steps'] = post_steps
@@ -75,6 +82,12 @@ class QuickV2Rotation(PlannedRotation):
     def __init__(self, name, cfg, seconds, nodes):
         super().__init__(name, cfg, seconds, nodes, baseline={})
         self.wait_observations = {}
+        self.milestones = {}
+
+    def resource_check(self, phase):
+        super().resource_check(phase)
+        loads={n:self.ssh(e,['nvidia-smi','--query-gpu=index,utilization.gpu,memory.used','--format=csv,noheader,nounits']).splitlines() for n,e in self.endpoints.items()}
+        (self.out/f'gpu_load_{phase}.json').write_text(json.dumps(loads)+'\n')
 
     def start_services(self, cycles):
         # Refuse any baseline other than the eight known company VLLM PIDs.
@@ -131,6 +144,18 @@ class QuickV2Rotation(PlannedRotation):
             scan_started = time.monotonic()
             data = self.data()
             scan_finished = time.monotonic()
+            # First observations share the controller clock. Milestones may
+            # coincide in one scan; they are observation bounds, not GPU times.
+            checks = {
+                'target_prepared': complete(self.rows_role(data, 'C', 'planned_local_ready')),
+                'frozen': all(complete(self.rows_role(data, role, 'planned_final_freeze')) for role in 'AB'),
+                'state_sent': complete(self.rows_role(data, 'B', 'planned_state_sent')) or complete(self.rows_role(data, 'B', 'planned_precopy_sent')),
+                'restored': complete(self.rows_role(data, 'C', 'restored')),
+                'activated': all(complete(self.rows_role(data, role, 'planned_epoch_activated')) for role in 'AC'),
+            }
+            for milestone, reached in checks.items():
+                if reached and milestone not in self.milestones:
+                    self.milestones[milestone] = scan_finished
             for role, files in data.items():
                 bad = [e for e in files.get('supervisor.jsonl', [])
                        if e.get('kind') in ('unexpected_exit', 'supervisor_error')]
@@ -181,7 +206,7 @@ def timing_samples(data):
                     phases.append(dict(name=event.get('name'), **_timed_fields(event)))
                 elif event.get('kind') in ('begin', 'commit'):
                     steps.append(dict(kind=event['kind'], **_timed_fields(event)))
-                elif (event.get('kind') in ('restored', 'reconfigure_begin', 'reconfigure_end')
+                elif (event.get('kind') in ('restored', 'reconfigure_begin', 'reconfigure_end', 'cpu_model_load_overlap')
                       or event.get('kind', '').startswith('planned_')):
                     handoff.append(dict(kind=event['kind'], **_timed_fields(event)))
             workers.append(dict(role=role, rank=rank, generation=int(filename.split('_')[1][1:]),
@@ -209,9 +234,12 @@ def verify_deployed_source(s, out):
     return result
 
 
-def audit(s, data, cut, goal):
+def audit(s, data, cut, goal, audit_every_step=True, audit_state=True, variant='p1f'):
     """Require complete B->C restoration and matching joint A/C commits."""
     for role in ('A', 'B'):
+        ready = s.rows_role(data, role, 'ready')
+        if not complete(ready) or (audit_state and any(set(row.get('hashes', {})) != SCHEMAS for row in ready)):
+            raise RuntimeError(f'{role}: incomplete initial state audit')
         commits = s.rows_role(data, role, 'commit')
         for step in range(1, cut + 1):
             rows = s.rows_role(data, role, 'commit', step=step)
@@ -220,7 +248,8 @@ def audit(s, data, cut, goal):
             for row in rows:
                 if row.get('participants') != 2 or not row.get('contributed') or not row.get('finite_gradients'):
                     raise RuntimeError(f'{role}: invalid pre-cut commit {step}')
-                if (set(row.get('hashes', {})) != SCHEMAS or row.get('fixed_batch') is not True
+                if ((audit_state and audit_every_step or row.get('hashes')) and set(row.get('hashes', {})) != SCHEMAS
+                        or row.get('fixed_batch') is not True
                         or row.get('global_batch') != 8):
                     raise RuntimeError(f'{role}: incomplete hashes at step {step}')
             if role == 'B':
@@ -228,7 +257,8 @@ def audit(s, data, cut, goal):
                 for rank in range(8):
                     a = next(row for row in a_rows if row['rank'] == rank)
                     b = next(row for row in rows if row['rank'] == rank)
-                    if any(a['hashes'][key] != b['hashes'][key] for key in SHARED_HASHES):
+                    if (bool(a.get('hashes')) != bool(b.get('hashes')) or
+                            (a.get('hashes') and any(a['hashes'][key] != b['hashes'][key] for key in SHARED_HASHES))):
                         raise RuntimeError(f'A/B state hash mismatch at step {step} rank {rank}')
                 samples = {sample for row in a_rows + rows for sample in row.get('sample_ids', [])}
                 if samples != set(range((step-1)*8, step*8)):
@@ -238,15 +268,30 @@ def audit(s, data, cut, goal):
 
     restored = s.rows_role(data, 'C', 'restored')
     state_ready = s.rows_role(data, 'C', 'planned_state_ready', step=cut)
-    sent = s.rows_role(data, 'B', 'planned_state_sent', step=cut)
-    if not complete(restored) or not complete(state_ready) or not complete(sent):
+    sent = s.rows_role(data, 'B', 'planned_precopy_sent' if variant=='p2' else 'planned_state_sent', step=cut)
+    snapshots = s.rows_role(data, 'B', 'snapshot', step=cut)
+    if not complete(restored) or not complete(state_ready) or not complete(sent) or not complete(snapshots):
         raise RuntimeError('incomplete B-to-C state transfer')
     for row in restored:
+        snapshot = next(value for value in snapshots if value['rank'] == row['rank'])
         if (row.get('step') != cut or not row.get('hashes_match')
                 or row.get('optimizer_tensors', 0) <= 0
-                or set(row.get('actual_hashes', {})) != SCHEMAS
-                or row.get('actual_hashes') != row.get('expected_hashes')):
+                or (audit_state and set(row.get('actual_hashes', {})) != SCHEMAS)
+                or row.get('actual_hashes') != row.get('expected_hashes')
+                or row.get('expected_hashes') != snapshot.get('hashes')):
             raise RuntimeError('C full-state restore audit failed')
+    if variant == 'p2':
+        sent_grad = s.rows_role(data, 'B', 'planned_gradient_sent', step=cut)
+        recv_grad = s.rows_role(data, 'C', 'planned_gradient_received', step=cut)
+        if not complete(sent_grad) or not complete(recv_grad):raise RuntimeError('incomplete gradient ownership relay')
+        for rank in range(8):
+            source=next(row for row in sent_grad if row['rank']==rank)
+            target=next(row for row in recv_grad if row['rank']==rank)
+            if any(source.get(key)!=target.get(key) for key in ('sample_ids','gradient_hash','tail_hash')):
+                raise RuntimeError('gradient/tail relay mismatch')
+            if target.get('forward_calls') != 0:raise RuntimeError('relay target repeated forward')
+            if audit_state and any(not source.get(key) for key in ('gradient_hash','tail_hash')):
+                raise RuntimeError('missing gradient/tail development hashes')
 
     for step in range(cut + 1, goal + 1):
         a_rows = s.rows_role(data, 'A', 'commit', step=step)
@@ -261,9 +306,11 @@ def audit(s, data, cut, goal):
                         or row.get('participants') != 2 or not row.get('contributed')
                         or not row.get('finite_gradients') or row.get('global_batch') != 8
                         or row.get('fixed_batch') is not True
-                        or set(row.get('hashes', {})) != SCHEMAS):
+                        or ((audit_state and (audit_every_step or step == cut+1) or row.get('hashes'))
+                            and set(row.get('hashes', {})) != SCHEMAS)):
                     raise RuntimeError(f'invalid A/C joint commit at step {step} rank {rank}')
-            if any(a['hashes'][key] != c['hashes'][key] for key in SHARED_HASHES):
+            if (bool(a.get('hashes')) != bool(c.get('hashes')) or
+                    (a.get('hashes') and any(a['hashes'][key] != c['hashes'][key] for key in SHARED_HASHES))):
                 raise RuntimeError(f'A/C shared state hash mismatch at step {step} rank {rank}')
         samples = {sample for row in a_rows + c_rows for sample in row.get('sample_ids', [])}
         expected_samples = set(range((step-1)*8, step*8))
@@ -271,18 +318,40 @@ def audit(s, data, cut, goal):
             raise RuntimeError(f'invalid fixed-batch sample coverage at step {step}')
     if not complete(s.rows_role(data, 'B', 'planned_standby_verified')):
         raise RuntimeError('B standby did not finish retirement verification')
+    if not audit_state:
+        finals = {role:s.rows_role(data, role, 'final_audit', step=cut if role=='B' else goal) for role in 'ABC'}
+        if any(not complete(rows) or any(set(row.get('hashes', {})) != SCHEMAS for row in rows) for rows in finals.values()):
+            raise RuntimeError('incomplete final development audit')
+        for rank in range(8):
+            a=next(row for row in finals['A'] if row['rank']==rank)
+            c=next(row for row in finals['C'] if row['rank']==rank)
+            if any(a['hashes'][key] != c['hashes'][key] for key in SHARED_HASHES):
+                raise RuntimeError('final A/C shared state mismatch')
+    hashed_commits = sum(bool(row.get('hashes')) for role in 'ABC' for row in s.rows_role(data, role, 'commit'))
     return dict(functional_pass=True, cut=cut, goal=goal, post_steps=goal-cut,
-                state_transfer_ranks=8, audited_joint_steps=list(range(cut+1, goal+1)))
+                state_transfer_ranks=8, audit_every_step=audit_every_step,
+                full_restore_hash_audit=audit_state, final_state_hash_audit=not audit_state,
+                variant=variant,
+                hashed_commits=hashed_commits,
+                audited_joint_steps=(list(range(cut+1, goal+1)) if audit_every_step else [cut+1]) if audit_state else [])
 
 
 def run_one(args):
     name = 'v2_q2_' + args.suffix
-    cfg = config(args.trigger, args.post_steps)
+    cfg = config(args.trigger, args.post_steps, args.audit_every_step, not args.performance_no_audit, args.variant)
+    cfg['cold_launcher'] = args.cold_launcher
+    if args.slow_ms:
+        _set_arg(cfg['train_args'],'--planned-inject','slow-compute')
+        _set_arg(cfg['train_args'],'--planned-slow-ms',args.slow_ms)
     s = QuickV2Rotation(name, cfg, SECONDS, args.nodes.split(','))
     request_mono = None
-    status = dict(done=False, success=False, name=name, seed=args.seed,
+    status = dict(slow_ms=args.slow_ms, done=False, success=False, name=name, seed=args.seed,
+                  cold_launcher=args.cold_launcher, digest_engine=cfg['env']['SHIFT_DIGEST_ENGINE'],
+                  overlap_cpu_model_load=cfg['env']['SHIFT_OVERLAP_CPU_MODEL_LOAD'],
+                  audit_every_step=args.audit_every_step,
+                  audit_state=not args.performance_no_audit,
                   requested_trigger=args.trigger, requested_post_steps=args.post_steps,
-                  source='B', target='C', nodes=args.nodes.split(','), variant='p1f',
+                  source='B', target='C', nodes=args.nodes.split(','), variant=args.variant,
                   seed_note='manifest provenance; planned_train fixes initialization and derives random batches from committed sample IDs')
     status_path = s.out / 'status.json'
     status_path.write_text(json.dumps(status, indent=2) + '\n')
@@ -333,8 +402,9 @@ def run_one(args):
         d = s.wait('all_workers_stopped',
                    lambda data: all(complete(s.rows_role(data, role, 'stopped')) for role in 'ABC'), timeout=180)
         full = s.data(full=True)
-        functional = audit(s, full, cut, goal)
+        functional = audit(s, full, cut, goal, args.audit_every_step, not args.performance_no_audit, args.variant)
         result = dict(functional=functional, first_joint_observation=first_observation,
+                      controller_milestones=s.milestones,
                       workers=timing_samples(full), requested_trigger=args.trigger,
                       observed_cut=cut, goal=goal, seed=args.seed,
                       worker_clock_note='per-worker monotonic values are retained but must not be subtracted across physical hosts')
@@ -360,14 +430,21 @@ def main():
     p.add_argument('--seed', type=int, required=True)
     p.add_argument('--trigger', type=int, choices=(9, 10), required=True)
     p.add_argument('--post-steps', type=int, default=5)
+    p.add_argument('--cold-launcher', action='store_true')
+    p.add_argument('--audit-every-step', action='store_true', help='diagnostic full hashes on every commit')
+    p.add_argument('--performance-no-audit', action='store_true', help='no hashes during migration; final development audit after measured steps')
+    p.add_argument('--variant', choices=['p1f','p2'], default='p1f')
+    p.add_argument('--slow-ms', type=float, default=0)
     p.add_argument('--nodes', default='node0,node1,node3')
     args = p.parse_args()
+    if args.performance_no_audit and args.audit_every_step:p.error('choose migration auditing or performance timing')
     if not args.suffix or not all(c.isalnum() or c in '_-' for c in args.suffix):
         p.error('invalid suffix')
     if args.post_steps != 5:
         p.error('quick manifest runs require exactly five post-steps')
     if args.nodes.split(',') != ['node0', 'node1', 'node3']:
         p.error('--nodes must be node0,node1,node3 in role order')
+    if args.slow_ms < 0:p.error('nonnegative slow delay required')
     if args.seed < 0:
         p.error('--seed must be nonnegative')
     lock = (ROOT / 'runtime/v3-training.lock').open('a')

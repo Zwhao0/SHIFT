@@ -147,7 +147,7 @@ class Outer:
                 store_port=port + 100 + self._service_epoch * 2 + replica,
                 lighthouse_addr=f"http://{host}:{port + 60 + self._service_epoch}",
                 replica_id=f"v4outer{replica}",
-                hostname=host,
+                hostname=hosts.get('D',host) if c.get('unified') and replica else host,
                 checkpoint_transport=_ForbiddenCheckpointTransport(),
             )
             self.manager.load_state_dict({"step": 0, "batches_committed": 0})

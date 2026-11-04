@@ -129,7 +129,7 @@ def _classify_commit_samples(workers, commits, summary, common):
     stage_by_key = {}
     for worker, events in workers.items():
         role = worker.split("_")[-1][0]
-        same_node0 = role in ("A", "D")
+        same_node0 = role in (("A", "B") if summary.get("unified") else ("A", "D"))
         basis_by_worker[worker] = ("same-host monotonic relative to node0 migration_request"
                                    if same_node0 else
                                    "logical step relative to node0 request.observed_step and cut")

@@ -1,0 +1,9 @@
+{
+  "parent": "7c8fe1eec6b5fe98c72bf98e0d77a9d4b42271fa",
+  "local_source_checkpoint": "4fd55ec730d501fe4c76a1403a1ad3ec0680b985",
+  "preserved_local_branch": "codex/v2-recovery-timing",
+  "common_ancestor": "8ee421cada7b1986fc0f0bed7d1c1dab42f7d1e3",
+  "method": "new commit with public v4 parent and fully preserved reviewed current source tree; old branch unchanged; no reset, rebase or force",
+  "public_files_secret_scan_pass": true,
+  "raw_or_private_artifacts_in_candidate_tree": 0
+}

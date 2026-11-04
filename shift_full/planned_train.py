@@ -16,6 +16,8 @@ import types
 
 import torch
 import torch.distributed as dist
+from shift_full.training_core import (TrainingState, partition_model, configure_model,
+    sample_plan, make_batches, train_step, complete_step, initialize_rng)
 from shift_full.compat import install_baby_event_fix, install_managed_callback_fix, bootstrap_legacy_core
 if os.environ.get("SHIFT_BABY_COMPAT") == "1":
     install_baby_event_fix()  # Inherited by the isolated subprocess backend.
@@ -87,6 +89,7 @@ def main():
     p.add_argument('--microbatches', type=int, default=2)
     p.add_argument('--hash-every', type=int, default=0)
     p.add_argument('--audit-state', action='store_true')
+    p.add_argument('--final-audit', action='store_true', help='development audit after measured commits finish')
     p.add_argument('--measure-step', action='store_true')
     p.add_argument('--sync-quorum', action='store_true')
     p.add_argument('--fixed-batch', action='store_true')
@@ -221,6 +224,17 @@ def main():
     phase_started = phase('megatron_imports', phase_started)
     topology_out = out / f'topology_g{args.generation}'
     topology_out.mkdir(parents=True, exist_ok=True)
+    overlap_cpu_load = os.environ.get('SHIFT_OVERLAP_CPU_MODEL_LOAD', '0')
+    if overlap_cpu_load not in ('0', '1'):
+        raise ValueError('invalid SHIFT_OVERLAP_CPU_MODEL_LOAD')
+    cpu_model_load = None
+    if overlap_cpu_load == '1':
+        # The pinned topology path consumes no model RNG; keep every PG on
+        # this thread and join the CPU-only loader before partitioning.
+        torch.manual_seed(2026)
+        random.seed(2026)
+        from shift_full.cold_cpu_load import CPUModelLoad
+        cpu_model_load = CPUModelLoad(lambda:load_model(Path(args.flash) / 'models/qwen_moe'))
     new_group = dist.new_group
     def local_new_group(*pos, **kwargs):
         kwargs['use_local_synchronization'] = True
@@ -233,24 +247,28 @@ def main():
     assert dist.get_world_size(expert_dp) == (2 if args.mode == 'flat' else 1)
     assert dist.get_world_size(dense) == (4 if args.mode == 'flat' else 2)
     phase_started = phase('parallel_groups', phase_started)
-    torch.manual_seed(2026)
-    random.seed(2026)
-    full = load_model(Path(args.flash) / 'models/qwen_moe')
+    if cpu_model_load is None:
+        torch.manual_seed(2026)
+        random.seed(2026)
+        full = load_model(Path(args.flash) / 'models/qwen_moe')
+    else:
+        full, load_timing = cpu_model_load.result()
+        event('cpu_model_load_overlap', **load_timing,
+              elapsed_overlap_seconds=max(0, min(load_timing['end_monotonic'], phase_started)-load_timing['start_monotonic']),
+              performance_evidence=False)
+        del cpu_model_load
     phase_started = phase('full_model_load', phase_started)
     total_parameters = sum(v.numel() for v in full.parameters())
     if args.fp32:
         full.float()
-    patch_moe(full, ep)
-    stage = StageModel(full, state.get_pipeline_model_parallel_rank())
-    tp_manifest = patch_tensor_parallel(stage, state.get_tensor_model_parallel_group())
+    stage, tp_manifest = partition_model(full, ep=ep, tp=state.get_tensor_model_parallel_group(),
+        pp_rank=state.get_pipeline_model_parallel_rank(), StageModel=StageModel,
+        patch_moe=patch_moe, patch_tensor_parallel=patch_tensor_parallel)
     del full
     phase_started = phase('model_partition', phase_started)
-    stage.cuda()
-    ddp = megatron_adapter.wrap(stage, dense, expert_dp, args.bucket_size, config=stage.config)
-    stage.config.no_sync_func = ddp.no_sync
-    stage.config.finalize_model_grads_func = finalize_model_grads
-    optimizer = torch.optim.AdamW(stage.parameters(), lr=args.lr, foreach=False)
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=int(os.environ.get('SHIFT_PLANNED_SCHEDULER_STEP','1000')), gamma=0.98)
+    ddp, optimizer, scheduler = configure_model(stage, adapter=megatron_adapter, dense=dense,
+        expert_dp=expert_dp, finalize=finalize_model_grads, bucket_size=args.bucket_size,
+        lr=args.lr, scheduler_step=int(os.environ.get('SHIFT_PLANNED_SCHEDULER_STEP','1000')))
     phase_started = phase('cuda_ddp_optimizer', phase_started)
     def role_manifest():
         return dict(tp=2, pp=2, ep=2, etp=2, rank=rank,
@@ -287,20 +305,13 @@ def main():
     audit_joint_pending = False
     manager = None
 
-    def rng_snapshot():
-        return dict(torch_rng=torch.get_rng_state(), cuda_rng=torch.cuda.get_rng_state(),
-                    python_rng=random.getstate(), tracker_rng=tracker_snapshot(rng_tracker))
-
-    def current_hashes(rng=None):
-        torch.cuda.current_stream().synchronize()
-        rng = rng if rng is not None else rng_snapshot()
-        return dict(model=digest(stage.state_dict()), buffers=digest(dict(stage.named_buffers())), optimizer=digest(optimizer.state_dict()),
-                    scheduler=digest(scheduler.state_dict()), progress=digest(progress),
-                    cpu_rng=digest(rng['torch_rng']), cuda_rng=digest(rng['cuda_rng']),
-                    python_rng=digest(rng['python_rng']), tracker_rng=digest(rng['tracker_rng']))
+    training_state = TrainingState(stage, optimizer, scheduler, progress, rng_tracker)
+    rng_snapshot = training_state.rng
+    current_hashes = training_state.hashes
 
     def export_state():
         nonlocal audit_joint_pending
+        snapshot_started = time.monotonic()
         event('snapshot_begin',step=progress['updates'])
         torch.cuda.current_stream().synchronize()
         step = manager.current_step() if manager else progress['updates']
@@ -310,19 +321,14 @@ def main():
         frozen = boundary_rng if boundary_rng and boundary_rng['step'] == step else None
         all_buffers = frozen['buffers'] if frozen else {n:b.detach().clone() for n,b in stage.named_buffers()}
         if frozen: frozen['copy_ready'].synchronize()
-        model_state = stage.state_dict()
-        for name,value in all_buffers.items():
-            if name in model_state:model_state[name]=value
-        payload = dict(schema=2, model=model_state, all_buffers=all_buffers,
-                       optimizer=optimizer.state_dict(),
-                       scheduler=scheduler.state_dict(), progress=dict(progress),
-                       **rng, source_replica=args.replica,
-                       source_rank=rank, step=step)
-        payload['hashes'] = current_hashes(rng) if args.audit_state else {}
-        if args.audit_state:payload['hashes'].update(model=digest(model_state),buffers=digest(all_buffers))
+        payload = training_state.capture(rng=rng, all_buffers=all_buffers,
+            source_replica=args.replica, source_rank=rank)
+        model_state = payload['model']
+        payload['hashes'] = current_hashes(rng, model_state=model_state, all_buffers=all_buffers) if args.audit_state else {}
         if args.transport == 'http':
             payload = cpu_tree(payload)
         event('snapshot', step=step, hashes=payload['hashes'],
+              seconds=time.monotonic()-snapshot_started,
               optimizer_tensors=tensor_count(payload['optimizer'].get('state', {})))
         return payload
 
@@ -332,16 +338,8 @@ def main():
         validate_state(payload, rank=rank, audit=args.audit_state)
         assert payload['step'] == payload['progress']['updates']
         assert payload['step'] == (manager.current_step() if manager else payload['step'])
-        stage.load_state_dict(payload['model'], strict=True)
-        restore_buffers(stage,payload['all_buffers'])
-        optimizer.load_state_dict(payload['optimizer'])
-        scheduler.load_state_dict(payload['scheduler'])
-        progress.clear();progress.update(payload['progress'])
+        training_state.restore(payload)
         audit_joint_pending = True
-        torch.set_rng_state(payload['torch_rng'])
-        torch.cuda.set_rng_state(payload['cuda_rng'])
-        random.setstate(payload['python_rng'])
-        restore_tracker(rng_tracker,payload['tracker_rng'])
         torch.cuda.current_stream().synchronize()
         loaded_at = time.monotonic()
         event('state_loaded',step=payload['step'],load_seconds=loaded_at-load_started,
@@ -394,9 +392,8 @@ def main():
         if before_hash is not None: assert before_hash==digest(stage.state_dict()),'warmup changed model state'
         phase_started=phase('local_cuda_warmup',warm_started)
 
-    # Distinct logical-rid RNG streams; model initialization is already complete.
-    if not args.reference_anchor:
-        torch.manual_seed(70000+100*args.replica+rank);random.seed(80000+100*args.replica+rank)
+    # DP checkpoint state follows the logical shard, independent of its host.
+    if not args.reference_anchor: initialize_rng(rank % 8)
     export_state.role_metadata=lambda:dict(schema=2,all_buffers=dict(stage.named_buffers()),source_rank=rank,step=progress['updates'],progress=dict(progress),**rng_snapshot())
     from shift_full.planned_handoff import PlannedHandoff
     if args.planned_variant=='p2':
@@ -716,7 +713,7 @@ def main():
     initial = (handoff.initial_audit['hashes'] if args.planned_ownership_recompute and args.planned_role=='C'
                else current_hashes() if args.audit_state else {})
     phase_started = phase('ownership_activation' if args.planned_ownership_recompute and args.planned_role=='C' else 'initial_audit', phase_started)
-    event('ready', digest_engine=os.environ.get('SHIFT_DIGEST_ENGINE','reference'), physical_rank=args.replica * 8 + rank,
+    event('ready', digest_engine=os.environ.get('SHIFT_DIGEST_ENGINE','reference'), overlap_cpu_model_load=overlap_cpu_load == '1', physical_rank=args.replica * 8 + rank,
           layout='node_local_pp', tp=2, pp=2, ep=2, local_dense_dp=dist.get_world_size(dense),
           local_expert_dp=dist.get_world_size(expert_dp), model_id=MODEL_ID, model_revision=REVISION,
           full_parameters=total_parameters, local_parameters=sum(v.numel() for v in stage.parameters()),
@@ -742,6 +739,7 @@ def main():
     attempts = 0
     last_commit_mono = None
     recovery_requested = False
+    last_audited_handoff = None
     def requested_stop():
         limit=out/'TRAIN_UNTIL'
         if limit.exists() and progress['updates']>=int(limit.read_text()):return True
@@ -819,22 +817,12 @@ def main():
             else:
                 replica_index = manager._participating_replica_rank if args.fixed_batch else args.replica
                 data_rank = (replica_index or 0) * 2 + state.get_data_parallel_rank()
-            count = args.microbatches * (2 // participants if args.fixed_batch else 1)
-            dense_size = 2 * participants if args.fixed_batch else 4
-            batches = []
-            sample_ids = []
-            for micro in range(0 if retained_step else count):
-                sample = step * (args.microbatches * 4) + micro * dense_size + data_rank
-                sample_ids.append(sample)
-                if args.data == 'random':
-                    generator = torch.Generator(device='cuda').manual_seed(100_000 + sample)
-                    tokens = torch.randint(0, stage.hf_config.vocab_size, (1, args.seq_len + 1),
-                                           device='cuda', generator=generator)
-                else:
-                    tokens = (torch.arange(args.seq_len + 1, device='cuda').view(1, -1)
-                              + sample % 8) % 32 + 100
-                batches.append(dict(input_ids=tokens[:, :-1].contiguous(),
-                                    next_token_labels=tokens[:, 1:].contiguous()))
+            sample_ids = sample_plan(step, microbatches=args.microbatches, participants=participants,
+                replica=0 if args.mode=='flat' else (replica_index or 0), local_data_rank=state.get_data_parallel_rank(),
+                fixed_batch=args.fixed_batch)
+            count = len(sample_ids)
+            batches = make_batches(sample_ids, seq_len=args.seq_len, vocab_size=stage.hf_config.vocab_size,
+                data=args.data) if not retained_step else []
             if retained_step:sample_ids=handoff.contribution.result['sample_ids']
             if args.reference_dump or args.reference_signatures: event('batch_plan',step=step,sample_ids=sample_ids)
             if ((args.planned_shadow_recompute or args.planned_ownership_recompute) and args.planned_role=='B'
@@ -854,7 +842,7 @@ def main():
             if args.planned_inject=='slow-compute' and args.planned_role=='B' and not handoff.activated and handoff.request_seen:
                 delay_started=time.monotonic();time.sleep(args.planned_slow_ms/1000)
                 event('planned_compute_delay',step=step,seconds=time.monotonic()-delay_started)
-            try:
+            def execute_step():
                 if retained_step:
                     metrics=[]
                     handoff.contribution.finish(native_finalizer=stage.config.finalize_model_grads_func,
@@ -866,23 +854,24 @@ def main():
                     metrics = schedule(forward_step_func=forward_step, data_iterator=iter(batches),
                                        model=ddp, num_microbatches=count,
                                        seq_length=args.seq_len + stage.extra_positions(1), micro_batch_size=1)
+                return metrics
+            try:
+                transaction = train_step(stage, ddp, optimizer, scheduler, progress,
+                    execute=execute_step, synchronize=args.measure_step)
+                computed = next(transaction)
+                metrics = computed.metrics
             except Exception as exc:
                 from shift_full.overlap_handoff import RetiredReplica
                 if not isinstance(exc,RetiredReplica):raise
                 manager=None
                 if args.planned_cycles>1 and advance_round(wait=True):continue
                 break
-            for parameter in stage.parameters():
-                parameter.grad = parameter.main_grad
-            # A bad numeric result must never be counted as a valid update.
-            schedule_done = time.monotonic()
-            finite = bool(torch.stack([torch.isfinite(b.grad_data).all() for buf in buffers for b in buf.buckets]).all())
+            schedule_done = computed.schedule_done
+            finite = computed.finite
             if not finite:
-                if manager:
-                    manager.report_error(RuntimeError('nonfinite gradients'))
-                else:
-                    raise RuntimeError('nonfinite gradients in baseline')
-            gradient_checked = time.monotonic()
+                if manager: manager.report_error(RuntimeError('nonfinite gradients'))
+                else: raise RuntimeError('nonfinite gradients in baseline')
+            gradient_checked = computed.gradient_checked
             gradients = cpu_tree({name: p.main_grad for name, p in stage.named_parameters()}) if args.reference_dump and args.replica == 0 and rank in {int(r) for r in args.reference_ranks.split(',')} else None
             decision_started = time.monotonic()
             handoff.authorize(manager)
@@ -893,16 +882,22 @@ def main():
                            decision_seconds=decision_done-decision_started)
             attempts += 1
             if commit:
-                optimizer.step()
-                scheduler.step()
-                if args.measure_step:
-                    torch.cuda.current_stream().synchronize()
-                progress['updates'] += 1
+                update = complete_step(transaction, True)
+                optimizer_started = update['optimizer_started']
+                optimizer_done, step_sync_done = update['optimizer_done'], update['step_sync_done']
                 actual_participants=manager.num_participants() if manager else 2
                 contributed=manager.is_participating() if manager else True
-                audit_joint=args.audit_state and audit_joint_pending and actual_participants>=2 and contributed
+                handoff_key = (args.planned_round, handoff.gate.epoch)
+                audit_joint=args.audit_state and actual_participants>=2 and contributed and (
+                    audit_joint_pending or (handoff.activated and last_audited_handoff != handoff_key))
                 hashes = current_hashes() if ((args.hash_every and progress['updates'] % args.hash_every == 0) or audit_joint) else {}
-                if audit_joint: audit_joint_pending=False
+                audit_done = time.monotonic()
+                timings.update(optimizer_seconds=optimizer_done-optimizer_started,
+                               step_sync_seconds=step_sync_done-optimizer_done,
+                               audit_seconds=audit_done-step_sync_done)
+                if audit_joint:
+                    audit_joint_pending=False
+                    last_audited_handoff=handoff_key
                 if gradients is not None:
                     torch.save(dict(gradients=gradients, model=cpu_tree(stage.state_dict()),
                                     optimizer=cpu_tree(optimizer.state_dict()), scheduler=scheduler.state_dict()),
@@ -928,6 +923,7 @@ def main():
                 last_commit_mono=committed_at
                 handoff.committed()
             else:
+                complete_step(transaction, False)
                 event('skipped', step=step, error=str(manager.errored()), **timings)
             if manager:
                 assert manager.current_step() == progress['updates']
@@ -959,6 +955,8 @@ def main():
                     del loaded
                 del payload
         handoff.finish_retired_cleanup()
+        if args.final_audit:
+            event('final_audit', step=progress['updates'], hashes=current_hashes())
         event('stopped', step=progress['updates'], attempts=attempts)
         dist.barrier()
         if manager:

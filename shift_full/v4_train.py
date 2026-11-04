@@ -20,6 +20,8 @@ from dataclasses import replace
 from datetime import timedelta
 
 from .v4_protocol import Ownership, Plan
+from .training_core import (TrainingState, partition_model, configure_model, sample_plan,
+    make_batches, train_step, complete_step, initialize_rng)
 
 
 def main():
@@ -30,6 +32,7 @@ def main():
     p.add_argument('--device', type=int, default=0)
     a = p.parse_args()
     c = json.loads(Path(a.config).read_text())
+    if c.get('deterministic'):os.environ['CUBLAS_WORKSPACE_CONFIG']=':4096:8'
     out = Path(c['directory'])
     out.mkdir(parents=True, exist_ok=True)
     actor_prefix=f"g{c.get('initial_round',0)}_" if c.get('transactional_switch') and not c.get('reference_only') else ''
@@ -99,6 +102,7 @@ def main():
 
     torch.cuda.set_device(device)
     torch.cuda.set_per_process_memory_fraction(.12, device)
+    if c.get('deterministic'):torch.use_deterministic_algorithms(True)
     torch.backends.cuda.matmul.allow_tf32 = False
     torch.set_float32_matmul_precision('highest')
     sys.path.insert(0, c['flash'])
@@ -156,15 +160,11 @@ def main():
 
     def build(full, groups, pp_rank):
         ep, expert_dp, dense = groups
-        patch_moe(full, ep)
-        stage = StageModel(full, pp_rank)
-        patch_tensor_parallel(stage, state.get_tensor_model_parallel_group())
-        stage.cuda()
-        ddp = megatron_adapter.wrap(stage, dense, expert_dp, 67_108_864, config=stage.config)
-        stage.config.no_sync_func = ddp.no_sync
-        stage.config.finalize_model_grads_func = finalize_model_grads
-        optimizer = torch.optim.AdamW(stage.parameters(), lr=1e-4, foreach=False)
-        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 1000, gamma=.98)
+        stage, _ = partition_model(full, ep=ep, tp=state.get_tensor_model_parallel_group(),
+            pp_rank=pp_rank, StageModel=StageModel, patch_moe=patch_moe,
+            patch_tensor_parallel=patch_tensor_parallel)
+        ddp, optimizer, scheduler = configure_model(stage, adapter=megatron_adapter,
+            dense=dense, expert_dp=expert_dp, finalize=finalize_model_grads)
         return stage, ddp, optimizer, scheduler
 
     def rebind(stage, ddp, old_groups, new_groups):
@@ -365,29 +365,17 @@ def main():
         full_parameters = sum(t.numel() for t in full.parameters())
         stage, ddp, optimizer, scheduler = build(full, groups, state.get_pipeline_model_parallel_rank())
         del full
+    initialize_rng(rank)
     progress = {'updates': 0}
     outer = None
-    def rng():
-        return dict(torch_rng=torch.get_rng_state(), cuda_rng=torch.cuda.get_rng_state(),
-                    python_rng=random.getstate(), tracker_rng=tracker_snapshot(tracker))
-    def restore_rng(value):
-        torch.set_rng_state(value['torch_rng']); torch.cuda.set_rng_state(value['cuda_rng'])
-        random.setstate(value['python_rng']); restore_tracker(tracker, value['tracker_rng'])
-    def hashes():
-        r = rng()
-        return dict(model=digest(stage.state_dict()), optimizer=digest(optimizer.state_dict()),
-                    scheduler=digest(scheduler.state_dict()), progress=digest(progress),
-                    buffers=digest(dict(stage.named_buffers())), cpu_rng=digest(r['torch_rng']),
-                    cuda_rng=digest(r['cuda_rng']), python_rng=digest(r['python_rng']),
-                    tracker_rng=digest(r['tracker_rng']))
+    training_state = TrainingState(stage, optimizer, scheduler, progress, tracker)
+    rng, restore_rng, hashes = training_state.rng, training_state.restore_rng, training_state.hashes
     def snapshot():
         started = time.monotonic()
         torch.cuda.synchronize()
         value = tree_map(lambda t: t.detach().clone() if isinstance(t, torch.Tensor) else t,
-            dict(schema=2, model=stage.state_dict(), all_buffers=dict(stage.named_buffers()),
-            optimizer=optimizer.state_dict(), scheduler=scheduler.state_dict(), progress=dict(progress),
-            **rng(), source_replica=replica, source_rank=rank, step=progress['updates'], v4_epoch=1, v4_owner='C',
-            outer_manager=outer.state_dict() if outer else None))
+            training_state.capture(source_replica=replica, source_rank=rank, v4_epoch=1, v4_owner='C',
+                outer_manager=outer.state_dict() if outer else None))
         value['hashes'] = hashes()
         torch.cuda.synchronize()
         event('snapshot_ready', step=progress['updates'], seconds=time.monotonic()-started,
@@ -395,16 +383,7 @@ def main():
         return value
     def restore(value):
         started = time.monotonic()
-        stage.load_state_dict(value['model'], strict=True)
-        restore_buffers(stage, value['all_buffers'])
-        # Adam's same-device load can alias checkpoint tensors; keep snapshots
-        # independent of future optimizer updates and release packed storage.
-        optimizer.load_state_dict(tree_map(
-            lambda t: t.detach().clone() if isinstance(t, torch.Tensor) else t,
-            value['optimizer']))
-        scheduler.load_state_dict(value['scheduler'])
-        progress.clear(); progress.update(value['progress'])
-        restore_rng(value)
+        training_state.restore(value, clone_optimizer=True)
         optimizer.zero_grad(set_to_none=True); ddp.zero_grad_buffer()
         torch.cuda.synchronize()
         actual = hashes()
@@ -428,8 +407,15 @@ def main():
     trajectory_exact = []
     current_phase=None
     native_finish = ddp.finish_grad_sync
+    def gradient_trace(point):
+        if c.get('trace_step') != progress['updates']+1:return
+        values=[b.grad_data for buf in ddp.buffers+ddp.expert_parallel_buffers for b in buf.buckets]
+        fields=dict(bucket_hash=digest(values))
+        if point=='optimizer':fields['parameters']={n:digest(p.main_grad) for n,p in stage.named_parameters()}
+        event('gradient_trace',step=progress['updates']+1,point=point,**fields)
     def finish_grad_sync():
         native_finish()
+        gradient_trace('native')
         if c.get('overlap_peer') and replica and current_phase=='after' and progress['updates']==plan.cut:
             torch.cuda.synchronize()
             store.set(f'peer_gradient_ready/{rank}','1')
@@ -438,6 +424,7 @@ def main():
         if outer:
             outer.reduce([b for buf in ddp.buffers+ddp.expert_parallel_buffers for b in buf.buckets],
                          progress['updates'])
+        gradient_trace('outer')
         if c.get('overlap_peer') and replica and current_phase=='after' and progress['updates']==plan.cut:
             event('peer_outer_gradient_ready',step=progress['updates'],seconds=time.monotonic()-outer_started)
     ddp.finish_grad_sync = finish_grad_sync
@@ -456,35 +443,34 @@ def main():
                 saved_rng = rng()
                 outer.begin(step)
                 restore_rng(saved_rng)
-            if role == 'B' and phase == 'before' and step == plan.cut-1 and c.get('slow_ms',0):
+            if role == 'B' and phase == 'before' and step >= c.get('slow_start_step',plan.cut-1) and c.get('slow_ms',0):
                 event('planned_slow',step=step,delay_ms=c['slow_ms'])
                 time.sleep(c['slow_ms']/1000)
-            batches, sample_ids = [], []
-            for micro in range(plan.microbatches):
-                width = 4 if c.get('outer_manager') else 2
-                sample = step * plan.microbatches * width + micro * width + replica*2 + state.get_data_parallel_rank()
-                sample_ids.append(sample)
-                tokens = (torch.arange(plan.seq_len+1, device='cuda').view(1,-1) + sample % 8) % 32 + 100
-                batches.append(dict(input_ids=tokens[:,:-1].contiguous(), next_token_labels=tokens[:,1:].contiguous()))
+            sample_ids = sample_plan(step, microbatches=plan.microbatches,
+                participants=2 if c.get('outer_manager') else 1, replica=replica,
+                local_data_rank=state.get_data_parallel_rank(), fixed_batch=bool(c.get('outer_manager')))
+            if not c.get('outer_manager'):
+                sample_ids = [step*plan.microbatches*2+m*2+state.get_data_parallel_rank() for m in range(plan.microbatches)]
+            batches = make_batches(sample_ids, seq_len=plan.seq_len, vocab_size=stage.hf_config.vocab_size,
+                data=c.get('data','pattern'))
             if c.get('overlap_peer') and replica and phase=='after' and step==plan.cut:
                 store.set(f'peer_compute/{rank}','1')
                 event('peer_compute_begin',step=step)
-            metrics = schedule(forward_step_func=forward_step, data_iterator=iter(batches), model=ddp,
-                num_microbatches=plan.microbatches, seq_length=plan.seq_len+stage.extra_positions(1), micro_batch_size=1)
-            for parameter in stage.parameters():
-                parameter.grad = parameter.main_grad
-            buffers = ddp.buffers + ddp.expert_parallel_buffers
-            finite = bool(torch.stack([torch.isfinite(b.grad_data).all() for buf in buffers for b in buf.buckets]).all())
-            if not finite:
-                raise RuntimeError('nonfinite gradients')
+            def execute_step():
+                return schedule(forward_step_func=forward_step, data_iterator=iter(batches), model=ddp,
+                    num_microbatches=len(batches), seq_length=plan.seq_len+stage.extra_positions(1), micro_batch_size=1)
+            transaction = train_step(stage, ddp, optimizer, scheduler, progress, execute=execute_step)
+            computed = next(transaction)
+            metrics, finite = computed.metrics, computed.finite
+            if not finite: raise RuntimeError('nonfinite gradients')
             ownership.authorize(owner_role, epoch)
             if outer:
                 outer.commit(step)
-            optimizer.step(); scheduler.step(); torch.cuda.synchronize()
-            progress['updates'] += 1
-            step_hashes = hashes() if (c.get('reference_only') or independent_reference or
+            gradient_trace('optimizer')
+            complete_step(transaction, True)
+            step_hashes = hashes() if ((c.get('reference_only') and not c.get('performance_no_audit')) or independent_reference or
                 (c['oracle'] and phase in ('oracle','after'))) else None
-            if c.get('reference_only'):
+            if c.get('reference_only') and not c.get('performance_no_audit'):
                 event('reference_step',step=progress['updates'],hashes=step_hashes,sample_ids=sample_ids,
                       outer_manager=outer.state_dict())
             if independent_reference:
@@ -575,7 +561,7 @@ def main():
         saved_rng = rng()
         outer = Outer(c,replica,rank,0,event)
         restore_rng(saved_rng)
-    if c.get('reference_only') or (independent_reference and role != 'C'):
+    if (c.get('reference_only') and not c.get('performance_no_audit')) or (independent_reference and role != 'C'):
         initial_hashes=hashes()
         event('reference_step' if c.get('reference_only') else 'reference_initial',step=0,
               hashes=initial_hashes,sample_ids=[],outer_manager=outer.state_dict())
@@ -586,7 +572,7 @@ def main():
                 raise RuntimeError('independent initial state mismatch')
     if c.get('reference_only'):
         train(0,plan.cut+plan.post_steps,'reference')
-        event('done',step=progress['updates'],comparison=None,identity_preserved=identity_preserved(),hashes=hashes())
+        event('done',step=progress['updates'],comparison=None,identity_preserved=identity_preserved(),hashes=hashes() if not c.get('performance_no_audit') else {})
         outer.close(); disconnect(); log.close()
         return
     if role == 'B' and c.get('preconnect_state'):

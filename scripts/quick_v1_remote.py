@@ -1,6 +1,7 @@
 """Two-plan bounded cold V1 fail-stop test with controller-clock timing."""
 import argparse
 import fcntl
+import hashlib
 import json
 from pathlib import Path
 import time
@@ -30,7 +31,7 @@ def source_hashes():
     paths = [Path(__file__), ROOT/'scripts/v1_cold_remote.py',
              ROOT/'scripts/v3_benchmark_remote.py', ROOT/'shift_full/rotation.py',
              ROOT/'shift_full/supervisor.py', ROOT/'shift_full/train.py',
-             ROOT/'shift_full/transport.py', ROOT/'shift_full/verify_rotation.py',
+             ROOT/'shift_full/transport.py', ROOT/'shift_full/training_core.py', ROOT/'shift_full/verify_rotation.py',
              ROOT/'shift_full/verify_v3_recovery.py', ROOT/'configs/v1_bench_shift.json']
     hashes = {str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest()
               for path in paths}
@@ -66,7 +67,16 @@ class QuickV1Rotation(ServerOwnedRotation):
     def start_supervisor(self, rid, endpoint, generation, standby=None):
         self.install_worker_module(endpoint)
         self.config['entry_module'] = 'shift_full.' + self.worker_module
-        return super().start_supervisor(rid, endpoint, generation, standby)
+        # A cold joiner's first kernels can exceed the healthy peer's short
+        # native FT timeout. Rehearse only after SIGKILL, before advertising the
+        # new replica; the later native checkpoint restores all training state.
+        old = self.config
+        if generation > 0 and old.get('recovery_local_warmup', False):
+            self.config = dict(old, train_args=[*old['train_args'], '--warmup-before-join'])
+        try:
+            return super().start_supervisor(rid, endpoint, generation, standby)
+        finally:
+            self.config = old
 
     def event(self, kind, **fields):
         fields.pop('physical_ip', None)
@@ -188,7 +198,8 @@ def resource_snapshot(session, baseline, phase):
         entries = [line.split(',', 1) for line in rows]
         company = {pid.strip() for pid, name in entries if 'VLLM::' in name}
         current = {pid.strip() for pid, _ in entries}
-        result[node] = dict(company_count=len(company), company_pids=sorted(company),
+        load=session.ssh(endpoint,['nvidia-smi','--query-gpu=index,utilization.gpu,memory.used','--format=csv,noheader,nounits']).splitlines()
+        result[node] = dict(gpu_load=load,company_count=len(company), company_pids=sorted(company),
                             extra_pids=sorted(current-expected),
                             missing_company_pids=sorted(expected-company),
                             company_pids_unchanged=company == expected)
@@ -206,6 +217,23 @@ def short_schema2_audit(result_dir, post_steps):
     except (OSError, json.JSONDecodeError) as exc:
         return [f'cannot load schema-2 evidence: {type(exc).__name__}']
     mapping = {(row['rid'], row['generation']): row for row in manifest}
+    from shift_full.training_core import sample_plan
+    for binding in manifest:
+        for rank in range(8):
+            path = result_dir/('physical_'+binding['physical_node'])/Path(binding['directory']).name/f"events_g{binding['generation']}_r{rank}.jsonl"
+            commits = [x for x in read_rows(path) if x.get('kind')=='commit' and x.get('contributed')]
+            sequence = [x['step'] for x in commits]
+            if sequence and sequence != list(range(sequence[0], sequence[-1]+1)):
+                errors.append('discontinuous/duplicate committed cursor')
+            for x in commits:
+                participants = x.get('participants')
+                if participants not in (1,2):
+                    errors.append('invalid participant count'); continue
+                expected = sample_plan(x['step']-1, participants=participants,
+                    replica=binding['rid'] if participants==2 else 0, local_data_rank=rank%4//2)
+                if not x.get('fixed_batch') or x.get('global_batch')!=8 or x.get('sample_ids')!=expected:
+                    errors.append(f"batch8/sample cursor mismatch rid{binding['rid']} rank{rank} step{x['step']}")
+
 
     def event_rows(rid, generation, rank):
         binding = mapping.get((rid, generation))
@@ -269,6 +297,38 @@ def short_schema2_audit(result_dir, post_steps):
     return errors
 
 
+def performance_state_audit(result_dir, post_steps):
+    """No timed hashes; require the complete paired state after exact final stop."""
+    from shift_full.training_core import sample_plan
+    errors=[];manifest=json.loads((result_dir/'physical_manifest.json').read_text())
+    fault=json.loads((result_dir/'fault_results.json').read_text())[0]
+    first=fault['first_joint_step'];goal=first+post_steps-1;target=fault['target']
+    finals={};joint={}
+    for binding in manifest:
+        rid,g=binding['rid'],binding['generation']
+        for rank in range(8):
+            path=result_dir/('physical_'+binding['physical_node'])/Path(binding['directory']).name/f'events_g{g}_r{rank}.jsonl'
+            rows=read_rows(path)
+            for x in (x for x in rows if x['kind']=='commit' and x.get('contributed')):
+                p=x['participants']
+                expected=sample_plan(x['step']-1,participants=p,replica=rid if p==2 else 0,local_data_rank=rank%4//2)
+                if x.get('hashes') or x.get('global_batch')!=8 or not x.get('fixed_batch') or x['sample_ids']!=expected:
+                    errors.append('performance commit hashed or invalid batch8 cursor')
+                if p==2 and first<=x['step']<=goal:joint[rid,rank,x['step']]=x
+            active=g==(fault['generation'] if rid==target else 0)
+            if active:
+                fs=[x for x in rows if x['kind']=='final_audit']
+                if len(fs)!=1 or fs[0]['step']!=goal or set(fs[0]['hashes'])!=HASH_FIELDS:
+                    errors.append('missing complete exact-final-step development audit')
+                else:finals[rid,rank]=fs[0]['hashes']
+    if len(joint)!=16*post_steps:errors.append('incomplete five-step common commit coverage')
+    if len(finals)!=16:errors.append('incomplete paired final states')
+    else:
+        for rank in range(8):
+            if finals[0,rank]!=finals[1,rank]:errors.append('nine-state final mismatch')
+    return errors
+
+
 def timing_summary(session, trigger, post_steps):
     fault = session.fault_results[0]
     manifest = json.loads((session.out/'physical_manifest.json').read_text())
@@ -277,10 +337,13 @@ def timing_summary(session, trigger, post_steps):
                    'transport_send', 'transport_recv', 'recovery_request',
                    'reconfigure_begin', 'reconfigure_end', 'state_loaded',
                    'restored', 'ready'}
+    stage_kinds.update({'load_state_begin', 'join_schedule_begin', 'join_schedule_end',
+                        'join_decision_begin', 'join_decision_end', 'recovery_only_begin',
+                        'recovery_only_end', 'skipped'})
     stage_fields = ('step', 'seconds', 'load_seconds', 'audit_seconds',
                     'gpu_bytes', 'control_bytes', 'tensors', 'cpu_tensor_bytes',
                     'optimizer_tensors', 'hashes_match', 'world_size', 'quorum_id',
-                    'source_replica', 'source_rank')
+                    'source_replica', 'source_rank', 'commit', 'cross_calls')
     for item in manifest:
         directory = session.out/('physical_'+item['physical_node'])/Path(item['directory']).name
         role_key = f"rid{item['rid']}_g{item['generation']}"
@@ -357,6 +420,14 @@ def run(args):
     remote.PASSWORD = server_password(remote.PRIVATE/'credentials')
     (remote.PRIVATE/'credentials').unlink()
     config = cold_config()
+    at = config['train_args'].index('--communication-timeout') + 1
+    config['train_args'][at] = str(args.communication_timeout)
+    config['cold_launcher'] = args.cold_launcher
+    config['recovery_local_warmup'] = True
+    config['train_args'] += ['--recovery-timing','--sync-quorum','--fixed-batch','--data','random']
+    if args.performance_no_audit:
+        config['train_args']=[x for x in config['train_args'] if x!='--audit-state']
+        config['train_args'].append('--final-audit')
     config['lighthouse_ip'] = endpoints_from_env()['node0'].ip
     config['target_steps'] = 1000000
     config['entry_module'] = 'shift_full.train'
@@ -364,7 +435,15 @@ def run(args):
                          SHIFT_GENERIC_PRELOAD='0', SHIFT_COMMON_GPU_WARMUP='0',
                          CUDA_DEVICE_MAX_CONNECTIONS='1')
     s = QuickV1Rotation(name, config, 600, args.seed, backup_mode='cold')
+    s.bindings = {(rid,0):s.endpoints[node] for rid,node in enumerate(('node0','node1'))}
+    s.config['master_addr'] = s.endpoint_for(0).ip
     status = dict(done=False, success=False, session=name, seed=args.seed,
+                  performance_no_audit=args.performance_no_audit,
+                  recovery_local_warmup=True,
+                  cold_launcher=args.cold_launcher,
+                  communication_timeout=args.communication_timeout,
+                  digest_engine=s.config['env']['SHIFT_DIGEST_ENGINE'],
+                  overlap_cpu_model_load=s.config['env']['SHIFT_OVERLAP_CPU_MODEL_LOAD'],
                   trigger=args.trigger, post_steps=args.post_steps,
                   worker_memory_fraction=MEMORY_FRACTION, error=None)
     status_path = out/'status.json'
@@ -384,6 +463,8 @@ def run(args):
         s.fault(0)
         first_joint = s.first_joint_observation['step']
         goal_step = first_joint + args.post_steps - 1
+        if args.performance_no_audit:
+            for rid in (0,1):s.mark(rid,'STOP',str(goal_step))
         s.await_('post_recovery_progress', lambda d: bool(
             s.common_commits(d, after=goal_step-1)[0]))
         s.event('complete', faults=1, fault_window_seconds=(
@@ -404,8 +485,9 @@ def run(args):
             status['resource_error'] = type(exc).__name__+': '+str(exc)
     if s.fault_results:
         try:
-            audit = verify(s.out, 1, require_audit=True)
-            schema_errors = short_schema2_audit(s.out, args.post_steps)
+            audit = verify(s.out, 1, require_audit=not args.performance_no_audit)
+            schema_errors = (performance_state_audit(s.out, args.post_steps) if args.performance_no_audit
+                             else short_schema2_audit(s.out, args.post_steps))
             audit['schema2_short_plan_errors'] = schema_errors
             audit['schema2_short_plan_pass'] = not schema_errors
             audit['pass'] = audit['pass'] and not schema_errors
@@ -435,10 +517,13 @@ def main():
     parser.add_argument('--seed', type=int, required=True)
     parser.add_argument('--trigger', type=int, required=True)
     parser.add_argument('--post-steps', type=int, required=True)
+    parser.add_argument('--cold-launcher', action='store_true')
+    parser.add_argument('--performance-no-audit', action='store_true')
+    parser.add_argument('--communication-timeout', type=float, default=2)
     args = parser.parse_args()
     if not args.suffix or not all(c.isalnum() or c in '_-' for c in args.suffix):
         parser.error('invalid suffix')
-    if args.trigger < 1 or args.post_steps < 1:
+    if args.trigger < 1 or args.post_steps < 1 or not 0 < args.communication_timeout <= 90:
         parser.error('trigger and post-steps must be positive')
     return run(args)
 

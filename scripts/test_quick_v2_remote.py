@@ -18,9 +18,17 @@ class QuickV2Tests(unittest.TestCase):
         self.assertIn('--data', args)
         self.assertEqual(args[args.index('--data') + 1], 'random')
         self.assertIn('--hash-every', args)
-        self.assertEqual(args[args.index('--hash-every') + 1], '1')
+        self.assertEqual(args[args.index('--hash-every') + 1], '0')
+        diagnostic = config(9, 5, audit_every_step=True)['train_args']
+        self.assertEqual(diagnostic[diagnostic.index('--hash-every') + 1], '1')
         self.assertIn('set_per_process_memory_fraction(0.12, rank)', WORKER_WRAPPER)
         self.assertIn('run_module("shift_full.planned_train"', WORKER_WRAPPER)
+
+    def test_performance_config_audits_only_after_measured_training(self):
+        args = config(9, 5, audit_state=False)['train_args']
+        self.assertNotIn('--audit-state', args)
+        self.assertIn('--final-audit', args)
+        self.assertEqual(args[args.index('--hash-every')+1], '0')
 
     def test_timing_keeps_per_rank_phase_step_and_handoff_rows(self):
         data = {'A': {'events_g0_r2.jsonl': [
@@ -45,13 +53,14 @@ class QuickV2Tests(unittest.TestCase):
             data_rank = replica*2 + rank % 2
             return [(step-1)*8 + micro*4 + data_rank for micro in range(2)]
         for role in 'AB':
-            rows = []
+            rows = [dict(kind='ready', rank=rank, hashes=hashes(0,rank,role)) for rank in range(8)]
             for step in range(1, cut + 1):
                 for rank in range(8):
                     rows.append(dict(kind='commit', step=step, rank=rank, hashes=hashes(step,rank,role),
                                      sample_ids=sample_ids(step,role,rank), fixed_batch=True, global_batch=8,
                                      participants=2, contributed=True, finite_gradients=True))
             if role == 'B':
+                rows.extend(dict(kind='snapshot', step=cut, rank=rank, hashes=hashes(cut,rank,role)) for rank in range(8))
                 rows.extend(dict(kind='planned_state_sent', step=cut, rank=rank) for rank in range(8))
                 rows.extend(dict(kind='planned_standby_verified', step=cut, rank=rank) for rank in range(8))
             data[role]['events_g0_r0.jsonl'] = rows
@@ -97,6 +106,63 @@ class QuickV2Tests(unittest.TestCase):
              if row.get('kind') == 'commit')['hashes']['model'] = 'bad'
         with self.assertRaisesRegex(RuntimeError, 'shared state hash mismatch'):
             audit(self.fake_session(), data, 9, 14)
+
+    def test_boundary_audit_requires_first_joint_but_allows_unhashed_steady_steps(self):
+        data = self.sample()
+        for files in data.values():
+            for rows in files.values():
+                for row in rows:
+                    if row['kind'] == 'commit' and row['step'] != 10:
+                        row['hashes'] = {}
+        result = audit(self.fake_session(), data, 9, 14, audit_every_step=False)
+        self.assertEqual(result['audited_joint_steps'], [10])
+        with self.assertRaises(RuntimeError):
+            audit(self.fake_session(), data, 9, 14, audit_every_step=True)
+        next(row for row in data['C']['events_g1_r0.jsonl']
+             if row.get('kind') == 'commit' and row['step'] == 10)['hashes'] = {}
+        with self.assertRaisesRegex(RuntimeError, 'invalid A/C joint commit'):
+            audit(self.fake_session(), data, 9, 14, audit_every_step=False)
+
+    def test_boundary_audit_checks_actual_donor_snapshot(self):
+        data = self.sample()
+        next(row for row in data['B']['events_g0_r0.jsonl']
+             if row.get('kind') == 'snapshot')['hashes']['model'] = 'wrong donor'
+        with self.assertRaisesRegex(RuntimeError, 'restore audit failed'):
+            audit(self.fake_session(), data, 9, 14, audit_every_step=False)
+
+    def test_performance_audit_requires_complete_matching_final_states(self):
+        data = self.sample()
+        for role, files in data.items():
+            rows = next(iter(files.values()))
+            last = 9 if role == 'B' else 14
+            finals = [dict(kind='final_audit', step=last, rank=row['rank'], hashes=dict(row['hashes']))
+                      for row in rows if row['kind']=='commit' and row['step']==last]
+            for row in rows:
+                if row['kind'] in ('commit', 'snapshot', 'ready'):row['hashes']={}
+                if row['kind']=='restored':row['actual_hashes']={};row['expected_hashes']={}
+            rows.extend(finals)
+        result=audit(self.fake_session(), data, 9, 14, audit_every_step=False, audit_state=False)
+        self.assertFalse(result['full_restore_hash_audit'])
+        self.assertTrue(result['final_state_hash_audit'])
+        self.assertEqual(result['hashed_commits'],0)
+        next(row for row in data['C']['events_g1_r0.jsonl']
+             if row['kind']=='final_audit')['hashes']['optimizer']='bad final state'
+        with self.assertRaisesRegex(RuntimeError,'final A/C shared state mismatch'):
+            audit(self.fake_session(), data, 9, 14, audit_every_step=False, audit_state=False)
+
+    def test_p2_audit_requires_matching_gradient_tail_and_no_repeated_forward(self):
+        data=self.sample()
+        for row in data['B']['events_g0_r0.jsonl']:
+            if row['kind']=='planned_state_sent':row['kind']='planned_precopy_sent'
+        for rank in range(8):
+            packet=dict(step=9,rank=rank,sample_ids=[72+rank%2],gradient_hash='grad'+str(rank),tail_hash='tail'+str(rank))
+            data['B']['events_g0_r0.jsonl'].append(dict(kind='planned_gradient_sent',**packet))
+            data['C']['events_g1_r0.jsonl'].append(dict(kind='planned_gradient_received',forward_calls=0,**packet))
+        self.assertEqual(audit(self.fake_session(),data,9,14,variant='p2')['variant'],'p2')
+        next(row for row in data['C']['events_g1_r0.jsonl']
+             if row['kind']=='planned_gradient_received')['forward_calls']=1
+        with self.assertRaisesRegex(RuntimeError,'repeated forward'):
+            audit(self.fake_session(),data,9,14,variant='p2')
 
 
 if __name__ == '__main__':

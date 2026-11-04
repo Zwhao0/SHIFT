@@ -1,0 +1,24 @@
+{
+  "runs": [
+    {
+      "name": "v4_rf_a8",
+      "functional_pass": true,
+      "resources_clean": true
+    },
+    {
+      "name": "v4_rf_b8",
+      "functional_pass": true,
+      "resources_clean": true
+    },
+    {
+      "name": "v4_rf_full24",
+      "functional_pass": true,
+      "resources_clean": true
+    },
+    {
+      "name": "v4_rf_switch",
+      "functional_pass": true,
+      "resources_clean": true
+    }
+  ]
+}

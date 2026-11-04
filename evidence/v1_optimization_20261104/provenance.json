@@ -1,0 +1,30 @@
+{
+  "torchft_manager_sha256": "df8876d4306c601d5d7848abf91f3249604c2a359a91e3a0a51101dba850a033",
+  "manager_source_observed": {
+    "start_quorum": [
+      585,
+      615
+    ],
+    "recv_and_stage": [
+      787,
+      813
+    ],
+    "apply_pending": [
+      826,
+      853
+    ],
+    "should_commit": [
+      880,
+      943
+    ]
+  },
+  "read_only_company_load_sample": "During original 2s baseline retry: company SM utilization 37..98%; total GPU utilization 100%; no company processes modified.",
+  "training_sources": {
+    "shift_full/train.py": "5fa3301ae95c01c344586929ffcc84123c3684cccc79f89d994223130978c8f4",
+    "shift_full/recovery_join.py": "41725f892eff4902e7082f7b9c7406ef0cd58978c3712b310187b3860dab64cd",
+    "shift_full/compat.py": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76",
+    "shift_full/transport.py": "b03464786a4f8f6b8814f002b4649c1fb9a77e0985387e92e0f1ad17cee611e7",
+    "shift_full/planned_train.py": "be5aa64ea39624ab85c6730d26512cd3e798760c85af8ad9fbb370bead3ddfea",
+    "shift_full/v4_train.py": "fa25723eb703180bf0e3eb27cd403b69a65ca78adc14be9f48b547832a2428d3"
+  }
+}

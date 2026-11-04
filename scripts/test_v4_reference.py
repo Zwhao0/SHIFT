@@ -9,13 +9,15 @@ import tempfile
 import unittest
 
 from shift_full.reference_audit import REFERENCE_HASH_KEYS
-from shift_full.v4_reference import compare_signature, sample_ids, validate_compatibility, validate_signatures
+from shift_full.v4_reference import (compare_signature, sample_ids, training_profile,
+    validate_compatibility, validate_signatures)
 from shift_full.v4_outer import MigrationNamespace, Outer
 from scripts.verify_v4_reference import verify, verify_comparisons, verify_retention
 
 
 def reference():
     return dict(schema=1, steps=2, seq_len=512, microbatches=4, seed=20261106,cross_node_tp=False,
+        training_profile=training_profile({}),
         source_sha256={'train':'123'},workers={f'{r}/{k}':{str(s):dict(
             hashes={key:'a'*64 for key in REFERENCE_HASH_KEYS},sample_ids=sample_ids(s,r,k,4),
             outer_manager=dict(step=s,batches_committed=2*s)) for s in range(3)}
@@ -45,6 +47,30 @@ class ReferenceTest(unittest.TestCase):
         with self.assertRaises(ValueError):validate_compatibility(reference(),config,{'train':'456'})
         config['seed']=0
         with self.assertRaises(ValueError):validate_compatibility(reference(),config,{'train':'123'})
+
+    def test_training_profile_is_required(self):
+        value=reference();value.pop('training_profile')
+        config=dict(plan=dict(seq_len=512,microbatches=4),seed=20261106)
+        with self.assertRaisesRegex(ValueError,'training profile'):
+            validate_compatibility(value,config,{'train':'123'})
+
+    def test_async_profile_mismatch_rejected(self):
+        config=dict(plan=dict(seq_len=512,microbatches=4),seed=20261106,
+            outer_manager=True,outer_audit=True,overlap_peer=True)
+        value=reference();value['training_profile']=training_profile(config)
+        validate_compatibility(value,config,{'train':'123'})
+        config['overlap_peer']=False
+        with self.assertRaisesRegex(ValueError,'training profile'):
+            validate_compatibility(value,config,{'train':'123'})
+
+    def test_retain_profile_mismatch_rejected(self):
+        config=dict(plan=dict(seq_len=512,microbatches=4),seed=20261106,
+            outer_manager=True,retain_outer_managers=True,transactional_switch=True)
+        value=reference();value['training_profile']=training_profile(config)
+        validate_compatibility(value,config,{'train':'123'})
+        config['retain_outer_managers']=False
+        with self.assertRaisesRegex(ValueError,'training profile'):
+            validate_compatibility(value,config,{'train':'123'})
 
     def test_uncovered_step_is_error(self):
         with self.assertRaises(ValueError):
@@ -96,10 +122,13 @@ class RetentionTest(unittest.TestCase):
 class ReferenceEvidenceTest(unittest.TestCase):
     def setUp(self):
         directory=tempfile.TemporaryDirectory();self.addCleanup(directory.cleanup);self.root=Path(directory.name)
-        self.reference=reference();self.reference['run']='v4_ref'
-        self.summary=dict(name='v4_ref',reference_only=True,outer_manager=True,functional_pass=True,error=None,
-            cleanup_errors=[],outer_timeout=120,outer_audit=True,source_sha256={'train':'123'},
+        self.summary=dict(name='v4_ref',reference_only=True,outer_manager=True,outer_audit=True,
+            overlap_peer=True,retain_outer_managers=True,transactional_switch=True,
+            cross_node_tp=False,deterministic=False,functional_pass=True,error=None,
+            cleanup_errors=[],outer_timeout=120,source_sha256={'train':'123'},
             plan=dict(cut=1,post_steps=1,seq_len=512,microbatches=4))
+        self.reference=reference();self.reference['run']='v4_ref'
+        self.reference['training_profile']=training_profile(self.summary)
         self.save('summary.json',self.summary);self.save('reference_signatures.json',self.reference)
         resources={n:dict(company={str(i):'VLLM' for i in range(8)},extra_gpu=[]) for n in ('node0','node1','node3')}
         self.save('resources_before.json',resources);self.save('resources_after.json',resources)

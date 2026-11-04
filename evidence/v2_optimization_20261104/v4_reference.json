@@ -1,0 +1,40 @@
+{
+  "name": "v4_v2ref2",
+  "independent_audit": {
+    "pass_all": true,
+    "errors": [],
+    "resources_clean": true,
+    "reference_only": true,
+    "logical_workers": 16,
+    "reference_rank_steps": 384,
+    "independent_gradient_audit": true
+  },
+  "source_sha256": {
+    "shift_full/v4_train.py": "fa25723eb703180bf0e3eb27cd403b69a65ca78adc14be9f48b547832a2428d3",
+    "shift_full/v4_protocol.py": "1c37d3b3fa65fd921620a2bd1034399e2c5dc3392d48dfbbc8c4e2a6399d89ad",
+    "shift_full/transport.py": "b03464786a4f8f6b8814f002b4649c1fb9a77e0985387e92e0f1ad17cee611e7",
+    "shift_full/compat.py": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76",
+    "shift_full/v4_groups.py": "3ddd9c9d1499b23cb67b344f14cc5d52b4ca9ed06530d43378008624c71e36ad",
+    "shift_full/v4_reference.py": "356114c38c7f6fa20cf176aebeb54892f345c5d46dc4614139e28e2b734bc979",
+    "scripts/v4_remote.py": "a540bf34b8212b4d62fecd52f6064e1c4f41cf9725b5a06763112f4302625ec9",
+    "scripts/verify_v4.py": "826ec940f60207595fb4bf92d08a85f91081594cef0e768f04263af72e8db4c8",
+    "shift_full/v4_outer.py": "25f22ae888feb831df94c8fb0100b1041e57bfd4852b7d80695593614ebda6a0",
+    "scripts/verify_v4_outer.py": "0efa5136e9524f2900e95725ee92f2df4d44f842d0181e4c03e9b745aa2fcb6e",
+    "scripts/verify_v4_reference.py": "f4c09d18899c664442015c4ddf4a005e446c0a766fb640c8be5304753461892c",
+    "shift_full/planned_state.py": "2911ef24a2f5e7cb08e98d05b3397bf54afe6d4353194f1d0a02dc8e3ef6dede",
+    "shift_full/reference_audit.py": "7e489ee2d66a4a8fc9168e7de2ce915ee956f1daeb7c846fbceb0fede09a49ce",
+    "shift_full/state_digest.py": "fe2e8a941bef9dfe4b93c71c29c6245e609215fd7d12ac3d9891004f0b7d26b3",
+    "shift_full/state_inventory.py": "0eaa472d689bc83564e4d48c524ad5744297b227fb14e8fbb2575ef379edbe51",
+    "shift_full/train.py": "e0c2eba969662a9d89bee10aee04b274850588e07b8b3c9d5ffa91042a460aeb",
+    "shift_full/v4_metadata.py": "27ae20fa5a1c3c266ce649e7d6ef3c88bbd8b0565fcfeef02bbc7e16af7bf3a9",
+    "shift_full/v4_transaction.py": "e4aa2d63e68f6ea938b5698be25f5e97d8cc4b64ff4a03f27f82b23fcb62dfa8",
+    "shift_full/v4_transaction_train.py": "e49c6f91d7a5acdb4bce40900def50b59525cd826b08cf981978f0b93b0442a0"
+  },
+  "plan": {
+    "cut": 12,
+    "post_steps": 12,
+    "seq_len": 512,
+    "microbatches": 4
+  },
+  "reference_sha256": "99f4eb52521177924ffd1a38eedbd53b14b281bdb65068ae338ed285799fb52a"
+}

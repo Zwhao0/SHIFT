@@ -1,0 +1,114 @@
+{
+  "local_unittests": {
+    "passed": 24,
+    "failed": 0
+  },
+  "installed_runtime_cpu_tests": {
+    "passed": 11,
+    "failed": 0,
+    "cuda_visible_devices": ""
+  },
+  "staged_equivalence": {
+    "passed": true,
+    "common_pre_cut_steps": 22,
+    "roles": 2,
+    "ranks_per_role": 8,
+    "state_fields": 9,
+    "compared_worker_states": 368,
+    "signatures": [
+      {
+        "run": "v2_q2_v2b0",
+        "sha256": "4ab6f09ddf8413c1289ba490278de575875647f7c7952c62bff6c0d3ce76a089"
+      },
+      {
+        "run": "v2_q2_v2s0",
+        "sha256": "4ab6f09ddf8413c1289ba490278de575875647f7c7952c62bff6c0d3ce76a089"
+      },
+      {
+        "run": "v2_q2_v2c0",
+        "sha256": "4ab6f09ddf8413c1289ba490278de575875647f7c7952c62bff6c0d3ce76a089"
+      }
+    ],
+    "mismatches": []
+  },
+  "selected_boundary_audit": {
+    "functional_pass": true,
+    "cut": 34,
+    "goal": 39,
+    "post_steps": 5,
+    "state_transfer_ranks": 8,
+    "audit_every_step": false,
+    "hashed_commits": 16,
+    "audited_joint_steps": [
+      35
+    ]
+  },
+  "baseline_commit": "4fd55ec",
+  "branch": "codex/v2-recovery-timing",
+  "source_sha256": {
+    "shift_full/planned_train.py": "6be0b4e7c2c47c9e1ed21bddd521a892e067eaa9684890477f53db8cab9363b2",
+    "scripts/quick_v2_remote.py": "b540ab9d16d7367937515236b54080c28d7e573fabc6cd84750ab9a53e7a5269",
+    "scripts/start_quick_recovery.py": "1364c5d9925eb13ef40fcf203ed3c873c82f29bb850c2fc6bd2b19def9a8c12b"
+  },
+  "limitations": [
+    "One measured run per profile, short post windows; no long-term stability or statistical speedup claim.",
+    "Removing normal step hashes changes diagnostic overhead, not training work.",
+    "V1/V4 retain their original workloads in phase1; cross-strategy timing is not controlled."
+  ],
+  "healthy_A_joint_commit_gap_seconds": {
+    "mean": 3.578248816251289,
+    "max": 3.6074463790282607
+  },
+  "selected_C_local_restore_seconds": {
+    "state_load_mean": 0.026,
+    "audit_mean": 0.628
+  },
+  "phase_1_stopped_by_user": true,
+  "gpu_rerun_after_candidate_rollback": false,
+  "trajectory_equivalence": {
+    "passed": true,
+    "common_pre_cut_steps": null,
+    "common_committed_steps": 27,
+    "includes_migration": true,
+    "roles": 2,
+    "ranks_per_role": 8,
+    "state_fields": 9,
+    "compared_worker_states": 448,
+    "signatures": [
+      {
+        "run": "v2_q2_v2b0",
+        "sha256": "7c4939bdb2b0db7bef945151a2f8d2964e8f5f159b2abaccaa3bb7618d02a7ac"
+      },
+      {
+        "run": "v2_q2_v2s0",
+        "sha256": "7c4939bdb2b0db7bef945151a2f8d2964e8f5f159b2abaccaa3bb7618d02a7ac"
+      },
+      {
+        "run": "v2_q2_v2c0",
+        "sha256": "7c4939bdb2b0db7bef945151a2f8d2964e8f5f159b2abaccaa3bb7618d02a7ac"
+      }
+    ],
+    "mismatches": []
+  },
+  "p2_trajectory_equivalence": {
+    "passed": true,
+    "common_pre_cut_steps": null,
+    "common_committed_steps": 27,
+    "includes_migration": true,
+    "roles": 2,
+    "ranks_per_role": 8,
+    "state_fields": 9,
+    "compared_worker_states": 448,
+    "signatures": [
+      {
+        "run": "v2_q2_v2b0",
+        "sha256": "7c4939bdb2b0db7bef945151a2f8d2964e8f5f159b2abaccaa3bb7618d02a7ac"
+      },
+      {
+        "run": "v2_q2_v2r0",
+        "sha256": "7c4939bdb2b0db7bef945151a2f8d2964e8f5f159b2abaccaa3bb7618d02a7ac"
+      }
+    ],
+    "mismatches": []
+  }
+}

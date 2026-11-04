@@ -15,6 +15,7 @@ import unittest
 from unittest.mock import patch
 import torch
 from shift_full import planned_train
+from shift_full.training_core import TrainingState
 from shift_full.planned_state import validate_state
 from shift_full.state_inventory import tracker_snapshot,restore_tracker,restore_buffers
 
@@ -46,6 +47,8 @@ class PlannedPayloadTest(unittest.TestCase):
                      progress={'updates':7},rank=3,device_rank=0,manager=None,boundary_rng=None,
                      handoff=SimpleNamespace(new_epoch=1),
                      args=SimpleNamespace(audit_state=True,transport='gpu',replica=1),event=lambda *a,**k:None)
+        core=TrainingState(stage,optimizer,scheduler,self.ns['progress'],tracker)
+        self.ns.update(training_state=core,rng_snapshot=core.rng,current_hashes=core.hashes)
         tree=ast.parse(Path(planned_train.__file__).read_text())
         main=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='main')
         names={'rng_snapshot','current_hashes','export_state','load_state','apply_tail'}
@@ -54,6 +57,7 @@ class PlannedPayloadTest(unittest.TestCase):
         wrapper.body[1:1]=funcs
         exec(compile(ast.fix_missing_locations(ast.Module(body=[wrapper],type_ignores=[])),'<planned-closures>','exec'),self.ns)
         self.fn=self.ns['build']()
+        self.fn.update(rng_snapshot=core.rng,current_hashes=core.hashes)
 
     def test_snapshot_restores_adam_buffers_and_all_rng(self):
         payload=planned_train.cpu_tree(self.fn['export_state']())
@@ -77,9 +81,14 @@ class PlannedPayloadTest(unittest.TestCase):
         rng=self.fn['rng_snapshot']()
         self.ns['boundary_rng']=dict(step=7,rng=rng,
             buffers={n:b.clone() for n,b in self.ns['stage'].named_buffers()},copy_ready=SimpleNamespace(synchronize=lambda:None))
-        self.ns['stage'].scratch.add_(100);self.ns['rng_tracker'].states['tp'].add_(1)
+        self.ns['stage'].scratch.add_(100);self.ns['stage'].persistent.add_(100)
+        self.ns['rng_tracker'].states['tp'].add_(1)
         payload=self.fn['export_state']()
         self.assertEqual(payload['all_buffers']['scratch'].item(),5)
+        self.assertEqual(payload['model']['persistent'].item(),4)
+        self.assertEqual(self.ns['stage'].persistent.item(),104)
+        self.assertEqual(payload['hashes']['model'],planned_train.digest(payload['model']))
+        self.assertEqual(payload['hashes']['buffers'],planned_train.digest(payload['all_buffers']))
         self.assertEqual(payload['tracker_rng']['tp'].tolist(),[11,12])
         for epoch in range(1,5):
             step=7+epoch;self.ns['progress']['updates']=step;self.ns['handoff'].new_epoch=epoch
