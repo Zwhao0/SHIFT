@@ -213,8 +213,8 @@
       "bytes": 1845
     },
     "docs/v3_reproduce.md": {
-      "sha256": "91005d0cf713691b273d3dc4e046458519997151ea61510b073b3263ef436954",
-      "bytes": 4704
+      "sha256": "62e29320fdac83ed70db2d2ed67efa08dcaaa86adb97c100cb57610e89c1c27d",
+      "bytes": 4980
     },
     "evidence/v3/dependencies.json": {
       "sha256": "01603355792d313b8700f63011aaef076bfd7cd2f05eb591386eaef7ca34c8ea",
@@ -725,8 +725,8 @@
       "bytes": 7911
     },
     "shift_full/control.py": {
-      "sha256": "12835431bbaa920605f176506c1265ae01e87ce84a898af0331b928c5bde44dc",
-      "bytes": 27745
+      "sha256": "d976dd031727ca1aa9abbd23287f512e79fa0e81d74d9be69277bbedd58b7b5f",
+      "bytes": 28378
     },
     "shift_full/control_service.py": {
       "sha256": "a10430ae9c00d4546d1cbb0d2cadc3f4042ea100b80a65dfa0e5d5e6c1209f2d",
@@ -1211,5 +1211,5 @@
     "path": "results/v3_b1_20261103/pdtri01_source_provenance.json",
     "sha256": "3ef0f4ccb43c104547ea97de1795ed7fb7af0a66314d157568fd04ecbe27421c"
   },
-  "note": "Public deployment defaults and deploy packaging differ from experimental frozen code. User-directed minimal retention removes historical raw/archive sources after publishing summaries. Legacy Baby child bootstrap included in packaging; no training semantics or GPU matrix changes."
+  "note": "Public deployment defaults and deploy packaging differ from experimental frozen code. User-directed minimal retention removes historical raw/archive sources after publishing summaries. Legacy Baby child bootstrap included in packaging; no training semantics or GPU matrix changes. Optional persisted private endpoint loading keeps future server-owned reruns configured; explicit environment overrides it."
 }

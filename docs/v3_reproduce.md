@@ -37,3 +37,5 @@ python3 -m unittest scripts.test_planned_state scripts.test_v3_recovery
 `evidence/v3/source_manifest.json`区分公开source SHA与实验冻结source provenance文件SHA。发布只调整部署默认地址和公开打包清单，没有重新证明所有GPU行为逐字相同。公开包不含私有AGENTS/handoff、调度IDs、server.md、socket、模型、wheel、虚拟环境或大日志；旧版本仍可在旧Git提交查阅。
 
 清理后重入：本机先`source runtime/v3-private.env`，再prepare；私有精确run配置与公司PID基线在`runtime/v3-reproduce/`，默认实验种子20261106，公开去敏配置见`evidence/v3/reproduction_configs.json`。现有服务器直接使用host/systemd路径，无需恢复旧容器或重装环境。纯冷/慢化耗时受噪声影响，保留配置保证重跑同条件，不能保证每次得到完全相同秒数。BF16原始step1 anchor按原逻辑角色各一套保留；strict诊断可重新运行生成自己的初始anchor。
+
+`endpoints_from_env()`会自动读取保留的私有`runtime/v3-reproduce/endpoints.json`，显式环境变量优先。该文件已保留在本机和各服务器；下一次prepare同步公开代码后，服务器controller也会读取它，省去重新填写真实端点。

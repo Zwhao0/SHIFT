@@ -29,7 +29,17 @@ class Endpoint:
 
 
 def endpoints_from_env(env=None):
-    env = os.environ if env is None else env
+    if env is None:
+        env = dict(os.environ)
+        # Preserve the ready-to-rerun site configuration without publishing it.
+        private = Path(__file__).resolve().parents[1] / 'runtime/v3-reproduce/endpoints.json'
+        if private.is_file():
+            for name, settings in json.loads(private.read_text()).items():
+                if name not in ('node0', 'node1', 'node3'):
+                    raise ValueError('invalid private endpoint name')
+                for field, suffix in (('ip', 'IP'), ('host_root', 'HOST_ROOT')):
+                    if field in settings:
+                        env.setdefault(f'SHIFT_{name.upper()}_{suffix}', str(settings[field]))
     return {
         'node0': Endpoint('node0', env.get('SHIFT_NODE0_IP', '192.0.2.10'),
                           env.get('SHIFT_NODE0_CONTAINER', 'flash1022-run'), 'ssh-h2.sock',
