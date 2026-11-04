@@ -6,11 +6,15 @@
   "method": "new commit with public v4 parent and fully preserved reviewed current source tree; old branch unchanged; no reset, rebase or force",
   "public_files_secret_scan_pass": true,
   "raw_or_private_artifacts_in_candidate_tree": 0,
-  "published_implementation_commit": "e9ede429913176a15986cf8dc32ce5087fa405b7",
-  "reviewed_local_commit": "b71eaf0256eef3f0d03e88715a7afb48cd585f1c",
-  "reviewed_and_remote_tree": "c36d652aea1decfdbcbcc8967268300b84d01b0b",
   "transport": "connected GitHub API; byte-identical reviewed tree; CLI push had no credential",
   "old_remote_v3": "8ee421cada7b1986fc0f0bed7d1c1dab42f7d1e3",
   "old_remote_v4": "7c8fe1eec6b5fe98c72bf98e0d77a9d4b42271fa",
-  "old_branches_unchanged": true
+  "old_branches_unchanged": true,
+  "initial_implementation_commit": "e9ede429913176a15986cf8dc32ce5087fa405b7",
+  "initial_reviewed_local_commit": "b71eaf0256eef3f0d03e88715a7afb48cd585f1c",
+  "initial_reviewed_and_remote_tree": "c36d652aea1decfdbcbcc8967268300b84d01b0b",
+  "resource_cleanup_commit": "b452ca9b02eea5262b896f56e361db60d70d2db2",
+  "default_profile_equals_certified_explicit_flags": true,
+  "default_profile_server_cpu_tests": 109,
+  "final_numerical_training_sources_unchanged": true
 }

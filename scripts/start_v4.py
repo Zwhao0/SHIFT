@@ -29,7 +29,7 @@ def main():
     p.add_argument('--source-stall-round',type=int,default=-1)
     p.add_argument('--source-deadline',type=float,default=2)
     p.add_argument('--cross-node-tp',action='store_true')
-    p.add_argument('--transactional-switch',action='store_true')
+    p.add_argument('--transactional-switch',action='store_true',default=True)
     p.add_argument('--cycles',type=int,default=1)
     p.add_argument('--candidate-request-step',type=int,default=0)
     p.add_argument('--between-steps',type=int,default=4)
@@ -43,7 +43,8 @@ def main():
     p.add_argument('--trace-step',type=int,default=0)
     p.add_argument('--deterministic',action='store_true')
     p.add_argument('--post-layout', action='store_true', help='no-fault timing control for the final cross-host PP layout')
-    p.add_argument('--unified', action='store_true', help='batch8 random data; complete initial DP replica per host')
+    p.add_argument('--unified', action='store_true', default=True, help='batch8 random data; complete initial DP replica per host')
+    p.add_argument('--legacy-layout',dest='unified',action='store_false',help='explicit historical batch16 layout')
     p.add_argument('--performance-no-audit', action='store_true')
     p.add_argument('--seed', type=int, default=20261106)
     a=p.parse_args()
@@ -90,6 +91,7 @@ def main():
     args=['--suffix',a.suffix,'--seq-len',str(a.seq_len),'--cut',str(a.cut),'--post-steps',str(a.post_steps)]
     args+=['--seed',str(a.seed)]
     if a.unified:args+=['--unified']
+    else:args+=['--legacy-layout']
     if a.post_layout:args+=['--post-layout']
     if a.performance_no_audit:args+=['--performance-no-audit']
     if a.no_oracle:args+=['--no-oracle']
