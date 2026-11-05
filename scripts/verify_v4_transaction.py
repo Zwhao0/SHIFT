@@ -25,6 +25,31 @@ def _valid_hashes(value):
                 all(c in '0123456789abcdef' for c in v) for v in value.values()))
 
 
+def _valid_sha256(value):
+    return (isinstance(value, str) and len(value) == 64 and
+            all(c in '0123456789abcdef' for c in value))
+
+
+_RUNTIME_HASHLESS_KINDS = frozenset({
+    'boundary_selected', 'freeze', 'outer_retention_boundary', 'outer_retained',
+    'peer_state_authorized', 'state_sent', 'state_received',
+    'candidate_validated', 'candidate_rejected', 'candidate_activated',
+    'peer_compute_ready', 'activated', 'snapshot_ready',
+    'final_audit_ready', 'final_audit_begin',
+})
+
+
+def _runtime_readiness_ok(event, *, epoch, rank, cut, target):
+    readiness = event.get('readiness')
+    expected = dict(schema=1, epoch=epoch, rank=rank, cut=cut,
+                    target=target, restored=True)
+    return (isinstance(readiness, dict) and readiness == expected and
+            all(type(readiness.get(key)) is int
+                for key in ('schema', 'epoch', 'rank', 'cut')) and
+            readiness.get('target') == target and
+            readiness.get('restored') is True)
+
+
 def _state_channel_ok(sent, received):
     try:
         return state_channel_matches(sent, received)
@@ -117,6 +142,10 @@ def verify(root):
         errors.append('summary unavailable: ' + str(exc))
 
     check(summary.get('transactional_switch') is True, 'transactional switch mode')
+    boundary_validation = summary.get('boundary_validation', 'full')
+    check(boundary_validation in ('full', 'runtime'), 'boundary validation mode')
+    if boundary_validation not in ('full', 'runtime'):
+        boundary_validation = 'full'
     check(summary.get('functional_pass') is True and summary.get('error') in (None, ''),
           'functional completion')
     check(summary.get('resources_clean') is True and summary.get('cleanup_errors') == [],
@@ -142,6 +171,16 @@ def verify(root):
             errors.append('duplicate actor descriptor ' + label)
         actors[label] = dict(generation=item['generation'], role=item['role'])
     rows = _load_events(root, actors, errors, cross_node_tp)
+
+    if boundary_validation == 'runtime':
+        for label, devices in rows.items():
+            for device, worker_events in devices.items():
+                for event in worker_events:
+                    if (event.get('kind') in _RUNTIME_HASHLESS_KINDS and
+                            any(event.get(key) is not None
+                                for key in ('hashes', 'expected_hashes', 'oracle_hashes'))):
+                        errors.append('runtime boundary carries a state hash ' + label + str(device) + '/' +
+                                      str(event.get('kind')))
 
     cycles = summary.get('cycles')
     plan = summary.get('plan')
@@ -201,6 +240,9 @@ def verify(root):
                   f'A0 decision owner round {round_id}')
             check(decision.get('epoch') == round_id + 1 and _is_int(decision.get('step')),
                   f'decision epoch/cut round {round_id}')
+            if boundary_validation == 'runtime':
+                check(decision.get('validation') == 'runtime',
+                      f'runtime decision validation mode round {round_id}')
             minimum_cut = first_cut if round_id == 0 else cuts[round_id - 1] + between
             check(_is_int(decision.get('step')) and decision.get('step') >= minimum_cut,
                   f'decision cut does not precede requested progress round {round_id}')
@@ -276,9 +318,12 @@ def verify(root):
         for round_id, decision in decisions.items():
             matches = [x for x in reported_decisions
                        if isinstance(x, dict) and x.get('round') == round_id]
+            immutable_fields = ('step', 'decision', 'owner', 'epoch', 'timeout',
+                                'candidate_results', 'source_recovery')
+            if boundary_validation == 'runtime':
+                immutable_fields += ('validation',)
             check(len(matches) == 1 and all(matches[0].get(key) == decision.get(key)
-                  for key in ('step', 'decision', 'owner', 'epoch', 'timeout',
-                              'candidate_results', 'source_recovery')),
+                  for key in immutable_fields),
                   f'summary switch decision immutable round {round_id}')
 
     # Event-level binding and full nine-component signatures.
@@ -552,6 +597,7 @@ def verify(root):
                       received[0].get('step') == cut and
                       peer_auth[0].get('hashes') == peer_auth[0].get('expected_hashes') ==
                       source_freeze[0].get('hashes') == peer_freeze[0].get('hashes') and
+                      (boundary_validation != 'runtime' or peer_auth[0].get('version_checked') is True) and
                       peer_sent[0].get('hashes') == peer_freeze[0].get('hashes') and
                       received[0].get('hashes') == peer_sent[0].get('hashes') and
                       peer_sent[0].get('packet_source') == received[0].get('packet_source') == 'peer' and
@@ -584,21 +630,34 @@ def verify(root):
                           f'candidate prepares before source state arrival {candidate_label}{device}/round{r}')
             validated = events(candidate_label, device, 'candidate_validated', r)
             rejected = events(candidate_label, device, 'candidate_rejected', r)
+            rank = Plan.logical_rank({'D': 'A', 'E': 'B'}.get(target_role, target_role),
+                                     device, cross_node_tp)
             check(len(validated) + len(rejected) <= 1,
                   f'unique candidate validation {candidate_label}{device}/round{r}')
             if validated:
-                check(len(sent) == 1 and validated[0].get('step') == cut and
-                      validated[0].get('hashes') == validated[0].get('expected_hashes') == sent[0].get('hashes'),
-                      f'candidate validation matches source {candidate_label}{device}/round{r}')
+                if boundary_validation == 'runtime':
+                    check(len(sent) == 1 and validated[0].get('step') == cut and
+                          _runtime_readiness_ok(validated[0], epoch=r + 1, rank=rank,
+                                                cut=cut, target=target_role),
+                          f'candidate runtime readiness matches boundary {candidate_label}{device}/round{r}')
+                else:
+                    check(len(sent) == 1 and validated[0].get('step') == cut and
+                          validated[0].get('hashes') == validated[0].get('expected_hashes') == sent[0].get('hashes'),
+                          f'candidate validation matches source {candidate_label}{device}/round{r}')
             if rejected:
-                check(len(sent) == 1 and rejected[0].get('step') == cut and
-                      _valid_hashes(rejected[0].get('hashes')) and
-                      rejected[0].get('expected_hashes') == sent[0].get('hashes') and
-                      rejected[0].get('hashes') != rejected[0].get('expected_hashes') and
-                      isinstance(rejected[0].get('reason'), str) and bool(rejected[0]['reason']),
-                      f'rejected candidate state is incomplete or mismatched {candidate_label}{device}/round{r}')
-            rank = Plan.logical_rank({'D': 'A', 'E': 'B'}.get(target_role, target_role),
-                                     device, cross_node_tp)
+                if boundary_validation == 'runtime':
+                    check(len(sent) == 1 and rejected[0].get('step') == cut and
+                          rejected[0].get('hashes') is None and
+                          rejected[0].get('expected_hashes') is None and
+                          isinstance(rejected[0].get('reason'), str) and bool(rejected[0]['reason']),
+                          f'rejected runtime candidate lacks a clear reason {candidate_label}{device}/round{r}')
+                else:
+                    check(len(sent) == 1 and rejected[0].get('step') == cut and
+                          _valid_hashes(rejected[0].get('hashes')) and
+                          rejected[0].get('expected_hashes') == sent[0].get('hashes') and
+                          rejected[0].get('hashes') != rejected[0].get('expected_hashes') and
+                          isinstance(rejected[0].get('reason'), str) and bool(rejected[0]['reason']),
+                          f'rejected candidate state is incomplete or mismatched {candidate_label}{device}/round{r}')
             if not state['timeout']:
                 expected_result = state['results'].get(rank)
                 check(expected_result is (len(validated) == 1),
@@ -612,8 +671,13 @@ def verify(root):
                 # activation event, rather than repeating it at local admission.
                 admission=dict(activated[0]) if activated else {}
                 if candidate_activated:admission.update(candidate_activated[0])
+                readiness_ok = (boundary_validation != 'runtime' or
+                    (len(candidate_activated) == 1 and
+                     _runtime_readiness_ok(candidate_activated[0], epoch=r + 1, rank=rank,
+                                           cut=cut, target=target_role)))
                 check(len(sent) == len(validated) == len(candidate_activated) == len(activated) == 1 and
                       not rejected and candidate_activated[0].get('step') == cut and
+                      readiness_ok and
                       admission.get('decision') == 'replace' and
                       admission.get('owner') == target_role and
                       admission.get('hashes') == sent[0].get('hashes') and
@@ -794,13 +858,41 @@ def verify(root):
         check(not (root / 'reference_signatures.json').exists() or not summary.get('reference_sha256'),
               'unrequested reference manifest')
 
-    # Final ownership, all sixteen done records, identity and cross-replica state equality.
+    # Final ownership, optional terminal reference, all sixteen done records,
+    # identity and cross-replica state equality.
     if round_state:
         final_owner = round_state[-1]['active_after']
     else:
         final_owner = ('B', 0)
     expected_done = {_actor_key(0, 'A'), _actor_key(0, 'D'), _actor_key(0, 'E'),
                      _actor_key(final_owner[1], final_owner[0])}
+    final_reference_run = summary.get('final_reference_run')
+    final_reference_sha256 = summary.get('final_reference_sha256')
+    final_reference_enabled = final_reference_run is not None or final_reference_sha256 is not None
+    final_reference = None
+    final_reference_path = root / 'final_reference_signatures.json'
+    check((final_reference_run is None) == (final_reference_sha256 is None),
+          'final reference run/SHA are paired')
+    if final_reference_enabled:
+        check(isinstance(final_reference_run, str) and bool(final_reference_run),
+              'final reference run name')
+        check(_valid_sha256(final_reference_sha256), 'final reference SHA256 format')
+        try:
+            raw = final_reference_path.read_bytes()
+            check(hashlib.sha256(raw).hexdigest() == final_reference_sha256,
+                  'final reference manifest SHA256')
+            from shift_full.v4_reference import validate_signatures
+            final_reference = validate_signatures(json.loads(raw))
+            expected_final_reference_run = (final_reference_run if final_reference_run.startswith('v4_')
+                                            else 'v4_' + final_reference_run)
+            check(final_reference.get('run') == expected_final_reference_run,
+                  'final reference run name matches manifest')
+            check(final_reference.get('steps', 0) >= final_step,
+                  'final reference covers final step')
+        except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
+            errors.append('independent final reference invalid: ' + str(exc))
+    else:
+        check(not final_reference_path.exists(), 'unrequested final reference manifest')
     done_by_worker = {}
     done_total = []
     for label, devices in rows.items():
@@ -816,6 +908,51 @@ def verify(root):
                 if done:
                     done_by_worker[(replica, rank)] = done[0]
                     done_total.append(done[0])
+                    if boundary_validation == 'runtime':
+                        ready_markers = [x for x in worker_events if x.get('kind') == 'final_audit_ready']
+                        begin_markers = [x for x in worker_events if x.get('kind') == 'final_audit_begin']
+                        commits = [x for x in worker_events if x.get('kind') == 'commit']
+                        hash_calls = [x for x in worker_events if x.get('kind') == 'state_hash']
+                        check(len(ready_markers) == len(begin_markers) == 1 and
+                              ready_markers[0].get('step') == begin_markers[0].get('step') == final_step,
+                              f'final audit markers cover active worker {label}{device}')
+                        check(len(hash_calls) == 1 and _is_int(done[0].get('state_hash_calls')) and
+                              done[0].get('state_hash_calls') == 1 and
+                              hash_calls[0].get('step') == final_step and
+                              hash_calls[0].get('final_audit') is True and
+                              _is_int(hash_calls[0].get('calls')) and hash_calls[0].get('calls') == 1,
+                              f'one final state hash only {label}{device}')
+                        if len(ready_markers) == len(begin_markers) == len(hash_calls) == 1 and commits:
+                            check(worker_events.index(commits[-1]) < worker_events.index(ready_markers[0]) <
+                                  worker_events.index(begin_markers[0]) < worker_events.index(hash_calls[0]) <
+                                  worker_events.index(done[0]),
+                                  f'final audit markers follow final commit before done {label}{device}')
+                        else:
+                            check(False, f'final audit follows final commit {label}{device}')
+                    final_comparisons = [x for x in worker_events
+                                         if x.get('kind') == 'final_reference_comparison']
+                    if final_reference_enabled:
+                        check(len(final_comparisons) == 1 and
+                              final_comparisons[0].get('step') == final_step and
+                              final_comparisons[0].get('exact') is True and
+                              _valid_hashes(final_comparisons[0].get('hashes')) and
+                              final_comparisons[0].get('hashes') == done[0].get('hashes'),
+                              f'final reference event matches done {label}{device}')
+                        if final_reference is not None:
+                            expected_final = final_reference['workers'].get(f'{replica}/{rank}', {}).get(str(final_step))
+                            check(expected_final is not None and
+                                  done[0].get('hashes') == expected_final.get('hashes'),
+                                  f'final reference signature replica{replica}/rank{rank}/step{final_step}')
+                            if (len(final_comparisons) == 1 and expected_final is not None and
+                                    boundary_validation == 'runtime'):
+                                begin_markers = [x for x in worker_events if x.get('kind') == 'final_audit_begin']
+                                check(len(begin_markers) == 1 and
+                                      worker_events.index(begin_markers[0]) < worker_events.index(final_comparisons[0]) <
+                                      worker_events.index(done[0]),
+                                      f'final reference comparison follows audit begin {label}{device}')
+                    else:
+                        check(not final_comparisons,
+                              f'unrequested final reference event {label}{device}')
                     comparison = done[0].get('comparison')
                     if isinstance(comparison, dict):
                         exact = comparison.get('exact')
@@ -829,6 +966,12 @@ def verify(root):
                         check(False, f'final reference comparison missing {label}{device}')
             else:
                 check(not done, f'inactive actor emitted done {label}{device}')
+                if boundary_validation == 'runtime':
+                    check(not any(x.get('kind') in ('final_audit_ready', 'final_audit_begin')
+                                  for x in worker_events),
+                          f'inactive actor emitted final audit marker {label}{device}')
+                    check(not any(x.get('kind') == 'state_hash' for x in worker_events),
+                          f'inactive actor emitted state hash {label}{device}')
     check(len(done_total) == 16 and set(done_by_worker) == {(r, k) for r in range(2) for k in range(8)},
           'exact sixteen-worker final coverage')
     for rank in range(8):
@@ -858,7 +1001,8 @@ def verify(root):
         auditor_sha = None
     raw_hashes = _raw_hashes(root)
     return dict(pass_all=not errors, errors=errors, resources_clean=resources_clean,
-        transactional_switch=True, cycles=cycles, cuts=cuts, final_step=final_step,
+        transactional_switch=True, boundary_validation=boundary_validation,
+        cycles=cycles, cuts=cuts, final_step=final_step,
         decisions=[decisions[r].get('decision') for r in sorted(decisions)],
         logical_workers=16, commit_count=sum(len(v) for v in worker_commits.values()),
         peer_outer_gradient_ready_seconds=peer_waits, reference_run=summary.get('reference_run'),
@@ -875,10 +1019,13 @@ def summarize(root):
                 for line in path.read_text().splitlines() if line.strip()]
     final_signatures={f'{x["replica"]}/{x["rank"]}':x['hashes'] for x in all_events if x['kind']=='done'}
     return dict(name=summary.get('name'), transactional_switch=True,
+        boundary_validation=audit['boundary_validation'],
         cycles=audit['cycles'], cuts=audit['cuts'], final_step=audit['final_step'],
         decisions=audit['decisions'], functional_pass=True, resources_clean=audit['resources_clean'],
         cleanup_errors=summary.get('cleanup_errors'), reference_run=summary.get('reference_run'),
         reference_sha256=summary.get('reference_sha256'),
+        final_reference_run=summary.get('final_reference_run'),
+        final_reference_sha256=summary.get('final_reference_sha256'),
         plan=summary.get('plan'),topology=summary.get('topology'),cross_node_tp=bool(summary.get('cross_node_tp')),
         oracle_exact=summary.get('oracle_exact'),source_sha256=summary.get('source_sha256'),
         fail_restore_rank=summary.get('fail_restore_rank'),stall_restore_rank=summary.get('stall_restore_rank'),

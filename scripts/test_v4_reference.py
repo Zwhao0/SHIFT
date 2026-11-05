@@ -48,6 +48,17 @@ class ReferenceTest(unittest.TestCase):
         config['seed']=0
         with self.assertRaises(ValueError):validate_compatibility(reference(),config,{'train':'123'})
 
+    def test_final_only_allows_audit_flags_but_keeps_training_and_source_guards(self):
+        config=dict(plan=dict(seq_len=512,microbatches=4),seed=20261106,
+                    performance_no_audit=True,outer_audit=True)
+        with self.assertRaises(ValueError):validate_compatibility(reference(),config,{'train':'123'})
+        validate_compatibility(reference(),config,{'train':'123'},final_only=True)
+        for key,value in [('unified',True),('overlap_peer',True),('seed',0)]:
+            with self.subTest(key=key),self.assertRaises(ValueError):
+                validate_compatibility(reference(),dict(config,**{key:value}),{'train':'123'},final_only=True)
+        with self.assertRaises(ValueError):
+            validate_compatibility(reference(),config,{'train':'wrong'},final_only=True)
+
     def test_training_profile_is_required(self):
         value=reference();value.pop('training_profile')
         config=dict(plan=dict(seq_len=512,microbatches=4),seed=20261106)

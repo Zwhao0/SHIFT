@@ -1,4 +1,14 @@
-# SHIFT — v4.1 代码重构统一
+# SHIFT — v4.2 手动恢复优化完成
+
+同一训练会话启动一次，通过统一命令在运行中选择 v1 原生恢复、v2 整副本 p2 迁移、v4 部分 PP 迁移。`training_loop`、`session_control`、`session_engine` 分别提供共同主循环、命令接口和策略路由，继续共用原有训练/数据/Adam/scheduler。当前支持 v1/v2 的 DP1 全8 rank，以及 v4 的 DP0 PP1 rank4–7，可迁出再迁回。
+
+正式路径保留结构/版本、实际恢复完成、epoch/owner和提交屏障，去除计时窗口内的开发全状态 hash；停止后再做完整九状态审计。开发全 hash、独立参考与梯度审计仍有专用入口。匹配 v4.1 原版对照为23.182秒，runtime两例16.255/16.037秒，收益主要来自取消边界开发审计；不是隔离通信加速或统计显著性证明。
+
+本轮完成单次启动内 v2→v4→v1→v4迁回→v2迁回→v1再次恢复，并独立核对16 worker九状态、样本、真实kill、交接、owner/epoch与健康PID。额外同会话80步对照：native 0.697秒/步，v2迁出后0.693、迁回原布局后0.713；最慢worker提交间隔也完整保留。旧v2入口出现30.314秒慢例，未改训练/协议源码原样复跑为22.950秒，均通过状态审计；不删除慢样本或宣称全部冷准备时间恒定。
+
+[单会话使用及范围](docs/v4_2_unified_session.md) · [验收与计时](evidence/v4_2/summary.json) · [v2诊断](evidence/v4_2/v2_diagnosis.json) · [v4优化对照及限制](evidence/v4_recovery_20261105/summary.json) · [运行检查与开发审计](docs/v4_runtime_validation.md)
+
+# v4.1 历史验收记录
 
 `training_core.py`统一真实训练、batch计划、Adam/scheduler和完整九状态；v1/v2/v4仅保留恢复/迁移策略。global batch=8（含v1 solo），初始A/B各完整DP副本、C备用，TP节点内，v4迁移后才跨PP。正常训练不逐步hash，开发审计独立。v4入口默认选择已验收的统一事务配置，旧batch16布局需显式`--legacy-layout`。
 

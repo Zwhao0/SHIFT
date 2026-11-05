@@ -22,7 +22,8 @@ def _sample_ids(step, replica, rank):
 
 class Fixture:
     def __init__(self, root, outcomes, *, reference=False, cross_node_tp=False,
-                 timeouts=(), invalid_rounds=(), cancel_round=None, recover_rounds=()):
+                 timeouts=(), invalid_rounds=(), cancel_round=None, recover_rounds=(),
+                 boundary_validation='full', final_reference=False):
         self.root = Path(root)
         self.cycles = len(outcomes)
         self.outcomes = outcomes
@@ -33,6 +34,8 @@ class Fixture:
         self.timeouts = set(timeouts)
         self.invalid_rounds = set(invalid_rounds)
         self.recover_rounds = set(recover_rounds)
+        self.boundary_validation = boundary_validation
+        self.final_reference_enabled = final_reference
         source = ('B', 0)
         self.rounds = []
         self.actor_specs = {(0, role) for role in 'ABCDE'}
@@ -64,7 +67,12 @@ class Fixture:
             source_recovery_scope=dict(failure_window='after_freeze_before_ready',
                 transport_failure='fail_stop'),
             actors=[dict(generation=g, role=role) for g, role in sorted(self.actor_specs)])
+        if boundary_validation != 'full':
+            self.summary['boundary_validation'] = boundary_validation
         self.reference = self._make_reference() if reference else None
+        self.final_reference = self._make_reference() if final_reference else None
+        if self.final_reference:
+            self.final_reference['run'] = 'v4_fixture-final-reference'
 
     def _rank(self, label, device):
         role = label.split('_', 1)[1]
@@ -80,6 +88,10 @@ class Fixture:
         marker = 30000 + sum(map(ord, label)) * 10 + device
         return dict(manager=marker, server=marker + 1, client=marker + 2,
                     executor=marker + 3, pg=marker + 4, service_epoch=0)
+
+    def _readiness(self, label, device, cut, epoch, target):
+        return dict(schema=1, epoch=epoch, rank=self._rank(label, device),
+                    cut=cut, target=target, restored=True)
 
     def _training_identity(self, label, device):
         marker = 40000 + sum(map(ord, label)) * 10 + device
@@ -163,7 +175,7 @@ class Fixture:
             for label in active_labels:
                 for device in range(4):
                     rank = self._rank(label, device)
-                    state_hashes = _hashes(rank, cut)
+                    state_hashes = None if self.boundary_validation == 'runtime' else _hashes(rank, cut)
                     self.add(label, device, 'boundary_selected', r, epoch=r, step=cut,
                              requested_cut=cut)
                     self.add(label, device, 'freeze', r, step=cut, hashes=state_hashes,
@@ -174,7 +186,7 @@ class Fixture:
                         manager_state=self._manager(cut))
             for device in range(4):
                 rank = self._rank(source_label, device)
-                state_hashes = _hashes(rank, cut)
+                state_hashes = None if self.boundary_validation == 'runtime' else _hashes(rank, cut)
                 channel = dict(transport='packed_gpu', bytes=104, gpu_bytes=64,
                                control_bytes=40, cpu_tensor_bytes=10,
                                hashes=state_hashes, oracle_hashes=None)
@@ -184,9 +196,12 @@ class Fixture:
                     self.add(source_label, device, 'old_owner_rejected', r, step=cut)
                     self.add(source_label, device, 'source_stalled', r, step=cut)
                     peer_hashes = _hashes(self._rank('g0_E', device), cut)
+                    if self.boundary_validation == 'runtime':
+                        peer_hashes = None
                     peer_channel = dict(channel, hashes=peer_hashes, packet_source='peer')
                     self.add('g0_E', device, 'peer_state_authorized', r, step=cut,
-                        hashes=peer_hashes, expected_hashes=state_hashes)
+                        hashes=peer_hashes, expected_hashes=state_hashes,
+                        **({'version_checked': True} if self.boundary_validation == 'runtime' else {}))
                     self.add('g0_E', device, 'state_sent', r, step=cut, **peer_channel)
                     self.add(candidate_label, device, 'state_received', r, step=cut, **peer_channel)
                 else:
@@ -195,11 +210,14 @@ class Fixture:
                     self.add(candidate_label, device, 'state_received', r, step=cut, **source_channel)
                 if r in self.invalid_rounds and device == 3:
                     self.add(candidate_label, device, 'candidate_rejected', r, step=cut,
-                        hashes=_hashes(rank, cut + 100), expected_hashes=state_hashes,
+                        hashes=(None if self.boundary_validation == 'runtime' else _hashes(rank, cut + 100)),
+                        expected_hashes=state_hashes,
                         reason='complete state signature mismatch')
                 elif r not in self.timeouts or device < 2:
                     self.add(candidate_label, device, 'candidate_validated', r, step=cut,
-                             hashes=state_hashes, expected_hashes=state_hashes, reason=None)
+                             hashes=state_hashes, expected_hashes=state_hashes, reason=None,
+                             **({'readiness': self._readiness(candidate_label, device, cut, r + 1, state['target'])}
+                                if self.boundary_validation == 'runtime' else {}))
 
             results = {str(self._rank(candidate_label, device)): True for device in range(4)}
             if r in self.invalid_rounds:
@@ -217,7 +235,8 @@ class Fixture:
                     source=state['source'][0], target=state['target'])
             self.add('g0_A', 0, 'switch_decision', r, step=cut, epoch=r + 1,
                 decision=decision, owner=owner, timeout=timed_out, candidate_results=decision_results,
-                source_recovery=recovering)
+                source_recovery=recovering,
+                **({'validation': 'runtime'} if self.boundary_validation == 'runtime' else {}))
 
             # Per-worker retention/activation events preserve production causal order.
             for label in ('g0_A', 'g0_D', 'g0_E'):
@@ -252,32 +271,39 @@ class Fixture:
                         training_identity=self._training_identity(candidate_label, device),
                         manager_state=self._manager(cut), channel_reconnected=self._rank(candidate_label, device) in
                             ({1, 3, 5, 7} if self.cross_node_tp else {4, 5, 6, 7}),
-                        owner=state['target'], decision='replace', hashes=_hashes(self._rank(candidate_label, device), cut),
-                        identity_preserved=True, peer_compute_started=True, peer_gradients_ready=True)
+                        owner=state['target'], decision='replace',
+                        hashes=(None if self.boundary_validation == 'runtime' else
+                                _hashes(self._rank(candidate_label, device), cut)),
+                        identity_preserved=True, peer_compute_started=True, peer_gradients_ready=True,
+                        **({'readiness': self._readiness(candidate_label, device, cut, r + 1, state['target'])}
+                           if self.boundary_validation == 'runtime' else {}))
             # D/E publish retained state, then start their first post-decision step.
             for role in ('D', 'E'):
                 label = 'g0_' + role
                 for device in range(4):
                     rank = self._rank(label, device)
-                    hashes = _hashes(rank, cut)
+                    hashes = None if self.boundary_validation == 'runtime' else _hashes(rank, cut)
                     self.add(label, device, 'peer_inner_groups_retained', r, identity_preserved=True)
                     self.add(label, device, 'peer_compute_ready', r, step=cut,
                              hashes=hashes, identity_preserved=True)
             for device in range(4):
-                a_fields = dict(epoch=r + 1, step=cut, hashes=_hashes(device, cut),
+                a_fields = dict(epoch=r + 1, step=cut,
+                    hashes=(None if self.boundary_validation == 'runtime' else _hashes(device, cut)),
                     identity_preserved=True, owner=owner, decision=decision,
                     peer_compute_started=True, peer_gradients_ready=True)
                 self.add('g0_A', device, 'activated', r, **a_fields)
             if decision == 'retain':
                 for device in range(4):
                     self.add(source_label, device, 'activated', r,
-                        epoch=r + 1, step=cut, hashes=_hashes(self._rank(source_label, device), cut),
+                        epoch=r + 1, step=cut,
+                        hashes=(None if self.boundary_validation == 'runtime' else _hashes(self._rank(source_label, device), cut)),
                         identity_preserved=True, owner=owner, decision=decision,
                         peer_compute_started=True, peer_gradients_ready=True)
             else:
                 for device in range(4):
                     self.add(candidate_label, device, 'activated', r,
-                        epoch=r + 1, step=cut, hashes=_hashes(self._rank(candidate_label, device), cut),
+                        epoch=r + 1, step=cut,
+                        hashes=(None if self.boundary_validation == 'runtime' else _hashes(self._rank(candidate_label, device), cut)),
                         identity_preserved=True, owner=owner, decision=decision,
                         peer_compute_started=True, peer_gradients_ready=True)
 
@@ -308,6 +334,15 @@ class Fixture:
             role = label.split('_', 1)[1]
             for device in range(4):
                 rank = self._rank(label, device); replica = self._replica(label)
+                if self.boundary_validation == 'runtime':
+                    self.add(label, device, 'final_audit_ready', self.cycles - 1, step=self.final_step)
+                    self.add(label, device, 'final_audit_begin', self.cycles - 1, step=self.final_step)
+                    self.add(label, device, 'state_hash', self.cycles - 1, step=self.final_step,
+                             final_audit=True, calls=1)
+                hashes = _hashes(rank, self.final_step)
+                if self.final_reference_enabled:
+                    self.add(label, device, 'final_reference_comparison', self.cycles - 1,
+                             step=self.final_step, exact=True, hashes=hashes)
                 comparison = None
                 if self.reference:
                     comparison = dict(exact={key: True for key in REFERENCE_HASH_KEYS},
@@ -315,7 +350,8 @@ class Fixture:
                         method='independent_nine_state_sha256')
                 self.add(label, device, 'done', self.cycles - 1, step=self.final_step,
                     comparison=comparison, identity_preserved=True,
-                    hashes=_hashes(rank, self.final_step))
+                    hashes=hashes,
+                    **({'state_hash_calls': 1} if self.boundary_validation == 'runtime' else {}))
 
     def write(self):
         self._initial_actor_events()
@@ -323,7 +359,7 @@ class Fixture:
         self._final_events()
         self.summary['decisions'] = [
             {key: event.get(key) for key in ('round', 'step', 'decision', 'owner', 'epoch',
-                'timeout', 'candidate_results', 'source_recovery')}
+                'timeout', 'candidate_results', 'source_recovery', 'validation')}
             for event in self.events[('g0_A', 0)] if event['kind'] == 'switch_decision']
         self.summary['source_recovery_stops'] = [dict(round=r,
             generation=self.rounds[r]['source'][1], role=self.rounds[r]['source'][0],
@@ -338,6 +374,11 @@ class Fixture:
             raw_reference = json.dumps(self.reference, separators=(',', ':')).encode()
             (self.root / 'reference_signatures.json').write_bytes(raw_reference)
             self.summary['reference_sha256'] = hashlib.sha256(raw_reference).hexdigest()
+        if self.final_reference:
+            raw_final_reference = json.dumps(self.final_reference, separators=(',', ':')).encode()
+            (self.root / 'final_reference_signatures.json').write_bytes(raw_final_reference)
+            self.summary['final_reference_run'] = self.final_reference['run'].removeprefix('v4_')
+            self.summary['final_reference_sha256'] = hashlib.sha256(raw_final_reference).hexdigest()
         self.summary['actors'] = [dict(generation=g, role=role) for g, role in sorted(self.actor_specs)]
         pids = {'node0': range(1000, 1008), 'node1': range(2000, 2008), 'node3': range(3000, 3008)}
         resources = {node: dict(company={str(pid): 'VLLM::fixture' for pid in ids}, extra_gpu=[])
@@ -350,13 +391,15 @@ class Fixture:
 
 class VerifyV4TransactionTest(unittest.TestCase):
     def fixture(self, outcomes, *, reference=False, cross_node_tp=False, timeouts=(), invalid_rounds=(), cancel_round=None,
-                recover_rounds=()):
+                recover_rounds=(), boundary_validation='full', final_reference=False):
         temp = tempfile.TemporaryDirectory()
         self.addCleanup(temp.cleanup)
         root = Path(temp.name)
         return Fixture(root, outcomes, reference=reference, cross_node_tp=cross_node_tp,
                        timeouts=timeouts, invalid_rounds=invalid_rounds,
-                       cancel_round=cancel_round, recover_rounds=recover_rounds).write()
+                       cancel_round=cancel_round, recover_rounds=recover_rounds,
+                       boundary_validation=boundary_validation,
+                       final_reference=final_reference).write()
 
     def test_single_round_replace_and_retain(self):
         for outcome in ('replace', 'retain'):
@@ -474,6 +517,72 @@ class VerifyV4TransactionTest(unittest.TestCase):
     def test_reference_manifest_and_comparisons_are_recomputed(self):
         audit = verify(self.fixture(['replace'], reference=True))
         self.assertTrue(audit['pass_all'], audit['errors'])
+
+    def test_runtime_validation_and_final_reference_pass(self):
+        root = self.fixture(['replace'], boundary_validation='runtime', final_reference=True)
+        audit = verify(root)
+        self.assertTrue(audit['pass_all'], audit['errors'])
+        self.assertEqual(audit['boundary_validation'], 'runtime')
+
+    def _edit_event(self, root, filename, predicate, edit):
+        path = Path(root) / filename
+        events = [json.loads(line) for line in path.read_text().splitlines()]
+        event = next((x for x in events if predicate(x)), None)
+        self.assertIsNotNone(event, f'fixture event not found: {filename}')
+        edit(event)
+        path.write_text(''.join(json.dumps(x) + '\n' for x in events))
+
+    def test_runtime_rejects_missing_candidate_readiness(self):
+        root = self.fixture(['replace'], boundary_validation='runtime')
+        self._edit_event(root, 'g0_C0.jsonl', lambda x: x.get('kind') == 'candidate_validated',
+                         lambda x: x.pop('readiness'))
+        audit = verify(root)
+        self.assertFalse(audit['pass_all'])
+        self.assertTrue(any('runtime readiness' in e for e in audit['errors']))
+
+    def test_runtime_rejects_wrong_candidate_readiness_rank_and_cut(self):
+        for field, delta in (('rank', 1), ('cut', 1)):
+            with self.subTest(field=field):
+                root = self.fixture(['replace'], boundary_validation='runtime')
+                self._edit_event(root, 'g0_C0.jsonl', lambda x: x.get('kind') == 'candidate_validated',
+                                 lambda x: x['readiness'].__setitem__(field, x['readiness'][field] + delta))
+                audit = verify(root)
+                self.assertFalse(audit['pass_all'])
+                self.assertTrue(any('runtime readiness' in e for e in audit['errors']))
+
+    def test_runtime_requires_final_done_hash(self):
+        root = self.fixture(['replace'], boundary_validation='runtime')
+        self._edit_event(root, 'g0_A0.jsonl', lambda x: x.get('kind') == 'done',
+                         lambda x: x.pop('hashes'))
+        audit = verify(root)
+        self.assertFalse(audit['pass_all'])
+        self.assertTrue(any('final done/identity' in e for e in audit['errors']))
+
+    def test_runtime_rejects_hash_smuggled_into_boundary(self):
+        root = self.fixture(['replace'], boundary_validation='runtime')
+        self._edit_event(root, 'g0_B0.jsonl', lambda x: x.get('kind') == 'freeze',
+                         lambda x: x.__setitem__('hashes', _hashes(x['rank'], x['step'])))
+        audit = verify(root)
+        self.assertFalse(audit['pass_all'])
+        self.assertTrue(any('runtime boundary carries a state hash' in e for e in audit['errors']))
+
+    def test_runtime_rejects_final_reference_hash_mismatch(self):
+        root = self.fixture(['replace'], boundary_validation='runtime', final_reference=True)
+        reference_path = root / 'final_reference_signatures.json'
+        reference = json.loads(reference_path.read_text())
+        reference['workers']['0/0'][str(self.fixture_final_step(root))]['hashes']['model'] = 'f' * 64
+        raw = json.dumps(reference, separators=(',', ':')).encode()
+        reference_path.write_bytes(raw)
+        summary_path = root / 'summary.json'
+        summary = json.loads(summary_path.read_text())
+        summary['final_reference_sha256'] = hashlib.sha256(raw).hexdigest()
+        summary_path.write_text(json.dumps(summary))
+        audit = verify(root)
+        self.assertFalse(audit['pass_all'])
+        self.assertTrue(any('final reference signature replica0/rank0' in e for e in audit['errors']))
+
+    def fixture_final_step(self, root):
+        return json.loads((Path(root) / 'summary.json').read_text())['final_step']
 
     def test_summarize_returns_auditor_and_raw_hashes(self):
         result = summarize(self.fixture(['retain']))

@@ -47,7 +47,17 @@ def main():
     p.add_argument('--legacy-layout',dest='unified',action='store_false',help='explicit historical batch16 layout')
     p.add_argument('--performance-no-audit', action='store_true')
     p.add_argument('--seed', type=int, default=20261106)
+    p.add_argument('--boundary-validation',choices=('full','runtime'),help='development hashes or runtime readiness; performance mode defaults to runtime')
+    p.add_argument('--final-reference-run',help='independent final audit after the timed window')
+    p.add_argument('--digest-engine',choices=('reference','staged'),default='reference')
     a=p.parse_args()
+    from shift_full.v4_state import boundary_validation
+    a.boundary_validation=boundary_validation(vars(a))
+    if a.performance_no_audit:a.no_oracle=True
+    if a.boundary_validation=='runtime' and not a.performance_no_audit:p.error('runtime readiness requires performance-no-audit')
+    if a.fail_restore_rank!=-1 and a.boundary_validation!='full':p.error('silent state corruption injection requires full boundary audit')
+    if a.final_reference_run and (not a.performance_no_audit or a.reference_run or a.reference_only):p.error('final reference requires migrating performance mode')
+    if a.final_reference_run and not all(x.isalnum() or x in '_-' for x in a.final_reference_run):p.error('invalid final reference suffix')
     if a.post_layout and not (a.unified and a.reference_only and a.performance_no_audit):p.error('post-layout is a unified no-fault performance control only')
     if a.unified and a.cross_node_tp:p.error('unified TP must remain within a node')
     if a.performance_no_audit and (a.outer_audit or a.reference_run):p.error('performance run cannot consume audited reference')
@@ -89,7 +99,8 @@ def main():
     e=replace(endpoints_from_env()['node0'],socket=f'ssh-v4-start-{os.getpid()}.sock')
     root='/workspace/SHIFT';unit='shift-v4-'+a.suffix+'-controller'
     args=['--suffix',a.suffix,'--seq-len',str(a.seq_len),'--cut',str(a.cut),'--post-steps',str(a.post_steps)]
-    args+=['--seed',str(a.seed)]
+    args+=['--seed',str(a.seed),'--boundary-validation',a.boundary_validation,'--digest-engine',a.digest_engine]
+    if a.final_reference_run:args+=['--final-reference-run',a.final_reference_run]
     if a.unified:args+=['--unified']
     else:args+=['--legacy-layout']
     if a.post_layout:args+=['--post-layout']

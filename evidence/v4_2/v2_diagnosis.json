@@ -1,0 +1,176 @@
+{
+  "scope": "CPU-only read of existing legacy artifacts and code; no GPU or prepare.",
+  "runs": {
+    "v2_q2_r42_v2_perf1": {
+      "success": true,
+      "first_joint_s": 30.31377685,
+      "cut": 28,
+      "target_prepared_s": 20.4579,
+      "restored_s": 28.9801,
+      "state_sent_s": 29.4207,
+      "candidate_C": {
+        "warmup_mean_range_s": [
+          8.305,
+          [
+            8.179,
+            8.344
+          ]
+        ],
+        "warmup_end_to_local_ready_range_s": [
+          0.305,
+          1.068
+        ],
+        "local_ready_to_restored_s_by_rank": [
+          9.47,
+          9.146,
+          9.42,
+          8.957,
+          9.002,
+          8.745,
+          8.836,
+          8.882
+        ],
+        "state_receive_s_range": [
+          6.474,
+          6.648
+        ],
+        "state_bytes_range": [
+          749000000,
+          765000000
+        ],
+        "restore_load_s_range": [
+          0.023,
+          0.03
+        ],
+        "restored_to_state_ready_s_range": [
+          1.0,
+          1.17
+        ],
+        "state_ready_to_manager_phase_end_s_range": [
+          0.011,
+          0.012
+        ],
+        "manager_init_phase_s_range": [
+          10.839,
+          10.869
+        ]
+      },
+      "source_steps_25_28_maxrank_s": [
+        3.936,
+        3.39,
+        3.0,
+        3.31
+      ],
+      "slow_compute_sleep_per_B_rank": {
+        "count": 18,
+        "total_s": 4.501
+      }
+    },
+    "v2_q2_r42_v2_repeat": {
+      "success": true,
+      "first_joint_s": 22.95038738,
+      "cut": 31,
+      "target_prepared_s": 17.4616,
+      "restored_s": 22.0502,
+      "candidate_C": {
+        "warmup_mean_range_s": [
+          5.398,
+          [
+            5.322,
+            5.443
+          ]
+        ],
+        "warmup_end_to_local_ready_s_range": [
+          0.494,
+          1.033
+        ],
+        "local_ready_to_restored_s_range": [
+          4.518,
+          5.096
+        ],
+        "state_receive_s_range": [
+          2.059,
+          2.111
+        ],
+        "state_bytes_range": [
+          749000000,
+          765000000
+        ],
+        "restore_load_s_range": [
+          0.023,
+          0.028
+        ],
+        "restored_to_state_ready_s_range": [
+          0.797,
+          0.853
+        ],
+        "state_ready_to_manager_phase_end_s_range": [
+          0.012,
+          0.013
+        ],
+        "manager_init_phase_s_range": [
+          6.399,
+          6.416
+        ]
+      },
+      "source_steps_25_31_s": "approximately 0.93\u20131.12 per step",
+      "slow_compute_sleep_per_B_rank": {
+        "count": 21,
+        "total_s": 5.252
+      }
+    }
+  },
+  "config_same": {
+    "cold_launcher": true,
+    "slow_compute_ms": 250,
+    "trigger_step": 9,
+    "overlap_cpu_model_load": 0,
+    "digest_engine": "reference"
+  },
+  "source_integrity": {
+    "file_count": 12,
+    "deployed_hashes_equal_between_runs": true,
+    "source_map_sha256_both_runs": "a78ccb3791d0e6fa11bea3eff094176541448fd947da429bee1adb9e3bfab51c",
+    "all_three_node_deployment_checks_passed": true,
+    "current_local_hashes_match": true,
+    "local_match_count": 12,
+    "local_file_count": 12
+  },
+  "manager_init_phase_note": "In planned_train.py this phase includes candidate handoff setup/ready_receiver, cut wait, checkpoint transfer and restore, then Manager creation and activation. planned_state_ready to phase end is only about 0.01\u20130.013 s per rank, so 10.84/6.41 s is not Manager constructor time. The constructor duration itself is not isolated; the post-state-ready interval is an upper bound.",
+  "interpretation": [
+    "The 7.36 s first-joint gap is not explained by the configured 250 ms delay: repeat injected more sleeps (21 vs 18 per B rank) and was faster.",
+    "Original C warmup is about 2.91 s longer across ranks. This is consistent with first-use kernel/cache or runtime variation but does not prove it.",
+    "Original A/B source steps 25\u201328 have multi-second pauses across ranks; they overlap handoff PG/channel preparation. Repeat has the same preparation around steps 26\u201331 without comparable pauses. Preparation contention is plausible, but transient runtime/scheduler/communication effects cannot be separated from these two runs.",
+    "State recv duration falls from 6.47\u20136.65 s to 2.06\u20132.11 s while sender transport is short; receiver duration includes waiting for source progress/cut, not just wire transfer of the 749\u2013765 MB checkpoint.",
+    "No fixed ~10 s Manager wait or redundant Manager construction is evidenced. The misleading phase label should be split into preparation, ready_receiver/cut wait, state transfer/restore, Manager construction, and activation. No must-fix correctness defect is demonstrated; slow original remains unattributed."
+  ],
+  "reference_context": {
+    "v4_1_request_s": [
+      22.008,
+      21.515
+    ],
+    "v4_1_during_maxrank_mean_s": [
+      0.9951,
+      0.9852
+    ],
+    "v4_1_post_maxrank_mean_s": [
+      0.8581,
+      0.8397
+    ],
+    "release_v2_request_s": [
+      21.334,
+      21.752
+    ],
+    "release_v2_post4_s": [
+      0.869,
+      0.863
+    ],
+    "s42_final_80_step_parent_report": {
+      "native_11_80_mean_s": 0.697099,
+      "p2_out_steady_s": 0.692951,
+      "p2_return_steady_s": 0.712505,
+      "return_delta_pct": 2.21,
+      "independent_audit": "PASS"
+    }
+  }
+}

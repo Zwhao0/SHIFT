@@ -1,0 +1,532 @@
+[
+  {
+    "name": "v4_r42_a2",
+    "accepted": false,
+    "resources_clean": true,
+    "error": "KeyboardInterrupt: ",
+    "diagnosis": "model/Adam diverged from independent reference before migration; cause unresolved; not accepted as performance control",
+    "pre_boundary": [
+      {
+        "worker": "g0_D2.jsonl",
+        "step": 15,
+        "hashes": {
+          "model": "a04018ad7aade5d946e1d9d4299fc80e86d05fb9491f7437a05627e4df79c857",
+          "optimizer": "4605d0cce884428aecee0e1ea8d53a737c70485e2058ecac76ead357a5d66a26",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "3a57e48b1b43139230a159d7c4eb7c558881938aa8a329d69ab4a2d838e3e028",
+          "cuda_rng": "aa714649c210740539060f0b92dc56e2c48fa06c627fc0f8bc6f1ee915ec92b3",
+          "python_rng": "f3786e427eabeeab75066bb98b5beb24895d3452bf6b6a327199ac563b31902c",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "expected": {
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "3a57e48b1b43139230a159d7c4eb7c558881938aa8a329d69ab4a2d838e3e028",
+          "cuda_rng": "aa714649c210740539060f0b92dc56e2c48fa06c627fc0f8bc6f1ee915ec92b3",
+          "model": "f4fa3c70c724f8e0dc2dede0c74196c30b31213dda82a63d3c1c8f7596629fd0",
+          "optimizer": "21df832526e6c2a580e1fe896ec02bd3a477b5eb24c9a4e511a8c2ba381445b1",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "python_rng": "f3786e427eabeeab75066bb98b5beb24895d3452bf6b6a327199ac563b31902c",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mismatches": [
+          "model",
+          "optimizer"
+        ]
+      },
+      {
+        "worker": "g0_A0.jsonl",
+        "step": 15,
+        "hashes": {
+          "model": "0e634f7e9b3d7946fb5ec32f825a8122003c331e6d239a347bf58ee32d90ebbc",
+          "optimizer": "30c97b152d3aa005df40fd5d8361320b8772372107dea78de398c9d9b6af51dd",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "bb1997c383ec5cdb69b677e05206f1ac959fde6364019b5853f39b7e18bf54d8",
+          "cuda_rng": "19192746ce35e0a90c20f36e4e9f540e879c0b0534ee821912d18cde65a468f5",
+          "python_rng": "49290a927c3cfbf9b56d7ca46944296e677ed85c01823a1ea565763726f102d3",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "expected": {
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "bb1997c383ec5cdb69b677e05206f1ac959fde6364019b5853f39b7e18bf54d8",
+          "cuda_rng": "19192746ce35e0a90c20f36e4e9f540e879c0b0534ee821912d18cde65a468f5",
+          "model": "c3bbbe29386559b6bdc18c0c41815470b4306c2c2042e34247099a140099daa4",
+          "optimizer": "2a7b4f12798c30face8a1577f4e582257fbb6e06d53101a4378b2e7b06a42994",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "python_rng": "49290a927c3cfbf9b56d7ca46944296e677ed85c01823a1ea565763726f102d3",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mismatches": [
+          "model",
+          "optimizer"
+        ]
+      },
+      {
+        "worker": "g0_A1.jsonl",
+        "step": 15,
+        "hashes": {
+          "model": "d7e4d888d9b25eba93b0c17137ccba7c99cf2de528a12364f06f14af912a0712",
+          "optimizer": "13e2b08e402d6cb4b9040318c8c9ed1521addf5b43bfbf081aa01c462e34f5c9",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "3a83afc70203103a59ffccdf3187e523c47597e7951b36bfa26ff0c8233e8bde",
+          "cuda_rng": "c088bb87a5edea6310a2b269c491d6dbabc8c8ee987b47f8d7141a12668c6a34",
+          "python_rng": "368746de770685b4ad9d7b5f1dd143964620ffd21fab88c8a91fff506e08e348",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "expected": {
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "3a83afc70203103a59ffccdf3187e523c47597e7951b36bfa26ff0c8233e8bde",
+          "cuda_rng": "c088bb87a5edea6310a2b269c491d6dbabc8c8ee987b47f8d7141a12668c6a34",
+          "model": "8d6c633f9fcfec49d0f843de503d8d88fbaccb3e77615df6cb9127e1456d8f91",
+          "optimizer": "f2e9b4e84c23f838204dd8a992446b420e9b83c066696c5aa53b32b71dcb471b",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "python_rng": "368746de770685b4ad9d7b5f1dd143964620ffd21fab88c8a91fff506e08e348",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mismatches": [
+          "model",
+          "optimizer"
+        ]
+      },
+      {
+        "worker": "g0_D1.jsonl",
+        "step": 15,
+        "hashes": {
+          "model": "d7e4d888d9b25eba93b0c17137ccba7c99cf2de528a12364f06f14af912a0712",
+          "optimizer": "13e2b08e402d6cb4b9040318c8c9ed1521addf5b43bfbf081aa01c462e34f5c9",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "3a83afc70203103a59ffccdf3187e523c47597e7951b36bfa26ff0c8233e8bde",
+          "cuda_rng": "c088bb87a5edea6310a2b269c491d6dbabc8c8ee987b47f8d7141a12668c6a34",
+          "python_rng": "368746de770685b4ad9d7b5f1dd143964620ffd21fab88c8a91fff506e08e348",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "expected": {
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "3a83afc70203103a59ffccdf3187e523c47597e7951b36bfa26ff0c8233e8bde",
+          "cuda_rng": "c088bb87a5edea6310a2b269c491d6dbabc8c8ee987b47f8d7141a12668c6a34",
+          "model": "8d6c633f9fcfec49d0f843de503d8d88fbaccb3e77615df6cb9127e1456d8f91",
+          "optimizer": "f2e9b4e84c23f838204dd8a992446b420e9b83c066696c5aa53b32b71dcb471b",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "python_rng": "368746de770685b4ad9d7b5f1dd143964620ffd21fab88c8a91fff506e08e348",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mismatches": [
+          "model",
+          "optimizer"
+        ]
+      },
+      {
+        "worker": "g0_B0.jsonl",
+        "step": 15,
+        "hashes": {
+          "model": "6e116c7333f4bea7f76a789042abfaeef2672f0b53a6e734653a5b7794dcc2d6",
+          "optimizer": "a62fec8b58744949a4cb92cacee431d009798a2f7663d94c3b4b0b0b3df59eda",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "eabee909209ec781ee55c8d0f1ec48f542aef41555e21119d696122d21f64824",
+          "cuda_rng": "93b88f14ebb89a8af15de4d7509d63ba70361859aa86ac7a5017f829803be797",
+          "python_rng": "406b20041b686bd44844313e876d3b5be0ad0ac28dec92fa9cfd6e9deda7cb59",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "expected": {
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "eabee909209ec781ee55c8d0f1ec48f542aef41555e21119d696122d21f64824",
+          "cuda_rng": "93b88f14ebb89a8af15de4d7509d63ba70361859aa86ac7a5017f829803be797",
+          "model": "dc5bb585bd7d8b19a03515c17a3edbb526972eb3af45a20109a8081666418d7c",
+          "optimizer": "e6f6b6afd58ba8cd0959051687cd2e1400325953ed1b395a0a5f350b7e8aae99",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "python_rng": "406b20041b686bd44844313e876d3b5be0ad0ac28dec92fa9cfd6e9deda7cb59",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mismatches": [
+          "model",
+          "optimizer"
+        ]
+      },
+      {
+        "worker": "g0_A2.jsonl",
+        "step": 15,
+        "hashes": {
+          "model": "a04018ad7aade5d946e1d9d4299fc80e86d05fb9491f7437a05627e4df79c857",
+          "optimizer": "4605d0cce884428aecee0e1ea8d53a737c70485e2058ecac76ead357a5d66a26",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "3a57e48b1b43139230a159d7c4eb7c558881938aa8a329d69ab4a2d838e3e028",
+          "cuda_rng": "aa714649c210740539060f0b92dc56e2c48fa06c627fc0f8bc6f1ee915ec92b3",
+          "python_rng": "f3786e427eabeeab75066bb98b5beb24895d3452bf6b6a327199ac563b31902c",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "expected": {
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "3a57e48b1b43139230a159d7c4eb7c558881938aa8a329d69ab4a2d838e3e028",
+          "cuda_rng": "aa714649c210740539060f0b92dc56e2c48fa06c627fc0f8bc6f1ee915ec92b3",
+          "model": "f4fa3c70c724f8e0dc2dede0c74196c30b31213dda82a63d3c1c8f7596629fd0",
+          "optimizer": "21df832526e6c2a580e1fe896ec02bd3a477b5eb24c9a4e511a8c2ba381445b1",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "python_rng": "f3786e427eabeeab75066bb98b5beb24895d3452bf6b6a327199ac563b31902c",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mismatches": [
+          "model",
+          "optimizer"
+        ]
+      },
+      {
+        "worker": "g0_D0.jsonl",
+        "step": 15,
+        "hashes": {
+          "model": "0e634f7e9b3d7946fb5ec32f825a8122003c331e6d239a347bf58ee32d90ebbc",
+          "optimizer": "30c97b152d3aa005df40fd5d8361320b8772372107dea78de398c9d9b6af51dd",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "bb1997c383ec5cdb69b677e05206f1ac959fde6364019b5853f39b7e18bf54d8",
+          "cuda_rng": "19192746ce35e0a90c20f36e4e9f540e879c0b0534ee821912d18cde65a468f5",
+          "python_rng": "49290a927c3cfbf9b56d7ca46944296e677ed85c01823a1ea565763726f102d3",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "expected": {
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "bb1997c383ec5cdb69b677e05206f1ac959fde6364019b5853f39b7e18bf54d8",
+          "cuda_rng": "19192746ce35e0a90c20f36e4e9f540e879c0b0534ee821912d18cde65a468f5",
+          "model": "c3bbbe29386559b6bdc18c0c41815470b4306c2c2042e34247099a140099daa4",
+          "optimizer": "2a7b4f12798c30face8a1577f4e582257fbb6e06d53101a4378b2e7b06a42994",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "python_rng": "49290a927c3cfbf9b56d7ca46944296e677ed85c01823a1ea565763726f102d3",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mismatches": [
+          "model",
+          "optimizer"
+        ]
+      },
+      {
+        "worker": "g0_E2.jsonl",
+        "step": 15,
+        "hashes": {
+          "model": "6edcc434b87a32f5af0fe1561030e03db0c548230a4563de4d9258d501ab88b0",
+          "optimizer": "c365ffc68af77a1506c031cbde706e720c158a7479aa93ddac4818f08aca55b9",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "3c0629bf320a529a1b9791b6086438f713a1759a091c44dcb93978dc4fae4fc4",
+          "cuda_rng": "4906f01415e405146a5912264ff19da3fa0552f51217211a6d2f7f35bda85201",
+          "python_rng": "a2d98ffd6232d673abe23648890dbd3b026bb2d1b2a9baf96806bae0ec1e4619",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "expected": {
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "3c0629bf320a529a1b9791b6086438f713a1759a091c44dcb93978dc4fae4fc4",
+          "cuda_rng": "4906f01415e405146a5912264ff19da3fa0552f51217211a6d2f7f35bda85201",
+          "model": "665107a4e798d32f57c648df5c32a702d0bec977a30e39dfe0c65f07987ccbd9",
+          "optimizer": "34bc2a891e95c5e5dad6a859f9ef55a8b42655c718d69e2fdb5e111e5ca4604c",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "python_rng": "a2d98ffd6232d673abe23648890dbd3b026bb2d1b2a9baf96806bae0ec1e4619",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mismatches": [
+          "model",
+          "optimizer"
+        ]
+      },
+      {
+        "worker": "g0_A3.jsonl",
+        "step": 15,
+        "hashes": {
+          "model": "a1ba27fd9777a5a49979cef6833ad2385143cb4a20342f9153aa64dffe291350",
+          "optimizer": "ca3068aeb3e1cea044983bb3d10ccd04de2f2bccc99beef2b177189a04ab20ca",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "f82d56e53df72f3108c831ef95f1f248acfd601da5d56db4977bfabc9a4674b4",
+          "cuda_rng": "3b1462961fe7692fd323d6a2b5c3854d820de7a6c5f32e7b355a9d9e594743f6",
+          "python_rng": "e5e6e81bd8198b34d5dca6e3e18cdc725ebb844f88d195c6b772073453131d8b",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "expected": {
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "f82d56e53df72f3108c831ef95f1f248acfd601da5d56db4977bfabc9a4674b4",
+          "cuda_rng": "3b1462961fe7692fd323d6a2b5c3854d820de7a6c5f32e7b355a9d9e594743f6",
+          "model": "301c2e8e79010ff57ef92bfda10397f28317a19b64d5609b337f6ea87efc0d05",
+          "optimizer": "62d60ec7f6754c31ced05bf5d2b2de2dcef8e4862e178192941b1763843dd4bd",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "python_rng": "e5e6e81bd8198b34d5dca6e3e18cdc725ebb844f88d195c6b772073453131d8b",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mismatches": [
+          "model",
+          "optimizer"
+        ]
+      },
+      {
+        "worker": "g0_B2.jsonl",
+        "step": 15,
+        "hashes": {
+          "model": "6edcc434b87a32f5af0fe1561030e03db0c548230a4563de4d9258d501ab88b0",
+          "optimizer": "c365ffc68af77a1506c031cbde706e720c158a7479aa93ddac4818f08aca55b9",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "3c0629bf320a529a1b9791b6086438f713a1759a091c44dcb93978dc4fae4fc4",
+          "cuda_rng": "4906f01415e405146a5912264ff19da3fa0552f51217211a6d2f7f35bda85201",
+          "python_rng": "a2d98ffd6232d673abe23648890dbd3b026bb2d1b2a9baf96806bae0ec1e4619",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "expected": {
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "3c0629bf320a529a1b9791b6086438f713a1759a091c44dcb93978dc4fae4fc4",
+          "cuda_rng": "4906f01415e405146a5912264ff19da3fa0552f51217211a6d2f7f35bda85201",
+          "model": "665107a4e798d32f57c648df5c32a702d0bec977a30e39dfe0c65f07987ccbd9",
+          "optimizer": "34bc2a891e95c5e5dad6a859f9ef55a8b42655c718d69e2fdb5e111e5ca4604c",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "python_rng": "a2d98ffd6232d673abe23648890dbd3b026bb2d1b2a9baf96806bae0ec1e4619",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mismatches": [
+          "model",
+          "optimizer"
+        ]
+      },
+      {
+        "worker": "g0_E3.jsonl",
+        "step": 15,
+        "hashes": {
+          "model": "d8047eafa7dbdc4b89c130b07e92a8e944dbe23b1625c72384d11bebd2756339",
+          "optimizer": "45b219b9f2a2a68a601c31bd6d5345fe07154747ed50e22d182c1eb4b1fadbf7",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "7fbc4430089785e550c2202c66c9be43bde4818d0152d44155e3e64e008153de",
+          "cuda_rng": "2d661973f4c932021eefe2846b93d0976f09a3ff0065f26c521d07768c7ade02",
+          "python_rng": "2b6f4f08393e9fe4e0d16c563aa6d1c6f8f779f32fd243eeacdb20a3102d171d",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "expected": {
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "7fbc4430089785e550c2202c66c9be43bde4818d0152d44155e3e64e008153de",
+          "cuda_rng": "2d661973f4c932021eefe2846b93d0976f09a3ff0065f26c521d07768c7ade02",
+          "model": "c31a49323979dbf465fbdd5eb3e48455b5fc49d62146d0d284f8c0c2042f2ac7",
+          "optimizer": "809219a0067c56d43131fcbf3573d0fa576b18921cc02b9f2e173465264d4fd4",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "python_rng": "2b6f4f08393e9fe4e0d16c563aa6d1c6f8f779f32fd243eeacdb20a3102d171d",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mismatches": [
+          "model",
+          "optimizer"
+        ]
+      },
+      {
+        "worker": "g0_E0.jsonl",
+        "step": 15,
+        "hashes": {
+          "model": "6e116c7333f4bea7f76a789042abfaeef2672f0b53a6e734653a5b7794dcc2d6",
+          "optimizer": "a62fec8b58744949a4cb92cacee431d009798a2f7663d94c3b4b0b0b3df59eda",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "eabee909209ec781ee55c8d0f1ec48f542aef41555e21119d696122d21f64824",
+          "cuda_rng": "93b88f14ebb89a8af15de4d7509d63ba70361859aa86ac7a5017f829803be797",
+          "python_rng": "406b20041b686bd44844313e876d3b5be0ad0ac28dec92fa9cfd6e9deda7cb59",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "expected": {
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "eabee909209ec781ee55c8d0f1ec48f542aef41555e21119d696122d21f64824",
+          "cuda_rng": "93b88f14ebb89a8af15de4d7509d63ba70361859aa86ac7a5017f829803be797",
+          "model": "dc5bb585bd7d8b19a03515c17a3edbb526972eb3af45a20109a8081666418d7c",
+          "optimizer": "e6f6b6afd58ba8cd0959051687cd2e1400325953ed1b395a0a5f350b7e8aae99",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "python_rng": "406b20041b686bd44844313e876d3b5be0ad0ac28dec92fa9cfd6e9deda7cb59",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mismatches": [
+          "model",
+          "optimizer"
+        ]
+      },
+      {
+        "worker": "g0_B3.jsonl",
+        "step": 15,
+        "hashes": {
+          "model": "d8047eafa7dbdc4b89c130b07e92a8e944dbe23b1625c72384d11bebd2756339",
+          "optimizer": "45b219b9f2a2a68a601c31bd6d5345fe07154747ed50e22d182c1eb4b1fadbf7",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "7fbc4430089785e550c2202c66c9be43bde4818d0152d44155e3e64e008153de",
+          "cuda_rng": "2d661973f4c932021eefe2846b93d0976f09a3ff0065f26c521d07768c7ade02",
+          "python_rng": "2b6f4f08393e9fe4e0d16c563aa6d1c6f8f779f32fd243eeacdb20a3102d171d",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "expected": {
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "7fbc4430089785e550c2202c66c9be43bde4818d0152d44155e3e64e008153de",
+          "cuda_rng": "2d661973f4c932021eefe2846b93d0976f09a3ff0065f26c521d07768c7ade02",
+          "model": "c31a49323979dbf465fbdd5eb3e48455b5fc49d62146d0d284f8c0c2042f2ac7",
+          "optimizer": "809219a0067c56d43131fcbf3573d0fa576b18921cc02b9f2e173465264d4fd4",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "python_rng": "2b6f4f08393e9fe4e0d16c563aa6d1c6f8f779f32fd243eeacdb20a3102d171d",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mismatches": [
+          "model",
+          "optimizer"
+        ]
+      },
+      {
+        "worker": "g0_B1.jsonl",
+        "step": 15,
+        "hashes": {
+          "model": "fc1b92e2d4b0e29a458500cf6baae27ec3cc315e2691384fa02cc6a075fb10a2",
+          "optimizer": "b725ef6099620b512b2077ecf0427c1700995f1c21109f5cee69a9fd4d2afa36",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "8702ddaa8954d6b436e0cb70eed4c01592d3c96c195385b3cb114d8014d494b8",
+          "cuda_rng": "c3bdb0a0950c21a91e8a3a8ffa76835df66b55445453c5469fff08d01bbb6add",
+          "python_rng": "1b0e6ccd396dcde511a5ad3cf451b3f12a1184db4c2d88c9495fe853652cdc8f",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "expected": {
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "8702ddaa8954d6b436e0cb70eed4c01592d3c96c195385b3cb114d8014d494b8",
+          "cuda_rng": "c3bdb0a0950c21a91e8a3a8ffa76835df66b55445453c5469fff08d01bbb6add",
+          "model": "928a99c4731b374793191e8c587a355c65cf6d99c636958eb1e4334151db4ae7",
+          "optimizer": "1a94fe9a31af94a5fb649f8f4889e8e647ad953c4d9b5bfb3c47a58f27cf9a3f",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "python_rng": "1b0e6ccd396dcde511a5ad3cf451b3f12a1184db4c2d88c9495fe853652cdc8f",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mismatches": [
+          "model",
+          "optimizer"
+        ]
+      },
+      {
+        "worker": "g0_E1.jsonl",
+        "step": 15,
+        "hashes": {
+          "model": "fc1b92e2d4b0e29a458500cf6baae27ec3cc315e2691384fa02cc6a075fb10a2",
+          "optimizer": "b725ef6099620b512b2077ecf0427c1700995f1c21109f5cee69a9fd4d2afa36",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "8702ddaa8954d6b436e0cb70eed4c01592d3c96c195385b3cb114d8014d494b8",
+          "cuda_rng": "c3bdb0a0950c21a91e8a3a8ffa76835df66b55445453c5469fff08d01bbb6add",
+          "python_rng": "1b0e6ccd396dcde511a5ad3cf451b3f12a1184db4c2d88c9495fe853652cdc8f",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "expected": {
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "8702ddaa8954d6b436e0cb70eed4c01592d3c96c195385b3cb114d8014d494b8",
+          "cuda_rng": "c3bdb0a0950c21a91e8a3a8ffa76835df66b55445453c5469fff08d01bbb6add",
+          "model": "928a99c4731b374793191e8c587a355c65cf6d99c636958eb1e4334151db4ae7",
+          "optimizer": "1a94fe9a31af94a5fb649f8f4889e8e647ad953c4d9b5bfb3c47a58f27cf9a3f",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "python_rng": "1b0e6ccd396dcde511a5ad3cf451b3f12a1184db4c2d88c9495fe853652cdc8f",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mismatches": [
+          "model",
+          "optimizer"
+        ]
+      },
+      {
+        "worker": "g0_D3.jsonl",
+        "step": 15,
+        "hashes": {
+          "model": "a1ba27fd9777a5a49979cef6833ad2385143cb4a20342f9153aa64dffe291350",
+          "optimizer": "ca3068aeb3e1cea044983bb3d10ccd04de2f2bccc99beef2b177189a04ab20ca",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "f82d56e53df72f3108c831ef95f1f248acfd601da5d56db4977bfabc9a4674b4",
+          "cuda_rng": "3b1462961fe7692fd323d6a2b5c3854d820de7a6c5f32e7b355a9d9e594743f6",
+          "python_rng": "e5e6e81bd8198b34d5dca6e3e18cdc725ebb844f88d195c6b772073453131d8b",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "expected": {
+          "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+          "cpu_rng": "f82d56e53df72f3108c831ef95f1f248acfd601da5d56db4977bfabc9a4674b4",
+          "cuda_rng": "3b1462961fe7692fd323d6a2b5c3854d820de7a6c5f32e7b355a9d9e594743f6",
+          "model": "301c2e8e79010ff57ef92bfda10397f28317a19b64d5609b337f6ea87efc0d05",
+          "optimizer": "62d60ec7f6754c31ced05bf5d2b2de2dcef8e4862e178192941b1763843dd4bd",
+          "progress": "d6ad95499ed4fe52c316257092014126abba19caee658c6daafb57be0b983f73",
+          "python_rng": "e5e6e81bd8198b34d5dca6e3e18cdc725ebb844f88d195c6b772073453131d8b",
+          "scheduler": "2e4f41a97a3037b21798735c8a21e613737aaa858810c5337793137c3f99cf9d",
+          "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mismatches": [
+          "model",
+          "optimizer"
+        ]
+      }
+    ],
+    "raw_sha256": {
+      "g0_C0.jsonl": "ba99b67a38c05ce4ed2a650537cb44fcda89eaaf3a9fa6a7002ea08f3e219609",
+      "g0_D2.jsonl": "26fbdad81945e9da96eb7bbde43cfa032de35a69d7b8de231cb1e95c27562ef1",
+      "g0_C2.jsonl": "f6a6d83012e5c058a6e937c5a33807591506b0ba308d96c63def7ce61e68221a",
+      "g0_A0.jsonl": "7f476d0e3707b80e1195ea26bea8f409f8a9064589437a4c08e5a53231fa1b7c",
+      "g0_A1.jsonl": "abf83b31913d11028706c6c05b7e477de2b1f33ca6d4e91ef4ad4b0a4b44097f",
+      "g0_D1.jsonl": "3e853d73c546558b448a0fc423933779e2adc4a3e01038b0c17e908e591093fb",
+      "g0_B0.jsonl": "743d901fab39d64d490b6e917da692d660b96892f44e9e729c30896b0b525bf7",
+      "g0_A2.jsonl": "2ce62f657a31439def4d16243fd834c85d3746f7ae7138dde1cb7655ee6b6201",
+      "g0_D0.jsonl": "1c37578f9ba2d3df4a5ff0dbffc9b15ac93085d2bd315f806c415ae71ff7705d",
+      "g0_E2.jsonl": "f7fd25b504d8ecf86bc2f7957869adec956b0091b48a6eead2ce172c93cbcdc7",
+      "g0_C3.jsonl": "4c4dd13f8fb3ccb16a9e80a7fd33b8c1c1dbe9084e204b4633d4d93b8d35b2a4",
+      "g0_A3.jsonl": "75e949ce55252d3b165d02c5617ad2f8cdd7e50977d4ad202ae77eee506c557f",
+      "g0_B2.jsonl": "f783307c2f5865920e782b0c6a167ff154eaea381134c89fddb2fdd7edb0f085",
+      "g0_E3.jsonl": "8391a2456a1c89d0fb2b3431f4086e54d10a478cc39b738ddc7d4737f3be78d6",
+      "g0_E0.jsonl": "05aff059e405a771660c7d6a19da9ec10358a9b3186968687d27b2462151c1e3",
+      "g0_B3.jsonl": "91b7ad740b3f3d73c1bb24d7092bf2c2309e6b882b6793e4aaf6ce84800f4f92",
+      "g0_C1.jsonl": "3a0f18a610309b3e7575938aae05e60a371fb2b48117f75bd7439d00ad78624e",
+      "g0_B1.jsonl": "cf53ee47cb8e2b49378494bc2d78cb163eabcdfd70a927b3c4a08b192e74bb0f",
+      "g0_E1.jsonl": "180a07db59d80cae102d4aa6fbe2d32138e87cba5b922b1d31a449f4dafcab11",
+      "g0_D3.jsonl": "1c95c245cc90b6ce403aa60a92164770bec6e0ad222118f264b158fa84ed850e"
+    },
+    "source_sha256": {
+      "shift_full/compat.py": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76",
+      "shift_full/planned_state.py": "2911ef24a2f5e7cb08e98d05b3397bf54afe6d4353194f1d0a02dc8e3ef6dede",
+      "shift_full/reference_audit.py": "7e489ee2d66a4a8fc9168e7de2ce915ee956f1daeb7c846fbceb0fede09a49ce",
+      "shift_full/state_digest.py": "fe2e8a941bef9dfe4b93c71c29c6245e609215fd7d12ac3d9891004f0b7d26b3",
+      "shift_full/state_inventory.py": "0eaa472d689bc83564e4d48c524ad5744297b227fb14e8fbb2575ef379edbe51",
+      "shift_full/train.py": "fe1c1b26ee9e8ed8d68407f07485ead7907c361dcb50a96e55e71ae7000cbfb3",
+      "shift_full/training_core.py": "1b86532baca5a7115092c9591473f17ce463e9c54d3f1f951ce38ff937b86405",
+      "shift_full/transport.py": "b03464786a4f8f6b8814f002b4649c1fb9a77e0985387e92e0f1ad17cee611e7",
+      "shift_full/v4_groups.py": "3ddd9c9d1499b23cb67b344f14cc5d52b4ca9ed06530d43378008624c71e36ad",
+      "shift_full/v4_metadata.py": "27ae20fa5a1c3c266ce649e7d6ef3c88bbd8b0565fcfeef02bbc7e16af7bf3a9",
+      "shift_full/v4_outer.py": "e97a006188c6e630cb7ebdfa73eb30c9b0146ed99a8473b6ad49fd8c1011ad2f",
+      "shift_full/v4_protocol.py": "1c37d3b3fa65fd921620a2bd1034399e2c5dc3392d48dfbbc8c4e2a6399d89ad",
+      "shift_full/v4_reference.py": "d05c09478dcfbd5ef87eed011de3ede6b29e187a6f2b48abe7b68dbe8ec15081",
+      "shift_full/v4_state.py": "537c98690b3905145bd01b9121b0cc1357666da560135c3197ccb42f90973aa3",
+      "shift_full/v4_train.py": "c78ac26ff3abbc36a484b6e9166f82a58cc43b512fbba6febaf9a11a54d14600",
+      "shift_full/v4_transaction.py": "6bd6d8292f5f653a1cd91549d22164c01d696aa21ae77499f9689f09099ea121",
+      "shift_full/v4_transaction_train.py": "08636b3f3230aec5521462cb069793320c70ccd8bb3ffeefa83bf943c5b0c4f6"
+    }
+  }
+]

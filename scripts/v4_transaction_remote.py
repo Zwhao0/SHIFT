@@ -29,7 +29,7 @@ def main(a):
     eps=endpoints_from_env();roles=dict(A=eps['node0'],B=eps['node1'],C=eps['node3'],D=eps['node0'],E=eps['node1'])
     if a.unified:roles.update(B=eps['node0'],D=eps['node1'])
     sources=training_sources(ROOT)
-    report=dict(role_hosts={r:e.physical_node for r,e in roles.items()},unified=a.unified, performance_no_audit=a.performance_no_audit, seed=a.seed, initialization_seed=2026 if a.unified else a.seed, data='random' if a.unified else 'pattern', name=name,transactional_switch=True,overlap_peer=True,outer_manager=True,outer_audit=not a.performance_no_audit,
+    report=dict(boundary_validation=a.boundary_validation,digest_engine=a.digest_engine,final_reference_run=a.final_reference_run,role_hosts={r:e.physical_node for r,e in roles.items()},unified=a.unified, performance_no_audit=a.performance_no_audit, seed=a.seed, initialization_seed=2026 if a.unified else a.seed, data='random' if a.unified else 'pattern', name=name,transactional_switch=True,overlap_peer=True,outer_manager=True,outer_audit=not a.performance_no_audit,
         retain_outer_managers=True,oracle=not a.no_oracle,reference_run=a.reference_run,
         cycles=a.cycles,between_steps=a.between_steps,cross_node_tp=a.cross_node_tp,plan=vars(Plan(cut=a.cut,post_steps=a.post_steps,seq_len=a.seq_len,microbatches=2 if a.unified else 4)),
         outer_timeout=a.outer_timeout,fail_restore_rank=a.fail_restore_rank,stall_restore_rank=a.stall_restore_rank,
@@ -59,7 +59,7 @@ def main(a):
         command=['systemd-run','--quiet','--collect','--unit='+unit,'--property=RuntimeMaxSec='+str(a.seconds),
             '--property=KillMode=control-group','--property=TimeoutStopSec=15','--working-directory='+str(ROOT),
             '--property=StandardOutput=append:'+str(out/(label+'.host.log')),'--property=StandardError=inherit']
-        env=dict(PYTHONPATH=str(ROOT)+':/workspace/FLASH1022',PYTHONDONTWRITEBYTECODE='1',PYTHONUNBUFFERED='1',
+        env=dict(SHIFT_DIGEST_ENGINE=a.digest_engine,PYTHONPATH=str(ROOT)+':/workspace/FLASH1022',PYTHONDONTWRITEBYTECODE='1',PYTHONUNBUFFERED='1',
             OMP_NUM_THREADS='1',OPENBLAS_NUM_THREADS='1',MALLOC_ARENA_MAX='2',TOKIO_WORKER_THREADS='2',
             CPATH=str(ROOT/'runtime/python-headers'),CUDA_VISIBLE_DEVICES='4,5,6,7' if actor_role in (('B','E') if a.unified else ('D','E')) else '0,1,2,3',
             CUDA_DEVICE_MAX_CONNECTIONS='1',NCCL_MAX_CTAS='4',NCCL_BUFFSIZE='1048576',NCCL_CUMEM_HOST_ENABLE='0',NCCL_CUMEM_ENABLE='0',
@@ -103,13 +103,17 @@ def main(a):
                 ['systemctl','show',unit,'--property=ActiveState','--property=ExecMainStatus']).splitlines() if '=' in line)
             if values.get('ActiveState')=='failed' or values.get('ExecMainStatus') not in (None,'0'):
                 raise RuntimeError('owned unit failed: '+unit)
+            if values.get('ActiveState') not in ('active','activating','deactivating'):
+                label=unit.removeprefix('shift-v4-'+a.suffix+'-')
+                if label not in actors or label in unfinished_actors(actors,rows):
+                    raise RuntimeError('owned unit exited without terminal proof: '+unit)
 
     save()
     try:
         for endpoint in eps.values():session.ensure_connection(endpoint)
         before=resources();(out/'resources_before.json').write_text(json.dumps(before,indent=2)+'\n')
         if any(len(v['company'])!=8 or v['extra_gpu'] for v in before.values()):raise RuntimeError('SHIFT resources are not idle')
-        base=dict(directory=str(out),flash='/workspace/FLASH1022',hosts={r:e.ip for r,e in roles.items()},port=32750,
+        base=dict(boundary_validation=a.boundary_validation,directory=str(out),flash='/workspace/FLASH1022',hosts={r:e.ip for r,e in roles.items()},port=32750,
             timeout=120,seconds=a.seconds,slow_ms=a.slow_ms,slow_start_step=a.candidate_request_step or a.cut-1,seed=2026 if a.unified else a.seed, unified=a.unified, data='random' if a.unified else 'pattern', performance_no_audit=a.performance_no_audit,plan=report['plan'],oracle=report['oracle'],
             reference_only=False,reference_run=a.reference_run,outer_manager=True,outer_audit=not a.performance_no_audit,
             outer_timeout=a.outer_timeout,retain_outer_managers=True,overlap_peer=True,transactional_switch=True,
@@ -119,21 +123,21 @@ def main(a):
             cycles=a.cycles,between_steps=a.between_steps,fail_restore_rank=a.fail_restore_rank,
             stall_restore_rank=a.stall_restore_rank,cancel_round=a.cancel_round,restore_deadline=a.restore_deadline,
             fault_round=a.fault_round,source_stall_round=a.source_stall_round,source_deadline=a.source_deadline,initial_round=0,source_role='B',target_role='C')
-        if a.reference_run:
+        if a.reference_run or a.final_reference_run:
             from scripts.verify_v4_reference import verify
-            refpath=ROOT/'results'/('v4_'+a.reference_run)/'reference_signatures.json'
+            refpath=ROOT/'results'/('v4_'+(a.reference_run or a.final_reference_run))/'reference_signatures.json'
             report['reference_audit']=verify(refpath.parent)
             if not report['reference_audit']['pass_all']:raise ValueError(report['reference_audit']['errors'])
-            reference=json.loads(refpath.read_text());validate_compatibility(reference,base,sources)
-            report['reference_sha256']=hashlib.sha256(refpath.read_bytes()).hexdigest()
-            base['reference_file']=str(out/'reference_signatures.json')
+            reference=json.loads(refpath.read_text());validate_compatibility(reference,base,sources,final_only=bool(a.final_reference_run))
+            report['final_reference_sha256' if a.final_reference_run else 'reference_sha256']=hashlib.sha256(refpath.read_bytes()).hexdigest()
+            base['final_reference_file' if a.final_reference_run else 'reference_file']=str(out/('final_reference_signatures.json' if a.final_reference_run else 'reference_signatures.json'))
             for endpoint in eps.values():
                 temporary='/tmp/shift-v4-'+a.suffix+'-reference.json'
                 subprocess.run(['scp','-q','-o','ControlPath='+str(ROOT/'tmp'/endpoint.socket),
                     str(refpath),'test@'+endpoint.ip+':'+temporary],capture_output=True,timeout=30,check=True)
                 run(endpoint,'from pathlib import Path;import hashlib;p=Path('+repr(temporary)+');data=p.read_bytes();'
-                    'assert hashlib.sha256(data).hexdigest()=='+repr(report['reference_sha256'])+';'
-                    'dest=Path('+repr(base['reference_file'])+');dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(data);p.unlink()')
+                    'assert hashlib.sha256(data).hexdigest()=='+repr(report['final_reference_sha256' if a.final_reference_run else 'reference_sha256'])+';'
+                    'dest=Path('+repr(base['final_reference_file' if a.final_reference_run else 'reference_file'])+');dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(data);p.unlink()')
         for endpoint in eps.values():
             run(endpoint,'from pathlib import Path;p=Path('+repr(str(out))+');p.mkdir(parents=True,exist_ok=True)')
         service_config=ROOT/'runtime/v3-reproduce'/f'{name}.json'

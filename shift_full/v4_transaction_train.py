@@ -14,14 +14,22 @@ def run(context):
     role,rank,device,replica=s.role,s.rank,s.device,s.replica
     first=c.get('initial_round',0);cycles=c['cycles'];epoch=first
     source=c.get('source_role','B');target=c.get('target_role','C')
-    candidate=role==target
-    gate=OwnerGate(first,source);outer=None;groups=s.groups
+    from .v4_state import boundary_validation,boundary_descriptor,validate_candidate_state
+    mode=boundary_validation(c);audit=mode=='full'
+    def boundary_hashes(packet=None):
+        return (packet['hashes'] if packet is not None else s.hashes()) if audit else None
+    candidate=not replica and role==target
+    gate=s.ownership if getattr(s,'session_protocol',False) else OwnerGate(first,source)
+    outer=getattr(s,'outer',None);groups=s.groups
+    outer_factory=getattr(s,'outer_factory',None)
     identity=s.identity_preserved
     def bind(**kwargs):s.configure_runtime(**kwargs)
     bind(ownership_value=gate,role_value='A' if replica else role)
     if not candidate:
         from .v4_outer import Outer
-        saved=s.rng();outer=Outer(c,replica,rank,first,s.event);s.restore_rng(saved)
+        saved=s.rng()
+        if outer is None:outer=(outer_factory or Outer)(c,replica,rank,first,s.event)
+        s.restore_rng(saved)
         bind(outer_value=outer)
         if s.independent_reference:
             from .v4_reference import compare_signature
@@ -36,6 +44,7 @@ def run(context):
             self.kind=kind
             self.pg=None;self.error=None;self.thread=None
         def prepare(self):
+            started=time.monotonic()
             pg=None
             try:
                 torch.cuda.set_device(device)
@@ -51,7 +60,7 @@ def run(context):
                     stream.synchronize()
                     if value.item()!=2:raise RuntimeError('candidate channel warmup mismatch')
                 self.pg=pg
-                s.event('switch_channel_prepared',round=self.round_id,epoch=self.round_id+1)
+                s.event('switch_channel_prepared',round=self.round_id,epoch=self.round_id+1,seconds=time.monotonic()-started)
                 if self.is_source:self.store.set(f'{self.kind}_channel_ready/{device}','1')
                 else:self.store.wait([f'{self.kind}_channel_ready/{device}'])
             except BaseException as error:
@@ -78,7 +87,7 @@ def run(context):
                 else:packet=transport.recv_checkpoint(0,transport.metadata(),cut,s.timeout)
                 s.event('state_sent' if self.is_source else 'state_received',round=self.round_id,
                     packet_source=self.kind,
-                    step=cut,hashes=packet['hashes'],oracle_hashes=None,transport='packed_gpu',
+                    step=cut,hashes=boundary_hashes(packet),oracle_hashes=None,transport='packed_gpu',
                     bytes=stats['gpu_bytes']+stats['control_bytes'],
                     **{k:stats[k] for k in ('gpu_bytes','control_bytes','cpu_tensor_bytes')})
                 return packet
@@ -88,11 +97,14 @@ def run(context):
         try:
             while not control.check(['packet_source']):time.sleep(.02)
             if control.get('packet_source')!=b'peer':return
-            expected=json.loads(control.get(f'source_hashes/{rank}'))
-            if packet['hashes']!=expected:
+            expected=json.loads(control.get(f'source_descriptor/{rank}'))
+            if boundary_descriptor(packet)!=expected:
+                raise RuntimeError('peer checkpoint version differs from the frozen source')
+            expected_hashes=json.loads(control.get(f'source_hashes/{rank}')) if audit else None
+            if audit and packet['hashes']!=expected_hashes:
                 raise RuntimeError('peer checkpoint differs from the frozen logical source state')
             s.event('peer_state_authorized',round=round_id,step=packet['step'],
-                hashes=packet['hashes'],expected_hashes=expected)
+                hashes=boundary_hashes(packet),expected_hashes=expected_hashes,version_checked=True)
             relay=Channel(control,round_id,True,kind='peer');relay.prepare();relay.transfer(packet)
         except BaseException as error:
             control.set('recovery_error',type(error).__name__)
@@ -108,10 +120,10 @@ def run(context):
             requested=c['plan']['cut'] if not candidate else None
         else:
             source=json.loads(store.get('placement'))['source'];target='C' if source=='B' else 'B'
-            candidate=role==target
+            candidate=not replica and role==target
             requested=s.progress['updates']
         channel=None
-        if role in (source,target):
+        if not replica and role in (source,target):
             channel=Channel(store,round_id,role==source)
             if role==source:channel.start()
 
@@ -134,16 +146,18 @@ def run(context):
             if rank==0 and not replica:store.set('actual_cut',str(cut))
             s.event('boundary_selected',round=round_id,epoch=epoch,step=cut,requested_cut=requested)
             anchor=s.snapshot();anchor.update(v4_epoch=next_epoch,v4_owner=target,switch_round=round_id)
-            if role==source:store.set(f'source_hashes/{rank}',json.dumps(anchor['hashes']))
+            if role==source:
+                store.set(f'source_descriptor/{rank}',json.dumps(boundary_descriptor(anchor)))
+                if audit:store.set(f'source_hashes/{rank}',json.dumps(anchor['hashes']))
             boundary_outer=outer.identity();boundary_training=s.training_identity()
-            s.event('freeze',round=round_id,step=cut,hashes=s.hashes(),identity_preserved=identity())
+            s.event('freeze',round=round_id,step=cut,hashes=boundary_hashes(),identity_preserved=identity())
             s.event('outer_retention_boundary',round=round_id,step=cut,identity=boundary_outer,
                 training_identity=boundary_training,manager_state=outer.state_dict())
             store.set(f'frozen/{replica}/{rank}','1')
             gate.fence()
             if replica:
                 relay_thread=None
-                if role=='E':
+                if rank in c.get('affected_ranks',range(4,8)):
                     relay_thread=threading.Thread(target=serve_peer,args=(anchor,store,round_id),daemon=True)
                     relay_thread.start()
                 outer.migrate(next_epoch);s.restore_rng(anchor)
@@ -152,7 +166,7 @@ def run(context):
                     training_identity=s.training_identity(),manager_state=outer.state_dict(),
                     channel_reconnected=rank in c.get('affected_ranks',range(4,8)))
                 s.event('peer_inner_groups_retained',round=round_id,identity_preserved=True)
-                s.event('peer_compute_ready',round=round_id,step=cut,hashes=s.hashes(),identity_preserved=identity())
+                s.event('peer_compute_ready',round=round_id,step=cut,hashes=boundary_hashes(),identity_preserved=identity())
                 store.set(f'active/{replica}/{rank}','1')
                 del anchor;gc.collect();torch.cuda.empty_cache()
                 s.train(next_epoch,segment,'after')
@@ -205,7 +219,7 @@ def run(context):
                 channel=Channel(store,round_id,False,kind='peer');channel.prepare()
             anchor=channel.transfer()
             from .planned_state import validate_state
-            validate_state(anchor,rank=rank,step=cut,audit=True)
+            validate_state(anchor,rank=rank,step=cut,audit=audit)
             if not anchor['optimizer'].get('state'):raise ValueError('candidate needs complete Adam state')
             if anchor.get('v4_epoch')!=next_epoch or anchor.get('v4_owner')!=role:
                 raise ValueError('stale candidate boundary')
@@ -213,23 +227,32 @@ def run(context):
                 s.event('candidate_restore_stalled',round=round_id,step=cut)
                 while not store.check(['decision']):time.sleep(.05)
             if not store.check(['decision']):
-                actual=s.hashes()
+                actual=s.hashes() if audit else None
+                readiness=None
                 try:
+                    structure_started=time.monotonic()
+                    validate_candidate_state(anchor,rank=rank,cut=cut,epoch=next_epoch,target=role,
+                        round_id=round_id,source_replica=1 if packet_source=='peer' else 0,
+                        stage=s.stage,optimizer=s.optimizer,scheduler=s.scheduler,rng=s.rng(),progress=s.progress,
+                        fixed_replicas=not c.get('unified_session',False))
+                    s.event('candidate_structure_validated',step=cut,seconds=time.monotonic()-structure_started)
                     s.restore(anchor)
                     if c.get('fail_restore_rank',-1)==rank and round_id==c.get('fault_round',0):
                         with torch.no_grad():next(s.stage.parameters()).add_(.125)
-                    actual=s.hashes();valid=actual==anchor['hashes']
+                    actual=s.hashes() if audit else None
+                    valid=actual==anchor['hashes'] if audit else True
+                    if valid:readiness=dict(schema=1,epoch=next_epoch,rank=rank,cut=cut,target=role,restored=True)
                     reason=None if valid else 'complete state signature mismatch'
                 except BaseException as error:
                     valid=False;reason=type(error).__name__+': '+str(error)
                 store.set(f'candidate/{device}',json.dumps(dict(rank=rank,actual=actual,
-                    expected=anchor['hashes'],valid=valid,reason=reason)))
+                    expected=boundary_hashes(anchor),valid=valid,reason=reason,readiness=readiness)))
                 s.event('candidate_validated' if valid else 'candidate_rejected',round=round_id,
-                    step=cut,hashes=actual,expected_hashes=anchor['hashes'],reason=reason)
+                    step=cut,hashes=actual,expected_hashes=boundary_hashes(anchor),reason=reason,readiness=readiness)
 
         if role=='A' and rank==0:
             ranks=tuple(c.get('affected_ranks',range(4,8)))
-            tx=Transaction(next_epoch,source,target,cut,ranks)
+            tx=Transaction(next_epoch,source,target,cut,ranks,validation=mode)
             deadline=time.monotonic()+c['restore_deadline']
             while not store.check([f'candidate/{i}' for i in range(4)]):
                 if store.check(['recovery_error']):raise RuntimeError('peer could not supply the committed source state')
@@ -239,7 +262,8 @@ def run(context):
             if not timed_out:
                 for i in range(4):
                     result=json.loads(store.get(f'candidate/{i}'))
-                    tx.candidate(next_epoch,result['rank'],result['actual'] if result['valid'] else {},result['expected'])
+                    if audit:tx.candidate(next_epoch,result['rank'],result['actual'] if result['valid'] else {},result['expected'])
+                    else:tx.ready(next_epoch,result['rank'],result['readiness'] if result['valid'] else None)
             decision=tx.decide(cancel=timed_out or c.get('cancel_round',-1)==round_id)
             recovered_source=store.get('packet_source')==b'peer'
             if recovered_source and decision!='replace':raise RuntimeError('lost source has no validated replacement')
@@ -247,7 +271,7 @@ def run(context):
             store.set('decision',json.dumps(dict(decision=decision,owner=selected,epoch=next_epoch,
                 cut=cut,timeout=timed_out,source_recovery=recovered_source)))
             s.event('switch_decision',round=round_id,step=cut,decision=decision,owner=selected,
-                epoch=next_epoch,timeout=timed_out,candidate_results=tx.results,source_recovery=recovered_source)
+                epoch=next_epoch,timeout=timed_out,candidate_results=tx.results,source_recovery=recovered_source,validation=mode)
             if recovered_source:
                 # Decision metadata is immutable; annotate the selected recovery source before admission.
                 store.set('source_recovered','1')
@@ -272,7 +296,7 @@ def run(context):
             store.wait(['activated'])
             if s.local_cache:
                 counts=s.local_cache.finish();s.event('source_local_groups_closed',round=round_id,**counts)
-            s.event('retired',round=round_id,step=cut);s.log.close();return
+            s.event('retired',round=round_id,step=cut);s.log.close();return dict(retired=True)
 
         old=(s.metadata_handles['tp'] if candidate and s.metadata_handles else s.state.get_tensor_model_parallel_group(),
              groups[0],groups[2],groups[1])
@@ -289,18 +313,19 @@ def run(context):
         else:s.event('inner_groups_retained_after_cancel',round=round_id,step=cut)
         if candidate:
             from .v4_outer import Outer
-            outer=Outer(c,replica,rank,next_epoch,s.event);outer.load_state_dict(anchor['outer_manager'])
+            outer=(outer_factory or Outer)(c,replica,rank,next_epoch,s.event);outer.load_state_dict(anchor['outer_manager'])
             bind(outer_value=outer)
         else:outer.migrate(next_epoch)
         s.restore_rng(anchor)
-        validated_hashes=s.hashes()
-        if validated_hashes!=anchor['hashes'] or not identity():raise RuntimeError('switch changed committed state')
+        validated_hashes=boundary_hashes()
+        if (audit and validated_hashes!=anchor['hashes']) or not identity():raise RuntimeError('switch changed committed state')
         if not candidate and s.training_identity()!=boundary_training:raise RuntimeError('retained Adam/storage identity changed')
         gate.advance(next_epoch,selected);epoch=next_epoch
         s.event('outer_retained' if not candidate else 'candidate_activated',round=round_id,step=cut,
             epoch=epoch,decision=outcome['decision'],owner=selected,hashes=validated_hashes,identity_preserved=identity(),
             identity=outer.identity(),training_identity=s.training_identity(),manager_state=outer.state_dict(),
-            channel_reconnected=rank in c.get('affected_ranks',range(4,8)))
+            channel_reconnected=rank in c.get('affected_ranks',range(4,8)),
+            readiness=dict(schema=1,epoch=next_epoch,rank=rank,cut=cut,target=selected,restored=True) if candidate else None)
         active=dict(round=round_id,epoch=epoch,step=cut,hashes=validated_hashes,identity_preserved=identity(),
             owner=selected,decision=outcome['decision'],
             peer_compute_started=store.check([f'peer_compute/{i}' for i in range(8)]),
@@ -313,3 +338,4 @@ def run(context):
         candidate=False
         s.train(epoch,segment,'after')
     s.finish()
+    return dict(outer=outer,groups=groups,gate=gate,epoch=epoch,owner=gate.owner)

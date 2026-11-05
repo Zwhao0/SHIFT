@@ -88,10 +88,12 @@ def build_signatures(rows, summary):
         source_sha256=summary['source_sha256'], workers=workers))
 
 
-def validate_compatibility(reference, config, sources):
+def validate_compatibility(reference, config, sources, *, final_only=False):
     validate_signatures(reference)
     expected_profile = training_profile(config)
     profile = reference.get('training_profile')
+    if final_only and isinstance(profile, Mapping):
+        expected_profile.update({k:profile.get(k) for k in ('outer_audit','performance_no_audit')})
     if (not isinstance(profile, Mapping) or set(profile) != set(expected_profile) or
         any(type(profile[key]) is not bool or profile[key] != value
             for key, value in expected_profile.items())):

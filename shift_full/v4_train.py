@@ -35,11 +35,11 @@ def main():
     if c.get('deterministic'):os.environ['CUBLAS_WORKSPACE_CONFIG']=':4096:8'
     out = Path(c['directory'])
     out.mkdir(parents=True, exist_ok=True)
-    actor_prefix=f"g{c.get('initial_round',0)}_" if c.get('transactional_switch') and not c.get('reference_only') else ''
+    actor_prefix=f"g{c.get('actor_generation',c.get('initial_round',0))}_" if c.get('transactional_switch') and not c.get('reference_only') else ''
     if a.role == 'host':
         children, logs = [], []
         try:
-            for device in range(4):
+            for device in range(c.get('actor_devices',4)):
                 log = (out / f'{actor_prefix}{a.host_role}{device}.log').open('wb')
                 logs.append(log)
                 children.append(subprocess.Popen([sys.executable, '-m', 'shift_full.v4_train', '--config', a.config,
@@ -63,6 +63,7 @@ def main():
                 log.close()
         return
 
+    worker_import_started=time.monotonic()
     import torch
     import torch.distributed as dist
     torch.set_num_threads(1)
@@ -72,7 +73,7 @@ def main():
     if a.role == 'store':
         outer_stores = [dist.TCPStore(c['hosts']['A'], c['port']+100+epoch*2+replica,
             None, True, timeout=timeout, wait_for_workers=False)
-            for epoch in range(1 if c.get('reference_only') or c.get('retain_outer_managers') else 2) for replica in range(2)] if c.get('outer_manager') else []
+            for epoch in range(c.get('session_services',1 if c.get('reference_only') or c.get('retain_outer_managers') else 2)) for replica in range(2)] if c.get('outer_manager') else []
         (out / 'store_ready').write_text(str(os.getpid()))
         until = time.monotonic() + c['seconds']
         while time.monotonic() < until and not (out / 'STOP_STORE').exists():
@@ -83,11 +84,18 @@ def main():
     if c.get('transactional_switch'):
         store=dist.PrefixStore(f"round/{c.get('initial_round',0)}/",base_store)
     role, device = a.role, a.device
-    initial_candidate=role==c.get('target_role','C')
-    replica = int(role in ('D','E'))
-    rank = Plan.logical_rank({'D':'A','E':'B'}.get(role,role), device, c.get('cross_node_tp',False))
+    initial_candidate=c.get('session_candidate',role==c.get('target_role','C'))
+    replica = c.get('session_replica',int(role in ('D','E')))
+    rank = device if c.get('candidate_full_dp') else Plan.logical_rank({'D':'A','E':'B'}.get(role,role), device, c.get('cross_node_tp',False))
     owner_role = 'A' if replica else role
     plan = Plan(**c['plan'])
+    from .v4_state import boundary_validation
+    boundary_mode=boundary_validation(c)
+    audit_boundary=boundary_mode=='full'
+    final_reference=None
+    if c.get('final_reference_file'):
+        from .v4_reference import validate_signatures
+        final_reference=validate_signatures(json.loads(Path(c['final_reference_file']).read_text()))
     independent_reference = None
     if c.get('reference_file'):
         from .v4_reference import validate_signatures
@@ -96,10 +104,11 @@ def main():
     log = (out / f'{actor_prefix}{role}{device}.jsonl').open('w', buffering=1)
     def event(kind, **fields):
         fields.setdefault('round',c.get('round_id',c.get('initial_round',0)))
-        fields.setdefault('actor_round',c.get('initial_round',0))
+        fields.setdefault('actor_round',c.get('actor_generation',c.get('initial_round',0)))
         log.write(json.dumps(dict(kind=kind, role=role, rank=rank, device=device,
                                  replica=replica, pid=os.getpid(), time=time.time(), monotonic=time.monotonic(), **fields)) + '\n')
 
+    event('worker_imported',seconds=time.monotonic()-worker_import_started)
     torch.cuda.set_device(device)
     torch.cuda.set_per_process_memory_fraction(.12, device)
     if c.get('deterministic'):torch.use_deterministic_algorithms(True)
@@ -135,12 +144,12 @@ def main():
         nonlocal local_handles
         started = time.monotonic()
         dist.init_process_group('nccl', store=dist.PrefixStore(f'v4/replica{replica}/{epoch}/', store),
-                                rank=device if local else rank, world_size=4 if local else 8, timeout=timeout)
+                                rank=device if local else rank, world_size=(8 if c.get('candidate_full_dp') else 4) if local else 8, timeout=timeout)
         directory = out / f'topology_{epoch}_{role}'
         directory.mkdir(exist_ok=True)
         with local_cache.creating(reuse=isinstance(epoch,int) and epoch>=1) if local_cache else nullcontext():
-            groups = megatron_adapter.initialize_groups(directory, 2, 1 if local else 2, 2)
-        assert state.get_pipeline_model_parallel_rank() == (0 if local else rank // 4)
+            groups = megatron_adapter.initialize_groups(directory, 2, 1 if local and not c.get('candidate_full_dp') else 2, 2)
+        assert state.get_pipeline_model_parallel_rank() == (0 if local and not c.get('candidate_full_dp') else rank // 4)
         assert dist.get_world_size(groups[0]) == 2
         assert dist.get_world_size(groups[1]) == 1
         assert dist.get_world_size(groups[2]) == 2
@@ -276,6 +285,7 @@ def main():
             state_channel = None
 
     # The joiner imports independently; its CPU model load starts while AB train.
+    preparation_started=time.monotonic()
     prepared_stage = None
     metadata_handles=None
     if initial_candidate:
@@ -299,12 +309,27 @@ def main():
         elif c.get('gpu_prepare'):
             local_groups = connect('standby', local=True)
             # Construct the eventual PP1 DDP bucket policy on the isolated C group.
-            state.set_pipeline_model_parallel_rank(1)
-            state.set_pipeline_model_parallel_world_size(2)
-            prepared_stage = build(full, local_groups, 1)
+            if not c.get('candidate_full_dp'):
+                state.set_pipeline_model_parallel_rank(1)
+                state.set_pipeline_model_parallel_world_size(2)
+            build_started=time.monotonic()
+            prepared_stage = build(full, local_groups, rank//4 if c.get('candidate_full_dp') else 1)
+            event('standby_stage_built',seconds=time.monotonic()-build_started)
             del full
             prepared_old = (state.get_tensor_model_parallel_group(),local_groups[0],local_groups[2],local_groups[1])
-            if c.get('gpu_warmup'):
+            if c.get('gpu_warmup') and c.get('candidate_full_dp'):
+                warm_stage,warm_ddp,warm_opt,warm_scheduler=prepared_stage
+                warm_batches=make_batches(sample_plan(0,replica=replica,local_data_rank=state.get_data_parallel_rank()),seq_len=plan.seq_len,vocab_size=warm_stage.hf_config.vocab_size)
+                warm_schedule=get_forward_backward_func()
+                warm_progress={'updates':0}
+                def warm_execute():
+                    return warm_schedule(forward_step_func=forward_step,data_iterator=iter(warm_batches),model=warm_ddp,num_microbatches=2,seq_length=plan.seq_len+warm_stage.extra_positions(1),micro_batch_size=1)
+                warm_step=train_step(warm_stage,warm_ddp,warm_opt,warm_scheduler,warm_progress,execute=warm_execute)
+                next(warm_step);complete_step(warm_step,True)
+                warm_opt.zero_grad(set_to_none=True);warm_ddp.zero_grad_buffer()
+                del warm_batches
+                event('standby_full_dp_warmed')
+            if c.get('gpu_warmup') and not c.get('candidate_full_dp'):
                 started = time.monotonic()
                 warm_stage, warm_ddp, warm_opt, _ = prepared_stage
                 warm_opt.zero_grad(set_to_none=True); warm_ddp.zero_grad_buffer()
@@ -369,14 +394,26 @@ def main():
     progress = {'updates': 0}
     outer = None
     training_state = TrainingState(stage, optimizer, scheduler, progress, tracker)
-    rng, restore_rng, hashes = training_state.rng, training_state.restore_rng, training_state.hashes
-    def snapshot():
+    rng, restore_rng = training_state.rng, training_state.restore_rng
+    final_audit_started=False
+    hash_calls=0
+    def hashes():
+        nonlocal hash_calls
+        if c.get('performance_no_audit') and not audit_boundary and not final_audit_started:
+            raise RuntimeError('development state hash entered the runtime timing window')
+        started=time.monotonic()
+        value=training_state.hashes();hash_calls+=1
+        event('state_hash',step=progress['updates'],seconds=time.monotonic()-started,
+              final_audit=final_audit_started,calls=hash_calls)
+        return value
+    def snapshot(*, audit=None):
+        if audit is None:audit=audit_boundary
         started = time.monotonic()
         torch.cuda.synchronize()
         value = tree_map(lambda t: t.detach().clone() if isinstance(t, torch.Tensor) else t,
             training_state.capture(source_replica=replica, source_rank=rank, v4_epoch=1, v4_owner='C',
                 outer_manager=outer.state_dict() if outer else None))
-        value['hashes'] = hashes()
+        value['hashes'] = hashes() if audit else {}
         torch.cuda.synchronize()
         event('snapshot_ready', step=progress['updates'], seconds=time.monotonic()-started,
               allocated=torch.cuda.memory_allocated())
@@ -386,11 +423,12 @@ def main():
         training_state.restore(value, clone_optimizer=True)
         optimizer.zero_grad(set_to_none=True); ddp.zero_grad_buffer()
         torch.cuda.synchronize()
-        actual = hashes()
-        if actual != value['hashes']:
+        actual = hashes() if audit_boundary else None
+        if audit_boundary and actual != value['hashes']:
             raise RuntimeError('complete state restoration mismatch: '+str([k for k in actual if actual[k]!=value['hashes'][k]]))
-        event('restored', step=progress['updates'], hashes_match=True, hashes=actual,
+        event('restored', step=progress['updates'], hashes_match=True if audit_boundary else None, hashes=actual,
               seconds=time.monotonic()-started)
+        return actual
     identity = dict(model=id(stage), optimizer=id(optimizer), ddp=id(ddp),
                     parameter_ids=[id(t) for t in stage.parameters()], pointers=[t.data_ptr() for t in stage.parameters()])
     def identity_preserved():
@@ -406,6 +444,7 @@ def main():
     reference_trajectory = {}
     trajectory_exact = []
     current_phase=None
+    session_runtime=None
     native_finish = ddp.finish_grad_sync
     def gradient_trace(point):
         if c.get('trace_step') != progress['updates']+1:return
@@ -414,6 +453,7 @@ def main():
         if point=='optimizer':fields['parameters']={n:digest(p.main_grad) for n,p in stage.named_parameters()}
         event('gradient_trace',step=progress['updates']+1,point=point,**fields)
     def finish_grad_sync():
+        if session_runtime is not None:return session_runtime.gradient_finalize(native_finish)
         native_finish()
         gradient_trace('native')
         if c.get('overlap_peer') and replica and current_phase=='after' and progress['updates']==plan.cut:
@@ -503,7 +543,18 @@ def main():
                 store.set('prepare', '1')
 
     def finish():
-        actual = snapshot()
+        nonlocal final_audit_started
+        if c.get('performance_no_audit'):
+            audit_store=dist.PrefixStore('v4-final-audit/',base_store)
+            event('final_audit_ready',step=progress['updates'])
+            audit_store.set(f'{replica}/{rank}',str(progress['updates']))
+            keys=[f'{r}/{i}' for r in range(2) for i in range(8)]
+            audit_store.wait(keys)
+            if any(int(audit_store.get(k))!=progress['updates'] for k in keys):
+                raise RuntimeError('final audit requires a common completed window')
+            event('final_audit_begin',step=progress['updates'])
+        final_audit_started=True
+        actual = snapshot(audit=True)
         comparison = None
         if oracle is not None:
             comparison = dict(exact={k: actual['hashes'][k] == oracle['hashes'][k] for k in actual['hashes']}, tensors={})
@@ -534,23 +585,35 @@ def main():
                 trajectory_exact=len(trajectory_exact)==progress['updates']-comparison_start_step and all(trajectory_exact),
                 manager_exact=actual['outer_manager']==expected['outer_manager'],tensors={},
                 method='independent_nine_state_sha256')
+        if final_reference:
+            expected=final_reference['workers'][f'{replica}/{rank}'].get(str(progress['updates']))
+            if expected is None or actual['hashes']!=expected['hashes'] or actual['outer_manager']!=expected['outer_manager']:
+                raise RuntimeError('independent final state mismatch')
+            event('final_reference_comparison',step=progress['updates'],exact=True,hashes=actual['hashes'])
         event('done', step=progress['updates'], comparison=comparison,
-              identity_preserved=identity_preserved(), hashes=actual['hashes'])
+              identity_preserved=identity_preserved(), hashes=actual['hashes'],state_hash_calls=hash_calls)
         if outer:
             outer.close()
         disconnect()
         log.close()
 
+    if initial_candidate:event('standby_preparation_complete',seconds=time.monotonic()-preparation_started)
+    event('validation_policy',boundary_validation=boundary_mode,digest_engine=os.environ.get('SHIFT_DIGEST_ENGINE','reference'))
     event('model_ready', full_parameters=full_parameters, local_parameters=sum(t.numel() for t in stage.parameters()),
           model_id=MODEL_ID, revision=REVISION)
-    def configure_runtime(*,outer_value=...,plan_value=...,ownership_value=...,store_value=...,role_value=...,comparison_start=...):
-        nonlocal outer,plan,ownership,store,owner_role,comparison_start_step
+    def configure_runtime(*,outer_value=...,plan_value=...,ownership_value=...,store_value=...,role_value=...,comparison_start=...,session_runtime_value=...):
+        nonlocal outer,plan,ownership,store,owner_role,comparison_start_step,session_runtime
+        if session_runtime_value is not ...:session_runtime=session_runtime_value
         if outer_value is not ...:outer=outer_value
         if plan_value is not ...:plan=plan_value
         if ownership_value is not ...:ownership=ownership_value
         if store_value is not ...:store=store_value
         if role_value is not ...:owner_role=role_value
         if comparison_start is not ...:comparison_start_step=comparison_start
+    if c.get('unified_session'):
+        from .session_engine import run_session
+        run_session(locals().copy())
+        return
     if c.get('transactional_switch') and not c.get('reference_only'):
         from .v4_transaction_train import run
         context=locals().copy()

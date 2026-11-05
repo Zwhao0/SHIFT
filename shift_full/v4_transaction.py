@@ -23,7 +23,9 @@ class OwnerGate:
 
 
 class Transaction:
-    def __init__(self,epoch,source,target,cut,ranks):
+    def __init__(self,epoch,source,target,cut,ranks,*,validation='full'):
+        if validation not in ('full','runtime'):raise ValueError('invalid boundary validation mode')
+        self.validation=validation
         if (type(epoch) is not int or epoch<1 or source not in ('B','C') or
             target not in ('B','C') or source==target or type(cut) is not int or cut<1):
             raise ValueError('invalid switch boundary')
@@ -34,12 +36,26 @@ class Transaction:
         self.results={};self.decision=None
 
     def candidate(self,epoch,rank,actual,expected):
+        if self.validation!='full':raise ValueError('hash report requires full validation')
         if (type(epoch) is not int or epoch!=self.epoch or type(rank) is not int or
             self.decision is not None or rank not in self.ranks or rank in self.results):
             raise ValueError('stale, duplicate or unexpected candidate result')
         valid=(isinstance(actual,dict) and isinstance(expected,dict) and
                set(actual)==set(expected)==REFERENCE_HASH_KEYS and actual==expected and
                all(isinstance(v,str) and len(v)==64 and all(c in '0123456789abcdef' for c in v) for v in actual.values()))
+        self.results[rank]=valid
+        return valid
+
+    def ready(self,epoch,rank,report):
+        """Admit an actual completed restore, without pretending metadata is a hash."""
+        if self.validation!='runtime':raise ValueError('readiness report requires runtime validation')
+        if (type(epoch) is not int or epoch!=self.epoch or type(rank) is not int or
+            self.decision is not None or rank not in self.ranks or rank in self.results):
+            raise ValueError('stale, duplicate or unexpected candidate result')
+        expected=dict(schema=1,epoch=epoch,rank=rank,cut=self.cut,target=self.target,restored=True)
+        valid=(isinstance(report,dict) and report==expected and
+               all(type(report.get(k)) is int for k in ('schema','epoch','rank','cut')) and
+               report.get('restored') is True)
         self.results[rank]=valid
         return valid
 

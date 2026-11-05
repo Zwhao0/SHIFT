@@ -13,7 +13,8 @@ from pathlib import Path
 
 _ACTOR_FILE = re.compile(r"^(g\d+_[ABCDE])(\d+)\.jsonl$")
 _STAGE_KINDS = {
-    "standby_imported", "standby_cpu_model_ready", "standby_gpu_warmed",
+    "worker_imported", "standby_stage_built", "standby_preparation_complete",
+    "candidate_structure_validated", "state_hash", "final_audit_begin", "standby_imported", "standby_cpu_model_ready", "standby_gpu_warmed",
     "state_channel_preparing", "state_channel_prepared", "state_channel_connected",
     "switch_channel_prepared", "boundary_selected", "freeze", "snapshot_ready",
     "state_sent", "state_received", "transport_send", "transport_recv",

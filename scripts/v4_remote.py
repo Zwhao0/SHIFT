@@ -55,7 +55,17 @@ def main():
     p.add_argument('--legacy-layout',dest='unified',action='store_false',help='explicit historical batch16 layout')
     p.add_argument('--performance-no-audit', action='store_true')
     p.add_argument('--seed', type=int, default=20261106)
+    p.add_argument('--boundary-validation',choices=('full','runtime'),help='development hashes or runtime readiness; performance mode defaults to runtime')
+    p.add_argument('--final-reference-run',help='independent final audit after the timed window')
+    p.add_argument('--digest-engine',choices=('reference','staged'),default='reference')
     a = p.parse_args()
+    from shift_full.v4_state import boundary_validation
+    a.boundary_validation=boundary_validation(vars(a))
+    if a.performance_no_audit:a.no_oracle=True
+    if a.boundary_validation=='runtime' and not a.performance_no_audit:p.error('runtime readiness requires performance-no-audit')
+    if a.fail_restore_rank!=-1 and a.boundary_validation!='full':p.error('silent state corruption injection requires full boundary audit')
+    if a.final_reference_run and (not a.performance_no_audit or a.reference_run or a.reference_only):p.error('final reference requires migrating performance mode')
+    if a.final_reference_run and not all(x.isalnum() or x in '_-' for x in a.final_reference_run):p.error('invalid final reference suffix')
     if a.post_layout and not (a.unified and a.reference_only and a.performance_no_audit):p.error('post-layout is a unified no-fault performance control only')
     if a.unified and a.cross_node_tp:p.error('unified TP must remain within a node')
     if a.performance_no_audit and (a.outer_audit or a.reference_run):p.error('performance run cannot consume audited reference')
@@ -116,7 +126,7 @@ def main():
     if a.reference_only:roles.pop('C')
     units = []
     rows = {}
-    report = dict(role_hosts={r:e.physical_node for r,e in roles.items()},post_layout=a.post_layout,unified=a.unified, performance_no_audit=a.performance_no_audit, seed=a.seed, initialization_seed=2026 if a.unified else a.seed, data='random' if a.unified else 'pattern', name=name, functional_pass=False, oracle_exact=None, error=None,
+    report = dict(boundary_validation=a.boundary_validation,digest_engine=a.digest_engine,final_reference_run=a.final_reference_run,role_hosts={r:e.physical_node for r,e in roles.items()},post_layout=a.post_layout,unified=a.unified, performance_no_audit=a.performance_no_audit, seed=a.seed, initialization_seed=2026 if a.unified else a.seed, data='random' if a.unified else 'pattern', name=name, functional_pass=False, oracle_exact=None, error=None,
         topology=dict(tp=2, pp=2, ep=2, ranks=8, devices_per_node=4,
                       A='node0/PP0', B='node1/PP1', C='node3/standby_PP1'),
         plan=vars(plan), oracle=not (a.no_oracle or a.reference_only), gpu_prepare=a.gpu_prepare,gpu_warmup=a.gpu_warmup,slow_ms=a.slow_ms,
@@ -173,7 +183,7 @@ def main():
             '--property=RuntimeMaxSec='+str(a.seconds),'--property=KillMode=control-group',
             '--property=TimeoutStopSec=15','--working-directory='+str(ROOT),
             '--property=StandardOutput=append:'+str(out/(suffix+'.host.log')),'--property=StandardError=inherit']
-        env = dict(PYTHONPATH=str(ROOT)+':/workspace/FLASH1022',PYTHONDONTWRITEBYTECODE='1',
+        env = dict(SHIFT_DIGEST_ENGINE=a.digest_engine,PYTHONPATH=str(ROOT)+':/workspace/FLASH1022',PYTHONDONTWRITEBYTECODE='1',
             PYTHONUNBUFFERED='1',OMP_NUM_THREADS='1',MALLOC_ARENA_MAX='2',
             CPATH=str(ROOT/'runtime/python-headers'),CUDA_VISIBLE_DEVICES='4,5,6,7' if host_role in (('E',) if a.post_layout else ('B','E') if a.unified else ('D','E')) else '0,1,2,3',
             CUDA_DEVICE_MAX_CONNECTIONS='1',NCCL_MAX_CTAS='4',NCCL_BUFFSIZE='1048576',NCCL_CUMEM_HOST_ENABLE='0',
@@ -216,7 +226,7 @@ def main():
         (out/'resources_before.json').write_text(json.dumps(before,indent=2)+'\n')
         if any(len(x['company']) != 8 or x['extra_gpu'] for x in before.values()):
             raise RuntimeError('expected idle SHIFT resources and eight existing company PIDs')
-        config = dict(directory=str(out), flash='/workspace/FLASH1022',
+        config = dict(boundary_validation=a.boundary_validation,directory=str(out), flash='/workspace/FLASH1022',
             hosts={role:e.ip for role,e in roles.items()}, port=32750, timeout=120,
             seconds=a.seconds, seed=2026 if a.unified else a.seed, unified=a.unified, data='random' if a.unified else 'pattern', performance_no_audit=a.performance_no_audit, plan=vars(plan), oracle=report['oracle'],
             reference_only=a.reference_only,reference_run=a.reference_run,retain_outer_managers=a.retain_outer_managers,overlap_peer=a.overlap_peer,transactional_switch=a.transactional_switch,cycles=a.cycles,cross_node_tp=a.cross_node_tp,

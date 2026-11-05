@@ -1,0 +1,1371 @@
+{
+  "v1_quick_20261104_r42_v1_perf_final1": {
+    "pass_all": true,
+    "target_rid": 0,
+    "actual_fault_boundary": 10,
+    "first_joint_step": 24,
+    "solo_steps": 13,
+    "full_seconds": 20.292237131856382,
+    "windows": {
+      "pre": {
+        "step_max_seconds": {
+          "4": 0.8492306270636618,
+          "5": 0.8075253693386912,
+          "6": 0.7804862870834768,
+          "7": 0.7975670821033418,
+          "8": 0.7941679847426713,
+          "9": 0.774716448970139
+        },
+        "max_rank_step": {
+          "n": 6,
+          "mean": 0.800615633216997,
+          "max": 0.8492306270636618,
+          "min": 0.774716448970139
+        }
+      },
+      "during": {
+        "step_max_seconds": {
+          "10": 0.7491946509107947,
+          "11": 1.7596030388958752,
+          "12": 1.1872919590678066,
+          "13": 1.1997793191112578,
+          "14": 1.1409392810892314,
+          "15": 1.4916774409357458,
+          "16": 1.1526559418998659,
+          "17": 1.153134562075138,
+          "18": 1.156843036878854,
+          "19": 1.1210130869876593,
+          "20": 1.1357718561775982,
+          "21": 1.3720099569763988,
+          "22": 1.1291080210357904,
+          "23": 1.123194248881191
+        },
+        "max_rank_step": {
+          "n": 14,
+          "mean": 1.2051583143516578,
+          "max": 1.7596030388958752,
+          "min": 0.7491946509107947
+        }
+      },
+      "first_joint": {
+        "step_max_seconds": {
+          "24": 2.8862721491605043
+        },
+        "max_rank_step": {
+          "n": 1,
+          "mean": 2.8862721491605043,
+          "max": 2.8862721491605043,
+          "min": 2.8862721491605043
+        }
+      },
+      "post": {
+        "step_max_seconds": {
+          "25": 0.8835515410173684,
+          "26": 0.7728664739988744,
+          "27": 0.756251092068851,
+          "28": 0.7406084721442312
+        },
+        "max_rank_step": {
+          "n": 4,
+          "mean": 0.7883193948073313,
+          "max": 0.8835515410173684,
+          "min": 0.7406084721442312
+        }
+      },
+      "post_extra_drain": {
+        "step_max_seconds": {},
+        "max_rank_step": {
+          "n": 0,
+          "mean": null,
+          "max": null,
+          "min": null
+        }
+      }
+    },
+    "stage_durations": {
+      "phase": {
+        "n": 272,
+        "mean": 0.6749093067440245,
+        "max": 5.390469032106921,
+        "min": 0.0001685568131506443
+      },
+      "reconfigure_end": {
+        "n": 40,
+        "mean": 0.4160167523077689,
+        "max": 0.6706188200041652,
+        "min": 0.09820263087749481
+      },
+      "transport_recv": {
+        "n": 8,
+        "mean": 0.22433284236467443,
+        "max": 0.24610277893953025,
+        "min": 0.20771079417318106
+      },
+      "transport_send": {
+        "n": 8,
+        "mean": 0.19556624145479873,
+        "max": 0.21609057392925024,
+        "min": 0.1804749348666519
+      }
+    },
+    "last_validated_signatures": {
+      "0/0/0": null,
+      "0/0/1": null,
+      "0/0/2": null,
+      "0/0/3": null,
+      "0/0/4": null,
+      "0/0/5": null,
+      "0/0/6": null,
+      "0/0/7": null,
+      "0/1/0": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "bb1997c383ec5cdb69b677e05206f1ac959fde6364019b5853f39b7e18bf54d8",
+        "cuda_rng": "19192746ce35e0a90c20f36e4e9f540e879c0b0534ee821912d18cde65a468f5",
+        "model": "be7e690c9f9cc2ad706ae60a209d345d90a0262515c6619d0ac2a3b41f654864",
+        "optimizer": "c6f2aa96371f2e394fcdb0cd2b93dceb4ef87fe4c364ccb4249a5c9c20a99b60",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "49290a927c3cfbf9b56d7ca46944296e677ed85c01823a1ea565763726f102d3",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "0/1/1": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3a83afc70203103a59ffccdf3187e523c47597e7951b36bfa26ff0c8233e8bde",
+        "cuda_rng": "c088bb87a5edea6310a2b269c491d6dbabc8c8ee987b47f8d7141a12668c6a34",
+        "model": "4715ae332ae425235ad4676f5645706e3accc80afde639bf9ed47649508e488d",
+        "optimizer": "8d58543e70e490a3e471a725c3e1245051297431d9ce1d7b95fa5191687cc72e",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "368746de770685b4ad9d7b5f1dd143964620ffd21fab88c8a91fff506e08e348",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "0/1/2": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3a57e48b1b43139230a159d7c4eb7c558881938aa8a329d69ab4a2d838e3e028",
+        "cuda_rng": "aa714649c210740539060f0b92dc56e2c48fa06c627fc0f8bc6f1ee915ec92b3",
+        "model": "0a77a5a7a2126f91994efa8832939a89cb99754667d9fa246a776ee9f4e64bc0",
+        "optimizer": "13999d0e90fa96541c2dcec5f8f19fc39e6c0da8b2e4c589f9a8f48162714850",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "f3786e427eabeeab75066bb98b5beb24895d3452bf6b6a327199ac563b31902c",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "0/1/3": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "f82d56e53df72f3108c831ef95f1f248acfd601da5d56db4977bfabc9a4674b4",
+        "cuda_rng": "3b1462961fe7692fd323d6a2b5c3854d820de7a6c5f32e7b355a9d9e594743f6",
+        "model": "52c66ac3bb17e8443a3af79c5c91b50aafbe141024e2826fcdf5cf91ccd44898",
+        "optimizer": "12004c07f4fdd8eb2ce5bbcd7f8151d94921f3017fbad7a2689adeb532ef8de0",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "e5e6e81bd8198b34d5dca6e3e18cdc725ebb844f88d195c6b772073453131d8b",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "0/1/4": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "eabee909209ec781ee55c8d0f1ec48f542aef41555e21119d696122d21f64824",
+        "cuda_rng": "93b88f14ebb89a8af15de4d7509d63ba70361859aa86ac7a5017f829803be797",
+        "model": "7f5f6cb13613361778e7cbab2277c28fbbe48af6f0a675c8e792334d85d92136",
+        "optimizer": "03ead5a5430b815efad61624f08891b7a0403aaead28d1b602f690e6654904e8",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "406b20041b686bd44844313e876d3b5be0ad0ac28dec92fa9cfd6e9deda7cb59",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "0/1/5": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "8702ddaa8954d6b436e0cb70eed4c01592d3c96c195385b3cb114d8014d494b8",
+        "cuda_rng": "c3bdb0a0950c21a91e8a3a8ffa76835df66b55445453c5469fff08d01bbb6add",
+        "model": "2716d7f153e7f422d282770352a62b9fe739db1908c6b286880df8f1665b23aa",
+        "optimizer": "6622875736e4701ccbfe1a554677aab8cbc4f3d569955051e94b902756845a03",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "1b0e6ccd396dcde511a5ad3cf451b3f12a1184db4c2d88c9495fe853652cdc8f",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "0/1/6": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3c0629bf320a529a1b9791b6086438f713a1759a091c44dcb93978dc4fae4fc4",
+        "cuda_rng": "4906f01415e405146a5912264ff19da3fa0552f51217211a6d2f7f35bda85201",
+        "model": "9b16f34524242e93310f05f58c08a04cf958efea0df59f2f502dd0ba189952a3",
+        "optimizer": "bdbfe42df60408b9ddc64b52994273e9f76720dd170c16e01d257a4492d5afa9",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "a2d98ffd6232d673abe23648890dbd3b026bb2d1b2a9baf96806bae0ec1e4619",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "0/1/7": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "7fbc4430089785e550c2202c66c9be43bde4818d0152d44155e3e64e008153de",
+        "cuda_rng": "2d661973f4c932021eefe2846b93d0976f09a3ff0065f26c521d07768c7ade02",
+        "model": "42c2a619162bc6b93811a320c9cec16c1e2c69e5c367d755fbac7666f8ca9f10",
+        "optimizer": "c683f58090986dfed371a8f91ada56f5a15cbc4b483536e12cc97ad922762462",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "2b6f4f08393e9fe4e0d16c563aa6d1c6f8f779f32fd243eeacdb20a3102d171d",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/0": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "bb1997c383ec5cdb69b677e05206f1ac959fde6364019b5853f39b7e18bf54d8",
+        "cuda_rng": "19192746ce35e0a90c20f36e4e9f540e879c0b0534ee821912d18cde65a468f5",
+        "model": "be7e690c9f9cc2ad706ae60a209d345d90a0262515c6619d0ac2a3b41f654864",
+        "optimizer": "c6f2aa96371f2e394fcdb0cd2b93dceb4ef87fe4c364ccb4249a5c9c20a99b60",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "49290a927c3cfbf9b56d7ca46944296e677ed85c01823a1ea565763726f102d3",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/1": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3a83afc70203103a59ffccdf3187e523c47597e7951b36bfa26ff0c8233e8bde",
+        "cuda_rng": "c088bb87a5edea6310a2b269c491d6dbabc8c8ee987b47f8d7141a12668c6a34",
+        "model": "4715ae332ae425235ad4676f5645706e3accc80afde639bf9ed47649508e488d",
+        "optimizer": "8d58543e70e490a3e471a725c3e1245051297431d9ce1d7b95fa5191687cc72e",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "368746de770685b4ad9d7b5f1dd143964620ffd21fab88c8a91fff506e08e348",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/2": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3a57e48b1b43139230a159d7c4eb7c558881938aa8a329d69ab4a2d838e3e028",
+        "cuda_rng": "aa714649c210740539060f0b92dc56e2c48fa06c627fc0f8bc6f1ee915ec92b3",
+        "model": "0a77a5a7a2126f91994efa8832939a89cb99754667d9fa246a776ee9f4e64bc0",
+        "optimizer": "13999d0e90fa96541c2dcec5f8f19fc39e6c0da8b2e4c589f9a8f48162714850",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "f3786e427eabeeab75066bb98b5beb24895d3452bf6b6a327199ac563b31902c",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/3": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "f82d56e53df72f3108c831ef95f1f248acfd601da5d56db4977bfabc9a4674b4",
+        "cuda_rng": "3b1462961fe7692fd323d6a2b5c3854d820de7a6c5f32e7b355a9d9e594743f6",
+        "model": "52c66ac3bb17e8443a3af79c5c91b50aafbe141024e2826fcdf5cf91ccd44898",
+        "optimizer": "12004c07f4fdd8eb2ce5bbcd7f8151d94921f3017fbad7a2689adeb532ef8de0",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "e5e6e81bd8198b34d5dca6e3e18cdc725ebb844f88d195c6b772073453131d8b",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/4": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "eabee909209ec781ee55c8d0f1ec48f542aef41555e21119d696122d21f64824",
+        "cuda_rng": "93b88f14ebb89a8af15de4d7509d63ba70361859aa86ac7a5017f829803be797",
+        "model": "7f5f6cb13613361778e7cbab2277c28fbbe48af6f0a675c8e792334d85d92136",
+        "optimizer": "03ead5a5430b815efad61624f08891b7a0403aaead28d1b602f690e6654904e8",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "406b20041b686bd44844313e876d3b5be0ad0ac28dec92fa9cfd6e9deda7cb59",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/5": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "8702ddaa8954d6b436e0cb70eed4c01592d3c96c195385b3cb114d8014d494b8",
+        "cuda_rng": "c3bdb0a0950c21a91e8a3a8ffa76835df66b55445453c5469fff08d01bbb6add",
+        "model": "2716d7f153e7f422d282770352a62b9fe739db1908c6b286880df8f1665b23aa",
+        "optimizer": "6622875736e4701ccbfe1a554677aab8cbc4f3d569955051e94b902756845a03",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "1b0e6ccd396dcde511a5ad3cf451b3f12a1184db4c2d88c9495fe853652cdc8f",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/6": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3c0629bf320a529a1b9791b6086438f713a1759a091c44dcb93978dc4fae4fc4",
+        "cuda_rng": "4906f01415e405146a5912264ff19da3fa0552f51217211a6d2f7f35bda85201",
+        "model": "9b16f34524242e93310f05f58c08a04cf958efea0df59f2f502dd0ba189952a3",
+        "optimizer": "bdbfe42df60408b9ddc64b52994273e9f76720dd170c16e01d257a4492d5afa9",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "a2d98ffd6232d673abe23648890dbd3b026bb2d1b2a9baf96806bae0ec1e4619",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/7": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "7fbc4430089785e550c2202c66c9be43bde4818d0152d44155e3e64e008153de",
+        "cuda_rng": "2d661973f4c932021eefe2846b93d0976f09a3ff0065f26c521d07768c7ade02",
+        "model": "42c2a619162bc6b93811a320c9cec16c1e2c69e5c367d755fbac7666f8ca9f10",
+        "optimizer": "c683f58090986dfed371a8f91ada56f5a15cbc4b483536e12cc97ad922762462",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "2b6f4f08393e9fe4e0d16c563aa6d1c6f8f779f32fd243eeacdb20a3102d171d",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "name": "v1_quick_20261104_r42_v1_perf_final1",
+    "resources": {
+      "company_pids_unchanged": true,
+      "company_pid_count_per_node": 8,
+      "extra_gpu": 0,
+      "gpu_load": {
+        "node0": {
+          "before": [
+            "0, 0, 56251",
+            "1, 0, 56251",
+            "2, 0, 56427",
+            "3, 0, 56427",
+            "4, 0, 56427",
+            "5, 0, 56427",
+            "6, 0, 56251",
+            "7, 0, 56251"
+          ],
+          "after": [
+            "0, 0, 56251",
+            "1, 0, 56251",
+            "2, 0, 56427",
+            "3, 0, 56427",
+            "4, 0, 56427",
+            "5, 0, 56427",
+            "6, 0, 56251",
+            "7, 0, 56251"
+          ]
+        },
+        "node1": {
+          "before": [
+            "0, 0, 64605",
+            "1, 0, 64605",
+            "2, 0, 64813",
+            "3, 0, 64813",
+            "4, 0, 64813",
+            "5, 0, 64813",
+            "6, 0, 64605",
+            "7, 0, 64605"
+          ],
+          "after": [
+            "0, 0, 64605",
+            "1, 0, 64605",
+            "2, 0, 64813",
+            "3, 0, 64813",
+            "4, 0, 64813",
+            "5, 0, 64813",
+            "6, 0, 64605",
+            "7, 0, 64605"
+          ]
+        },
+        "node3": {
+          "before": [
+            "0, 0, 59669",
+            "1, 0, 59669",
+            "2, 0, 59877",
+            "3, 0, 59877",
+            "4, 0, 59877",
+            "5, 0, 59877",
+            "6, 0, 59669",
+            "7, 0, 59669"
+          ],
+          "after": [
+            "0, 0, 59669",
+            "1, 0, 59669",
+            "2, 0, 59877",
+            "3, 0, 59877",
+            "4, 0, 59877",
+            "5, 0, 59877",
+            "6, 0, 59669",
+            "7, 0, 59669"
+          ]
+        }
+      }
+    }
+  },
+  "v2_q2_r42_v2_perf1": {
+    "functional_pass": true,
+    "cut": 28,
+    "goal": 33,
+    "post_steps": 5,
+    "state_transfer_ranks": 8,
+    "audit_every_step": false,
+    "full_restore_hash_audit": false,
+    "final_state_hash_audit": true,
+    "variant": "p2",
+    "hashed_commits": 0,
+    "audited_joint_steps": [],
+    "pass_all": true,
+    "full_seconds": 30.313776849769056,
+    "windows": {
+      "pre": {
+        "step_max_seconds": {
+          "4": 0.8280215160921216,
+          "5": 0.8204024969600141,
+          "6": 0.7921677585691214,
+          "7": 0.7815605183131993,
+          "8": 0.7688201530836523,
+          "9": 0.7687947102822363
+        },
+        "max_rank_step": {
+          "n": 6,
+          "mean": 0.7932945255500575,
+          "max": 0.8280215160921216,
+          "min": 0.7687947102822363
+        }
+      },
+      "during": {
+        "step_max_seconds": {
+          "10": 0.8555194749496877,
+          "11": 0.7617806841153651,
+          "12": 1.0107107090298086,
+          "13": 1.0207370989955962,
+          "14": 1.0095263477414846,
+          "15": 1.002109865192324,
+          "16": 1.3453832799568772,
+          "17": 0.9896500469185412,
+          "18": 0.9976158000063151,
+          "19": 1.0877705500461161,
+          "20": 1.0571372169069946,
+          "21": 1.0704532030504197,
+          "22": 0.9898213509004563,
+          "23": 1.0139265421312302,
+          "24": 1.0278520570136607,
+          "25": 3.9393696249462664,
+          "26": 3.3881707650143653,
+          "27": 3.0030549471266568,
+          "28": 3.306818898068741
+        },
+        "max_rank_step": {
+          "n": 19,
+          "mean": 1.5198636032689952,
+          "max": 3.9393696249462664,
+          "min": 0.7617806841153651
+        }
+      },
+      "first_joint": {
+        "step_max_seconds": {
+          "29": 1.624547388870269
+        },
+        "max_rank_step": {
+          "n": 1,
+          "mean": 1.624547388870269,
+          "max": 1.624547388870269,
+          "min": 1.624547388870269
+        }
+      },
+      "post": {
+        "step_max_seconds": {
+          "30": 1.0171664711087942,
+          "31": 0.8608830040320754,
+          "32": 0.8265817179344594,
+          "33": 0.8022172900382429
+        },
+        "max_rank_step": {
+          "n": 4,
+          "mean": 0.876712120778393,
+          "max": 1.0171664711087942,
+          "min": 0.8022172900382429
+        }
+      },
+      "post_extra_drain": {
+        "step_max_seconds": {},
+        "max_rank_step": {
+          "n": 0,
+          "mean": null,
+          "max": null,
+          "min": null
+        }
+      }
+    },
+    "stage_durations": {
+      "phase": {
+        "n": 288,
+        "mean": 1.3240116667689614,
+        "max": 10.868920787936077,
+        "min": 2.3962929844856262e-05
+      },
+      "planned_compute_delay": {
+        "n": 144,
+        "mean": 0.25007065844773835,
+        "max": 0.2501144108828157,
+        "min": 0.25004352792166173
+      },
+      "planned_old_manager_shutdown_complete": {
+        "n": 16,
+        "mean": 0.00020733822020702064,
+        "max": 0.00034360820427536964,
+        "min": 0.00010622898116707802
+      },
+      "planned_precopy_frozen": {
+        "n": 8,
+        "mean": 0.057922302366932854,
+        "max": 0.062190265161916614,
+        "min": 0.05369761888869107
+      },
+      "planned_precopy_window_open": {
+        "n": 8,
+        "mean": 0.01482907377067022,
+        "max": 0.01853065099567175,
+        "min": 0.01341927400790155
+      },
+      "planned_retired_cleanup_complete": {
+        "n": 24,
+        "mean": 0.8012077160819899,
+        "max": 1.1065354167949408,
+        "min": 0.5458908511791378
+      },
+      "reconfigure_end": {
+        "n": 32,
+        "mean": 0.05712247989868047,
+        "max": 0.12855867482721806,
+        "min": 9.206775575876236e-05
+      },
+      "snapshot": {
+        "n": 8,
+        "mean": 0.005830148526001722,
+        "max": 0.009118190035223961,
+        "min": 0.004761151038110256
+      },
+      "transport_recv": {
+        "n": 16,
+        "mean": 3.28682956850389,
+        "max": 6.6484735971316695,
+        "min": 0.017656843876466155
+      },
+      "transport_send": {
+        "n": 16,
+        "mean": 0.14338773344934452,
+        "max": 0.6299687658902258,
+        "min": 0.013509046053513885
+      }
+    },
+    "last_validated_signatures": {
+      "0/0/0": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "bb1997c383ec5cdb69b677e05206f1ac959fde6364019b5853f39b7e18bf54d8",
+        "cuda_rng": "19192746ce35e0a90c20f36e4e9f540e879c0b0534ee821912d18cde65a468f5",
+        "model": "af8e8c1211b6e1e0a447f69704840c123473f808d465b8365aba95905cb4fb1c",
+        "optimizer": "c38842ee535c18063387b8226b0760948ad35f49f918924f19e44ede70f89327",
+        "progress": "f8eced0f210c737d590fb6ba7692c290e5769edd22fde0668514466660c939fd",
+        "python_rng": "49290a927c3cfbf9b56d7ca46944296e677ed85c01823a1ea565763726f102d3",
+        "scheduler": "c438428c43c74e512c669d6d43ffc0e2383f3370cab27d460c2668671aaa531b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "0/0/1": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3a83afc70203103a59ffccdf3187e523c47597e7951b36bfa26ff0c8233e8bde",
+        "cuda_rng": "c088bb87a5edea6310a2b269c491d6dbabc8c8ee987b47f8d7141a12668c6a34",
+        "model": "4dc40aad3937056db770091ec1e22ebc092ef5fe8236cc3815b19913ad55af4d",
+        "optimizer": "834dffed247d448e37f8d6d74c86ad0108eeaabb26b4760f95ab8acfcaa1e0b6",
+        "progress": "f8eced0f210c737d590fb6ba7692c290e5769edd22fde0668514466660c939fd",
+        "python_rng": "368746de770685b4ad9d7b5f1dd143964620ffd21fab88c8a91fff506e08e348",
+        "scheduler": "c438428c43c74e512c669d6d43ffc0e2383f3370cab27d460c2668671aaa531b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "0/0/2": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3a57e48b1b43139230a159d7c4eb7c558881938aa8a329d69ab4a2d838e3e028",
+        "cuda_rng": "aa714649c210740539060f0b92dc56e2c48fa06c627fc0f8bc6f1ee915ec92b3",
+        "model": "8357dccfaae11b093f72c6f4a3a972fb8194af5ada9714bd65c6255f6123e115",
+        "optimizer": "2f0440a017a46fa76d9e1afef10d6d6e6c5e81dd44ea5c5d8fae77d9ccc74a28",
+        "progress": "f8eced0f210c737d590fb6ba7692c290e5769edd22fde0668514466660c939fd",
+        "python_rng": "f3786e427eabeeab75066bb98b5beb24895d3452bf6b6a327199ac563b31902c",
+        "scheduler": "c438428c43c74e512c669d6d43ffc0e2383f3370cab27d460c2668671aaa531b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "0/0/3": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "f82d56e53df72f3108c831ef95f1f248acfd601da5d56db4977bfabc9a4674b4",
+        "cuda_rng": "3b1462961fe7692fd323d6a2b5c3854d820de7a6c5f32e7b355a9d9e594743f6",
+        "model": "09baab0e9385eb5ef1b1b9c22830d24277da9143e2c258e16b69013f86b856cf",
+        "optimizer": "ad0ae301c0939fc79978c5d0a76da0c765867715e7c1127d089819a1dffc7e4d",
+        "progress": "f8eced0f210c737d590fb6ba7692c290e5769edd22fde0668514466660c939fd",
+        "python_rng": "e5e6e81bd8198b34d5dca6e3e18cdc725ebb844f88d195c6b772073453131d8b",
+        "scheduler": "c438428c43c74e512c669d6d43ffc0e2383f3370cab27d460c2668671aaa531b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "0/0/4": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "eabee909209ec781ee55c8d0f1ec48f542aef41555e21119d696122d21f64824",
+        "cuda_rng": "93b88f14ebb89a8af15de4d7509d63ba70361859aa86ac7a5017f829803be797",
+        "model": "f9cb9aeec91ad6aece6970bb17d23ad655fd0a579eb596f966acc8ea8b84692b",
+        "optimizer": "20f52c20cd2be7d547c22ad2d7310f2ac18df26f2bbc89f2287cd49757455b52",
+        "progress": "f8eced0f210c737d590fb6ba7692c290e5769edd22fde0668514466660c939fd",
+        "python_rng": "406b20041b686bd44844313e876d3b5be0ad0ac28dec92fa9cfd6e9deda7cb59",
+        "scheduler": "c438428c43c74e512c669d6d43ffc0e2383f3370cab27d460c2668671aaa531b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "0/0/5": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "8702ddaa8954d6b436e0cb70eed4c01592d3c96c195385b3cb114d8014d494b8",
+        "cuda_rng": "c3bdb0a0950c21a91e8a3a8ffa76835df66b55445453c5469fff08d01bbb6add",
+        "model": "f74f8be4c4084cdc4011c4e26aae9ebff4228b742477bcbbc7da0edb3e6330a6",
+        "optimizer": "fd4f67d5470852a4ecd5abb7a3cc2ab16ee315445ff211f4703785362ca6d234",
+        "progress": "f8eced0f210c737d590fb6ba7692c290e5769edd22fde0668514466660c939fd",
+        "python_rng": "1b0e6ccd396dcde511a5ad3cf451b3f12a1184db4c2d88c9495fe853652cdc8f",
+        "scheduler": "c438428c43c74e512c669d6d43ffc0e2383f3370cab27d460c2668671aaa531b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "0/0/6": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3c0629bf320a529a1b9791b6086438f713a1759a091c44dcb93978dc4fae4fc4",
+        "cuda_rng": "4906f01415e405146a5912264ff19da3fa0552f51217211a6d2f7f35bda85201",
+        "model": "884392e1b37919d09b855a7cfe2ea55c754bc654b8aed2b647558b01bcbc94ae",
+        "optimizer": "bf6ad6426e3e36e988e20b2f75f97009c81e2bc6f4aac11034bb414af38a91ca",
+        "progress": "f8eced0f210c737d590fb6ba7692c290e5769edd22fde0668514466660c939fd",
+        "python_rng": "a2d98ffd6232d673abe23648890dbd3b026bb2d1b2a9baf96806bae0ec1e4619",
+        "scheduler": "c438428c43c74e512c669d6d43ffc0e2383f3370cab27d460c2668671aaa531b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "0/0/7": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "7fbc4430089785e550c2202c66c9be43bde4818d0152d44155e3e64e008153de",
+        "cuda_rng": "2d661973f4c932021eefe2846b93d0976f09a3ff0065f26c521d07768c7ade02",
+        "model": "d4aa98f56bd0dbb59603a6389a64e19b9ae0467d271a4c4e8dd09775ba3b2198",
+        "optimizer": "9f4a2394db2de919d327f8ace41ee24f897095dc65658dd8bbcdc71c2e6e0849",
+        "progress": "f8eced0f210c737d590fb6ba7692c290e5769edd22fde0668514466660c939fd",
+        "python_rng": "2b6f4f08393e9fe4e0d16c563aa6d1c6f8f779f32fd243eeacdb20a3102d171d",
+        "scheduler": "c438428c43c74e512c669d6d43ffc0e2383f3370cab27d460c2668671aaa531b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/0": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "bb1997c383ec5cdb69b677e05206f1ac959fde6364019b5853f39b7e18bf54d8",
+        "cuda_rng": "19192746ce35e0a90c20f36e4e9f540e879c0b0534ee821912d18cde65a468f5",
+        "model": "2b62ca3807f8b5bcd0fe4465964ccee61e0461abc65ca89154b0972834192f0c",
+        "optimizer": "1367f4e2f5c4f920370c545cbf8df38af8ed431e1f2b30d057317582a9b17114",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "49290a927c3cfbf9b56d7ca46944296e677ed85c01823a1ea565763726f102d3",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/1": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3a83afc70203103a59ffccdf3187e523c47597e7951b36bfa26ff0c8233e8bde",
+        "cuda_rng": "c088bb87a5edea6310a2b269c491d6dbabc8c8ee987b47f8d7141a12668c6a34",
+        "model": "855af2db9ea7874350658891f39640dcb4ef149005b267dbefedc81b2f14fc30",
+        "optimizer": "7fa86463092c4dd1add93ed52d7379bca5c5fc3c4539d9abdbd9b6bbc044603c",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "368746de770685b4ad9d7b5f1dd143964620ffd21fab88c8a91fff506e08e348",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/2": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3a57e48b1b43139230a159d7c4eb7c558881938aa8a329d69ab4a2d838e3e028",
+        "cuda_rng": "aa714649c210740539060f0b92dc56e2c48fa06c627fc0f8bc6f1ee915ec92b3",
+        "model": "124deaa59156446bcedf1a66dcf4c03ca5b1301f308412ce98cb4b71b2671ab4",
+        "optimizer": "1b73ae2ddd7651cbfa524417b4806f549cede5fc42e5ba773bec04a4588d961c",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "f3786e427eabeeab75066bb98b5beb24895d3452bf6b6a327199ac563b31902c",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/3": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "f82d56e53df72f3108c831ef95f1f248acfd601da5d56db4977bfabc9a4674b4",
+        "cuda_rng": "3b1462961fe7692fd323d6a2b5c3854d820de7a6c5f32e7b355a9d9e594743f6",
+        "model": "a8bc31e253dd4ba1b70944441215ac40ff23069a3099a1a61cf1b3d314ff7e0f",
+        "optimizer": "1ab04a4cdb0e389828e22755efea8c418d3719d01efecad6d44471b67cea0cc2",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "e5e6e81bd8198b34d5dca6e3e18cdc725ebb844f88d195c6b772073453131d8b",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/4": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "eabee909209ec781ee55c8d0f1ec48f542aef41555e21119d696122d21f64824",
+        "cuda_rng": "93b88f14ebb89a8af15de4d7509d63ba70361859aa86ac7a5017f829803be797",
+        "model": "43913dfc7afc1bf783c140d5ed86a651d453138607fc5f6edbb08d0ccb9c6081",
+        "optimizer": "b269456a8e9d8c4831fa2772689a7d227694776fbca322c4ffbd611219f8db61",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "406b20041b686bd44844313e876d3b5be0ad0ac28dec92fa9cfd6e9deda7cb59",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/5": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "8702ddaa8954d6b436e0cb70eed4c01592d3c96c195385b3cb114d8014d494b8",
+        "cuda_rng": "c3bdb0a0950c21a91e8a3a8ffa76835df66b55445453c5469fff08d01bbb6add",
+        "model": "7cb8da32e37a3745fc414a18c235849a36b35535204c98cd75d956d7685efce4",
+        "optimizer": "67e7ac6faf7ab53e912a6a8fe012c574f710159fb1bb76cdebd84c5bb5682dc4",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "1b0e6ccd396dcde511a5ad3cf451b3f12a1184db4c2d88c9495fe853652cdc8f",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/6": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3c0629bf320a529a1b9791b6086438f713a1759a091c44dcb93978dc4fae4fc4",
+        "cuda_rng": "4906f01415e405146a5912264ff19da3fa0552f51217211a6d2f7f35bda85201",
+        "model": "336bd92afce609483b4bd7c13df35d14d6cd314b0888aa58013d0816e43b57ff",
+        "optimizer": "73361fb5630e60256a0eaf8d2f72aa00d191d92d4e4890475346fb4fac2abb09",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "a2d98ffd6232d673abe23648890dbd3b026bb2d1b2a9baf96806bae0ec1e4619",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/7": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "7fbc4430089785e550c2202c66c9be43bde4818d0152d44155e3e64e008153de",
+        "cuda_rng": "2d661973f4c932021eefe2846b93d0976f09a3ff0065f26c521d07768c7ade02",
+        "model": "4545bb794917f70ffbbeefcd384c6020a10e8ac7d8a1a08eaf7a118a45d98188",
+        "optimizer": "524e1532c6871191edff4057b0a8202bf461a46c6d53138101f5d6e01bdf6ce7",
+        "progress": "ec1bc057356b7d07b8880ad1fccdea1db85d2ee9b9edcbab12306d797a7df9ed",
+        "python_rng": "2b6f4f08393e9fe4e0d16c563aa6d1c6f8f779f32fd243eeacdb20a3102d171d",
+        "scheduler": "3a0fb2d852502bcce08d7e3e7a848a900b57e07faa2e98d0bbe799de8f4a6bda",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/1/0": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "bb1997c383ec5cdb69b677e05206f1ac959fde6364019b5853f39b7e18bf54d8",
+        "cuda_rng": "19192746ce35e0a90c20f36e4e9f540e879c0b0534ee821912d18cde65a468f5",
+        "model": "af8e8c1211b6e1e0a447f69704840c123473f808d465b8365aba95905cb4fb1c",
+        "optimizer": "c38842ee535c18063387b8226b0760948ad35f49f918924f19e44ede70f89327",
+        "progress": "f8eced0f210c737d590fb6ba7692c290e5769edd22fde0668514466660c939fd",
+        "python_rng": "49290a927c3cfbf9b56d7ca46944296e677ed85c01823a1ea565763726f102d3",
+        "scheduler": "c438428c43c74e512c669d6d43ffc0e2383f3370cab27d460c2668671aaa531b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/1/1": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3a83afc70203103a59ffccdf3187e523c47597e7951b36bfa26ff0c8233e8bde",
+        "cuda_rng": "c088bb87a5edea6310a2b269c491d6dbabc8c8ee987b47f8d7141a12668c6a34",
+        "model": "4dc40aad3937056db770091ec1e22ebc092ef5fe8236cc3815b19913ad55af4d",
+        "optimizer": "834dffed247d448e37f8d6d74c86ad0108eeaabb26b4760f95ab8acfcaa1e0b6",
+        "progress": "f8eced0f210c737d590fb6ba7692c290e5769edd22fde0668514466660c939fd",
+        "python_rng": "368746de770685b4ad9d7b5f1dd143964620ffd21fab88c8a91fff506e08e348",
+        "scheduler": "c438428c43c74e512c669d6d43ffc0e2383f3370cab27d460c2668671aaa531b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/1/2": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3a57e48b1b43139230a159d7c4eb7c558881938aa8a329d69ab4a2d838e3e028",
+        "cuda_rng": "aa714649c210740539060f0b92dc56e2c48fa06c627fc0f8bc6f1ee915ec92b3",
+        "model": "8357dccfaae11b093f72c6f4a3a972fb8194af5ada9714bd65c6255f6123e115",
+        "optimizer": "2f0440a017a46fa76d9e1afef10d6d6e6c5e81dd44ea5c5d8fae77d9ccc74a28",
+        "progress": "f8eced0f210c737d590fb6ba7692c290e5769edd22fde0668514466660c939fd",
+        "python_rng": "f3786e427eabeeab75066bb98b5beb24895d3452bf6b6a327199ac563b31902c",
+        "scheduler": "c438428c43c74e512c669d6d43ffc0e2383f3370cab27d460c2668671aaa531b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/1/3": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "f82d56e53df72f3108c831ef95f1f248acfd601da5d56db4977bfabc9a4674b4",
+        "cuda_rng": "3b1462961fe7692fd323d6a2b5c3854d820de7a6c5f32e7b355a9d9e594743f6",
+        "model": "09baab0e9385eb5ef1b1b9c22830d24277da9143e2c258e16b69013f86b856cf",
+        "optimizer": "ad0ae301c0939fc79978c5d0a76da0c765867715e7c1127d089819a1dffc7e4d",
+        "progress": "f8eced0f210c737d590fb6ba7692c290e5769edd22fde0668514466660c939fd",
+        "python_rng": "e5e6e81bd8198b34d5dca6e3e18cdc725ebb844f88d195c6b772073453131d8b",
+        "scheduler": "c438428c43c74e512c669d6d43ffc0e2383f3370cab27d460c2668671aaa531b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/1/4": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "eabee909209ec781ee55c8d0f1ec48f542aef41555e21119d696122d21f64824",
+        "cuda_rng": "93b88f14ebb89a8af15de4d7509d63ba70361859aa86ac7a5017f829803be797",
+        "model": "f9cb9aeec91ad6aece6970bb17d23ad655fd0a579eb596f966acc8ea8b84692b",
+        "optimizer": "20f52c20cd2be7d547c22ad2d7310f2ac18df26f2bbc89f2287cd49757455b52",
+        "progress": "f8eced0f210c737d590fb6ba7692c290e5769edd22fde0668514466660c939fd",
+        "python_rng": "406b20041b686bd44844313e876d3b5be0ad0ac28dec92fa9cfd6e9deda7cb59",
+        "scheduler": "c438428c43c74e512c669d6d43ffc0e2383f3370cab27d460c2668671aaa531b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/1/5": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "8702ddaa8954d6b436e0cb70eed4c01592d3c96c195385b3cb114d8014d494b8",
+        "cuda_rng": "c3bdb0a0950c21a91e8a3a8ffa76835df66b55445453c5469fff08d01bbb6add",
+        "model": "f74f8be4c4084cdc4011c4e26aae9ebff4228b742477bcbbc7da0edb3e6330a6",
+        "optimizer": "fd4f67d5470852a4ecd5abb7a3cc2ab16ee315445ff211f4703785362ca6d234",
+        "progress": "f8eced0f210c737d590fb6ba7692c290e5769edd22fde0668514466660c939fd",
+        "python_rng": "1b0e6ccd396dcde511a5ad3cf451b3f12a1184db4c2d88c9495fe853652cdc8f",
+        "scheduler": "c438428c43c74e512c669d6d43ffc0e2383f3370cab27d460c2668671aaa531b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/1/6": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3c0629bf320a529a1b9791b6086438f713a1759a091c44dcb93978dc4fae4fc4",
+        "cuda_rng": "4906f01415e405146a5912264ff19da3fa0552f51217211a6d2f7f35bda85201",
+        "model": "884392e1b37919d09b855a7cfe2ea55c754bc654b8aed2b647558b01bcbc94ae",
+        "optimizer": "bf6ad6426e3e36e988e20b2f75f97009c81e2bc6f4aac11034bb414af38a91ca",
+        "progress": "f8eced0f210c737d590fb6ba7692c290e5769edd22fde0668514466660c939fd",
+        "python_rng": "a2d98ffd6232d673abe23648890dbd3b026bb2d1b2a9baf96806bae0ec1e4619",
+        "scheduler": "c438428c43c74e512c669d6d43ffc0e2383f3370cab27d460c2668671aaa531b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/1/7": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "7fbc4430089785e550c2202c66c9be43bde4818d0152d44155e3e64e008153de",
+        "cuda_rng": "2d661973f4c932021eefe2846b93d0976f09a3ff0065f26c521d07768c7ade02",
+        "model": "d4aa98f56bd0dbb59603a6389a64e19b9ae0467d271a4c4e8dd09775ba3b2198",
+        "optimizer": "9f4a2394db2de919d327f8ace41ee24f897095dc65658dd8bbcdc71c2e6e0849",
+        "progress": "f8eced0f210c737d590fb6ba7692c290e5769edd22fde0668514466660c939fd",
+        "python_rng": "2b6f4f08393e9fe4e0d16c563aa6d1c6f8f779f32fd243eeacdb20a3102d171d",
+        "scheduler": "c438428c43c74e512c669d6d43ffc0e2383f3370cab27d460c2668671aaa531b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "name": "v2_q2_r42_v2_perf1",
+    "resources": {
+      "company_pids_unchanged": true,
+      "company_pid_count_per_node": 8,
+      "extra_gpu": 0,
+      "gpu_load": {
+        "node0": {
+          "before": [
+            "0, 0, 56251",
+            "1, 0, 56251",
+            "2, 0, 56427",
+            "3, 0, 56427",
+            "4, 0, 56427",
+            "5, 0, 56427",
+            "6, 0, 56251",
+            "7, 0, 56251"
+          ],
+          "after": [
+            "0, 0, 56251",
+            "1, 0, 56251",
+            "2, 0, 56427",
+            "3, 0, 56427",
+            "4, 0, 56427",
+            "5, 0, 56427",
+            "6, 0, 56251",
+            "7, 0, 56251"
+          ]
+        },
+        "node1": {
+          "before": [
+            "0, 0, 64605",
+            "1, 0, 64605",
+            "2, 0, 64813",
+            "3, 0, 64813",
+            "4, 0, 64813",
+            "5, 0, 64813",
+            "6, 0, 64605",
+            "7, 0, 64605"
+          ],
+          "after": [
+            "0, 0, 64605",
+            "1, 0, 64605",
+            "2, 0, 64813",
+            "3, 0, 64813",
+            "4, 0, 64813",
+            "5, 0, 64813",
+            "6, 0, 64605",
+            "7, 0, 64605"
+          ]
+        },
+        "node3": {
+          "before": [
+            "0, 0, 59669",
+            "1, 0, 59669",
+            "2, 0, 59877",
+            "3, 0, 59877",
+            "4, 0, 59877",
+            "5, 0, 59877",
+            "6, 0, 59669",
+            "7, 0, 59669"
+          ],
+          "after": [
+            "0, 0, 59669",
+            "1, 0, 59669",
+            "2, 0, 59877",
+            "3, 0, 59877",
+            "4, 0, 59877",
+            "5, 0, 59877",
+            "6, 0, 59669",
+            "7, 0, 59669"
+          ]
+        }
+      }
+    }
+  },
+  "v2_q2_r42_v2_repeat": {
+    "functional_pass": true,
+    "cut": 31,
+    "goal": 36,
+    "post_steps": 5,
+    "state_transfer_ranks": 8,
+    "audit_every_step": false,
+    "full_restore_hash_audit": false,
+    "final_state_hash_audit": true,
+    "variant": "p2",
+    "hashed_commits": 0,
+    "audited_joint_steps": [],
+    "pass_all": true,
+    "full_seconds": 22.950387381017208,
+    "windows": {
+      "pre": {
+        "step_max_seconds": {
+          "4": 0.8011927839834243,
+          "5": 0.8610204244032502,
+          "6": 0.7991498871706426,
+          "7": 0.7615683106705546,
+          "8": 0.7465652378741652,
+          "9": 0.7472762982361019
+        },
+        "max_rank_step": {
+          "n": 6,
+          "mean": 0.7861288237230232,
+          "max": 0.8610204244032502,
+          "min": 0.7465652378741652
+        }
+      },
+      "during": {
+        "step_max_seconds": {
+          "10": 0.7369470768608153,
+          "11": 0.8162084398791194,
+          "12": 1.0424715268891305,
+          "13": 0.986916296184063,
+          "14": 1.0422356349881738,
+          "15": 0.9638643362559378,
+          "16": 1.2979836252052337,
+          "17": 0.9800350088626146,
+          "18": 1.0070577170699835,
+          "19": 0.9848669550847262,
+          "20": 0.9967187980655581,
+          "21": 1.0105400863103569,
+          "22": 1.0022350708022714,
+          "23": 0.9631018568761647,
+          "24": 0.9843310629948974,
+          "25": 1.0367665719240904,
+          "26": 1.1197476270608604,
+          "27": 1.0743231950327754,
+          "28": 0.9597005499526858,
+          "29": 0.9566476349718869,
+          "30": 0.9617268168367445,
+          "31": 0.9607861519325525
+        },
+        "max_rank_step": {
+          "n": 22,
+          "mean": 0.9947823654563929,
+          "max": 1.2979836252052337,
+          "min": 0.7369470768608153
+        }
+      },
+      "first_joint": {
+        "step_max_seconds": {
+          "32": 1.2328072721138597
+        },
+        "max_rank_step": {
+          "n": 1,
+          "mean": 1.2328072721138597,
+          "max": 1.2328072721138597,
+          "min": 1.2328072721138597
+        }
+      },
+      "post": {
+        "step_max_seconds": {
+          "33": 0.94439247995615,
+          "34": 0.8029763139784336,
+          "35": 0.8193714655935764,
+          "36": 0.7881553038023412
+        },
+        "max_rank_step": {
+          "n": 4,
+          "mean": 0.8387238908326253,
+          "max": 0.94439247995615,
+          "min": 0.7881553038023412
+        }
+      },
+      "post_extra_drain": {
+        "step_max_seconds": {},
+        "max_rank_step": {
+          "n": 0,
+          "mean": null,
+          "max": null,
+          "min": null
+        }
+      }
+    },
+    "stage_durations": {
+      "phase": {
+        "n": 288,
+        "mean": 1.1497535433308157,
+        "max": 6.416196376085281,
+        "min": 2.1600862964987755e-05
+      },
+      "planned_compute_delay": {
+        "n": 168,
+        "mean": 0.25007268109974184,
+        "max": 0.25012475810945034,
+        "min": 0.25006095692515373
+      },
+      "planned_old_manager_shutdown_complete": {
+        "n": 16,
+        "mean": 0.00020695172133855522,
+        "max": 0.00042231311090290546,
+        "min": 0.0001233401708304882
+      },
+      "planned_precopy_frozen": {
+        "n": 8,
+        "mean": 0.05707814183551818,
+        "max": 0.06009511696174741,
+        "min": 0.054393654922023416
+      },
+      "planned_precopy_window_open": {
+        "n": 8,
+        "mean": 0.014790755783906206,
+        "max": 0.020504479994997382,
+        "min": 0.012551782885566354
+      },
+      "planned_retired_cleanup_complete": {
+        "n": 24,
+        "mean": 0.754340304779665,
+        "max": 1.1065404848195612,
+        "min": 0.550522900884971
+      },
+      "reconfigure_end": {
+        "n": 32,
+        "mean": 0.05545375490328297,
+        "max": 0.12636131211183965,
+        "min": 0.0001077170018106699
+      },
+      "snapshot": {
+        "n": 8,
+        "mean": 0.005151358695002273,
+        "max": 0.0071227699518203735,
+        "min": 0.004277040949091315
+      },
+      "transport_recv": {
+        "n": 16,
+        "mean": 1.0532850038434844,
+        "max": 2.1110778911970556,
+        "min": 0.018537983065471053
+      },
+      "transport_send": {
+        "n": 16,
+        "mean": 0.057664762978674844,
+        "max": 0.10888497997075319,
+        "min": 0.015197464032098651
+      }
+    },
+    "last_validated_signatures": {
+      "0/0/0": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "bb1997c383ec5cdb69b677e05206f1ac959fde6364019b5853f39b7e18bf54d8",
+        "cuda_rng": "19192746ce35e0a90c20f36e4e9f540e879c0b0534ee821912d18cde65a468f5",
+        "model": "5e32eb9ae7caf3b35a315ae983e0c0f4e8f8886cc8cba5b04915d5533a344044",
+        "optimizer": "d48bf6a899878678cb2bcb2157f0a982e202984df23291c2b87c94d06caf4a67",
+        "progress": "f8a7e50788c496e1441bad93b06f1615966567e7722651302581fdf8881d9743",
+        "python_rng": "49290a927c3cfbf9b56d7ca46944296e677ed85c01823a1ea565763726f102d3",
+        "scheduler": "7b085b0539777254ad3f8ff9416cdc54a79e34aa2ad531c858a59bfc6029739b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "0/0/1": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3a83afc70203103a59ffccdf3187e523c47597e7951b36bfa26ff0c8233e8bde",
+        "cuda_rng": "c088bb87a5edea6310a2b269c491d6dbabc8c8ee987b47f8d7141a12668c6a34",
+        "model": "cb65c5f045f3c74867f98c693ad5b00429d7b5fbe7d8139e565fac1093a160da",
+        "optimizer": "d9ea03321e657390d3514692ef9c08d59106b07676a2d3a4f981c13e0c7c79bf",
+        "progress": "f8a7e50788c496e1441bad93b06f1615966567e7722651302581fdf8881d9743",
+        "python_rng": "368746de770685b4ad9d7b5f1dd143964620ffd21fab88c8a91fff506e08e348",
+        "scheduler": "7b085b0539777254ad3f8ff9416cdc54a79e34aa2ad531c858a59bfc6029739b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "0/0/2": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3a57e48b1b43139230a159d7c4eb7c558881938aa8a329d69ab4a2d838e3e028",
+        "cuda_rng": "aa714649c210740539060f0b92dc56e2c48fa06c627fc0f8bc6f1ee915ec92b3",
+        "model": "f093b41778593c706611ca4ab2451d54b6323f8135867aef8c4af1edc09b69d1",
+        "optimizer": "f606d17caa15eaf9ad6b4a9dbe5456a7fe19e466af19498635a9b533f215c13d",
+        "progress": "f8a7e50788c496e1441bad93b06f1615966567e7722651302581fdf8881d9743",
+        "python_rng": "f3786e427eabeeab75066bb98b5beb24895d3452bf6b6a327199ac563b31902c",
+        "scheduler": "7b085b0539777254ad3f8ff9416cdc54a79e34aa2ad531c858a59bfc6029739b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "0/0/3": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "f82d56e53df72f3108c831ef95f1f248acfd601da5d56db4977bfabc9a4674b4",
+        "cuda_rng": "3b1462961fe7692fd323d6a2b5c3854d820de7a6c5f32e7b355a9d9e594743f6",
+        "model": "f52fb98d06914718fdcfbdf332fb50926349f1addba7d95e8681254a8bc58227",
+        "optimizer": "3ae1618640374953d7a39a923c5e4fa40418ad61abf453595bf0166aa9557f9e",
+        "progress": "f8a7e50788c496e1441bad93b06f1615966567e7722651302581fdf8881d9743",
+        "python_rng": "e5e6e81bd8198b34d5dca6e3e18cdc725ebb844f88d195c6b772073453131d8b",
+        "scheduler": "7b085b0539777254ad3f8ff9416cdc54a79e34aa2ad531c858a59bfc6029739b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "0/0/4": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "eabee909209ec781ee55c8d0f1ec48f542aef41555e21119d696122d21f64824",
+        "cuda_rng": "93b88f14ebb89a8af15de4d7509d63ba70361859aa86ac7a5017f829803be797",
+        "model": "4d33af028b4aabb45d3a53d33ad8bd099e86e301a521aeaefe61ff736ad85c4a",
+        "optimizer": "e7790a94d24de2c2ae5c59e7a85071c70b9d9a81c69bd7d921e9e8cacd2274e9",
+        "progress": "f8a7e50788c496e1441bad93b06f1615966567e7722651302581fdf8881d9743",
+        "python_rng": "406b20041b686bd44844313e876d3b5be0ad0ac28dec92fa9cfd6e9deda7cb59",
+        "scheduler": "7b085b0539777254ad3f8ff9416cdc54a79e34aa2ad531c858a59bfc6029739b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "0/0/5": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "8702ddaa8954d6b436e0cb70eed4c01592d3c96c195385b3cb114d8014d494b8",
+        "cuda_rng": "c3bdb0a0950c21a91e8a3a8ffa76835df66b55445453c5469fff08d01bbb6add",
+        "model": "f52d38bec7facf5adbc8178c965d605b2e9f44902b7ea3d9e6bedf223b24698c",
+        "optimizer": "26aadc661ef8e79fcdce0328ca12668a784dee5a07d5eaec6e3446e5003fec1e",
+        "progress": "f8a7e50788c496e1441bad93b06f1615966567e7722651302581fdf8881d9743",
+        "python_rng": "1b0e6ccd396dcde511a5ad3cf451b3f12a1184db4c2d88c9495fe853652cdc8f",
+        "scheduler": "7b085b0539777254ad3f8ff9416cdc54a79e34aa2ad531c858a59bfc6029739b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "0/0/6": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3c0629bf320a529a1b9791b6086438f713a1759a091c44dcb93978dc4fae4fc4",
+        "cuda_rng": "4906f01415e405146a5912264ff19da3fa0552f51217211a6d2f7f35bda85201",
+        "model": "411af4d5319fbf2556fec4d6f5a5991a60e1aa61257f2436da20eaf49289e1cc",
+        "optimizer": "a632f27663b2c4ed5cea1d1ca0fd12b560c5fb9d3b5a2a246e43e751bdf598d0",
+        "progress": "f8a7e50788c496e1441bad93b06f1615966567e7722651302581fdf8881d9743",
+        "python_rng": "a2d98ffd6232d673abe23648890dbd3b026bb2d1b2a9baf96806bae0ec1e4619",
+        "scheduler": "7b085b0539777254ad3f8ff9416cdc54a79e34aa2ad531c858a59bfc6029739b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "0/0/7": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "7fbc4430089785e550c2202c66c9be43bde4818d0152d44155e3e64e008153de",
+        "cuda_rng": "2d661973f4c932021eefe2846b93d0976f09a3ff0065f26c521d07768c7ade02",
+        "model": "2c55041a6cb01052160dc6916c2f6bb2cdae77f0f16d4046681ef8441dcfec8e",
+        "optimizer": "a72bb049cdaeb647ac25ac5b82261e510b5bcd757c89d54d65006a7842b20e41",
+        "progress": "f8a7e50788c496e1441bad93b06f1615966567e7722651302581fdf8881d9743",
+        "python_rng": "2b6f4f08393e9fe4e0d16c563aa6d1c6f8f779f32fd243eeacdb20a3102d171d",
+        "scheduler": "7b085b0539777254ad3f8ff9416cdc54a79e34aa2ad531c858a59bfc6029739b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/0": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "bb1997c383ec5cdb69b677e05206f1ac959fde6364019b5853f39b7e18bf54d8",
+        "cuda_rng": "19192746ce35e0a90c20f36e4e9f540e879c0b0534ee821912d18cde65a468f5",
+        "model": "19066191a322553e50577a5f0060b183a453bc5338634e8273d9f1fc9089f970",
+        "optimizer": "aea6eed08e2d8437805c3cbd174e5d9fe79eb26c62babf4df291f2299bb99f26",
+        "progress": "c42e2af8810605921eecd187ba0d4e1a89f4eb02c15c2974be8fbf212cb67173",
+        "python_rng": "49290a927c3cfbf9b56d7ca46944296e677ed85c01823a1ea565763726f102d3",
+        "scheduler": "a6b33fac2f6fcfb538715f77265c3943078aa0ce35f87bc6d4d99f3b12c4a393",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/1": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3a83afc70203103a59ffccdf3187e523c47597e7951b36bfa26ff0c8233e8bde",
+        "cuda_rng": "c088bb87a5edea6310a2b269c491d6dbabc8c8ee987b47f8d7141a12668c6a34",
+        "model": "d56c99dba1a28b0c689d5db5dda058eaf5f2c1dd26d20659edaf3e137dbacd98",
+        "optimizer": "72a2bf62a00d38af9499cb231c417c461e04db79b34bc93ef439785a78409e65",
+        "progress": "c42e2af8810605921eecd187ba0d4e1a89f4eb02c15c2974be8fbf212cb67173",
+        "python_rng": "368746de770685b4ad9d7b5f1dd143964620ffd21fab88c8a91fff506e08e348",
+        "scheduler": "a6b33fac2f6fcfb538715f77265c3943078aa0ce35f87bc6d4d99f3b12c4a393",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/2": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3a57e48b1b43139230a159d7c4eb7c558881938aa8a329d69ab4a2d838e3e028",
+        "cuda_rng": "aa714649c210740539060f0b92dc56e2c48fa06c627fc0f8bc6f1ee915ec92b3",
+        "model": "9bd95077786da8540206cac631eb84407387cc9506a2820e0d3e6ac2267f4206",
+        "optimizer": "99b10248b52a521d1356e7565676ced7500469796acd54b441f9aba9a39f80b9",
+        "progress": "c42e2af8810605921eecd187ba0d4e1a89f4eb02c15c2974be8fbf212cb67173",
+        "python_rng": "f3786e427eabeeab75066bb98b5beb24895d3452bf6b6a327199ac563b31902c",
+        "scheduler": "a6b33fac2f6fcfb538715f77265c3943078aa0ce35f87bc6d4d99f3b12c4a393",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/3": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "f82d56e53df72f3108c831ef95f1f248acfd601da5d56db4977bfabc9a4674b4",
+        "cuda_rng": "3b1462961fe7692fd323d6a2b5c3854d820de7a6c5f32e7b355a9d9e594743f6",
+        "model": "6dfe1fc053c20152b602a74691ca0ef5e3e567bd2dd4345162344152adab3e60",
+        "optimizer": "a39084bd58865f35fccd27e31688d5e067e1ac7a909bd2e64879263963bd773f",
+        "progress": "c42e2af8810605921eecd187ba0d4e1a89f4eb02c15c2974be8fbf212cb67173",
+        "python_rng": "e5e6e81bd8198b34d5dca6e3e18cdc725ebb844f88d195c6b772073453131d8b",
+        "scheduler": "a6b33fac2f6fcfb538715f77265c3943078aa0ce35f87bc6d4d99f3b12c4a393",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/4": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "eabee909209ec781ee55c8d0f1ec48f542aef41555e21119d696122d21f64824",
+        "cuda_rng": "93b88f14ebb89a8af15de4d7509d63ba70361859aa86ac7a5017f829803be797",
+        "model": "6f91b3eb32521854f069e166a66a6518767babdd9f7008e4d0a53817489c94eb",
+        "optimizer": "fcaa2b9d6ceb1edb28ae4fd8d6e204bbf405815faec8af9f2b9983f1e70ef155",
+        "progress": "c42e2af8810605921eecd187ba0d4e1a89f4eb02c15c2974be8fbf212cb67173",
+        "python_rng": "406b20041b686bd44844313e876d3b5be0ad0ac28dec92fa9cfd6e9deda7cb59",
+        "scheduler": "a6b33fac2f6fcfb538715f77265c3943078aa0ce35f87bc6d4d99f3b12c4a393",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/5": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "8702ddaa8954d6b436e0cb70eed4c01592d3c96c195385b3cb114d8014d494b8",
+        "cuda_rng": "c3bdb0a0950c21a91e8a3a8ffa76835df66b55445453c5469fff08d01bbb6add",
+        "model": "8f93528a4b081363ce480e8dcf520f838d3f23e64a0c3829009abc090ba7c676",
+        "optimizer": "e214bd9305a0440cf79911ef24f1afbf5ba6dd1ac614cb7fd1ae0a9a19d15d80",
+        "progress": "c42e2af8810605921eecd187ba0d4e1a89f4eb02c15c2974be8fbf212cb67173",
+        "python_rng": "1b0e6ccd396dcde511a5ad3cf451b3f12a1184db4c2d88c9495fe853652cdc8f",
+        "scheduler": "a6b33fac2f6fcfb538715f77265c3943078aa0ce35f87bc6d4d99f3b12c4a393",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/6": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3c0629bf320a529a1b9791b6086438f713a1759a091c44dcb93978dc4fae4fc4",
+        "cuda_rng": "4906f01415e405146a5912264ff19da3fa0552f51217211a6d2f7f35bda85201",
+        "model": "d8885723163ea93c2206859351d9079906f89ad7b9cbc6f0c1e737bfc3f9cd06",
+        "optimizer": "2e2bf5b0a4d7a7116f9cf09f7ec8990e97fdad46359fcbc10110cd995c3d35ec",
+        "progress": "c42e2af8810605921eecd187ba0d4e1a89f4eb02c15c2974be8fbf212cb67173",
+        "python_rng": "a2d98ffd6232d673abe23648890dbd3b026bb2d1b2a9baf96806bae0ec1e4619",
+        "scheduler": "a6b33fac2f6fcfb538715f77265c3943078aa0ce35f87bc6d4d99f3b12c4a393",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/0/7": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "7fbc4430089785e550c2202c66c9be43bde4818d0152d44155e3e64e008153de",
+        "cuda_rng": "2d661973f4c932021eefe2846b93d0976f09a3ff0065f26c521d07768c7ade02",
+        "model": "d0d43cf9f2663bc7c828b7a3bb59dfbe8e3eda9a7336242d9db0015792b977c4",
+        "optimizer": "0c2baf20e16e15066158f4aa53cbe2cd2ab072df6c114080dffb9b849b9caee7",
+        "progress": "c42e2af8810605921eecd187ba0d4e1a89f4eb02c15c2974be8fbf212cb67173",
+        "python_rng": "2b6f4f08393e9fe4e0d16c563aa6d1c6f8f779f32fd243eeacdb20a3102d171d",
+        "scheduler": "a6b33fac2f6fcfb538715f77265c3943078aa0ce35f87bc6d4d99f3b12c4a393",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/1/0": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "bb1997c383ec5cdb69b677e05206f1ac959fde6364019b5853f39b7e18bf54d8",
+        "cuda_rng": "19192746ce35e0a90c20f36e4e9f540e879c0b0534ee821912d18cde65a468f5",
+        "model": "5e32eb9ae7caf3b35a315ae983e0c0f4e8f8886cc8cba5b04915d5533a344044",
+        "optimizer": "d48bf6a899878678cb2bcb2157f0a982e202984df23291c2b87c94d06caf4a67",
+        "progress": "f8a7e50788c496e1441bad93b06f1615966567e7722651302581fdf8881d9743",
+        "python_rng": "49290a927c3cfbf9b56d7ca46944296e677ed85c01823a1ea565763726f102d3",
+        "scheduler": "7b085b0539777254ad3f8ff9416cdc54a79e34aa2ad531c858a59bfc6029739b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/1/1": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3a83afc70203103a59ffccdf3187e523c47597e7951b36bfa26ff0c8233e8bde",
+        "cuda_rng": "c088bb87a5edea6310a2b269c491d6dbabc8c8ee987b47f8d7141a12668c6a34",
+        "model": "cb65c5f045f3c74867f98c693ad5b00429d7b5fbe7d8139e565fac1093a160da",
+        "optimizer": "d9ea03321e657390d3514692ef9c08d59106b07676a2d3a4f981c13e0c7c79bf",
+        "progress": "f8a7e50788c496e1441bad93b06f1615966567e7722651302581fdf8881d9743",
+        "python_rng": "368746de770685b4ad9d7b5f1dd143964620ffd21fab88c8a91fff506e08e348",
+        "scheduler": "7b085b0539777254ad3f8ff9416cdc54a79e34aa2ad531c858a59bfc6029739b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/1/2": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3a57e48b1b43139230a159d7c4eb7c558881938aa8a329d69ab4a2d838e3e028",
+        "cuda_rng": "aa714649c210740539060f0b92dc56e2c48fa06c627fc0f8bc6f1ee915ec92b3",
+        "model": "f093b41778593c706611ca4ab2451d54b6323f8135867aef8c4af1edc09b69d1",
+        "optimizer": "f606d17caa15eaf9ad6b4a9dbe5456a7fe19e466af19498635a9b533f215c13d",
+        "progress": "f8a7e50788c496e1441bad93b06f1615966567e7722651302581fdf8881d9743",
+        "python_rng": "f3786e427eabeeab75066bb98b5beb24895d3452bf6b6a327199ac563b31902c",
+        "scheduler": "7b085b0539777254ad3f8ff9416cdc54a79e34aa2ad531c858a59bfc6029739b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/1/3": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "f82d56e53df72f3108c831ef95f1f248acfd601da5d56db4977bfabc9a4674b4",
+        "cuda_rng": "3b1462961fe7692fd323d6a2b5c3854d820de7a6c5f32e7b355a9d9e594743f6",
+        "model": "f52fb98d06914718fdcfbdf332fb50926349f1addba7d95e8681254a8bc58227",
+        "optimizer": "3ae1618640374953d7a39a923c5e4fa40418ad61abf453595bf0166aa9557f9e",
+        "progress": "f8a7e50788c496e1441bad93b06f1615966567e7722651302581fdf8881d9743",
+        "python_rng": "e5e6e81bd8198b34d5dca6e3e18cdc725ebb844f88d195c6b772073453131d8b",
+        "scheduler": "7b085b0539777254ad3f8ff9416cdc54a79e34aa2ad531c858a59bfc6029739b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/1/4": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "eabee909209ec781ee55c8d0f1ec48f542aef41555e21119d696122d21f64824",
+        "cuda_rng": "93b88f14ebb89a8af15de4d7509d63ba70361859aa86ac7a5017f829803be797",
+        "model": "4d33af028b4aabb45d3a53d33ad8bd099e86e301a521aeaefe61ff736ad85c4a",
+        "optimizer": "e7790a94d24de2c2ae5c59e7a85071c70b9d9a81c69bd7d921e9e8cacd2274e9",
+        "progress": "f8a7e50788c496e1441bad93b06f1615966567e7722651302581fdf8881d9743",
+        "python_rng": "406b20041b686bd44844313e876d3b5be0ad0ac28dec92fa9cfd6e9deda7cb59",
+        "scheduler": "7b085b0539777254ad3f8ff9416cdc54a79e34aa2ad531c858a59bfc6029739b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/1/5": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "8702ddaa8954d6b436e0cb70eed4c01592d3c96c195385b3cb114d8014d494b8",
+        "cuda_rng": "c3bdb0a0950c21a91e8a3a8ffa76835df66b55445453c5469fff08d01bbb6add",
+        "model": "f52d38bec7facf5adbc8178c965d605b2e9f44902b7ea3d9e6bedf223b24698c",
+        "optimizer": "26aadc661ef8e79fcdce0328ca12668a784dee5a07d5eaec6e3446e5003fec1e",
+        "progress": "f8a7e50788c496e1441bad93b06f1615966567e7722651302581fdf8881d9743",
+        "python_rng": "1b0e6ccd396dcde511a5ad3cf451b3f12a1184db4c2d88c9495fe853652cdc8f",
+        "scheduler": "7b085b0539777254ad3f8ff9416cdc54a79e34aa2ad531c858a59bfc6029739b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/1/6": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "3c0629bf320a529a1b9791b6086438f713a1759a091c44dcb93978dc4fae4fc4",
+        "cuda_rng": "4906f01415e405146a5912264ff19da3fa0552f51217211a6d2f7f35bda85201",
+        "model": "411af4d5319fbf2556fec4d6f5a5991a60e1aa61257f2436da20eaf49289e1cc",
+        "optimizer": "a632f27663b2c4ed5cea1d1ca0fd12b560c5fb9d3b5a2a246e43e751bdf598d0",
+        "progress": "f8a7e50788c496e1441bad93b06f1615966567e7722651302581fdf8881d9743",
+        "python_rng": "a2d98ffd6232d673abe23648890dbd3b026bb2d1b2a9baf96806bae0ec1e4619",
+        "scheduler": "7b085b0539777254ad3f8ff9416cdc54a79e34aa2ad531c858a59bfc6029739b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "1/1/7": {
+        "buffers": "49fc958a26fb57d71eb9c2767f812ba3ff8f0c326fcee48f4897af2f188e8ff5",
+        "cpu_rng": "7fbc4430089785e550c2202c66c9be43bde4818d0152d44155e3e64e008153de",
+        "cuda_rng": "2d661973f4c932021eefe2846b93d0976f09a3ff0065f26c521d07768c7ade02",
+        "model": "2c55041a6cb01052160dc6916c2f6bb2cdae77f0f16d4046681ef8441dcfec8e",
+        "optimizer": "a72bb049cdaeb647ac25ac5b82261e510b5bcd757c89d54d65006a7842b20e41",
+        "progress": "f8a7e50788c496e1441bad93b06f1615966567e7722651302581fdf8881d9743",
+        "python_rng": "2b6f4f08393e9fe4e0d16c563aa6d1c6f8f779f32fd243eeacdb20a3102d171d",
+        "scheduler": "7b085b0539777254ad3f8ff9416cdc54a79e34aa2ad531c858a59bfc6029739b",
+        "tracker_rng": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "name": "v2_q2_r42_v2_repeat",
+    "resources": {
+      "company_pids_unchanged": true,
+      "company_pid_count_per_node": 8,
+      "extra_gpu": 0,
+      "gpu_load": {
+        "node0": {
+          "before": [
+            "0, 0, 56251",
+            "1, 0, 56251",
+            "2, 0, 56427",
+            "3, 0, 56427",
+            "4, 0, 56427",
+            "5, 0, 56427",
+            "6, 0, 56251",
+            "7, 0, 56251"
+          ],
+          "after": [
+            "0, 0, 56251",
+            "1, 0, 56251",
+            "2, 0, 56427",
+            "3, 0, 56427",
+            "4, 0, 56427",
+            "5, 0, 56427",
+            "6, 0, 56251",
+            "7, 0, 56251"
+          ]
+        },
+        "node1": {
+          "before": [
+            "0, 0, 64605",
+            "1, 0, 64605",
+            "2, 0, 64813",
+            "3, 0, 64813",
+            "4, 0, 64813",
+            "5, 0, 64813",
+            "6, 0, 64605",
+            "7, 0, 64605"
+          ],
+          "after": [
+            "0, 0, 64605",
+            "1, 0, 64605",
+            "2, 0, 64813",
+            "3, 0, 64813",
+            "4, 0, 64813",
+            "5, 0, 64813",
+            "6, 0, 64605",
+            "7, 0, 64605"
+          ]
+        },
+        "node3": {
+          "before": [
+            "0, 0, 59669",
+            "1, 0, 59669",
+            "2, 0, 59877",
+            "3, 0, 59877",
+            "4, 0, 59877",
+            "5, 0, 59877",
+            "6, 0, 59669",
+            "7, 0, 59669"
+          ],
+          "after": [
+            "0, 0, 59669",
+            "1, 0, 59669",
+            "2, 0, 59877",
+            "3, 0, 59877",
+            "4, 0, 59877",
+            "5, 0, 59877",
+            "6, 0, 59669",
+            "7, 0, 59669"
+          ]
+        }
+      }
+    }
+  }
+}
