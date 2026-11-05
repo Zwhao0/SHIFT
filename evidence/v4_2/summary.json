@@ -5936,5 +5936,21 @@
     "V1/V2 support DP1 whole replica; V4 supports DP0 PP1 rank4-7.",
     "Manual faults at committed boundaries; no arbitrary mid-communication host-failure guarantee.",
     "Full state hashes are development audits; runtime uses structural/version/readiness checks and final state auditing."
-  ]
+  ],
+  "profiles": {
+    "unified_session": {
+      "global_batch": 8,
+      "seq_len": 512,
+      "initialization_seed": 2026,
+      "artificial_source_delay_ms": 0,
+      "cold_candidate": true,
+      "per_step_development_hash": false
+    },
+    "legacy_v2_compatibility": {
+      "artificial_source_delay_ms": 250,
+      "cold_candidate": true,
+      "per_step_development_hash": false
+    },
+    "cross_profile_recovery_comparison": "Not a matched speedup comparison; legacy repeat uses unchanged code/profile, unified steady controls are reported separately."
+  }
 }

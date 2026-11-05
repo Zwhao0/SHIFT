@@ -42,3 +42,5 @@ CUDA_VISIBLE_DEVICES='' python -m scripts.verify_session /workspace/SHIFT/result
 保留现有环境/headers/模型与最小 BF16 初始 anchor；单训练锁、实验串行、每 worker 显存上限0.12。训练中禁止 prepare，不操作公司共享容器。导出审计、比较签名和源码 SHA 后删除可再生 raw/log/trace/中间快照。
 
 最终发布代码验收为 `session_s42_release`（188步、各两次策略）；`session_s42_final` 是额外432步联合稳态对照。最终158项服务器CPU测试通过。v2旧入口30.314秒慢例与未改代码复跑22.950秒均保留；`manager_init` 是包含handoff等待/接收的历史混合计时区间。v2切回通用Native Manager的一次提交间隔约1.42–1.45秒，完整80步与11–80稳态及逐步commit gap同时报告，避免稳态窗口掩盖切换开销。共享负载/首次内核准备/通信竞争未能严格隔离。
+
+计时profile区别：统一会话是手动策略选择，v2源未注入人工slow-compute；旧v2兼容入口与v4.1旧v2对照均注入250ms延迟。因此统一会话与旧入口的完整迁移秒数不作为严格配对加速证明。80步对照统计的是恢复后正常训练，另保留包含切换开销的完整80步commit cadence。
