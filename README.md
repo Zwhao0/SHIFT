@@ -1,4 +1,12 @@
-# SHIFT — v4.2 手动恢复优化完成
+# SHIFT — v4.3 两节点低显存验证
+
+完整 Qwen MoE 494,712,832 参数，短序列32、CPU AdamW 状态卸载。v1 使用16卡，验证两个副本各一次真实 SIGKILL 后原机重建；v2/v4 使用8卡训练并预留候选槽位，验证两次整副本迁移与两次 PP1 部分迁移。两种布局分别启动会话，不能在同一会话内动态改 TP。
+
+[两节点方案、复现和实测](docs/v4_3_two_node_validation.md) · [完整验收与计时](evidence/v4_3/summary.json) · [拒绝样本](evidence/v4_3/rejected.json) · [资源清理](evidence/v4_3/cleanup.json)
+
+此配置用于验证恢复和迁移流程；共享 GPU 的资源监视不构成业务吞吐隔离。CPU AdamW、TP和序列长度均与历史性能配置不同，步时只做同配置迁移前后比较。node3 未参与。
+
+## v4.2 历史记录
 
 同一训练会话启动一次，通过统一命令在运行中选择 v1 原生恢复、v2 整副本 p2 迁移、v4 部分 PP 迁移。`training_loop`、`session_control`、`session_engine` 分别提供共同主循环、命令接口和策略路由，继续共用原有训练/数据/Adam/scheduler。当前支持 v1/v2 的 DP1 全8 rank，以及 v4 的 DP0 PP1 rank4–7，可迁出再迁回。
 

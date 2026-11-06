@@ -8,8 +8,45 @@ from shift_full.v4_transaction import OwnerGate
 
 
 class NativeRecoveryTest(unittest.TestCase):
+    def test_switch_first_gradient_collective_waits_for_both_replicas(self):
+        from shift_full.session_layout import SessionLayout
+        for replica in (0,1):
+            calls=[]
+            r=SessionRuntime.__new__(SessionRuntime)
+            r.handoff=None;r.in_protocol=True;r.replica=replica;r.rank=0;r.phase='after'
+            r.protocol_plan=SimpleNamespace(cut=10);r.progress={'updates':10};r.layout=SessionLayout(4)
+            r.event=lambda *args,**kw:None
+            r.protocol_store=SimpleNamespace(set=lambda key,value:calls.append(('set',key)),
+                wait=lambda keys:calls.append(('wait',keys)))
+            r.ddp=SimpleNamespace(buffers=[],expert_parallel_buffers=[])
+            r.outer=SimpleNamespace(reduce=lambda *args:calls.append(('reduce',None)))
+            r.gradient_finalize(lambda:calls.append(('native',None)))
+            self.assertEqual(calls[0][0],'native')
+            self.assertEqual(calls[-1][0],'reduce')
+            self.assertEqual(calls[-2],('wait',[f'gradients_ready/10/{a}/{b}' for a in range(2) for b in range(4)]))
+            calls.clear();r.progress['updates']=11
+            r.gradient_finalize(lambda:None)
+            self.assertEqual(calls,[('reduce',None)])
+
+    def test_v4_peer_defers_quorum_until_replacement_ready_but_not_compute(self):
+        from shift_full.session_outer import SessionOuter
+        calls=[]
+        r=SimpleNamespace(in_protocol=True,replica=1,phase='after',protocol_plan=SimpleNamespace(cut=10),
+            progress={'updates':10},healing=False,protocol_store=SimpleNamespace(wait=lambda keys:calls.append(('ready',keys))))
+        o=SessionOuter.__new__(SessionOuter);o.runtime=r;o.replica=1;o.rank=0;o.refresh_boundary=lambda:None
+        o.manager=SimpleNamespace(start_quorum=lambda **kw:calls.append(('start',kw)),wait_quorum=lambda:calls.append(('wait',None)),
+            num_participants=lambda:2,participating_rank=lambda:1)
+        o.begin(10);self.assertFalse(calls)
+        calls.append(('compute',None));o.wait_quorum()
+        self.assertEqual([x[0] for x in calls],['compute','ready','start','wait'])
+        self.assertEqual(calls[1][1],['activated'])
+        calls.clear();r.progress['updates']=11
+        o.begin(11);self.assertEqual(calls[0][0],'start')
+
     def runtime(self):
         r=SessionRuntime.__new__(SessionRuntime)
+        from shift_full.session_layout import SessionLayout
+        r.layout=SessionLayout()
         r.progress={'updates':0};r.replica=1;r.rank=0;r.role='D';r.epoch=0;r.sequence=1;r.handoff=None
         r.gate=OwnerGate(0,'B');r.outer=SimpleNamespace(manager=SimpleNamespace(_use_async_quorum=True))
         r.optimizer=SimpleNamespace(zero_grad=lambda **kw:None);r.ddp=SimpleNamespace(zero_grad_buffer=lambda:None)
@@ -55,6 +92,43 @@ class NativeRecoveryTest(unittest.TestCase):
         with patch('shift_full.session_engine.SessionRuntime',return_value=r),patch('shift_full.session_engine.SessionOuter',side_effect=outer),patch('shift_full.session_engine.run_loop'):
             run_session({})
         self.assertEqual(observed,[('target-host',True)])
+
+    def test_replica_zero_native_candidate_keeps_replica_one_address(self):
+        from shift_full.session_engine import run_session
+        command=dict(schema=1,session='s',id='recover-zero',expected_epoch=4,
+            action='recover',policy='v1',source_replica=0,target='node3')
+        r=SimpleNamespace(c=dict(session_candidate=True,session_command={'command':command,'sequence':5},
+            node_hosts={'node3':'replacement'}),replica_hosts={'0':'old-zero','1':'healthy-one'},
+            retired=False,stopping=False,policy=object())
+        r._set_command=lambda c:setattr(r,'command',c)
+        observed=[];r.bind_outer=lambda outer:None
+        def outer(runtime):observed.append(dict(runtime.replica_hosts));return object()
+        with patch('shift_full.session_engine.SessionRuntime',return_value=r),patch('shift_full.session_engine.SessionOuter',side_effect=outer),patch('shift_full.session_engine.run_loop'):
+            run_session({})
+        self.assertEqual(observed,[{'0':'replacement','1':'healthy-one'}])
+
+    def test_native_recovery_accepts_either_replica_but_planned_scope_stays_explicit(self):
+        r=self.runtime();r.c={'node_hosts':{'node3':'target'}}
+        for replica in (0,1):
+            r.validate_placement(SimpleNamespace(policy='v1',source_replica=replica,target='node3'))
+        with self.assertRaisesRegex(ValueError,'replica 1'):
+            r.validate_placement(SimpleNamespace(policy='v2',source_replica=0,target='node3'))
+        with self.assertRaises(ValueError):
+            r.validate_placement(SimpleNamespace(policy='v1',source_replica=2,target='node3'))
+
+    def test_recovered_replica_zero_updates_only_its_host_and_resets_planned_store(self):
+        r=self.runtime();r.replica=0;r.progress={'updates':25};r.healing=True;r.planned_coord=object()
+        r.outer.manager.num_participants=lambda:2
+        r.epoch=4;r.gate=OwnerGate(4,'B')
+        r.c={'node_hosts':{'node3':'new-zero'}};r.replica_hosts={'0':'old-zero','1':'one'}
+        r.partial_owner='B';r.command=SimpleNamespace(policy='v1',expected_epoch=4,source_replica=0,target='node3')
+        r.base_store=SimpleNamespace(check=lambda keys:True,get=lambda key:b'25',set=lambda *args:None)
+        r._barrier=lambda key:None;r.event=lambda *args,**kwargs:None
+        r.s=SimpleNamespace(training_identity=lambda:{})
+        r._complete_command()
+        self.assertEqual(r.replica_hosts,{'0':'new-zero','1':'one'})
+        self.assertIsNone(r.planned_coord)
+        self.assertEqual(r.epoch,5)
 
     def test_p2_coordinator_is_kept_alive_and_reused(self):
         r=self.runtime();r.planned_coord=None;r.event=lambda *a,**k:None

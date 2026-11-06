@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+import os
 import pickle
 import time
 from datetime import timedelta
@@ -24,6 +25,7 @@ except ImportError:  # pragma: no cover - DTensor exists in supported torch buil
 _MAX_METADATA_BYTES = 16 * 1024 * 1024
 _MAX_CPU_TENSOR_BYTES = 4 * 1024 * 1024
 _VERSION = 1
+_CHUNK_BYTES = 64 * 1024 * 1024
 
 
 class PackedGPUTransport(CheckpointTransport[object]):
@@ -42,6 +44,7 @@ class PackedGPUTransport(CheckpointTransport[object]):
             raise ValueError(f"PackedGPUTransport requires a CUDA device, got {device}")
         self._timeout = timeout
         self._event = event
+        self._stage_cpu = os.environ.get('SHIFT_CPU_ADAM')=='1'
 
     def metadata(self) -> str:
         return "<packed-gpu>"
@@ -71,6 +74,9 @@ class PackedGPUTransport(CheckpointTransport[object]):
                 control_bytes=control_bytes,
                 tensors=tensors,
                 cpu_tensor_bytes=cpu_tensor_bytes,
+                staged_cpu_state=getattr(self,'_stage_cpu',False),
+                cuda_peak_allocated_bytes=torch.cuda.max_memory_allocated(self._device),
+                cuda_peak_reserved_bytes=torch.cuda.max_memory_reserved(self._device),
             )
 
     def _pack(
@@ -97,22 +103,24 @@ class PackedGPUTransport(CheckpointTransport[object]):
                 raise TypeError(
                     f"only strided tensor leaves are supported, got {value.layout}"
                 )
-            if value.device.type == "cuda":
+            staged_cpu=self._stage_cpu and value.device.type=='cpu' and value.numel()*value.element_size()>4096
+            if value.device.type == "cuda" or staged_cpu:
                 dtype = value.dtype
-                group = dtype_to_group.get(dtype)
+                group = None if self._stage_cpu else dtype_to_group.get(dtype)
                 if group is None:
                     group = len(chunks)
                     dtype_to_group[dtype] = group
                     chunks.append([])
                     group_numels.append(0)
 
-                flat = value.detach().reshape(-1).to(device=self._device)
+                flat = value.detach().reshape(-1)
+                if not staged_cpu:flat=flat.to(device=self._device)
                 offset = group_numels[group]
                 chunks[group].append(flat)
                 group_numels[group] += flat.numel()
                 leaf_meta.append(
                     {
-                        "kind": "cuda",
+                        "kind": "staged_cpu" if staged_cpu else "cuda",
                         "group": group,
                         "offset": offset,
                         "shape": tuple(value.shape),
@@ -133,11 +141,18 @@ class PackedGPUTransport(CheckpointTransport[object]):
                     f"only CUDA and small CPU tensor leaves are supported, got {value.device}"
                 )
 
-        # cat creates independent contiguous snapshots, including for a single
-        # tensor and for empty tensors. Keep these alive until every send waits.
-        groups = [torch.cat(parts, dim=0) for parts in chunks]
+        # Legacy cat creates independent contiguous snapshots. Streamed mode
+        # borrows tensors under the checked read-only boundary until send waits.
+        groups=[]
+        for i,parts in enumerate(chunks):
+            if self._stage_cpu:
+                # Each leaf is one group. Frozen CUDA values are sent directly;
+                # CPU moments use a bounded reusable CUDA staging buffer.
+                groups.append(parts[0])
+            else:groups.append(torch.cat(parts,dim=0))
         group_meta = [
-            {"dtype": chunks[i][0].dtype, "numel": group_numels[i]}
+            {"dtype": chunks[i][0].dtype, "numel": group_numels[i],
+             "device":chunks[i][0].device.type}
             for i in range(len(chunks))
         ]
         metadata = {
@@ -148,6 +163,8 @@ class PackedGPUTransport(CheckpointTransport[object]):
             "leaves": leaf_meta,
             "tensor_count": tensor_count,
             "cpu_tensor_bytes": cpu_tensor_bytes,
+            "streamed":self._stage_cpu,
+            "chunk_bytes":_CHUNK_BYTES,
         }
         metadata_bytes = pickle.dumps(metadata, protocol=pickle.HIGHEST_PROTOCOL)
         if len(metadata_bytes) > _MAX_METADATA_BYTES:
@@ -166,7 +183,8 @@ class PackedGPUTransport(CheckpointTransport[object]):
     ) -> None:
         start = time.perf_counter()
         leaves, _ = tree_flatten(state_dict)
-        versions = [(t, t._version) for t in leaves if isinstance(t, torch.Tensor)]
+        versions = (self.frozen_versions if state_dict is None and hasattr(self,'frozen_versions')
+                    else [(t,t._version) for t in leaves if isinstance(t,torch.Tensor)])
         metadata_bytes, groups, tensor_count, cpu_tensor_bytes = self._pack(
             state_dict, step
         )
@@ -185,13 +203,26 @@ class PackedGPUTransport(CheckpointTransport[object]):
             # dtype group in its serialized order. NCCL does not match by tag.
             works.append(self._pg.send([length], dst_rank, tag=1))
             works.append(self._pg.send([metadata], dst_rank, tag=2))
-            for index, flat in enumerate(groups):
-                if flat.numel() > 0:
-                    works.append(self._pg.send([flat], dst_rank, tag=3 + index))
+            if not self._stage_cpu:
+                for index, flat in enumerate(groups):
+                    if flat.numel() > 0:
+                        works.append(self._pg.send([flat], dst_rank, tag=3 + index))
 
         wait_timeout = timeout if timeout is not None else self._timeout
         for work in works:
             work.wait(wait_timeout)
+
+        if self._stage_cpu:
+            for index,flat in enumerate(groups):
+                count=max(1,_CHUNK_BYTES//flat.element_size())
+                scratch=torch.empty(min(count,flat.numel()),dtype=flat.dtype,device=self._device) if flat.device.type=='cpu' else None
+                for offset in range(0,flat.numel(),count):
+                    length=min(count,flat.numel()-offset)
+                    chunk=flat.narrow(0,offset,length)
+                    if scratch is not None:
+                        scratch[:length].copy_(chunk);chunk=scratch[:length]
+                    for dst_rank in dst_ranks:self._pg.send([chunk],dst_rank,tag=3+index).wait(wait_timeout)
+                    if scratch is not None:torch.cuda.current_stream(self._device).synchronize()
 
         torch.cuda.current_stream(self._device).synchronize()
         if any(t._version != version for t, version in versions):
@@ -240,6 +271,9 @@ class PackedGPUTransport(CheckpointTransport[object]):
             raise ValueError(f"checkpoint step mismatch: {wire.get('step')} != {step}")
 
         groups_meta = wire.get("groups")
+        streamed=wire.get('streamed',False)
+        if type(streamed) is not bool or (streamed and wire.get('chunk_bytes')!=_CHUNK_BYTES):
+            raise ValueError('unsupported streamed tensor chunk size')
         leaves_meta = wire.get("leaves")
         treespec = wire.get("treespec")
         if not isinstance(groups_meta, list) or not isinstance(leaves_meta, list):
@@ -274,10 +308,20 @@ class PackedGPUTransport(CheckpointTransport[object]):
                 or numel < 0
             ):
                 raise ValueError(f"invalid tensor group {index}")
-            flat = torch.empty(numel, dtype=dtype, device=self._device)
+            location=group.get('device','cuda') if streamed else 'cuda'
+            if location not in ('cpu','cuda'):raise ValueError('invalid streamed tensor location')
+            flat = torch.empty(numel, dtype=dtype, device='cpu' if location=='cpu' else self._device)
             groups.append(flat)
             if numel > 0:
-                works.append(self._pg.recv([flat], src_rank, tag=3 + index))
+                if streamed:
+                    count=max(1,_CHUNK_BYTES//flat.element_size())
+                    scratch=torch.empty(min(count,numel),dtype=dtype,device=self._device) if location=='cpu' else None
+                    for offset in range(0,numel,count):
+                        length=min(count,numel-offset)
+                        chunk=scratch[:length] if scratch is not None else flat.narrow(0,offset,length)
+                        self._pg.recv([chunk],src_rank,tag=3+index).wait(wait_timeout)
+                        if scratch is not None:flat.narrow(0,offset,length).copy_(chunk)
+                else:works.append(self._pg.recv([flat], src_rank, tag=3 + index))
         for work in works:
             work.wait(wait_timeout)
 
@@ -289,7 +333,7 @@ class PackedGPUTransport(CheckpointTransport[object]):
             if kind in ("value", "cpu"):
                 value = leaf.get("value")
                 values.append(value)
-            elif kind == "cuda":
+            elif kind in ("cuda","staged_cpu"):
                 group_index = leaf.get("group")
                 offset = leaf.get("offset")
                 shape = leaf.get("shape")
@@ -307,7 +351,9 @@ class PackedGPUTransport(CheckpointTransport[object]):
                 flat = groups[group_index]
                 if offset + numel > flat.numel():
                     raise ValueError("CUDA tensor leaf exceeds its packed group")
-                values.append(flat.narrow(0, offset, numel).view(tuple(shape)))
+                value=flat.narrow(0,offset,numel).view(tuple(shape))
+                if kind=='staged_cpu':value=value.to('cpu')
+                values.append(value)
             else:
                 raise ValueError(f"unknown checkpoint leaf kind: {kind!r}")
 

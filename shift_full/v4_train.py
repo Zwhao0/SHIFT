@@ -20,6 +20,7 @@ from dataclasses import replace
 from datetime import timedelta
 
 from .v4_protocol import Ownership, Plan
+from .session_layout import SessionLayout
 from .training_core import (TrainingState, partition_model, configure_model, sample_plan,
     make_batches, train_step, complete_step, initialize_rng)
 
@@ -83,10 +84,11 @@ def main():
     base_store=store
     if c.get('transactional_switch'):
         store=dist.PrefixStore(f"round/{c.get('initial_round',0)}/",base_store)
+    layout=SessionLayout.from_config(c)
     role, device = a.role, a.device
     initial_candidate=c.get('session_candidate',role==c.get('target_role','C'))
     replica = c.get('session_replica',int(role in ('D','E')))
-    rank = device if c.get('candidate_full_dp') else Plan.logical_rank({'D':'A','E':'B'}.get(role,role), device, c.get('cross_node_tp',False))
+    rank = Plan.logical_rank({'D':'A','E':'B'}.get(role,role),device,True) if c.get('cross_node_tp') else layout.rank(role,device,c.get('candidate_full_dp',False))
     owner_role = 'A' if replica else role
     plan = Plan(**c['plan'])
     from .v4_state import boundary_validation
@@ -133,7 +135,7 @@ def main():
         from torch.distributed import distributed_c10d as c10d
         from .v4_groups import LocalGroupCache, validate_runtime
         validate_runtime(c10d, state, megatron_adapter)
-        local_cache = LocalGroupCache(dist, c10d, (state.__file__, megatron_adapter.__file__))
+        local_cache = LocalGroupCache(dist, c10d, (state.__file__, megatron_adapter.__file__),stage_width=layout.width)
     from megatron.core.distributed import finalize_model_grads
     from megatron.core.pipeline_parallel.schedules import get_forward_backward_func
     from megatron.core.tensor_parallel.random import get_cuda_rng_tracker
@@ -144,12 +146,12 @@ def main():
         nonlocal local_handles
         started = time.monotonic()
         dist.init_process_group('nccl', store=dist.PrefixStore(f'v4/replica{replica}/{epoch}/', store),
-                                rank=device if local else rank, world_size=(8 if c.get('candidate_full_dp') else 4) if local else 8, timeout=timeout)
+                                rank=device if local else rank, world_size=(layout.world if c.get('candidate_full_dp') else layout.width) if local else layout.world, timeout=timeout)
         directory = out / f'topology_{epoch}_{role}'
         directory.mkdir(exist_ok=True)
         with local_cache.creating(reuse=isinstance(epoch,int) and epoch>=1) if local_cache else nullcontext():
-            groups = megatron_adapter.initialize_groups(directory, 2, 1 if local and not c.get('candidate_full_dp') else 2, 2)
-        assert state.get_pipeline_model_parallel_rank() == (0 if local and not c.get('candidate_full_dp') else rank // 4)
+            groups = megatron_adapter.initialize_groups(directory, 2, 1 if local and not c.get('candidate_full_dp') else 2, layout.tp)
+        assert state.get_pipeline_model_parallel_rank() == (0 if local and not c.get('candidate_full_dp') else rank // layout.width)
         assert dist.get_world_size(groups[0]) == 2
         assert dist.get_world_size(groups[1]) == 1
         assert dist.get_world_size(groups[2]) == 2
@@ -301,7 +303,7 @@ def main():
             from .v4_metadata import metadata_groups
             with metadata_groups(dist,state,rank) as metadata_handles:
                 local_groups=(metadata_handles['ep'],metadata_handles['expert_dp'],metadata_handles['dense'])
-                prepared_stage=build(full,local_groups,rank//4)
+                prepared_stage=build(full,local_groups,rank//layout.width)
             del full
             prepared_old=(metadata_handles['tp'],local_groups[0],local_groups[2],local_groups[1])
             event('standby_metadata_model_ready',allocated=torch.cuda.memory_allocated(),
@@ -313,7 +315,7 @@ def main():
                 state.set_pipeline_model_parallel_rank(1)
                 state.set_pipeline_model_parallel_world_size(2)
             build_started=time.monotonic()
-            prepared_stage = build(full, local_groups, rank//4 if c.get('candidate_full_dp') else 1)
+            prepared_stage = build(full, local_groups, rank//layout.width if c.get('candidate_full_dp') else 1)
             event('standby_stage_built',seconds=time.monotonic()-build_started)
             del full
             prepared_old = (state.get_tensor_model_parallel_group(),local_groups[0],local_groups[2],local_groups[1])
@@ -406,17 +408,17 @@ def main():
         event('state_hash',step=progress['updates'],seconds=time.monotonic()-started,
               final_audit=final_audit_started,calls=hash_calls)
         return value
-    def snapshot(*, audit=None):
+    def snapshot(*, audit=None, copy_state=True):
         if audit is None:audit=audit_boundary
         started = time.monotonic()
         torch.cuda.synchronize()
-        value = tree_map(lambda t: t.detach().clone() if isinstance(t, torch.Tensor) else t,
-            training_state.capture(source_replica=replica, source_rank=rank, v4_epoch=1, v4_owner='C',
-                outer_manager=outer.state_dict() if outer else None))
+        value=training_state.capture(source_replica=replica, source_rank=rank, v4_epoch=1, v4_owner='C',
+                outer_manager=outer.state_dict() if outer else None)
+        if copy_state:value=tree_map(lambda t:t.detach().clone() if isinstance(t,torch.Tensor) else t,value)
         value['hashes'] = hashes() if audit else {}
         torch.cuda.synchronize()
         event('snapshot_ready', step=progress['updates'], seconds=time.monotonic()-started,
-              allocated=torch.cuda.memory_allocated())
+              allocated=torch.cuda.memory_allocated(),frozen_readonly=not copy_state)
         return value
     def restore(value):
         started = time.monotonic()

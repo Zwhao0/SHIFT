@@ -16,7 +16,7 @@ import threading
 _POLICY_ACTIONS = {"v1": "recover", "v2": "migrate", "v4": "migrate"}
 _SAFE_TOKEN = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
 _NODE_NAME = re.compile(r"[A-Za-z][A-Za-z0-9_-]{0,63}\Z")
-_COMMON_FIELDS = {"schema", "session", "id", "expected_epoch", "action", "at_step", "ranks"}
+_COMMON_FIELDS = {"schema", "session", "id", "expected_epoch", "action", "at_step", "ranks", "replica_world_size"}
 _PLACEMENT_FIELDS = {"policy", "source_replica", "target"}
 
 
@@ -56,6 +56,7 @@ class Command:
     target: str | None = None
     at_step: int | None = None
     ranks: tuple[int, ...] | None = None
+    replica_world_size: int = 8
 
     @classmethod
     def from_dict(cls, payload):
@@ -76,6 +77,8 @@ class Command:
         session = _safe_string(payload["session"], "session")
         command_id = _safe_string(payload["id"], "id")
         expected_epoch = _strict_int(payload["expected_epoch"], "expected_epoch")
+        world=_strict_int(payload.get('replica_world_size',8),'replica_world_size',minimum=1)
+        if world not in (4,8):raise CommandError('replica_world_size must be four or eight')
         action = payload["action"]
         if type(action) is not str or action not in ("recover", "migrate", "stop"):
             raise CommandError("action must be recover, migrate, or stop")
@@ -89,7 +92,7 @@ class Command:
             if present or "ranks" in payload:
                 raise CommandError("stop does not accept policy, source_replica, target, or ranks")
             return cls(schema, session, command_id, expected_epoch, action,
-                       at_step=at_step)
+                       at_step=at_step,replica_world_size=world)
 
         missing = _PLACEMENT_FIELDS - set(payload)
         if missing:
@@ -111,7 +114,7 @@ class Command:
         else:
             raise CommandError("target must not be an IP address")
 
-        default_ranks = tuple(range(8)) if policy in ("v1", "v2") else tuple(range(4))
+        default_ranks = tuple(range(world)) if policy in ("v1", "v2") else tuple(range(world//2))
         raw_ranks = payload.get("ranks", list(default_ranks))
         if type(raw_ranks) is not list:
             raise CommandError("ranks must be a list of strict integers")
@@ -119,18 +122,18 @@ class Command:
         if len(set(parsed_ranks)) != len(parsed_ranks):
             raise CommandError("ranks must not contain duplicates")
         if policy in ("v1", "v2"):
-            if parsed_ranks != tuple(range(8)):
-                raise CommandError(f"{policy} requires all ranks 0..7")
-        elif parsed_ranks not in (tuple(range(4)), tuple(range(4, 8))):
-            raise CommandError("v4 requires one complete PP stage: ranks 0..3 or 4..7")
+            if parsed_ranks != tuple(range(world)):
+                raise CommandError(f"{policy} requires the complete declared replica")
+        elif parsed_ranks not in (tuple(range(world//2)), tuple(range(world//2,world))):
+            raise CommandError("v4 requires one complete declared PP stage")
 
         return cls(schema, session, command_id, expected_epoch, action, policy,
-                   source_replica, target, at_step, parsed_ranks)
+                   source_replica, target, at_step, parsed_ranks,world)
 
     def payload_key(self):
         """Canonical identity used for duplicate-id detection."""
         return (self.schema, self.session, self.id, self.expected_epoch, self.action,
-                self.policy, self.source_replica, self.target, self.at_step, self.ranks)
+                self.policy, self.source_replica, self.target, self.at_step, self.ranks,self.replica_world_size)
 
 
 @dataclass(frozen=True)

@@ -29,9 +29,11 @@ MARKER = 'shift-v3-controller-20261103'
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--smoke', action='store_true')
+    parser.add_argument('--nodes',nargs='+',choices=('node0','node1','node3'),default=['node0','node1','node3'])
     args = parser.parse_args()
+    if not {'node0','node1'}<=set(args.nodes):parser.error('node0 and node1 are required')
     eps = {n: replace(e, socket='ssh-v3-prepare-'+str(os.getpid())+'-'+n+'.sock')
-           for n, e in endpoints_from_env().items()}
+           for n, e in endpoints_from_env().items() if n in args.nodes}
     s = Session.__new__(Session)
     s.root, s._sudo_password = ROOT, None
     private = eps['node0'].host_root+'/runtime/v1-controller'

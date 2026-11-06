@@ -26,19 +26,21 @@ def validate_runtime(c10d, state, adapter):
 
 
 class LocalGroupCache:
-    def __init__(self, dist, c10d, source_paths):
+    def __init__(self, dist, c10d, source_paths, stage_width=4):
         self.dist, self.c10d = dist, c10d
+        if stage_width not in (2,4):raise ValueError('unsupported stage width')
+        self.stage_width=stage_width
         self.sources = {str(Path(p).resolve()) for p in source_paths}
         self.saved = {}
         self.used = set()
         self.detached = False
 
     @staticmethod
-    def local_members(ranks):
+    def local_members(ranks,stage_width=4):
         ranks = tuple(ranks)
-        if not ranks or len({r//4 for r in ranks}) != 1:
+        if not ranks or len({r//stage_width for r in ranks}) != 1:
             return None
-        return tuple(r%4 for r in ranks)
+        return tuple(r%stage_width for r in ranks)
 
     @contextmanager
     def creating(self, reuse=False):
@@ -51,7 +53,7 @@ class LocalGroupCache:
             if path not in self.sources or args:
                 raise RuntimeError('unsupported group constructor in pinned V4 adapter')
             members = tuple(ranks)
-            local = self.local_members(members)
+            local = self.local_members(members,self.stage_width)
             member = self.dist.get_rank() in members
             backend = kwargs.get('backend') or self.dist.get_backend()
             key = (path, frame.f_lineno, local, str(backend))

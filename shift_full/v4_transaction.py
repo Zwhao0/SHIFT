@@ -23,15 +23,16 @@ class OwnerGate:
 
 
 class Transaction:
-    def __init__(self,epoch,source,target,cut,ranks,*,validation='full'):
+    def __init__(self,epoch,source,target,cut,ranks,*,validation='full',world_size=8):
         if validation not in ('full','runtime'):raise ValueError('invalid boundary validation mode')
         self.validation=validation
         if (type(epoch) is not int or epoch<1 or source not in ('B','C') or
             target not in ('B','C') or source==target or type(cut) is not int or cut<1):
             raise ValueError('invalid switch boundary')
         ranks=tuple(ranks)
-        if len(ranks)!=4 or len(set(ranks))!=4 or any(type(r) is not int or r not in range(8) for r in ranks):
-            raise ValueError('four distinct logical candidate ranks required')
+        if type(world_size) is not int or world_size not in (4,8):raise ValueError('unsupported replica size')
+        if len(ranks)!=world_size//2 or len(set(ranks))!=world_size//2 or any(type(r) is not int or r not in range(world_size) for r in ranks):
+            raise ValueError('a complete distinct stage of logical candidate ranks required')
         self.epoch,self.source,self.target,self.cut,self.ranks=epoch,source,target,cut,ranks
         self.results={};self.decision=None
 
@@ -62,7 +63,7 @@ class Transaction:
     def decide(self,*,cancel=False):
         if type(cancel) is not bool:raise ValueError('cancel must be boolean')
         if self.decision is not None:raise ValueError('switch decision is already final')
-        if not cancel and len(self.results)!=4:raise ValueError('all candidates must be validated')
+        if not cancel and len(self.results)!=len(self.ranks):raise ValueError('all candidates must be validated')
         self.decision='retain' if cancel or not all(self.results.values()) else 'replace'
         return self.decision
 

@@ -7,10 +7,12 @@ import time
 from types import SimpleNamespace
 
 from .v4_transaction import OwnerGate, Transaction
+from .session_layout import SessionLayout
 
 
 def run(context):
     s=SimpleNamespace(**context);c=s.c;torch,dist=s.torch,s.dist
+    layout=SessionLayout.from_config(c)
     role,rank,device,replica=s.role,s.rank,s.device,s.replica
     first=c.get('initial_round',0);cycles=c['cycles'];epoch=first
     source=c.get('source_role','B');target=c.get('target_role','C')
@@ -85,6 +87,13 @@ def run(context):
             try:
                 if self.is_source:transport.send_checkpoint([1],cut,packet,s.timeout)
                 else:packet=transport.recv_checkpoint(0,transport.metadata(),cut,s.timeout)
+                if getattr(transport,'_stage_cpu',False):
+                    # CPU leaf decoding can outlast the source's last send.
+                    # Keep its NCCL channel alive until receive/copy has really
+                    # finished, including the final CUDA stream synchronization.
+                    ack=f'{self.kind}_delivered/{rank}'
+                    if self.is_source:self.store.wait([ack],s.timeout)
+                    else:self.store.set(ack,'1')
                 s.event('state_sent' if self.is_source else 'state_received',round=self.round_id,
                     packet_source=self.kind,
                     step=cut,hashes=boundary_hashes(packet),oracle_hashes=None,transport='packed_gpu',
@@ -136,7 +145,7 @@ def run(context):
                 if rank==0:
                     key=f'boundary_ready/{s.progress["updates"]}'
                     if not replica:
-                        ready=store.check([f'prepared/{i}' for i in range(4)])
+                        ready=store.check([f'prepared/{i}' for i in range(layout.width)])
                         store.set(key,str(int(ready)))
                     else:ready=bool(int(store.get(key)))
                 flag=torch.tensor(int(ready),device='cuda');dist.broadcast(flag,src=0)
@@ -145,7 +154,14 @@ def run(context):
             cut=s.progress['updates'];plan=replace(plan,cut=cut);bind(plan_value=plan)
             if rank==0 and not replica:store.set('actual_cut',str(cut))
             s.event('boundary_selected',round=round_id,epoch=epoch,step=cut,requested_cut=requested)
-            anchor=s.snapshot();anchor.update(v4_epoch=next_epoch,v4_owner=target,switch_round=round_id)
+            # Replica 0 is frozen until activation/retirement. Its snapshot can
+            # borrow read-only tensors; peer 1 still needs an immutable copy
+            # because it overlaps the next iteration and supplies fallback.
+            borrowed=bool(c.get('low_memory') and not replica)
+            anchor=s.snapshot(copy_state=False) if borrowed else s.snapshot()
+            anchor.update(v4_epoch=next_epoch,v4_owner=target,switch_round=round_id)
+            from torch.utils._pytree import tree_flatten
+            source_versions=[(t,t._version) for t in tree_flatten(anchor)[0] if isinstance(t,torch.Tensor)] if borrowed else []
             if role==source:
                 store.set(f'source_descriptor/{rank}',json.dumps(boundary_descriptor(anchor)))
                 if audit:store.set(f'source_hashes/{rank}',json.dumps(anchor['hashes']))
@@ -157,14 +173,14 @@ def run(context):
             gate.fence()
             if replica:
                 relay_thread=None
-                if rank in c.get('affected_ranks',range(4,8)):
+                if rank in c.get('affected_ranks',layout.affected):
                     relay_thread=threading.Thread(target=serve_peer,args=(anchor,store,round_id),daemon=True)
                     relay_thread.start()
                 outer.migrate(next_epoch);s.restore_rng(anchor)
                 gate.advance(next_epoch,source)
                 s.event('outer_retained',round=round_id,step=cut,identity=outer.identity(),
                     training_identity=s.training_identity(),manager_state=outer.state_dict(),
-                    channel_reconnected=rank in c.get('affected_ranks',range(4,8)))
+                    channel_reconnected=rank in c.get('affected_ranks',layout.affected))
                 s.event('peer_inner_groups_retained',round=round_id,identity_preserved=True)
                 s.event('peer_compute_ready',round=round_id,step=cut,hashes=boundary_hashes(),identity_preserved=identity())
                 store.set(f'active/{replica}/{rank}','1')
@@ -180,7 +196,7 @@ def run(context):
                     next_store.wait(['placement'])
                 continue
             if rank==0:
-                store.wait([f'frozen/{r}/{i}' for r in range(2) for i in range(8)])
+                store.wait([f'frozen/{r}/{i}' for r in range(2) for i in range(layout.world)])
                 store.set('switch','1')
             store.wait(['switch'])
             if role==source:
@@ -194,9 +210,9 @@ def run(context):
                 store.set(f'source_ready/{device}','1')
             if role=='A' and rank==0:
                 until_source=time.monotonic()+c.get('source_deadline',2)
-                while not store.check([f'source_ready/{i}' for i in range(4)]) and time.monotonic()<until_source:
+                while not store.check([f'source_ready/{i}' for i in range(layout.width)]) and time.monotonic()<until_source:
                     time.sleep(.01)
-                packet_source='source' if store.check([f'source_ready/{i}' for i in range(4)]) else 'peer'
+                packet_source='source' if store.check([f'source_ready/{i}' for i in range(layout.width)]) else 'peer'
                 store.set('packet_source',packet_source)
                 if packet_source=='peer':
                     s.event('source_recovery_selected',round=round_id,step=cut,source=source,target=target)
@@ -206,6 +222,9 @@ def run(context):
                     s.event('source_stalled',round=round_id,step=cut)
                     while True:time.sleep(.1)
                 channel.transfer(anchor)
+                if any(t._version!=version for t,version in source_versions):
+                    raise RuntimeError('frozen source changed while transmitting borrowed state')
+                if borrowed:s.event('source_readonly_verified',round=round_id,step=cut)
         else:
             # Candidate model/DDP was prepared in isolation by v4_train.
             channel.prepare()
@@ -251,16 +270,16 @@ def run(context):
                     step=cut,hashes=actual,expected_hashes=boundary_hashes(anchor),reason=reason,readiness=readiness)
 
         if role=='A' and rank==0:
-            ranks=tuple(c.get('affected_ranks',range(4,8)))
-            tx=Transaction(next_epoch,source,target,cut,ranks,validation=mode)
+            ranks=tuple(c.get('affected_ranks',layout.affected))
+            tx=Transaction(next_epoch,source,target,cut,ranks,validation=mode,world_size=layout.world)
             deadline=time.monotonic()+c['restore_deadline']
-            while not store.check([f'candidate/{i}' for i in range(4)]):
+            while not store.check([f'candidate/{i}' for i in range(layout.width)]):
                 if store.check(['recovery_error']):raise RuntimeError('peer could not supply the committed source state')
                 if time.monotonic()>=deadline:break
                 time.sleep(.05)
-            timed_out=not store.check([f'candidate/{i}' for i in range(4)])
+            timed_out=not store.check([f'candidate/{i}' for i in range(layout.width)])
             if not timed_out:
-                for i in range(4):
+                for i in range(layout.width):
                     result=json.loads(store.get(f'candidate/{i}'))
                     if audit:tx.candidate(next_epoch,result['rank'],result['actual'] if result['valid'] else {},result['expected'])
                     else:tx.ready(next_epoch,result['rank'],result['readiness'] if result['valid'] else None)
@@ -324,15 +343,15 @@ def run(context):
         s.event('outer_retained' if not candidate else 'candidate_activated',round=round_id,step=cut,
             epoch=epoch,decision=outcome['decision'],owner=selected,hashes=validated_hashes,identity_preserved=identity(),
             identity=outer.identity(),training_identity=s.training_identity(),manager_state=outer.state_dict(),
-            channel_reconnected=rank in c.get('affected_ranks',range(4,8)),
+            channel_reconnected=rank in c.get('affected_ranks',layout.affected),
             readiness=dict(schema=1,epoch=next_epoch,rank=rank,cut=cut,target=selected,restored=True) if candidate else None)
         active=dict(round=round_id,epoch=epoch,step=cut,hashes=validated_hashes,identity_preserved=identity(),
             owner=selected,decision=outcome['decision'],
-            peer_compute_started=store.check([f'peer_compute/{i}' for i in range(8)]),
-            peer_gradients_ready=store.check([f'peer_gradient_ready/{i}' for i in range(8)]))
+            peer_compute_started=store.check([f'peer_compute/{i}' for i in range(layout.world)]),
+            peer_gradients_ready=store.check([f'peer_gradient_ready/{i}' for i in range(layout.world)]))
         store.set(f'active/{replica}/{rank}','1')
         if rank==0:
-            store.wait([f'active/{r}/{i}' for r in range(2) for i in range(8)]);store.set('activated','1')
+            store.wait([f'active/{r}/{i}' for r in range(2) for i in range(layout.world)]);store.set('activated','1')
         store.wait(['activated']);s.event('activated',**active)
         del anchor;gc.collect();torch.cuda.empty_cache()
         candidate=False

@@ -8,6 +8,7 @@ from .training_core import make_batches,sample_plan,train_step
 from .training_loop import run_loop
 from .session_control import Command,Router
 from .session_outer import SessionOuter
+from .session_layout import SessionLayout
 from .v4_transaction import OwnerGate
 
 
@@ -44,11 +45,15 @@ class SessionRuntime:
         for name in ('c','torch','dist','role','rank','device','replica','stage','ddp','optimizer','scheduler',
                      'progress','training_state','base_store','groups'):
             setattr(self,name,getattr(self.s,name))
+        self.layout=SessionLayout.from_config(self.c)
         self.session=self.c['session'];self.epoch=self.c.get('session_epoch',0)
         self.service=self.c.get('manager_service',0)
         self.store_services=self.c.get('manager_store_services',{'0':self.service,'1':self.service})
-        self.channel_epochs=self.c.get('channel_epochs',[0]*8)
+        self.channel_epochs=self.c.get('channel_epochs',[0]*self.layout.world)
         self.replica_hosts=self.c['replica_hosts']
+        # Full-DP native replacements have a single physical D actor. Its
+        # replica-0 workers retain the healthy-owner gate used by PP0.
+        if self.replica==0 and self.c.get('candidate_full_dp'):self.role='A'
         self.audit=not self.c.get('performance_no_audit',False)
         self.policy=SessionPolicy();self.router=Router()
         for policy in ('v1','v2','v4'):self.router.register(policy,_Handler(policy))
@@ -76,23 +81,24 @@ class SessionRuntime:
         return self.stopping
 
     def validate_placement(self,command):
+        if getattr(command,'replica_world_size',self.layout.world)!=self.layout.world:raise ValueError('command layout differs from the live session')
         if command.source_replica not in (0,1):raise ValueError('source replica must be 0 or 1')
-        if command.policy in ('v1','v2') and command.source_replica!=1:
-            raise ValueError('this runtime currently supports whole-DP operations on replica 1')
-        if command.policy=='v4' and (command.source_replica!=0 or tuple(command.ranks)!=(4,5,6,7)):
+        if command.policy=='v2' and command.source_replica!=1:
+            raise ValueError('planned whole-DP migration currently supports replica 1')
+        if command.policy=='v4' and (command.source_replica!=0 or tuple(command.ranks)!=self.layout.affected):
             raise ValueError('partial placement currently replaces replica 0 PP1')
         if command.target not in self.c['node_hosts']:raise ValueError('unknown target node')
 
     def _barrier(self,key):
         self.base_store.set(key+f'/{self.replica}/{self.rank}','1')
-        self.base_store.wait([key+f'/{r}/{i}' for r in range(2) for i in range(8)])
+        self.base_store.wait([key+f'/{r}/{i}' for r in range(2) for i in range(self.layout.world)])
 
     def boundary(self):
         if self.in_protocol:return
         if self.command:
             if self.command.policy=='v2' and self.handoff and not self.handoff.activated:
                 if self.handoff.role=='A' and self.rank==0 and not self.handoff.coord.check(['arm']):
-                    if self.handoff.coord.check([f'prepared/C/{i}' for i in range(8)]):self.handoff.coord.set('arm','1')
+                    if self.handoff.coord.check([f'prepared/C/{i}' for i in range(self.layout.world)]):self.handoff.coord.set('arm','1')
                 manager,retired=self.handoff.boundary(self.outer.manager)
                 self.outer.manager=manager
                 if retired:self.stopping=True;return
@@ -128,6 +134,8 @@ class SessionRuntime:
         initial=dict(A=host_a,B=host_b,C=host_c)
         if round_id%2:initial['B'],initial['C']=initial['C'],initial['B']
         return SimpleNamespace(planned_role='C' if candidate else 'A' if self.replica==0 else 'B',
+            planned_allow_colocated=len(set(initial.values()))==2,
+            planned_store_offset=10 if candidate and len(set(initial.values()))==2 else 0,
             planned_variant='p2',planned_source='B',planned_round=round_id,planned_cycles=1000,
             planned_hosts=initial,planned_initial_role='C' if candidate else 'A' if self.replica==0 else 'B',
             planned_inject='healthy',planned_shadow_recompute=False,planned_ownership_recompute=False,
@@ -181,7 +189,7 @@ class SessionRuntime:
             min_replica_size=2,world_size_mode=WorldSizeMode.FIXED_WITH_SPARES,use_async_quorum=False,
             init_sync=False,timeout=timedelta(seconds=90),quorum_timeout=timedelta(seconds=180),
             connect_timeout=timedelta(seconds=20),hostname=a.host_ip,lighthouse_addr=a.lighthouse,
-            rank=self.rank,world_size=8,store_addr=a.host_ip,store_port=31600+h.offset,
+            rank=self.rank,world_size=self.layout.world,store_addr=a.host_ip,store_port=h.epoch_port,
             replica_id=f'shift{self.replica}',checkpoint_transport=PackedGPUTransport(pg,torch.device('cuda',self.device),timedelta(seconds=90),self.event),max_retries=8)
         manager.load_state_dict(dict(step=self.progress['updates'],batches_committed=2*self.progress['updates']))
         manager._shift_epoch=h.gate.epoch
@@ -203,6 +211,16 @@ class SessionRuntime:
         if peer_first:
             self.protocol_store.set(f'peer_gradient_ready/{self.rank}','1')
             self.event('peer_native_gradient_ready',step=self.progress['updates'])
+        first_after=(self.in_protocol and self.phase=='after' and self.protocol_plan and
+                     self.progress['updates']==self.protocol_plan.cut)
+        if first_after:
+            # The peer can finish its overlapping compute before the restored
+            # replica starts. Start the short NCCL deadline only once both
+            # replicas have real gradients, rather than timing model compute.
+            prefix=f'gradients_ready/{self.progress["updates"]}/'
+            self.protocol_store.set(prefix+f'{self.replica}/{self.rank}','1')
+            self.protocol_store.wait([prefix+f'{r}/{i}' for r in range(2) for i in range(self.layout.world)])
+            self.event('switch_gradients_ready',step=self.progress['updates'])
         buckets=[b for buf in self.ddp.buffers+self.ddp.expert_parallel_buffers for b in buf.buckets]
         if relay:
             manager,retired=h.at_gradient(self.outer.manager,[b.grad_data for b in buckets],
@@ -253,7 +271,7 @@ class SessionRuntime:
     def _complete_command(self):
         command=self.command;key=f'session/complete_step/{self.sequence}'
         if command.policy=='v1':
-            ready=self.base_store.check([f'session/native_restored/{self.sequence}/{i}' for i in range(8)])
+            ready=self.base_store.check([f'session/native_restored/{self.sequence}/{i}' for i in range(self.layout.world)])
             if self.replica==0 and self.rank==0 and ready and self.outer.manager.num_participants()==2 and not self.base_store.check([key]):
                 self.base_store.set(key,str(self.progress['updates']+5))
         elif command.policy=='v2' and self.handoff and self.handoff.activated:
@@ -264,7 +282,8 @@ class SessionRuntime:
         if self.progress['updates']!=cut:raise RuntimeError('missed strategy completion boundary')
         self._barrier(f'session/completed/{self.sequence}')
         self.epoch=command.expected_epoch+1;self.healing=False
-        self.replica_hosts['1']=self.c['node_hosts'][command.target]
+        self.replica_hosts[str(command.source_replica)]=self.c['node_hosts'][command.target]
+        if command.policy=='v1' and command.source_replica==0:self.planned_coord=None
         self.outer.manager._use_async_quorum=True
         self.gate.advance(self.epoch,self.partial_owner)
         self.outer.manager._shift_epoch=self.epoch
@@ -274,7 +293,7 @@ class SessionRuntime:
             self._barrier(f'session/planned_drained/{self.sequence}')
             self.outer.close()
             self._barrier(f'session/planned_managers_closed/{self.sequence}')
-            self.handoff=None;self.service=self.sequence;self.channel_epochs=[self.epoch]*8
+            self.handoff=None;self.service=self.sequence;self.channel_epochs=[self.epoch]*self.layout.world
             self.store_services={'0':self.service,'1':self.service}
             self.replica_hosts['1']=self.c['node_hosts'][command.target]
             self._barrier(f'session/rebuild/{self.sequence}')
@@ -302,8 +321,8 @@ class SessionRuntime:
         first=command.expected_epoch
         source=self.partial_owner;target='C' if source=='B' else 'B'
         self.c.update(initial_round=first,cycles=first+1,source_role=source,target_role=target,
-                      between_steps=5,restore_deadline=10,source_deadline=2,
-                      affected_ranks=[4,5,6,7],round_id=first)
+                      between_steps=5,restore_deadline=45 if self.c.get('low_memory') else 10,source_deadline=2,
+                      affected_ranks=list(self.layout.affected),round_id=first)
         self.c['plan']=dict(self.c['plan'],cut=(command.at_step or self.progress['updates'])+2,post_steps=5)
         context=vars(self.s).copy()
         context.update(outer=self.outer,groups=self.groups,ownership=self.gate,train=self.train_segment,
@@ -314,19 +333,21 @@ class SessionRuntime:
         self.in_protocol=True
         try:result=run(context)
         finally:self.in_protocol=False;self.phase='normal'
-        if result and result.get('retired'):
+        if result is None or result.get('retired'):
             self.stopping=True;self.retired=True;return
         self.outer=result['outer'];self.groups=result['groups'];self.gate=result['gate']
         self.epoch=result['epoch'];self.partial_owner=result['owner']
-        self.channel_epochs[4:8]=[self.epoch]*4
+        self.channel_epochs[self.layout.width:]=[self.epoch]*self.layout.width
         self.base_store.set(f'session/done/{self.sequence}/{self.replica}/{self.rank}',str(self.progress['updates']))
         self.event('session_command_done',policy='v4',step=self.progress['updates'],engine_identity=self.s.training_identity())
         self.command=None
 
     def finish(self):
         self._barrier('session/final_ready')
+        peaks=dict(cuda_peak_allocated_bytes=self.torch.cuda.max_memory_allocated(self.device),
+                   cuda_peak_reserved_bytes=self.torch.cuda.max_memory_reserved(self.device))
         hashes=self.training_state.hashes()
-        self.event('session_done',step=self.progress['updates'],hashes=hashes,engine_identity=self.s.training_identity())
+        self.event('session_done',step=self.progress['updates'],hashes=hashes,engine_identity=self.s.training_identity(),**peaks)
         self.outer.close();self.s.disconnect();self.s.log.close()
 
 
@@ -341,7 +362,7 @@ def run_session(context):
             elif command.policy=='v4':r.start_partial(command,candidate=True)
             elif command.policy=='v1':
                 r._set_command(command);r.healing=True
-                r.replica_hosts['1']=r.c['node_hosts'][command.target]
+                r.replica_hosts[str(command.source_replica)]=r.c['node_hosts'][command.target]
                 r.bind_outer(SessionOuter(r))
         else:
             r.bind_outer(SessionOuter(r))
@@ -355,4 +376,5 @@ def run_session(context):
         from .overlap_handoff import RetiredReplica
         if isinstance(error,RetiredReplica):
             r.event('session_retired',step=r.progress['updates']);r.s.disconnect();r.s.log.close();return
+        r.event('session_error',step=r.progress['updates'],error_type=type(error).__name__)
         raise

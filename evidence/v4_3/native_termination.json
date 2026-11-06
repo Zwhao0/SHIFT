@@ -1,0 +1,68 @@
+{
+  "all_four_source_units_sigkill_confirmed": true,
+  "kill_command_returncodes": [
+    1,
+    1,
+    1,
+    1
+  ],
+  "kill_command_stderr_retained": false,
+  "systemd_journal": [
+    {
+      "node": "node0",
+      "unit": "shift-session-v43_native16_20261106_a1-g0_A.service",
+      "events": [
+        {
+          "message": "shift-session-v43_native16_20261106_a1-g0_A.service: Main process exited, code=killed, status=9/KILL",
+          "timestamp_us": "1793939914382436"
+        },
+        {
+          "message": "shift-session-v43_native16_20261106_a1-g0_A.service: Failed with result 'signal'.",
+          "timestamp_us": "1793939914858692"
+        }
+      ]
+    },
+    {
+      "node": "node0",
+      "unit": "shift-session-v43_native16_20261106_a1-g0_B.service",
+      "events": [
+        {
+          "message": "shift-session-v43_native16_20261106_a1-g0_B.service: Main process exited, code=killed, status=9/KILL",
+          "timestamp_us": "1793939913868063"
+        },
+        {
+          "message": "shift-session-v43_native16_20261106_a1-g0_B.service: Failed with result 'signal'.",
+          "timestamp_us": "1793939914308334"
+        }
+      ]
+    },
+    {
+      "node": "node1",
+      "unit": "shift-session-v43_native16_20261106_a1-g0_D.service",
+      "events": [
+        {
+          "message": "shift-session-v43_native16_20261106_a1-g0_D.service: Main process exited, code=killed, status=9/KILL",
+          "timestamp_us": "1793939971120715"
+        },
+        {
+          "message": "shift-session-v43_native16_20261106_a1-g0_D.service: Failed with result 'signal'.",
+          "timestamp_us": "1793939971635242"
+        }
+      ]
+    },
+    {
+      "node": "node1",
+      "unit": "shift-session-v43_native16_20261106_a1-g0_E.service",
+      "events": [
+        {
+          "message": "shift-session-v43_native16_20261106_a1-g0_E.service: Main process exited, code=killed, status=9/KILL",
+          "timestamp_us": "1793939971730968"
+        },
+        {
+          "message": "shift-session-v43_native16_20261106_a1-g0_E.service: Failed with result 'signal'.",
+          "timestamp_us": "1793939972143367"
+        }
+      ]
+    }
+  ]
+}

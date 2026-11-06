@@ -11,7 +11,8 @@ def training_sources(root):
     root=Path(root)
     files=set((root/'shift_full').glob('v4_*.py'))
     files.update(root/'shift_full'/name for name in ('transport.py','compat.py','train.py',
-        'training_core.py','state_inventory.py','state_digest.py','planned_state.py','reference_audit.py'))
+        'training_core.py','state_inventory.py','state_digest.py','planned_state.py','reference_audit.py',
+        'session_layout.py','offloaded_adam.py','planned_handoff.py','overlap_handoff.py','prepared_pg.py'))
     return {str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(files)}
 
 

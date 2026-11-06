@@ -7,7 +7,15 @@ if {[file exists $cfgpath]} {
     set f [open $cfgpath r]
     set cfg [read $f]
     close $f
-    regexp {密码[：: ]+([^\s]+)} $cfg -> pass
+    set fields [regexp -all -inline {密码[：: ]+([^\s]+)} $cfg]
+    if {[llength $fields] > 0} {set pass [lindex $fields end]}
+    set authhost ""
+    foreach arg $argv {
+        if {[regexp {^[^@]+@([^:]+)$} $arg -> host]} {set authhost $host}
+    }
+    foreach {field host value} [regexp -all -inline {([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\s*密码[：: ]+([^\s]+)} $cfg] {
+        if {$host eq $authhost} {set pass $value}
+    }
 }
 log_user 0
 spawn {*}$argv

@@ -1,0 +1,48 @@
+{
+  "runs": [
+    {
+      "session": "v43_mig8_20261106_a6",
+      "interval_seconds": 5,
+      "stop_free_mib": 512,
+      "stopped": false,
+      "finished": true,
+      "samples": 43,
+      "nodes": {
+        "node0": {
+          "company_unchanged": true,
+          "unknown_gpu_count_max": 0,
+          "min_free_mib": 4984,
+          "max_test_process_mib": 3316
+        },
+        "node1": {
+          "company_unchanged": true,
+          "unknown_gpu_count_max": 0,
+          "min_free_mib": 950,
+          "max_test_process_mib": 3252
+        }
+      }
+    },
+    {
+      "session": "v43_native16_20261106_a1",
+      "interval_seconds": 5,
+      "stop_free_mib": 512,
+      "stopped": false,
+      "finished": true,
+      "samples": 23,
+      "nodes": {
+        "node0": {
+          "company_unchanged": true,
+          "unknown_gpu_count_max": 0,
+          "min_free_mib": 5364,
+          "max_test_process_mib": 2792
+        },
+        "node1": {
+          "company_unchanged": true,
+          "unknown_gpu_count_max": 0,
+          "min_free_mib": 1410,
+          "max_test_process_mib": 2792
+        }
+      }
+    }
+  ]
+}

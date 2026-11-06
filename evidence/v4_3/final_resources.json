@@ -1,0 +1,17 @@
+{
+  "node0": {
+    "company_count": 8,
+    "company_unchanged": true,
+    "extra_gpu_count": 0,
+    "active_session_units": 0
+  },
+  "node1": {
+    "company_count": 8,
+    "company_unchanged": true,
+    "extra_gpu_count": 0,
+    "active_session_units": 0
+  },
+  "server_ssh": {
+    "scoped_master_close_attempts": 2
+  }
+}

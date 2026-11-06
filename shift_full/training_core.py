@@ -59,7 +59,11 @@ def configure_model(stage, *, adapter, dense, expert_dp, finalize, bucket_size=6
     ddp = adapter.wrap(stage, dense, expert_dp, bucket_size, config=stage.config)
     stage.config.no_sync_func = ddp.no_sync
     stage.config.finalize_model_grads_func = finalize
-    optimizer = torch.optim.AdamW(stage.parameters(), lr=lr, foreach=False)
+    import os
+    if os.environ.get('SHIFT_CPU_ADAM')=='1':
+        from .offloaded_adam import OffloadedAdamW
+        optimizer=OffloadedAdamW(stage.parameters(),lr=lr)
+    else:optimizer = torch.optim.AdamW(stage.parameters(), lr=lr, foreach=False)
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer, scheduler_step, gamma=.98)
     return ddp, optimizer, scheduler
 
@@ -126,6 +130,18 @@ class Computed:
     gradient_checked: float
 
 
+def gradients_finite(buffers,chunk_elements=8*1024*1024):
+    """Same all-element predicate with bounded boolean/intermediate tensors."""
+    import torch
+    if type(chunk_elements) is not int or chunk_elements<1:raise ValueError('positive finite-check chunk required')
+    checks=[]
+    for buf in buffers:
+        for bucket in buf.buckets:
+            flat=bucket.grad_data.reshape(-1)
+            checks.extend(torch.isfinite(flat[i:i+chunk_elements]).all() for i in range(0,flat.numel(),chunk_elements))
+    return bool(torch.stack(checks).all()) if checks else True
+
+
 def train_step(stage, ddp, optimizer, scheduler, progress, *, execute, synchronize=True,
                schedule_end=None, finite_scope=None, optimizer_scope=None, mark=None):
     """Compute once, yield for policy commit vote, then update exactly once.
@@ -141,7 +157,9 @@ def train_step(stage, ddp, optimizer, scheduler, progress, *, execute, synchroni
     schedule_done = time.monotonic()
     buffers = ddp.buffers + ddp.expert_parallel_buffers
     with finite_scope() if finite_scope else nullcontext():
-        finite = bool(torch.stack([torch.isfinite(b.grad_data).all() for buf in buffers for b in buf.buckets]).all())
+        import os
+        finite=(gradients_finite(buffers) if os.environ.get('SHIFT_CPU_ADAM')=='1' else
+                bool(torch.stack([torch.isfinite(b.grad_data).all() for buf in buffers for b in buf.buckets]).all()))
     computed = Computed(metrics, finite, schedule_done, time.monotonic())
     commit = yield computed
     if commit:

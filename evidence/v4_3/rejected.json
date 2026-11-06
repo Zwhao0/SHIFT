@@ -1,0 +1,752 @@
+{
+  "base_commit": "6b05e8faa153939662743dec39e6c51a59329f0e",
+  "runs": [
+    {
+      "name": "session_v43_mem8_s32_a1",
+      "accepted": false,
+      "configuration": {
+        "batch": 8,
+        "seq_len": 32,
+        "tp": 1,
+        "pp": 2,
+        "ep": 2,
+        "replica_world_size": 4,
+        "seed": 2026,
+        "memory_fraction": 0.12,
+        "gpu_warmup": false,
+        "low_memory": true
+      },
+      "done": false,
+      "error": "RuntimeError: session actor exited without proof: g0_D",
+      "audit_pass": false,
+      "audit_errors": [
+        "summary done must be True",
+        "summary error must be None",
+        "final session_done missing/duplicate 0/0",
+        "final session_done missing/duplicate 0/1",
+        "final session_done missing/duplicate 0/2",
+        "final session_done missing/duplicate 0/3",
+        "final session_done missing/duplicate 1/0",
+        "final session_done missing/duplicate 1/1",
+        "final session_done missing/duplicate 1/2",
+        "final session_done missing/duplicate 1/3"
+      ],
+      "completed_commands": [],
+      "resources_clean": true,
+      "cleanup_errors": [],
+      "source_sha256": {
+        "shift_full/compat.py": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76",
+        "shift_full/planned_state.py": "2911ef24a2f5e7cb08e98d05b3397bf54afe6d4353194f1d0a02dc8e3ef6dede",
+        "shift_full/reference_audit.py": "7e489ee2d66a4a8fc9168e7de2ce915ee956f1daeb7c846fbceb0fede09a49ce",
+        "shift_full/state_digest.py": "fe2e8a941bef9dfe4b93c71c29c6245e609215fd7d12ac3d9891004f0b7d26b3",
+        "shift_full/state_inventory.py": "0eaa472d689bc83564e4d48c524ad5744297b227fb14e8fbb2575ef379edbe51",
+        "shift_full/train.py": "fe1c1b26ee9e8ed8d68407f07485ead7907c361dcb50a96e55e71ae7000cbfb3",
+        "shift_full/training_core.py": "1b86532baca5a7115092c9591473f17ce463e9c54d3f1f951ce38ff937b86405",
+        "shift_full/transport.py": "b03464786a4f8f6b8814f002b4649c1fb9a77e0985387e92e0f1ad17cee611e7",
+        "shift_full/v4_groups.py": "21577629bfb97a4993646f33fbc01cd9280de259cf4d2b4ef276fbd6313398c3",
+        "shift_full/v4_metadata.py": "27ae20fa5a1c3c266ce649e7d6ef3c88bbd8b0565fcfeef02bbc7e16af7bf3a9",
+        "shift_full/v4_outer.py": "e97a006188c6e630cb7ebdfa73eb30c9b0146ed99a8473b6ad49fd8c1011ad2f",
+        "shift_full/v4_protocol.py": "1c37d3b3fa65fd921620a2bd1034399e2c5dc3392d48dfbbc8c4e2a6399d89ad",
+        "shift_full/v4_reference.py": "d05c09478dcfbd5ef87eed011de3ede6b29e187a6f2b48abe7b68dbe8ec15081",
+        "shift_full/v4_state.py": "570584487f7a7e6f265679f979103a668b7344b4a89324c1ea939feef2e4769c",
+        "shift_full/v4_train.py": "c765a732667a1f8ab5793d7c05a10efb05e79a72658b442b1cd92fff362ca173",
+        "shift_full/v4_transaction.py": "d7c3ad7b78b6bab82151ae171d131e8577b0c1c6ae7ee06a3c675624f816bd80",
+        "shift_full/v4_transaction_train.py": "066ee6131032588d6afefdc8a4b1af3c0ff0054bd9ae6dd44f93d5c9db2aaf76",
+        "shift_full/session_layout.py": "ff7a75fe215d0de8c520dd247622153f2cd5b986a50e54fd8b60d41ccf7d2a0a",
+        "shift_full/session_engine.py": "8f895aa6a28aefb562119c6c810593dde042fd2ba21cc714efc747568640d20e",
+        "shift_full/session_outer.py": "26385629b8721434baf06c6e11e6a63308ce4719bce0b836c45898617b565a00",
+        "shift_full/session_control.py": "63bf355a711bda827b58c69ee531965eff2f680f3429a3d20d93ad4ef0cf7f87",
+        "shift_full/training_loop.py": "c37532f1a74bfa5352f9191adeabc6fe2cb2967bdfc5c91339c9923df21eab68",
+        "scripts/session_remote.py": "8e65659d5bb3d3609e6c72e5db2144b41d2db665b042924df2c22850959cd235",
+        "scripts/sessionctl.py": "6c5b2ce8db55d7894af9ea16188e4d9fbf552749094e870ec047672d9eff17a4"
+      },
+      "raw_manifest": {
+        "raw/node0/g0_A0.jsonl": {
+          "bytes": 1924,
+          "sha256": "771838fbfd293baa59b60c2ab806570dc53841248ee6c6d79d48cc46ab0aac38"
+        },
+        "raw/node0/g0_A1.jsonl": {
+          "bytes": 1916,
+          "sha256": "b2b5f64a2ae572748035f27d6dd5ceb99080931288ff025666af4dbcefdbb325"
+        },
+        "raw/node0/g0_B0.jsonl": {
+          "bytes": 1917,
+          "sha256": "4f0aa3ee41ea5219cfeebe0602005497696780579d562f3faca81692af04330d"
+        },
+        "raw/node0/g0_B1.jsonl": {
+          "bytes": 1916,
+          "sha256": "63f8d5390d91a2a118ad78ea67d039e09224e5bb24103bbb30b3cadd590da91d"
+        },
+        "raw/node1/g0_D0.jsonl": {
+          "bytes": 1923,
+          "sha256": "2dc10da4e39fdd68f5652df453f22348bc14cf5067d1950a08d387f69969f1c2"
+        },
+        "raw/node1/g0_D1.jsonl": {
+          "bytes": 1916,
+          "sha256": "dc1ad47f19d057a50d7fddd43d4d244988ad9ee11cbd48b7901e87e87303cfff"
+        },
+        "raw/node1/g0_E0.jsonl": {
+          "bytes": 1916,
+          "sha256": "34f82b949bca36b62789ef69d9d388cdd361e8acaf65c98049614079a3378699"
+        },
+        "raw/node1/g0_E1.jsonl": {
+          "bytes": 1914,
+          "sha256": "2b253a675741828788111ea853cebf64979414ba323fbf1b5c1616b5670170ee"
+        }
+      },
+      "rejection_reason": "GPU AdamW still exceeded node1 physical headroom at sequence length 32; no migration executed"
+    },
+    {
+      "name": "session_v43_mig8_20261106_a1",
+      "accepted": false,
+      "configuration": {
+        "batch": 8,
+        "seq_len": 32,
+        "tp": 1,
+        "pp": 2,
+        "ep": 2,
+        "replica_world_size": 4,
+        "seed": 2026,
+        "memory_fraction": 0.12,
+        "gpu_warmup": false,
+        "low_memory": true,
+        "optimizer": "cpu_adamw"
+      },
+      "done": false,
+      "error": "RuntimeError: session actor exited without proof: g0_A",
+      "audit_pass": false,
+      "audit_errors": [
+        "summary done must be True",
+        "summary error must be None",
+        "invalid actor placement g1_D",
+        "final session_done missing/duplicate 0/0",
+        "final session_done missing/duplicate 0/1",
+        "final session_done missing/duplicate 0/2",
+        "final session_done missing/duplicate 0/3",
+        "final session_done missing/duplicate 1/0",
+        "final session_done missing/duplicate 1/1",
+        "final session_done missing/duplicate 1/2",
+        "final session_done missing/duplicate 1/3"
+      ],
+      "completed_commands": [],
+      "resources_clean": true,
+      "cleanup_errors": [],
+      "source_sha256": {
+        "shift_full/compat.py": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76",
+        "shift_full/planned_state.py": "2911ef24a2f5e7cb08e98d05b3397bf54afe6d4353194f1d0a02dc8e3ef6dede",
+        "shift_full/reference_audit.py": "7e489ee2d66a4a8fc9168e7de2ce915ee956f1daeb7c846fbceb0fede09a49ce",
+        "shift_full/state_digest.py": "fe2e8a941bef9dfe4b93c71c29c6245e609215fd7d12ac3d9891004f0b7d26b3",
+        "shift_full/state_inventory.py": "0eaa472d689bc83564e4d48c524ad5744297b227fb14e8fbb2575ef379edbe51",
+        "shift_full/train.py": "fe1c1b26ee9e8ed8d68407f07485ead7907c361dcb50a96e55e71ae7000cbfb3",
+        "shift_full/training_core.py": "3e18556d51cec4ad4dd24a220ae2ffd215abbdc1a2303f3751386e63a1070cb8",
+        "shift_full/transport.py": "a7db31b5345afeb6a1e5688bd84b8742bc9708bd3a6b5c92d9dde1f559c7b417",
+        "shift_full/v4_groups.py": "21577629bfb97a4993646f33fbc01cd9280de259cf4d2b4ef276fbd6313398c3",
+        "shift_full/v4_metadata.py": "27ae20fa5a1c3c266ce649e7d6ef3c88bbd8b0565fcfeef02bbc7e16af7bf3a9",
+        "shift_full/v4_outer.py": "e97a006188c6e630cb7ebdfa73eb30c9b0146ed99a8473b6ad49fd8c1011ad2f",
+        "shift_full/v4_protocol.py": "1c37d3b3fa65fd921620a2bd1034399e2c5dc3392d48dfbbc8c4e2a6399d89ad",
+        "shift_full/v4_reference.py": "d05c09478dcfbd5ef87eed011de3ede6b29e187a6f2b48abe7b68dbe8ec15081",
+        "shift_full/v4_state.py": "570584487f7a7e6f265679f979103a668b7344b4a89324c1ea939feef2e4769c",
+        "shift_full/v4_train.py": "c765a732667a1f8ab5793d7c05a10efb05e79a72658b442b1cd92fff362ca173",
+        "shift_full/v4_transaction.py": "d7c3ad7b78b6bab82151ae171d131e8577b0c1c6ae7ee06a3c675624f816bd80",
+        "shift_full/v4_transaction_train.py": "066ee6131032588d6afefdc8a4b1af3c0ff0054bd9ae6dd44f93d5c9db2aaf76",
+        "shift_full/offloaded_adam.py": "ddce86e024a54d7200d271571455daf6f4be42a6b046369bb9da442538b974b1",
+        "shift_full/session_layout.py": "ff7a75fe215d0de8c520dd247622153f2cd5b986a50e54fd8b60d41ccf7d2a0a",
+        "shift_full/session_engine.py": "8f895aa6a28aefb562119c6c810593dde042fd2ba21cc714efc747568640d20e",
+        "shift_full/session_outer.py": "26385629b8721434baf06c6e11e6a63308ce4719bce0b836c45898617b565a00",
+        "shift_full/session_control.py": "63bf355a711bda827b58c69ee531965eff2f680f3429a3d20d93ad4ef0cf7f87",
+        "shift_full/training_loop.py": "c37532f1a74bfa5352f9191adeabc6fe2cb2967bdfc5c91339c9923df21eab68",
+        "scripts/session_remote.py": "6cb8e2aa4cd06b0eb785e23086f8faca188a58197e705b493b9b6bb19ad5a944",
+        "scripts/sessionctl.py": "6c5b2ce8db55d7894af9ea16188e4d9fbf552749094e870ec047672d9eff17a4"
+      },
+      "raw_manifest": {
+        "raw/node0/g0_A0.jsonl": {
+          "bytes": 110924,
+          "sha256": "6735517fe8036922e3bf03104f83f05ff27196aa4eff0c58704a759c39542518"
+        },
+        "raw/node0/g0_A1.jsonl": {
+          "bytes": 112789,
+          "sha256": "4d18af3107da529b785dbed254a4c2333afe4a45846d927b6fb6933a29bae67f"
+        },
+        "raw/node0/g0_B0.jsonl": {
+          "bytes": 105030,
+          "sha256": "9dbfc06ace1418e6c842202051fa8cd4a8cb6edd51d45adcde6d37fe52297f2a"
+        },
+        "raw/node0/g0_B1.jsonl": {
+          "bytes": 106671,
+          "sha256": "b53db26ccfbb79248f9f4eaef30775849380489da842961304dc9e6b114c07e4"
+        },
+        "raw/node0/g1_D0.jsonl": {
+          "bytes": 96763,
+          "sha256": "bf99e5488af52ce06c45b6b08177e32e01fa2d1f5bf277bfac55a44a2400dba6"
+        },
+        "raw/node0/g1_D1.jsonl": {
+          "bytes": 96758,
+          "sha256": "6e0d945b1bc281b74ad14eda2c404117bb67355d3cfbb75bbe8020f7634efb03"
+        },
+        "raw/node0/g1_D2.jsonl": {
+          "bytes": 90606,
+          "sha256": "932996e58857fcb1e7287318602d329e3661a24094a92f4d0c7c9c4a0bcf0f18"
+        },
+        "raw/node0/g1_D3.jsonl": {
+          "bytes": 88942,
+          "sha256": "6724d83e1e5b4205c68d21b1de60979f0fb7c3b53fc9a13b2ca17a695fea7730"
+        },
+        "raw/node1/g0_D0.jsonl": {
+          "bytes": 111883,
+          "sha256": "2d7aaba30337ff8fde5400c00153e38566c1bd621e096f79dddc7cff93c923fd"
+        },
+        "raw/node1/g0_D1.jsonl": {
+          "bytes": 112806,
+          "sha256": "d87d652e5d5ff189bf59f9d44aeb5c4965b0b353c335f84d19ebe6d340ddf526"
+        },
+        "raw/node1/g0_E0.jsonl": {
+          "bytes": 106074,
+          "sha256": "79b1a233e3cd69666126a15edbf7a004aa5550c9b6ea98e34c6705963ea5dba7"
+        },
+        "raw/node1/g0_E1.jsonl": {
+          "bytes": 105441,
+          "sha256": "7fb402936088343678d2bf9f9a3967684cc18539cb738613ef0cb6eb9f776909"
+        }
+      },
+      "rejection_reason": "legacy planned-host validation required three distinct hosts; no migration completed"
+    },
+    {
+      "name": "session_v43_mig8_20261106_a2",
+      "accepted": false,
+      "configuration": {
+        "batch": 8,
+        "seq_len": 32,
+        "tp": 1,
+        "pp": 2,
+        "ep": 2,
+        "replica_world_size": 4,
+        "seed": 2026,
+        "memory_fraction": 0.12,
+        "gpu_warmup": false,
+        "low_memory": true,
+        "optimizer": "cpu_adamw"
+      },
+      "done": false,
+      "error": "KeyboardInterrupt: ",
+      "audit_pass": false,
+      "audit_errors": [
+        "summary done must be True",
+        "summary error must be None",
+        "invalid actor placement g1_D",
+        "invalid actor placement g2_C",
+        "final session_done missing/duplicate 0/0",
+        "final session_done missing/duplicate 0/1",
+        "final session_done missing/duplicate 0/2",
+        "final session_done missing/duplicate 0/3",
+        "final session_done missing/duplicate 1/0",
+        "final session_done missing/duplicate 1/1",
+        "final session_done missing/duplicate 1/2",
+        "final session_done missing/duplicate 1/3"
+      ],
+      "completed_commands": [
+        {
+          "policy": "v2",
+          "epoch": 1,
+          "step": 45
+        },
+        {
+          "policy": "v4",
+          "epoch": 2,
+          "step": 88
+        },
+        {
+          "policy": "v4",
+          "epoch": 3,
+          "step": 131
+        }
+      ],
+      "resources_clean": true,
+      "cleanup_errors": [],
+      "source_sha256": {
+        "shift_full/compat.py": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76",
+        "shift_full/offloaded_adam.py": "ddce86e024a54d7200d271571455daf6f4be42a6b046369bb9da442538b974b1",
+        "shift_full/overlap_handoff.py": "a2ae04faeb7cd591b24b1a02451b7834b936909503ff68d350e9f04fab3e839d",
+        "shift_full/planned_handoff.py": "44922161992321022d78ceb006eb267e76b88dd7c6765ec7f32a1f4fe679b9c2",
+        "shift_full/planned_state.py": "30c8612dc4470539838e3cbec6351d040c197733b08f6c429ff9e124be11aa31",
+        "shift_full/prepared_pg.py": "f0ed5eef8b9dbbf881609421574608f666d14d648e4579e7b2c6d0cc54124688",
+        "shift_full/reference_audit.py": "7e489ee2d66a4a8fc9168e7de2ce915ee956f1daeb7c846fbceb0fede09a49ce",
+        "shift_full/session_layout.py": "ff7a75fe215d0de8c520dd247622153f2cd5b986a50e54fd8b60d41ccf7d2a0a",
+        "shift_full/state_digest.py": "fe2e8a941bef9dfe4b93c71c29c6245e609215fd7d12ac3d9891004f0b7d26b3",
+        "shift_full/state_inventory.py": "0eaa472d689bc83564e4d48c524ad5744297b227fb14e8fbb2575ef379edbe51",
+        "shift_full/train.py": "fe1c1b26ee9e8ed8d68407f07485ead7907c361dcb50a96e55e71ae7000cbfb3",
+        "shift_full/training_core.py": "3e18556d51cec4ad4dd24a220ae2ffd215abbdc1a2303f3751386e63a1070cb8",
+        "shift_full/transport.py": "6408ec64e3b6da623dc41613866c7fbe7ca2f72fb2d382ea09d95023c0963a29",
+        "shift_full/v4_groups.py": "21577629bfb97a4993646f33fbc01cd9280de259cf4d2b4ef276fbd6313398c3",
+        "shift_full/v4_metadata.py": "27ae20fa5a1c3c266ce649e7d6ef3c88bbd8b0565fcfeef02bbc7e16af7bf3a9",
+        "shift_full/v4_outer.py": "e97a006188c6e630cb7ebdfa73eb30c9b0146ed99a8473b6ad49fd8c1011ad2f",
+        "shift_full/v4_protocol.py": "1c37d3b3fa65fd921620a2bd1034399e2c5dc3392d48dfbbc8c4e2a6399d89ad",
+        "shift_full/v4_reference.py": "51771156946fef3dcb1dba16d55ec1d2d5fef2b0f76bc0b75e929b7325062762",
+        "shift_full/v4_state.py": "570584487f7a7e6f265679f979103a668b7344b4a89324c1ea939feef2e4769c",
+        "shift_full/v4_train.py": "c765a732667a1f8ab5793d7c05a10efb05e79a72658b442b1cd92fff362ca173",
+        "shift_full/v4_transaction.py": "d7c3ad7b78b6bab82151ae171d131e8577b0c1c6ae7ee06a3c675624f816bd80",
+        "shift_full/v4_transaction_train.py": "066ee6131032588d6afefdc8a4b1af3c0ff0054bd9ae6dd44f93d5c9db2aaf76",
+        "shift_full/session_engine.py": "7f51178184484f2f0e44c50cbdf72a5386dc91344169af4167eeefd733cc7e84",
+        "shift_full/session_outer.py": "26385629b8721434baf06c6e11e6a63308ce4719bce0b836c45898617b565a00",
+        "shift_full/session_control.py": "add05817e41b8e8e31b2f695f7b5b6adac53502ee5a04b4e63a23d090506c320",
+        "shift_full/training_loop.py": "c37532f1a74bfa5352f9191adeabc6fe2cb2967bdfc5c91339c9923df21eab68",
+        "scripts/session_remote.py": "8df5118ae82949dcd64a533e8ec9fa0c5a37590bf8cd128908f598191f7356c9",
+        "scripts/sessionctl.py": "7b207afc4471ee997aece92bd017b81cbe4515942904b8c218696af807360395"
+      },
+      "raw_manifest": {
+        "raw/node0/g0_A0.jsonl": {
+          "bytes": 997038,
+          "sha256": "5e15bf76171a74cbd503a1c7d497159ef85ac72a4842416e16ea390d971b2343"
+        },
+        "raw/node0/g0_A1.jsonl": {
+          "bytes": 992416,
+          "sha256": "3e0d6195d843a3cd1392700c786dd9ca3340aee7b2d6267fb81f606a7697ef3c"
+        },
+        "raw/node0/g0_B0.jsonl": {
+          "bytes": 393205,
+          "sha256": "566ea176cd383338dc57d0c83da8b434fcb0126333530c75d536b69f882658e6"
+        },
+        "raw/node0/g0_B1.jsonl": {
+          "bytes": 388947,
+          "sha256": "4ad6e8cabf8809c628034bd04921dfce07edabf3ceaac20a73d586f34d9e3572"
+        },
+        "raw/node0/g1_D0.jsonl": {
+          "bytes": 1049681,
+          "sha256": "44e7c3dfe4e0da7e200c881a97e73c535c36357720b90579f145158b3e4945d4"
+        },
+        "raw/node0/g1_D1.jsonl": {
+          "bytes": 1050656,
+          "sha256": "801f30243e92757b1e4e23c370e7f22c568cd606deab06aaf2662de92c123b5a"
+        },
+        "raw/node0/g1_D2.jsonl": {
+          "bytes": 985857,
+          "sha256": "905c24dd9d65d86a4c50c7b0a01f1bdebc15c747af74063803f721d7e2a2c756"
+        },
+        "raw/node0/g1_D3.jsonl": {
+          "bytes": 978141,
+          "sha256": "5a255f07ccddd0a9694ad643af4023a7d86f0fb6927441164632f62a97fe849e"
+        },
+        "raw/node0/g3_B0.jsonl": {
+          "bytes": 91021,
+          "sha256": "8e48b728ad765ebf4146aa6ccaa9bb6bc0c6164ee3c8944b80b93174e87d17b4"
+        },
+        "raw/node0/g3_B1.jsonl": {
+          "bytes": 92897,
+          "sha256": "42a182219f98d7b071a3d86c2bb3300daee36dcf439cb2d5068539ee3c532358"
+        },
+        "raw/node1/g0_D0.jsonl": {
+          "bytes": 119719,
+          "sha256": "58af9d9738a3f5f53e9c28bbd1cc6269e88319c5b8dbf861284450832a3cd920"
+        },
+        "raw/node1/g0_D1.jsonl": {
+          "bytes": 118368,
+          "sha256": "b26c287288e478759ec7df3ea824b022fec81ffdc6d32a79ca5d296fb24617f4"
+        },
+        "raw/node1/g0_E0.jsonl": {
+          "bytes": 111980,
+          "sha256": "5f2c8838a5a59d77b6883818518a62b62e239773418c35b07c36e8859db5d276"
+        },
+        "raw/node1/g0_E1.jsonl": {
+          "bytes": 113598,
+          "sha256": "9fd5842411f0ecc2cca73db7a519da446c58c8483ab5cc2e3a73715e4290825f"
+        },
+        "raw/node1/g2_C0.jsonl": {
+          "bytes": 640504,
+          "sha256": "3a5df5cc8d1ca64c2d554e1c0d4dc5c10bd35dc63851f5d4d412aefb87fd06e5"
+        },
+        "raw/node1/g2_C1.jsonl": {
+          "bytes": 644998,
+          "sha256": "fb7a2d4ccaec8e9a118de9bb3c4d1a346cd6af5c57b4943f2537b7f8a6d73715"
+        }
+      },
+      "rejection_reason": "second v4 attempt retained the source after candidate timeout; driver stopped; not accepted as migration",
+      "resource_guard": {
+        "stopped": false,
+        "samples": 41,
+        "min_free_mib": 856,
+        "company_unchanged": true
+      }
+    },
+    {
+      "name": "session_v43_mig8_20261106_a3",
+      "accepted": false,
+      "configuration": {
+        "batch": 8,
+        "seq_len": 32,
+        "tp": 1,
+        "pp": 2,
+        "ep": 2,
+        "replica_world_size": 4,
+        "seed": 2026,
+        "memory_fraction": 0.12,
+        "gpu_warmup": false,
+        "low_memory": true,
+        "optimizer": "cpu_adamw"
+      },
+      "done": false,
+      "error": "KeyboardInterrupt: ",
+      "audit_pass": false,
+      "audit_errors": [
+        "summary done must be True",
+        "summary error must be None",
+        "final session_done missing/duplicate 0/0",
+        "final session_done missing/duplicate 0/1",
+        "final session_done missing/duplicate 0/2",
+        "final session_done missing/duplicate 0/3",
+        "final session_done missing/duplicate 1/0",
+        "final session_done missing/duplicate 1/1",
+        "final session_done missing/duplicate 1/2",
+        "final session_done missing/duplicate 1/3"
+      ],
+      "completed_commands": [],
+      "resources_clean": true,
+      "cleanup_errors": [],
+      "source_sha256": {
+        "shift_full/compat.py": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76",
+        "shift_full/offloaded_adam.py": "ddce86e024a54d7200d271571455daf6f4be42a6b046369bb9da442538b974b1",
+        "shift_full/overlap_handoff.py": "abfda4bd48bb6231ef215569c34727b48e24973debd2171935373ded0fbc675e",
+        "shift_full/planned_handoff.py": "44922161992321022d78ceb006eb267e76b88dd7c6765ec7f32a1f4fe679b9c2",
+        "shift_full/planned_state.py": "30c8612dc4470539838e3cbec6351d040c197733b08f6c429ff9e124be11aa31",
+        "shift_full/prepared_pg.py": "f0ed5eef8b9dbbf881609421574608f666d14d648e4579e7b2c6d0cc54124688",
+        "shift_full/reference_audit.py": "7e489ee2d66a4a8fc9168e7de2ce915ee956f1daeb7c846fbceb0fede09a49ce",
+        "shift_full/session_layout.py": "ff7a75fe215d0de8c520dd247622153f2cd5b986a50e54fd8b60d41ccf7d2a0a",
+        "shift_full/state_digest.py": "fe2e8a941bef9dfe4b93c71c29c6245e609215fd7d12ac3d9891004f0b7d26b3",
+        "shift_full/state_inventory.py": "0eaa472d689bc83564e4d48c524ad5744297b227fb14e8fbb2575ef379edbe51",
+        "shift_full/train.py": "fe1c1b26ee9e8ed8d68407f07485ead7907c361dcb50a96e55e71ae7000cbfb3",
+        "shift_full/training_core.py": "3e18556d51cec4ad4dd24a220ae2ffd215abbdc1a2303f3751386e63a1070cb8",
+        "shift_full/transport.py": "68b76445411b3cf1e963e38f25f92082e9ce581941cd782e16239559f5137249",
+        "shift_full/v4_groups.py": "21577629bfb97a4993646f33fbc01cd9280de259cf4d2b4ef276fbd6313398c3",
+        "shift_full/v4_metadata.py": "27ae20fa5a1c3c266ce649e7d6ef3c88bbd8b0565fcfeef02bbc7e16af7bf3a9",
+        "shift_full/v4_outer.py": "e97a006188c6e630cb7ebdfa73eb30c9b0146ed99a8473b6ad49fd8c1011ad2f",
+        "shift_full/v4_protocol.py": "1c37d3b3fa65fd921620a2bd1034399e2c5dc3392d48dfbbc8c4e2a6399d89ad",
+        "shift_full/v4_reference.py": "51771156946fef3dcb1dba16d55ec1d2d5fef2b0f76bc0b75e929b7325062762",
+        "shift_full/v4_state.py": "570584487f7a7e6f265679f979103a668b7344b4a89324c1ea939feef2e4769c",
+        "shift_full/v4_train.py": "c765a732667a1f8ab5793d7c05a10efb05e79a72658b442b1cd92fff362ca173",
+        "shift_full/v4_transaction.py": "d7c3ad7b78b6bab82151ae171d131e8577b0c1c6ae7ee06a3c675624f816bd80",
+        "shift_full/v4_transaction_train.py": "8a3467b3454e41f6d26c54ce35bc0abe820968384ed2e35507ebc881200814dd",
+        "shift_full/session_engine.py": "913fcf24681d7a2fc46a8331c9fe0d3f2417d01ab4c88788528d42a5c48866fe",
+        "shift_full/session_outer.py": "26385629b8721434baf06c6e11e6a63308ce4719bce0b836c45898617b565a00",
+        "shift_full/session_control.py": "add05817e41b8e8e31b2f695f7b5b6adac53502ee5a04b4e63a23d090506c320",
+        "shift_full/training_loop.py": "c37532f1a74bfa5352f9191adeabc6fe2cb2967bdfc5c91339c9923df21eab68",
+        "scripts/session_remote.py": "54cb519687204e49bf611c7a4bc6d65b984a0426875242db66bff9981c621eb8",
+        "scripts/sessionctl.py": "7b207afc4471ee997aece92bd017b81cbe4515942904b8c218696af807360395"
+      },
+      "raw_manifest": {
+        "raw/node0/g0_A0.jsonl": {
+          "bytes": 2359,
+          "sha256": "9d61e91ed1e01b3d67fac8eb27de799f60d9f586628dc7b83e4d472cdc0f71f2"
+        },
+        "raw/node0/g0_A1.jsonl": {
+          "bytes": 2351,
+          "sha256": "24554c391816836b139e2c57f6c2e38233c3d4a8a6194697849dd97319776d97"
+        },
+        "raw/node0/g0_B0.jsonl": {
+          "bytes": 2354,
+          "sha256": "39f6b4239117822e6b24a7838a7d010431119c8cfdf272d4e4c5a97aaf911c78"
+        },
+        "raw/node0/g0_B1.jsonl": {
+          "bytes": 2352,
+          "sha256": "f81a3093ce927bccedd4c8ffe26cd09a6a07cd28f74db891a1939b3995b13ae2"
+        },
+        "raw/node1/g0_D0.jsonl": {
+          "bytes": 2362,
+          "sha256": "68d36f94415e040be1f7425867ca62f19b8b2880eef1931b405fe9e906d57d2b"
+        },
+        "raw/node1/g0_D1.jsonl": {
+          "bytes": 2352,
+          "sha256": "82efaf3298d64631f553357be5213e9c65244c2e9d9c19a106789bdada46afa1"
+        },
+        "raw/node1/g0_E0.jsonl": {
+          "bytes": 2353,
+          "sha256": "e5fbdd9faa68f237a4643800f66d68ded65d4e36456c52b52c134f2bdd191c7e"
+        },
+        "raw/node1/g0_E1.jsonl": {
+          "bytes": 1914,
+          "sha256": "3cabec5f5ade2b3d313a7dab351b2a3e370b1d8fa7008fbcc8c5eea14eab86f2"
+        }
+      },
+      "rejection_reason": "resource guard stopped owned controller at 486 MiB free GPU memory; no migration executed",
+      "resource_guard": {
+        "stopped": true,
+        "samples": 3,
+        "min_free_mib": 486,
+        "company_unchanged": true
+      }
+    },
+    {
+      "name": "session_v43_mig8_20261106_a4",
+      "accepted": false,
+      "configuration": {
+        "batch": 8,
+        "seq_len": 32,
+        "tp": 1,
+        "pp": 2,
+        "ep": 2,
+        "replica_world_size": 4,
+        "seed": 2026,
+        "memory_fraction": 0.12,
+        "gpu_warmup": false,
+        "low_memory": true,
+        "optimizer": "cpu_adamw"
+      },
+      "done": false,
+      "error": "RuntimeError: session actor exited without proof: g0_A",
+      "audit_pass": false,
+      "audit_errors": [
+        "summary done must be True",
+        "summary error must be None",
+        "invalid actor placement g1_D",
+        "invalid actor placement g2_C",
+        "final session_done missing/duplicate 0/0",
+        "final session_done missing/duplicate 0/1",
+        "final session_done missing/duplicate 0/2",
+        "final session_done missing/duplicate 0/3",
+        "final session_done missing/duplicate 1/0",
+        "final session_done missing/duplicate 1/1",
+        "final session_done missing/duplicate 1/2",
+        "final session_done missing/duplicate 1/3"
+      ],
+      "completed_commands": [
+        {
+          "policy": "v2",
+          "epoch": 1,
+          "step": 32
+        }
+      ],
+      "resources_clean": true,
+      "cleanup_errors": [],
+      "source_sha256": {
+        "shift_full/compat.py": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76",
+        "shift_full/offloaded_adam.py": "ddce86e024a54d7200d271571455daf6f4be42a6b046369bb9da442538b974b1",
+        "shift_full/overlap_handoff.py": "abfda4bd48bb6231ef215569c34727b48e24973debd2171935373ded0fbc675e",
+        "shift_full/planned_handoff.py": "44922161992321022d78ceb006eb267e76b88dd7c6765ec7f32a1f4fe679b9c2",
+        "shift_full/planned_state.py": "30c8612dc4470539838e3cbec6351d040c197733b08f6c429ff9e124be11aa31",
+        "shift_full/prepared_pg.py": "f0ed5eef8b9dbbf881609421574608f666d14d648e4579e7b2c6d0cc54124688",
+        "shift_full/reference_audit.py": "7e489ee2d66a4a8fc9168e7de2ce915ee956f1daeb7c846fbceb0fede09a49ce",
+        "shift_full/session_layout.py": "ff7a75fe215d0de8c520dd247622153f2cd5b986a50e54fd8b60d41ccf7d2a0a",
+        "shift_full/state_digest.py": "fe2e8a941bef9dfe4b93c71c29c6245e609215fd7d12ac3d9891004f0b7d26b3",
+        "shift_full/state_inventory.py": "0eaa472d689bc83564e4d48c524ad5744297b227fb14e8fbb2575ef379edbe51",
+        "shift_full/train.py": "fe1c1b26ee9e8ed8d68407f07485ead7907c361dcb50a96e55e71ae7000cbfb3",
+        "shift_full/training_core.py": "82519423a37ac198823be504997d5975a6c8e22c25084bc239e88d0cc007b586",
+        "shift_full/transport.py": "68b76445411b3cf1e963e38f25f92082e9ce581941cd782e16239559f5137249",
+        "shift_full/v4_groups.py": "21577629bfb97a4993646f33fbc01cd9280de259cf4d2b4ef276fbd6313398c3",
+        "shift_full/v4_metadata.py": "27ae20fa5a1c3c266ce649e7d6ef3c88bbd8b0565fcfeef02bbc7e16af7bf3a9",
+        "shift_full/v4_outer.py": "e97a006188c6e630cb7ebdfa73eb30c9b0146ed99a8473b6ad49fd8c1011ad2f",
+        "shift_full/v4_protocol.py": "1c37d3b3fa65fd921620a2bd1034399e2c5dc3392d48dfbbc8c4e2a6399d89ad",
+        "shift_full/v4_reference.py": "51771156946fef3dcb1dba16d55ec1d2d5fef2b0f76bc0b75e929b7325062762",
+        "shift_full/v4_state.py": "570584487f7a7e6f265679f979103a668b7344b4a89324c1ea939feef2e4769c",
+        "shift_full/v4_train.py": "c765a732667a1f8ab5793d7c05a10efb05e79a72658b442b1cd92fff362ca173",
+        "shift_full/v4_transaction.py": "d7c3ad7b78b6bab82151ae171d131e8577b0c1c6ae7ee06a3c675624f816bd80",
+        "shift_full/v4_transaction_train.py": "8a3467b3454e41f6d26c54ce35bc0abe820968384ed2e35507ebc881200814dd",
+        "shift_full/session_engine.py": "913fcf24681d7a2fc46a8331c9fe0d3f2417d01ab4c88788528d42a5c48866fe",
+        "shift_full/session_outer.py": "26385629b8721434baf06c6e11e6a63308ce4719bce0b836c45898617b565a00",
+        "shift_full/session_control.py": "add05817e41b8e8e31b2f695f7b5b6adac53502ee5a04b4e63a23d090506c320",
+        "shift_full/training_loop.py": "c37532f1a74bfa5352f9191adeabc6fe2cb2967bdfc5c91339c9923df21eab68",
+        "scripts/session_remote.py": "54cb519687204e49bf611c7a4bc6d65b984a0426875242db66bff9981c621eb8",
+        "scripts/sessionctl.py": "7b207afc4471ee997aece92bd017b81cbe4515942904b8c218696af807360395"
+      },
+      "raw_manifest": {
+        "raw/node0/g0_A0.jsonl": {
+          "bytes": 501139,
+          "sha256": "c8ad13d28e0e1c877720508803cb00b8cee39494ee064f38c10e128e2ee0d2ca"
+        },
+        "raw/node0/g0_A1.jsonl": {
+          "bytes": 500494,
+          "sha256": "21ef4a625d37783eb7bf3cffe5b8d3e5b9873434f8916b93806e17b680109b87"
+        },
+        "raw/node0/g0_B0.jsonl": {
+          "bytes": 378996,
+          "sha256": "d5a73450a4b2013b9f1cdef9e62029ca5bb2b40e994b8fd09147505977270f59"
+        },
+        "raw/node0/g0_B1.jsonl": {
+          "bytes": 376755,
+          "sha256": "c1720fd5a5c30e8b17f39d8bd5e12945a684e8d014d3f0329ca0e75a3949fed7"
+        },
+        "raw/node0/g1_D0.jsonl": {
+          "bytes": 552750,
+          "sha256": "0c3bd17d0d83b8f3d063c3f2654c2432d32352d2ba02245681878efd98f51188"
+        },
+        "raw/node0/g1_D1.jsonl": {
+          "bytes": 553089,
+          "sha256": "c3217cb559f2e7c93a437e3fd5fa52eaca2d1945dc14e26f3de0f850cef38d62"
+        },
+        "raw/node0/g1_D2.jsonl": {
+          "bytes": 517897,
+          "sha256": "9b6599a993935fb77e7a402d331b973d035f1affc0f138840361293dafc91f05"
+        },
+        "raw/node0/g1_D3.jsonl": {
+          "bytes": 514389,
+          "sha256": "8e66f0556e1b44b18d36a5290d906ee2b8f21b58aa0e84e3a138a3c7c94cee48"
+        },
+        "raw/node1/g0_D0.jsonl": {
+          "bytes": 112899,
+          "sha256": "810ad7e5dfc84388a2c51232697a77d5b772eb07617122fc6637fed19eead781"
+        },
+        "raw/node1/g0_D1.jsonl": {
+          "bytes": 112661,
+          "sha256": "4d49dcb02483b1ade6cc86df4fb77da3ad6927ba807ff6d400f0750b5a4386a7"
+        },
+        "raw/node1/g0_E0.jsonl": {
+          "bytes": 107225,
+          "sha256": "7e5ad3d69157c3bc5ee94241bdb20029b0dfcf48f7454d85066cdf270badd32b"
+        },
+        "raw/node1/g0_E1.jsonl": {
+          "bytes": 107882,
+          "sha256": "fcd9fa99b35bbf36d352ede358663a1af04fe413974b4ece6695fdc9460f86cc"
+        },
+        "raw/node1/g2_C0.jsonl": {
+          "bytes": 182134,
+          "sha256": "68b1a39f49d5afea0d617cc98471e66cdd4094dab3374ec70e07f9919aa48620"
+        },
+        "raw/node1/g2_C1.jsonl": {
+          "bytes": 180124,
+          "sha256": "ebeda4ac40781cfe7b3d4b395d43ebe767aa7b28b62e7e1e5f5095a10a9f1faa"
+        }
+      },
+      "rejection_reason": "peer began singleton quorum while PP1 was joining; rejected before any singleton optimizer commit",
+      "resource_guard": {
+        "stopped": false,
+        "samples": 35,
+        "min_free_mib": 996,
+        "company_unchanged": true
+      }
+    },
+    {
+      "name": "session_v43_mig8_20261106_a5",
+      "accepted": false,
+      "configuration": {
+        "batch": 8,
+        "seq_len": 32,
+        "tp": 1,
+        "pp": 2,
+        "ep": 2,
+        "replica_world_size": 4,
+        "seed": 2026,
+        "memory_fraction": 0.12,
+        "gpu_warmup": false,
+        "low_memory": true,
+        "optimizer": "cpu_adamw"
+      },
+      "done": false,
+      "error": "RuntimeError: session worker failed: g0_A DistStoreError",
+      "audit_pass": false,
+      "audit_errors": [
+        "summary done must be True",
+        "summary error must be None",
+        "invalid actor placement g1_D",
+        "invalid actor placement g2_C",
+        "final session_done missing/duplicate 0/0",
+        "final session_done missing/duplicate 0/1",
+        "final session_done missing/duplicate 0/2",
+        "final session_done missing/duplicate 0/3",
+        "final session_done missing/duplicate 1/0",
+        "final session_done missing/duplicate 1/1",
+        "final session_done missing/duplicate 1/2",
+        "final session_done missing/duplicate 1/3"
+      ],
+      "completed_commands": [
+        {
+          "policy": "v2",
+          "epoch": 1,
+          "step": 30
+        }
+      ],
+      "resources_clean": true,
+      "cleanup_errors": [],
+      "source_sha256": {
+        "shift_full/compat.py": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76",
+        "shift_full/offloaded_adam.py": "ddce86e024a54d7200d271571455daf6f4be42a6b046369bb9da442538b974b1",
+        "shift_full/overlap_handoff.py": "abfda4bd48bb6231ef215569c34727b48e24973debd2171935373ded0fbc675e",
+        "shift_full/planned_handoff.py": "44922161992321022d78ceb006eb267e76b88dd7c6765ec7f32a1f4fe679b9c2",
+        "shift_full/planned_state.py": "30c8612dc4470539838e3cbec6351d040c197733b08f6c429ff9e124be11aa31",
+        "shift_full/prepared_pg.py": "f0ed5eef8b9dbbf881609421574608f666d14d648e4579e7b2c6d0cc54124688",
+        "shift_full/reference_audit.py": "7e489ee2d66a4a8fc9168e7de2ce915ee956f1daeb7c846fbceb0fede09a49ce",
+        "shift_full/session_layout.py": "ff7a75fe215d0de8c520dd247622153f2cd5b986a50e54fd8b60d41ccf7d2a0a",
+        "shift_full/state_digest.py": "fe2e8a941bef9dfe4b93c71c29c6245e609215fd7d12ac3d9891004f0b7d26b3",
+        "shift_full/state_inventory.py": "0eaa472d689bc83564e4d48c524ad5744297b227fb14e8fbb2575ef379edbe51",
+        "shift_full/train.py": "fe1c1b26ee9e8ed8d68407f07485ead7907c361dcb50a96e55e71ae7000cbfb3",
+        "shift_full/training_core.py": "82519423a37ac198823be504997d5975a6c8e22c25084bc239e88d0cc007b586",
+        "shift_full/transport.py": "68b76445411b3cf1e963e38f25f92082e9ce581941cd782e16239559f5137249",
+        "shift_full/v4_groups.py": "21577629bfb97a4993646f33fbc01cd9280de259cf4d2b4ef276fbd6313398c3",
+        "shift_full/v4_metadata.py": "27ae20fa5a1c3c266ce649e7d6ef3c88bbd8b0565fcfeef02bbc7e16af7bf3a9",
+        "shift_full/v4_outer.py": "e97a006188c6e630cb7ebdfa73eb30c9b0146ed99a8473b6ad49fd8c1011ad2f",
+        "shift_full/v4_protocol.py": "1c37d3b3fa65fd921620a2bd1034399e2c5dc3392d48dfbbc8c4e2a6399d89ad",
+        "shift_full/v4_reference.py": "51771156946fef3dcb1dba16d55ec1d2d5fef2b0f76bc0b75e929b7325062762",
+        "shift_full/v4_state.py": "570584487f7a7e6f265679f979103a668b7344b4a89324c1ea939feef2e4769c",
+        "shift_full/v4_train.py": "c765a732667a1f8ab5793d7c05a10efb05e79a72658b442b1cd92fff362ca173",
+        "shift_full/v4_transaction.py": "d7c3ad7b78b6bab82151ae171d131e8577b0c1c6ae7ee06a3c675624f816bd80",
+        "shift_full/v4_transaction_train.py": "8a3467b3454e41f6d26c54ce35bc0abe820968384ed2e35507ebc881200814dd",
+        "shift_full/session_engine.py": "96b521dfa8be4934bb5dc59c09c3eafd789874870cac9dcd8c76f2e539f5b04f",
+        "shift_full/session_outer.py": "cebd6a53b7c080d477fa2987654d799a9a87da855d2cb92b54478f7c034d831a",
+        "shift_full/session_control.py": "add05817e41b8e8e31b2f695f7b5b6adac53502ee5a04b4e63a23d090506c320",
+        "shift_full/training_loop.py": "c37532f1a74bfa5352f9191adeabc6fe2cb2967bdfc5c91339c9923df21eab68",
+        "scripts/session_remote.py": "0a2af296dad2c935755df05742ce4457c7a8d341a3953207185df4438ca1f293",
+        "scripts/sessionctl.py": "7b207afc4471ee997aece92bd017b81cbe4515942904b8c218696af807360395"
+      },
+      "raw_manifest": {
+        "raw/node0/g0_A0.jsonl": {
+          "bytes": 500951,
+          "sha256": "3c67be3e6dd9cb0872842b3813bcfd562e52d2665679f1d712df314322493460"
+        },
+        "raw/node0/g0_A1.jsonl": {
+          "bytes": 495755,
+          "sha256": "5f915e5d944bb737856ca963d71197be0d2f38144f423ff64976e2561eadb632"
+        },
+        "raw/node0/g0_B0.jsonl": {
+          "bytes": 382825,
+          "sha256": "b41ad5c5201f0dae6141f26913225c0dff3218c09ec0489a03e8afee0b1ba83a"
+        },
+        "raw/node0/g0_B1.jsonl": {
+          "bytes": 382813,
+          "sha256": "af56af07156951ee3ead1eb4be27b358d93c89de1fc57fc66380c86d0a1775a5"
+        },
+        "raw/node0/g1_D0.jsonl": {
+          "bytes": 548430,
+          "sha256": "b8c92ea5a181eb29f3acad59a7195f6e4e54b975ec106014b068195a003427c7"
+        },
+        "raw/node0/g1_D1.jsonl": {
+          "bytes": 548807,
+          "sha256": "a1f8e2016d107410cfcc3dc6e87c9002ed49c8ead03386c395a7b41c219a1c38"
+        },
+        "raw/node0/g1_D2.jsonl": {
+          "bytes": 518340,
+          "sha256": "e61a72c219ced28ff91ece1d84f3cab67c279307105f828420d98512d9b6f5df"
+        },
+        "raw/node0/g1_D3.jsonl": {
+          "bytes": 517111,
+          "sha256": "7c46b64c046f3f9c382574e98a317bc483d5c1335167ba11a47b750a5bcaf951"
+        },
+        "raw/node1/g0_D0.jsonl": {
+          "bytes": 113122,
+          "sha256": "825ad9aa2052a9abfee3704ce789c832a1ef47c9604e592734f6a502319eeb5b"
+        },
+        "raw/node1/g0_D1.jsonl": {
+          "bytes": 113111,
+          "sha256": "0c4173d587e23f1a5ce33e6f60014a50c9bd3d937be65d2da53e5ec1b0b3fccf"
+        },
+        "raw/node1/g0_E0.jsonl": {
+          "bytes": 106982,
+          "sha256": "65ad60d0e34583765a55f8b159efb2a252d25e56bade0d542a0399dd2497bda9"
+        },
+        "raw/node1/g0_E1.jsonl": {
+          "bytes": 105458,
+          "sha256": "44a25557bf6ca63d6782add49b918d212553782bc0bba74770443369a3ebb640"
+        },
+        "raw/node1/g2_C0.jsonl": {
+          "bytes": 181037,
+          "sha256": "4744457dab8cc48469240b14b72d0c05f46117b0845b186fa7291a1b92c3ba3b"
+        },
+        "raw/node1/g2_C1.jsonl": {
+          "bytes": 182411,
+          "sha256": "11e4ae1ae1301c930deaa846cbb68caabd05005c5a2502346dc72ae3e5989932"
+        }
+      },
+      "rejection_reason": "v2 completed; v4 post-switch peer PP0 allreduce exceeded short gradient deadline while restored replica was still computing. No common commit/final audit; not migration acceptance. Added first-step gradient-ready rendezvous.",
+      "resource_guard": {
+        "stopped": false,
+        "samples": 35,
+        "min_free_mib": 1124,
+        "company_unchanged": true
+      }
+    }
+  ]
+}

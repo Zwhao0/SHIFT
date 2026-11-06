@@ -13,6 +13,7 @@ import time
 from scripts import v1_acceptance_remote as remote
 from shift_full.control import endpoints_from_env,server_password
 from shift_full.session_control import Command
+from shift_full.session_layout import SessionLayout
 
 ROOT=Path('/workspace/SHIFT')
 
@@ -21,15 +22,22 @@ def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--session',required=True)
     p.add_argument('--seconds',type=int,default=1800);p.add_argument('--audit',action='store_true')
     p.add_argument('--initial-steps',type=int,default=0,help='bounded reference run; zero accepts live commands')
+    p.add_argument('--replica-world-size',type=int,choices=(4,8),default=8)
+    p.add_argument('--seq-len',type=int,default=512)
+    p.add_argument('--low-memory',action='store_true')
+    p.add_argument('--nodes',nargs='+',choices=('node0','node1','node3'),default=['node0','node1','node3'])
     a=p.parse_args()
+    layout=SessionLayout(a.replica_world_size)
+    if a.seq_len<2:p.error("seq-len must be at least two")
+    if not {'node0','node1'}<=set(a.nodes):p.error('node0 and node1 are required')
     if not a.session or not all(c.isalnum() or c in '_-' for c in a.session):p.error('invalid session')
     import torch.distributed as dist
     name='session_'+a.session;out=ROOT/'results'/name;out.mkdir(exist_ok=False)
     lock=(ROOT/'runtime/v3-training.lock').open('a');fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
     remote.PASSWORD=server_password(remote.PRIVATE/'credentials');(remote.PRIVATE/'credentials').unlink()
     s=remote.ServerRotation.__new__(remote.ServerRotation);s.root=ROOT;s._sudo_password=remote.PASSWORD
-    eps=endpoints_from_env();units=[];actors={};offsets={};rows={};expected_stops=set();store=None;reserved_lights={};started_lights=set()
-    report=dict(name=name,controller_pid=os.getpid(),session=a.session,epoch=0,command_count=0,commands=[],done=False,error=None,audit=a.audit,resources_clean=False)
+    eps={n:e for n,e in endpoints_from_env().items() if n in a.nodes};units=[];actors={};offsets={};rows={};expected_stops=set();store=None;reserved_lights={};started_lights=set()
+    report=dict(name=name,controller_pid=os.getpid(),session=a.session,epoch=0,command_count=0,commands=[],done=False,error=None,audit=a.audit,resources_clean=False,nodes=list(eps))
     requests=ROOT/'runtime/v3-reproduce'/name/'requests';requests.mkdir(parents=True,exist_ok=True)
     rootcfg=ROOT/'runtime/v3-reproduce'/(name+'.json')
     def ssh(node,code):return s.ssh(eps[node],['sudo','-S','-p','','python3','-c',code],sudo_input=True)
@@ -53,6 +61,9 @@ def main():
             TORCHFT_USE_OTEL='false',SHIFT_DIGEST_ENGINE='staged',
             TMPDIR=str(ROOT/'runtime/v1-recheck-bootstrap/cache'),XDG_CACHE_HOME=str(ROOT/'runtime/v1-recheck-bootstrap/cache'),
             TRITON_CACHE_DIR=str(ROOT/'runtime/v1-recheck-bootstrap/cache/triton'),NO_PROXY='*',no_proxy='*')
+        if a.low_memory:
+            env['PYTORCH_ALLOC_CONF']='expandable_segments:True'
+            env['SHIFT_CPU_ADAM']='1'
         args=['systemd-run','--quiet','--collect','--unit='+unit,'--property=RuntimeMaxSec='+str(a.seconds),
             '--property=KillMode=control-group','--property=TimeoutStopSec=10','--working-directory='+str(ROOT),
             '--property=StandardOutput=append:'+str(out/(label+'.host.log')),'--property=StandardError=inherit',
@@ -62,18 +73,19 @@ def main():
         port=base['lighthouse_port']+service if planned_round is None else 31410+20*planned_round
         if port in started_lights:return
         if planned_round is None and service in reserved_lights:reserved_lights.pop(service).close()
-        launch('node0',f'light-{port}',[str(ROOT/'runtime/torch214/bin/python'),str(ROOT/'vendor/bin/torchft_lighthouse'),
+        light_node='node0' if planned_round is None else state['replica_nodes']['0']
+        launch(light_node,f'light-{port}',[str(ROOT/'runtime/torch214/bin/python'),str(ROOT/'vendor/bin/torchft_lighthouse'),
             '--bind',f'[::]:{port}','--min_replicas','1' if planned_round is None else '2',
             '--heartbeat_timeout_ms','500','--join_timeout_ms','200','--quorum_tick_ms','50'])
         until=time.monotonic()+30
         while time.monotonic()<until:
             with socket.socket() as probe:
-                if probe.connect_ex((eps['node0'].ip,port))==0:started_lights.add(port);return
+                if probe.connect_ex((eps[light_node].ip,port))==0:started_lights.add(port);return
             time.sleep(.1)
         raise TimeoutError('session Lighthouse did not become reachable')
     def actor(label,node,role,replica,devices,*,generation=0,command=None):
         cfg=dict(base,actor_generation=generation,session_replica=replica,actor_devices=len(devices),
-                 session_candidate=command is not None,candidate_full_dp=len(devices)==8,
+                 session_candidate=command is not None,candidate_full_dp=len(devices)==layout.world,
                  initial_round=report['epoch'],session_epoch=report['epoch'],manager_service=state['service'],manager_store_services=state['stores'],
                  channel_epochs=state['channels'],replica_hosts={k:eps[v].ip for k,v in state['replica_nodes'].items()},
                  partial_owner=state['partial_owner'],role=role)
@@ -108,7 +120,7 @@ print(json.dumps(out))
                     e=json.loads(line)
                     label='g'+str(e['actor_round'])+'_'+e['role']
                     rows[label].append(e)
-    def keys(kind,sequence):return [f'session/{kind}/{sequence}/{r}/{i}' for r in range(2) for i in range(8)]
+    def keys(kind,sequence):return [f'session/{kind}/{sequence}/{r}/{i}' for r in range(2) for i in range(layout.world)]
     def occupied(excluding=None):
         used={node:set() for node in eps}
         for logical,(label,device) in active.items():
@@ -118,24 +130,27 @@ print(json.dumps(out))
     def terminal(label):
         return {e['device'] for e in rows[label] if e['kind'] in ('session_done','session_retired','retired','standby_done')}==set(range(len(actors[label]['devices'])))
     def check():
+        for label,events in rows.items():
+            failures=[e for e in events if e['kind']=='session_error']
+            if failures:raise RuntimeError('session worker failed: '+label+' '+failures[-1]['error_type'])
         for label,info in actors.items():
             if info['unit'] in expected_stops or terminal(label):continue
             values=dict(x.split('=',1) for x in s.ssh(eps[info['node']],['systemctl','show',info['unit'],'--property=ActiveState','--property=ExecMainStatus']).splitlines() if '=' in x)
             if values.get('ActiveState') not in ('active','activating','deactivating') or values.get('ExecMainStatus') not in (None,'0'):
                 raise RuntimeError('session actor exited without proof: '+label)
-    before=None;active={};current=None;seen={};state=dict(service=0,stores={'0':0,'1':0},channels=[0]*8,replica_nodes={'0':'node0','1':'node1'},partial_owner='B')
-    base=dict(directory=str(out/'workers'),flash='/workspace/FLASH1022',hosts={r:eps[n].ip for r,n in dict(A='node0',B='node0',C='node3',D='node1',E='node1').items()},
+    before=None;active={};current=None;seen={};state=dict(service=0,stores={'0':0,'1':0},channels=[0]*layout.world,replica_nodes={'0':'node0','1':'node1'},partial_owner='B')
+    base=dict(directory=str(out/'workers'),flash='/workspace/FLASH1022',hosts={r:eps[n].ip for r,n in dict(A='node0',B='node0',C='node3' if 'node3' in eps else 'node0',D='node1',E='node1').items()},
         node_hosts={n:e.ip for n,e in eps.items()},port=28000,timeout=120,communication_timeout=2,seconds=a.seconds,
-        plan=dict(cut=2,post_steps=5,seq_len=512,microbatches=2),seed=2026,unified=True,data='random',
-        unified_session=True,session=a.session,session_services=16,outer_manager=True,transactional_switch=True,
+        plan=dict(cut=2,post_steps=5,seq_len=a.seq_len,microbatches=2),seed=2026,unified=True,data='random',
+        unified_session=True,session=a.session,replica_world_size=layout.world,session_services=16,outer_manager=True,transactional_switch=True,
         retain_outer_managers=True,overlap_peer=True,oracle=False,reference_only=False,
         performance_no_audit=not a.audit,boundary_validation='full' if a.audit else 'runtime',
-        gpu_prepare=True,gpu_warmup=True,reuse_local_groups=True,preconnect_state=True,defer_source_local_close=True,
-        slow_ms=0,cycles=1,between_steps=5,restore_deadline=10,source_deadline=2,affected_ranks=[4,5,6,7])
-    report['configuration']=dict(batch=8,seq_len=512,tp=2,pp=2,ep=2,seed=2026,memory_fraction=.12)
+        gpu_prepare=True,gpu_warmup=not a.low_memory,low_memory=a.low_memory,reuse_local_groups=True,preconnect_state=True,defer_source_local_close=True,
+        slow_ms=0,cycles=1,between_steps=5,restore_deadline=45 if a.low_memory else 10,source_deadline=2,affected_ranks=list(layout.affected))
+    report['configuration']=dict(batch=8,seq_len=a.seq_len,tp=layout.tp,pp=2,ep=2,replica_world_size=layout.world,seed=2026,memory_fraction=.12,gpu_warmup=not a.low_memory,low_memory=a.low_memory,optimizer='cpu_adamw' if a.low_memory else 'cuda_adamw')
     from shift_full.v4_reference import training_sources
     report['source_sha256']=training_sources(ROOT)
-    for file in ['shift_full/session_engine.py','shift_full/session_outer.py','shift_full/session_control.py','shift_full/training_loop.py','scripts/session_remote.py','scripts/sessionctl.py']:
+    for file in ['shift_full/offloaded_adam.py','shift_full/session_layout.py','shift_full/session_engine.py','shift_full/session_outer.py','shift_full/session_control.py','shift_full/training_loop.py','scripts/session_remote.py','scripts/sessionctl.py']:
         report['source_sha256'][file]=hashlib.sha256((ROOT/file).read_bytes()).hexdigest()
     save()
     try:
@@ -176,21 +191,22 @@ print(json.dumps(out))
         store=dist.TCPStore(eps['node0'].ip,base['port'],None,False,timeout=__import__('datetime').timedelta(seconds=120),wait_for_workers=False)
         store.set('session/command_count','0')
         lighthouse(0)
-        for role,node,replica,devices in [('A','node0',0,list(range(4))),('B','node0',0,list(range(4,8))),('D','node1',1,list(range(4))),('E','node1',1,list(range(4,8)))]:
+        for role,node,replica,devices in [('A','node0',0,list(range(layout.width))),('B','node0',0,list(layout.affected)),('D','node1',1,list(range(layout.width))),('E','node1',1,list(layout.affected))]:
             label='g0_'+role;actor(label,node,role,replica,devices)
-            for d in range(4):active[replica,d+(4 if role in 'BE' else 0)]=(label,d)
+            for d in range(layout.width):active[replica,d+(layout.width if role in 'BE' else 0)]=(label,d)
         deadline=time.monotonic()+a.seconds-30
         ready=False;ref_stopped=False
         while time.monotonic()<deadline:
             collect();check()
-            if not ready and store.check([f'session/ready/{r}/{i}' for r in range(2) for i in range(8)]):
+            if not ready and store.check([f'session/ready/{r}/{i}' for r in range(2) for i in range(layout.world)]):
                 store.set('session/start','1');ready=True;report['ready']=True;save()
             progress={r:int(store.get(f'session/progress/{r}')) if store.check([f'session/progress/{r}']) else 0 for r in (0,1)}
             report['progress']=progress
             if current:
                 seq=current['sequence'];cmd=current['command']
                 if cmd['policy']=='v1' and not current.get('killed') and store.check(keys('arrival',seq)):
-                    targets={active[1,i][0] for i in range(8)}
+                    source=cmd['source_replica']
+                    targets={active[source,i][0] for i in range(layout.world)}
                     current['fault_monotonic']=time.monotonic()
                     current['fault_proof']=[]
                     for label in targets:
@@ -215,24 +231,24 @@ print(json.dumps(dict(unit=unit,signal='SIGKILL',worker_pids=pids,main_pid=int(b
                         current['fault_proof'].append(json.loads(ssh(info['node'],code)))
                         expected_stops.add(info['unit'])
                     store.set(f'session/fault_released/{seq}','1')
-                    state['stores']['1']=seq
-                    label=f'g{seq}_D';actor(label,cmd['target'],'D',1,current['devices'],generation=seq,command=current)
+                    state['stores'][str(source)]=seq
+                    label=f'g{seq}_D';actor(label,cmd['target'],'D',source,current['devices'],generation=seq,command=current)
                     dist.PrefixStore(f'round/{report["epoch"]}/',store).set('prepare','1')
                     current.update(killed=True,target_actor=label,fault_kind='SIGKILL');save()
                 if current.get('target_actor') and 'first_common_observation' not in current:
                     wanted=dict(active)
                     target_label=current['target_actor']
                     if cmd['policy'] in ('v1','v2'):
-                        for i in range(8):wanted[1,i]=(target_label,i)
+                        for i in range(layout.world):wanted[cmd['source_replica'],i]=(target_label,i)
                     else:
-                        for i in range(4):wanted[0,4+i]=(target_label,i)
+                        for i in range(layout.width):wanted[0,layout.width+i]=(target_label,i)
                     by_step={}
                     for (replica,rank),(label,device) in wanted.items():
                         for e in rows[label]:
                             if (e['kind']=='session_commit' and e['device']==device and
                                 e.get('command_id')==cmd['id'] and e.get('participants')==2 and e.get('contributed')):
                                 by_step.setdefault(e['step'],set()).add((replica,rank))
-                    common=sorted(step for step,workers in by_step.items() if len(workers)==16)
+                    common=sorted(step for step,workers in by_step.items() if len(workers)==2*layout.world)
                     if common:
                         observed=time.monotonic()
                         current['first_common_observation']=dict(step=common[0],observed_monotonic=observed,
@@ -240,21 +256,29 @@ print(json.dumps(dict(unit=unit,signal='SIGKILL',worker_pids=pids,main_pid=int(b
                             fault_seconds=observed-current['fault_monotonic'] if current.get('fault_monotonic') else None)
                         save()
                 if store.check(keys('done',seq)):
+                    if cmd['policy']=='v4':
+                        decision=json.loads(dist.PrefixStore(f'round/{cmd["expected_epoch"]}/',store).get('decision'))
+                        if decision.get('decision')!='replace' or decision.get('owner')!=actors[current['target_actor']]['role']:
+                            raise RuntimeError('v4 retained the source; migration was not accepted')
+                    if 'first_common_observation' not in current:
+                        current.setdefault('completion_observation_deadline',time.monotonic()+20)
+                        if time.monotonic()>current['completion_observation_deadline']:raise RuntimeError('strategy completed without common commit evidence')
+                        save();time.sleep(.2);continue
                     done_steps={int(store.get(k)) for k in keys('done',seq)}
                     if len(done_steps)!=1:raise RuntimeError('strategy completion is not a common boundary')
                     if cmd['policy'] in ('v1','v2'):
-                        for i in range(8):active[1,i]=(current['target_actor'],i)
-                        state['replica_nodes']['1']=cmd['target']
-                        if cmd['policy']=='v2':state.update(service=seq,stores={'0':seq,'1':seq},channels=[report['epoch']+1]*8)
+                        for i in range(layout.world):active[cmd['source_replica'],i]=(current['target_actor'],i)
+                        state['replica_nodes'][str(cmd['source_replica'])]=cmd['target']
+                        if cmd['policy']=='v2':state.update(service=seq,stores={'0':seq,'1':seq},channels=[report['epoch']+1]*layout.world)
                     else:
-                        for i in range(4):active[0,4+i]=(current['target_actor'],i)
+                        for i in range(layout.width):active[0,layout.width+i]=(current['target_actor'],i)
                         state['partial_owner']='C' if state['partial_owner']=='B' else 'B'
-                        state['channels'][4:8]=[report['epoch']+1]*4
+                        state['channels'][layout.width:]=[report['epoch']+1]*layout.width
                     current.update(status='completed',completed_step=done_steps.pop(),controller_seconds=time.monotonic()-current['requested_monotonic'])
                     report['epoch']+=1;report['commands'].append(current);current=None;report['active_command']=None;save()
             if ready and current is None:
                 if a.initial_steps and min(progress.values())>=a.initial_steps and not ref_stopped:
-                    payload=dict(schema=1,session=a.session,id='reference-stop',expected_epoch=report['epoch'],action='stop',at_step=max(progress.values())+4)
+                    payload=dict(schema=1,session=a.session,id='reference-stop',expected_epoch=report['epoch'],action='stop',at_step=max(progress.values())+4,replica_world_size=layout.world)
                     (requests/'reference-stop.json').write_text(json.dumps(payload));ref_stopped=True
                 for path in sorted(requests.glob('*.json')):
                     payload=json.loads(path.read_text());identifier=payload.get('id');canonical=json.dumps(payload,sort_keys=True)
@@ -264,13 +288,15 @@ print(json.dumps(dict(unit=unit,signal='SIGKILL',worker_pids=pids,main_pid=int(b
                         continue
                     try:
                         cmd=Command.from_dict(payload)
+                        if cmd.replica_world_size!=layout.world:raise ValueError('command replica layout differs from the live session')
                         if cmd.session!=a.session or cmd.expected_epoch!=report['epoch']:raise ValueError('stale live command')
                         if cmd.action!='stop':
                             if report['command_count']+1>=base['session_services']:raise ValueError('session command budget reached; stop remains available')
                             if cmd.target not in eps:raise ValueError('unknown target node')
-                            if (cmd.policy in ('v1','v2') and cmd.source_replica!=1) or (cmd.policy=='v4' and (cmd.source_replica!=0 or tuple(cmd.ranks)!=(4,5,6,7))):raise ValueError('unsupported session source/scope')
-                            used=occupied(excluding=1 if cmd.policy=='v1' else None)
-                            if len(set(range(8))-used[cmd.target])<(4 if cmd.policy=='v4' else 8):raise ValueError('target does not have enough free stage slots')
+                            if (cmd.policy=='v2' and cmd.source_replica!=1) or (cmd.policy=='v4' and (cmd.source_replica!=0 or tuple(cmd.ranks)!=layout.affected)):raise ValueError('unsupported session source/scope')
+                            if cmd.policy=='v4' and any(actors[active[0,i][0]]['role'] not in ('B','C') for i in layout.affected):raise ValueError('partial migration requires separate PP1 actors')
+                            used=occupied(excluding=cmd.source_replica if cmd.policy=='v1' else None)
+                            if len(set(range(8))-used[cmd.target])<(layout.width if cmd.policy=='v4' else layout.world):raise ValueError('target does not have enough free stage slots')
                     except (ValueError,KeyError) as error:
                         seen[identifier]=canonical
                         report.setdefault('rejected_commands',[]).append(dict(id=identifier,error=str(error)))
@@ -282,10 +308,10 @@ print(json.dumps(dict(unit=unit,signal='SIGKILL',worker_pids=pids,main_pid=int(b
                         payload={k:v for k,v in payload.items() if k not in ('policy','source_replica','target','ranks')}
                     devices=[]
                     if cmd.action!='stop':
-                        if (cmd.policy in ('v1','v2') and cmd.source_replica!=1) or (cmd.policy=='v4' and (cmd.source_replica!=0 or tuple(cmd.ranks)!=(4,5,6,7))):raise ValueError('unsupported session source/scope')
-                        used=occupied(excluding=1 if cmd.policy=='v1' else None)
-                        devices=[i for i in range(8) if i not in used[cmd.target]][:4 if cmd.policy=='v4' else 8]
-                        if len(devices)!=(4 if cmd.policy=='v4' else 8):raise ValueError('target does not have enough free stage slots')
+                        if (cmd.policy=='v2' and cmd.source_replica!=1) or (cmd.policy=='v4' and (cmd.source_replica!=0 or tuple(cmd.ranks)!=layout.affected)):raise ValueError('unsupported session source/scope')
+                        used=occupied(excluding=cmd.source_replica if cmd.policy=='v1' else None)
+                        devices=[i for i in range(8) if i not in used[cmd.target]][:layout.width if cmd.policy=='v4' else layout.world]
+                        if len(devices)!=(layout.width if cmd.policy=='v4' else layout.world):raise ValueError('target does not have enough free stage slots')
                     record=dict(sequence=seq,command=payload,devices=devices,requested_monotonic=time.monotonic(),status='running')
                     if cmd.policy=='v2':lighthouse(seq);lighthouse(seq,planned_round=seq-1)
                     # Choose the boundary after service preparation and publish before
@@ -306,9 +332,9 @@ print(json.dumps(dict(unit=unit,signal='SIGKILL',worker_pids=pids,main_pid=int(b
                     if cmd.action!='stop':current=record;report['active_command']=record
                     save();break
             finished=[e for es in rows.values() for e in es if e['kind']=='session_done']
-            if len(finished)==16:
+            if len(finished)==2*layout.world:
                 if current is not None:raise RuntimeError('session stopped with an unfinished command')
-                if len({(e['replica'],e['rank']) for e in finished})!=16 or len({e['step'] for e in finished})!=1:raise RuntimeError('incomplete final session coverage')
+                if len({(e['replica'],e['rank']) for e in finished})!=2*layout.world or len({e['step'] for e in finished})!=1:raise RuntimeError('incomplete final session coverage')
                 report.update(done=True,final_step=finished[0]['step']);break
             save()
             time.sleep(.5)

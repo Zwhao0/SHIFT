@@ -68,6 +68,14 @@ class EndpointRoutingTests(unittest.TestCase):
             path.write_text('login\n机器密码：pass-with-s\nother\n', encoding='utf-8')
             self.assertEqual(server_password(path), 'pass-with-s')
 
+    def test_host_login_override_does_not_replace_shared_sudo_password(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'server.md'
+            path.write_text('192.0.2.13密码 login-three  机器密码/sudo/容器密码：shared-sudo\n')
+            self.assertEqual(server_password(path), 'shared-sudo')
+            self.assertEqual(server_password(path, '192.0.2.13'), 'login-three')
+            self.assertEqual(server_password(path, '192.0.2.10'), 'shared-sudo')
+
     def test_node3_password_is_sent_via_stdin_only(self):
         session = new_session()
         with tempfile.TemporaryDirectory() as directory:

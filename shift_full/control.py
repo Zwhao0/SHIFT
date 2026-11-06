@@ -75,13 +75,18 @@ def runtime_command(endpoint, command):
                      '/opt/greyhound-docker/docker', *command]
 
 
-def server_password(path):
-    """Read the lab password in memory for sudo -S; callers must never log it."""
+def server_password(path, host=None):
+    """Read host login or shared sudo credentials in memory; never log them."""
     text = Path(path).read_text(encoding='utf-8')
-    match = re.search(r'密码[：: ]+(\S+)', text)
-    if not match:
+    if host is not None:
+        match = re.search(re.escape(host) + r'\s*密码[：: ]+(\S+)', text)
+        if match:
+            return match.group(1)
+    # The optional host login override precedes the shared machine/sudo field.
+    matches = re.findall(r'密码[：: ]+(\S+)', text)
+    if not matches:
         raise RuntimeError('server.md does not contain the expected password field')
-    return match.group(1)
+    return matches[-1]
 
 
 # Retain the old tuple surface for benchmark/archive helpers that import NODES.

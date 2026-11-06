@@ -1,6 +1,7 @@
 """One persistent-session TorchFT adapter for ordinary, healing and planned steps."""
 import time
 from datetime import timedelta
+from .session_layout import SessionLayout
 
 
 class SessionOuter:
@@ -12,6 +13,7 @@ class SessionOuter:
         from .transport import PackedGPUTransport
         install_managed_callback_fix()
         self.runtime=runtime;self.replica=runtime.replica;self.rank=runtime.rank
+        self._defer_quorum=False
         self.epoch=runtime.epoch;self._step_started=None;self._closed=False
         self.timeout=timedelta(seconds=runtime.c.get('communication_timeout',2))
         service=runtime.service if service is None else service
@@ -21,7 +23,7 @@ class SessionOuter:
         self.manager=Manager(pg=self.pg,state_dict=self.capture,load_state_dict=self.restore,
             min_replica_size=1,use_async_quorum=not runtime.healing,init_sync=False,max_retries=8,
             timeout=timedelta(seconds=90),quorum_timeout=timedelta(seconds=180),
-            connect_timeout=timedelta(seconds=20),rank=self.rank,world_size=8,
+            connect_timeout=timedelta(seconds=20),rank=self.rank,world_size=SessionLayout.from_config(runtime.c).world,
             store_addr=host,store_port=port+100+runtime.store_services[str(self.replica)]*2+self.replica,
             hostname=runtime.replica_hosts[str(self.replica)],
             lighthouse_addr=f"http://{host}:{runtime.c.get('lighthouse_port',port+60)+service}",replica_id=f'shift{self.replica}',
@@ -64,7 +66,12 @@ class SessionOuter:
     def begin(self,step):
         r=self.runtime
         self.refresh_boundary()
-        self.manager.start_quorum(allow_heal=r.healing)
+        self._defer_quorum=bool(getattr(r,'in_protocol',False) and r.replica==1 and
+            r.phase=='after' and r.protocol_plan and r.progress['updates']==r.protocol_plan.cut)
+        # The healthy peer may compute while PP1 is restored. Starting its
+        # quorum now could elect a transient singleton before PP1's Manager
+        # rejoins; defer only the quorum, keeping real compute overlap.
+        if not self._defer_quorum:self.manager.start_quorum(allow_heal=r.healing)
         self._step_started=step
         if r.healing:
             self.manager.wait_quorum()
@@ -74,9 +81,13 @@ class SessionOuter:
             self.participants=2;self.participating_rank=self.replica
 
     def wait_quorum(self):
+        if getattr(self,'_defer_quorum',False):
+            self.runtime.protocol_store.wait(['activated'])
+            self.manager.start_quorum(allow_heal=False)
+            self._defer_quorum=False
         self.manager.wait_quorum()
         n=self.manager.num_participants()
-        if n not in (1,2) or (not self.runtime.healing and n!=2):raise RuntimeError('invalid session quorum size')
+        if n not in (1,2) or (not self.runtime.healing and n!=2):raise RuntimeError(f'invalid session quorum size {n} for replica {self.replica}/rank {self.rank}')
         self.participants=n;self.participating_rank=self.manager.participating_rank() or 0
 
     def reduce(self,buckets,step):
@@ -94,7 +105,7 @@ class SessionOuter:
             store=r.base_store;prefix=f'session-vote/{r.epoch}/{step}/{n}/'
             store.set(prefix+f'{self.replica}/{self.rank}','1')
             replicas=(self.replica,) if n==1 else (0,1)
-            store.wait([prefix+f'{replica}/{rank}' for replica in replicas for rank in range(8)])
+            store.wait([prefix+f'{replica}/{rank}' for replica in replicas for rank in range(SessionLayout.from_config(r.c).world)])
         self._step_started=None
         return bool(commit)
 
@@ -109,7 +120,7 @@ class SessionOuter:
 
     def migrate(self,epoch):
         if self._step_started is not None:raise RuntimeError('cannot migrate a live session step')
-        if self.rank in (4,5,6,7):
+        if self.rank in SessionLayout.from_config(self.runtime.c).affected:
             self.pg.migration_epoch=epoch;self.manager._quorum_id=None
         self.epoch=epoch;self.manager._shift_epoch=epoch
 

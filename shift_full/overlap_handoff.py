@@ -15,12 +15,18 @@ class RetiredReplica(Exception):pass
 
 class FrozenTransport(PackedGPUTransport):
  def freeze(self,payload,step):
+  from torch.utils._pytree import tree_flatten
+  self.frozen_versions=[(t,t._version) for t in tree_flatten(payload)[0] if isinstance(t,torch.Tensor)]
   self.frozen=super()._pack(payload,step);self.frozen_step=step
   self.ready=torch.cuda.Event();self.ready.record()
  def _pack(self,payload,step):
   if step!=self.frozen_step:raise ValueError('frozen version mismatch')
+  if any(t._version!=version for t,version in self.frozen_versions):raise RuntimeError('frozen precopy state changed before transport')
   self.ready.wait()
   return self.frozen
+ def send_checkpoint(self,*args,**kwargs):
+  super().send_checkpoint(*args,**kwargs)
+  if any(t._version!=version for t,version in self.frozen_versions):raise RuntimeError('frozen precopy state changed during transport')
 
 class OverlapHandoff(PlannedHandoff):
  def __init__(self,*args,**kw):

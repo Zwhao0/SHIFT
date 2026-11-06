@@ -1,0 +1,24 @@
+{
+  "model": "bayliner1980/Qwen2.5-0.5B-MoE-A0.3B",
+  "revision": "4b89028ef7376d0e92acbbc4a7f560c2374aeec0",
+  "parameters": 494712832,
+  "full_model": true,
+  "identical_on_both_nodes": true,
+  "checkpoint": {
+    "files": {
+      "SOURCE.txt": {
+        "bytes": 158,
+        "sha256": "d3ee3e1020b6df67a6f077c373d3ed4aaddd359227412d3238621e98672c116e"
+      },
+      "config.json": {
+        "bytes": 1654,
+        "sha256": "c3efb3a767f9ad61efdfa1bf1d248ca4ab19120a2586cbe0f3a6da6c8762bcb4"
+      },
+      "model.safetensors": {
+        "bytes": 989730216,
+        "sha256": "6c1673e92522af47907eb8e1825142061a367ec5993e4060554fbce271f683be"
+      }
+    },
+    "checkpoint_tensor_elements": 494712832
+  }
+}

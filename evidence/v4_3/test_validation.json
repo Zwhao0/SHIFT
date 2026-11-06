@@ -1,0 +1,34 @@
+{
+  "modules": [
+    "scripts.test_training_core",
+    "scripts.test_v41_cleanup_gate",
+    "scripts.test_v41_defaults",
+    "scripts.test_planned_payload",
+    "scripts.test_v4_reference",
+    "scripts.test_quick_v2_remote",
+    "scripts.test_planned_state",
+    "scripts.test_v3_recovery",
+    "scripts.test_v4_transaction",
+    "scripts.test_v4_commit",
+    "scripts.test_v4_groups",
+    "scripts.test_v4_outer",
+    "scripts.test_verify_v4_transaction",
+    "scripts.test_v42_runtime",
+    "scripts.test_training_loop",
+    "scripts.test_session_control",
+    "scripts.test_session_engine",
+    "scripts.test_verify_session",
+    "scripts.test_state_digest.DigestTest.test_cpu",
+    "scripts.test_state_digest.DigestTest.test_bound",
+    "scripts.test_session_layout",
+    "scripts.test_offloaded_adam",
+    "scripts.test_verify_session_rotation",
+    "shift_full.test_control_routing",
+    "scripts.test_cpu_state_wire",
+    "scripts.test_v43_channel_ack"
+  ],
+  "server": {
+    "rc": 0,
+    "output": "........................................................................................................................................................................................................\n----------------------------------------------------------------------\nRan 200 tests in 2.044s\n\nOK\n"
+  }
+}
