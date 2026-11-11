@@ -57,9 +57,11 @@ def validate_relay(packet, *, rank, step, epoch, digest, audit):
     return packet
 
 
-def role_hosts(hosts, round_index, *, allow_colocated=False):
+def role_hosts(hosts, round_index, *, allow_colocated=False, allow_source_target_colocated=False):
     if (not isinstance(hosts,Mapping) or set(hosts) != {'A', 'B', 'C'}
             or not all(isinstance(h,str) and h for h in hosts.values())
-            or (len(set(hosts.values())) != 3 and not (allow_colocated and len(set(hosts.values()))==2 and hosts['B']!=hosts['C']))):
+            or (len(set(hosts.values())) != 3 and not (
+                allow_colocated and len(set(hosts.values())) == 2
+                and (hosts['B'] != hosts['C'] or allow_source_target_colocated)))):
         raise ValueError('planned hosts require three distinct A/B/C addresses')
     return dict(hosts) if round_index % 2 == 0 else dict(A=hosts['A'], B=hosts['C'], C=hosts['B'])

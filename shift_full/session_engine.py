@@ -28,13 +28,13 @@ class SessionPolicy:
         return not r.stopping
     def begin(self,r):
         r.at_committed_boundary=False
-        r.gate.authorize('A' if r.replica else r.role,r.epoch)
+        r.gate.authorize(getattr(r, 'protocol_owner_role', 'A'),r.epoch)
         started=time.monotonic()
         r.optimizer.zero_grad(set_to_none=True);r.ddp.zero_grad_buffer()
         r.outer.begin(r.progress['updates'])
         return dict(started=started,step=r.progress['updates'])
     def vote(self,r,context,computed):
-        r.gate.authorize('A' if r.replica else r.role,r.epoch)
+        r.gate.authorize(getattr(r, 'protocol_owner_role', 'A'),r.epoch)
         if r.handoff:r.handoff.authorize(r.outer.manager)
         return r.outer.vote(computed.finite)
 
@@ -61,6 +61,8 @@ class SessionRuntime:
         self.command=None;self.sequence=self.c.get('command_sequence',0)
         self.handoff=None;self.planned_coord=None;self.current_samples=[];self.outer=None;self.phase='normal'
         self.protocol_plan=None;self.protocol_store=None
+        self.protocol_scope = None
+        self.protocol_owner_role = 'A'
         self.in_protocol=False;self.retired=False;self.last_commit=None;self.skips=0
         self.gate=OwnerGate(self.epoch,self.c.get('partial_owner','B'))
         self.partial_owner=self.gate.owner
@@ -85,8 +87,8 @@ class SessionRuntime:
         if command.source_replica not in (0,1):raise ValueError('source replica must be 0 or 1')
         if command.policy=='v2' and command.source_replica!=1:
             raise ValueError('planned whole-DP migration currently supports replica 1')
-        if command.policy=='v4' and (command.source_replica!=0 or tuple(command.ranks)!=self.layout.affected):
-            raise ValueError('partial placement currently replaces replica 0 PP1')
+        if command.policy=='v4':
+            self.layout.partial_scope(command.source_replica, command.ranks)
         if command.target not in self.c['node_hosts']:raise ValueError('unknown target node')
 
     def _barrier(self,key):
@@ -125,6 +127,18 @@ class SessionRuntime:
     def start_native(self,command):
         self._set_command(command);self.healing=True
         self.outer.manager._use_async_quorum=False
+        metadata = getattr(self, 'c', {}).get('pending_command_metadata', {})
+        if metadata.get('normal_source_exit') is True and self.replica == command.source_replica:
+            if metadata.get('prepare_v1'):
+                self.base_store.wait([f'session/native_prepared/{self.sequence}/{rank}'
+                                      for rank in range(self.layout.world)])
+            self.gate.fence()
+            self.outer.close()
+            self.s.disconnect()
+            self.event('session_source_exit', step=self.progress['updates'], reason='committed_boundary')
+            self.s.log.close()
+            self.retired = self.stopping = True
+            return
         self.base_store.wait([f'session/fault_released/{self.sequence}'])
 
     def _planned_args(self,command,*,candidate=False):
@@ -135,6 +149,7 @@ class SessionRuntime:
         if round_id%2:initial['B'],initial['C']=initial['C'],initial['B']
         return SimpleNamespace(planned_role='C' if candidate else 'A' if self.replica==0 else 'B',
             planned_allow_colocated=len(set(initial.values()))==2,
+            planned_allow_source_target_colocated=self.c.get('lab_distinct_runner_devices', False),
             planned_store_offset=10 if candidate and len(set(initial.values()))==2 else 0,
             planned_variant='p2',planned_source='B',planned_round=round_id,planned_cycles=1000,
             planned_hosts=initial,planned_initial_role='C' if candidate else 'A' if self.replica==0 else 'B',
@@ -207,7 +222,8 @@ class SessionRuntime:
     def gradient_finalize(self,native_finish):
         h=self.handoff;relay=bool(h and h.is_relay_step())
         if not (relay and h.role=='C'):native_finish()
-        peer_first=self.in_protocol and self.replica==1 and self.phase=='after' and self.protocol_plan and self.progress['updates']==self.protocol_plan.cut
+        source_replica = getattr(getattr(self, 'protocol_scope', None), 'replica', 0)
+        peer_first=self.in_protocol and self.replica!=source_replica and self.phase=='after' and self.protocol_plan and self.progress['updates']==self.protocol_plan.cut
         if peer_first:
             self.protocol_store.set(f'peer_gradient_ready/{self.rank}','1')
             self.event('peer_native_gradient_ready',step=self.progress['updates'])
@@ -232,7 +248,7 @@ class SessionRuntime:
         self.outer.reduce(buckets,self.progress['updates'])
 
     def compute(self,context):
-        if self.in_protocol and self.replica==1 and self.phase=='after' and self.protocol_plan and self.progress['updates']==self.protocol_plan.cut:
+        if self.in_protocol and self.replica!=getattr(self.protocol_scope, 'replica', 0) and self.phase=='after' and self.protocol_plan and self.progress['updates']==self.protocol_plan.cut:
             self.protocol_store.set(f'peer_compute/{self.rank}','1')
             self.event('peer_compute_begin',step=self.progress['updates'])
         r=self.outer
@@ -319,25 +335,46 @@ class SessionRuntime:
         from .v4_transaction_train import run
         self._set_command(command);self.healing=False
         first=command.expected_epoch
-        source=self.partial_owner;target='C' if source=='B' else 'B'
+        scope = self.layout.partial_scope(command.source_replica, command.ranks)
+        metadata = self.c['session_command'] if candidate else self.c['pending_command_metadata']
+        source = metadata.get('source_role', self.partial_owner)
+        target = metadata.get('target_role', 'C' if source == 'B' else 'B')
+        self.protocol_scope = scope
+        rebuild_outer = 0 in scope.ranks
+        channel_ranks = tuple(range(self.layout.world)) if rebuild_outer else scope.ranks
+        if rebuild_outer:
+            self.store_services[str(scope.replica)] = metadata.get('outer_store_service', self.sequence)
+        if scope.owns(self.replica, self.rank):
+            self.protocol_owner_role = target if candidate else source
+        if self.gate.owner != source:
+            self.gate = OwnerGate(first, source)
         self.c.update(initial_round=first,cycles=first+1,source_role=source,target_role=target,
                       between_steps=5,restore_deadline=45 if self.c.get('low_memory') else 10,source_deadline=2,
-                      affected_ranks=list(self.layout.affected),round_id=first)
+                      affected_ranks=list(scope.ranks),channel_ranks=channel_ranks,round_id=first)
         self.c['plan']=dict(self.c['plan'],cut=(command.at_step or self.progress['updates'])+2,post_steps=5)
         context=vars(self.s).copy()
         context.update(outer=self.outer,groups=self.groups,ownership=self.gate,train=self.train_segment,
-            configure_runtime=self.configure,finish=lambda:None,session_protocol=True)
+            configure_runtime=self.configure,finish=lambda:None,session_protocol=True,
+            partial_scope=scope,partial_candidate=candidate,rebuild_outer=rebuild_outer)
         def factory(c,replica,rank,epoch,event):
             value=SessionOuter(self);value.epoch=epoch;value.pg.migration_epoch=epoch;value.manager._shift_epoch=epoch;return value
         context['outer_factory']=factory
         self.in_protocol=True
         try:result=run(context)
-        finally:self.in_protocol=False;self.phase='normal'
+        finally:
+            self.in_protocol=False;self.phase='normal'
+            self.protocol_scope = None
+            self.protocol_owner_role = 'A'
         if result is None or result.get('retired'):
             self.stopping=True;self.retired=True;return
+        if not candidate and scope.owns(self.replica, self.rank) and result['owner'] != source:
+            raise RuntimeError('replaced stage source did not retire')
         self.outer=result['outer'];self.groups=result['groups'];self.gate=result['gate']
         self.epoch=result['epoch'];self.partial_owner=result['owner']
-        self.channel_epochs[self.layout.width:]=[self.epoch]*self.layout.width
+        for rank in channel_ranks:
+            self.channel_epochs[rank] = self.epoch
+        if 0 in scope.ranks:
+            self.replica_hosts[str(scope.replica)] = self.c['node_hosts'][command.target]
         self.base_store.set(f'session/done/{self.sequence}/{self.replica}/{self.rank}',str(self.progress['updates']))
         self.event('session_command_done',policy='v4',step=self.progress['updates'],engine_identity=self.s.training_identity())
         self.command=None
@@ -363,6 +400,10 @@ def run_session(context):
             elif command.policy=='v1':
                 r._set_command(command);r.healing=True
                 r.replica_hosts[str(command.source_replica)]=r.c['node_hosts'][command.target]
+                if raw.get('prepare_v1'):
+                    r.event('session_native_prepared',step=r.progress['updates'])
+                    r.base_store.set(f'session/native_prepared/{r.sequence}/{r.rank}', '1')
+                    r.base_store.wait([f'session/fault_released/{r.sequence}'])
                 r.bind_outer(SessionOuter(r))
         else:
             r.bind_outer(SessionOuter(r))

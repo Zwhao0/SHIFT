@@ -79,4 +79,11 @@ class PlannedStateTest(unittest.TestCase):
             self.assertEqual(role_hosts(hosts,2),hosts)
         with self.assertRaises(ValueError):role_hosts(dict(A='same',B='same',C='third'),0)
 
+    def test_source_and_target_share_a_host_only_when_explicitly_allowed(self):
+        hosts = dict(A='healthy', B='shared', C='shared')
+        with self.assertRaises(ValueError):
+            role_hosts(hosts, 0, allow_colocated=True)
+        self.assertEqual(role_hosts(hosts, 0, allow_colocated=True,
+                                    allow_source_target_colocated=True), hosts)
+
 if __name__=='__main__':unittest.main()

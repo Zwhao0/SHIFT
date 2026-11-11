@@ -7,6 +7,7 @@ from collections import defaultdict
 from pathlib import Path
 
 from shift_full.reference_audit import REFERENCE_HASH_KEYS
+from shift_full.session_layout import SessionLayout, partial_roles
 from shift_full.training_core import sample_plan
 
 
@@ -55,6 +56,19 @@ def _logical_rank(role, device, replica, full_dp=False, *, world=8):
     return None
 
 
+def _actor_rank(actor, device, world):
+    if 'ranks' in actor:
+        try:
+            scope = SessionLayout(world).partial_scope(actor['replica'], actor['ranks'])
+            if len(actor['devices']) != len(scope.ranks):
+                return None
+            return scope.ranks[device]
+        except (KeyError, TypeError, IndexError, ValueError):
+            return None
+    full_dp = actor.get('role') == 'D' and actor.get('generation', 0) > 0 and len(actor.get('devices', [])) == world
+    return _logical_rank(actor.get('role'), device, actor.get('replica'), full_dp, world=world)
+
+
 def _read_json(path, errors, label):
     try:
         value = json.loads(path.read_text())
@@ -91,10 +105,17 @@ def _event_rows(root, actors, errors, *, world=8, tp=2):
             rows[label][device] = events
             if not events:
                 errors.append(f'empty actor log {path.name}')
+            if d.get('pod_uid'):
+                reserved = d.get('gpu_uuids')
+                observed = [e.get('gpu_uuid') for e in events if e.get('kind') == 'worker_device_bound']
+                if (not isinstance(reserved, list) or len(reserved) != len(d['devices'])
+                        or not isinstance(reserved[device], str) or len(observed) != 1
+                        or not isinstance(observed[0], str)
+                        or observed[0].removeprefix('GPU-') != reserved[device].removeprefix('GPU-')):
+                    errors.append(f'Lab GPU binding proof mismatch {path.name}')
             event_pids = set()
             for e in events:
-                full_dp = d['role'] == 'D' and d['generation'] > 0 and len(d['devices']) == world
-                rank = _logical_rank(d['role'], device, d['replica'], full_dp, world=world)
+                rank = _actor_rank(d, device, world)
                 binding = (e.get('role'), e.get('replica'), e.get('device'),
                            e.get('rank'), e.get('actor_round'))
                 wanted = (d['role'], d['replica'], device, rank, d['generation'])
@@ -118,7 +139,7 @@ def _event_rows(root, actors, errors, *, world=8, tp=2):
             if len(event_pids) != 1:
                 errors.append(f'PID continuity {path.name}')
             elif event_pids:
-                pid = next(iter(event_pids))
+                pid = (d.get('pod_uid'), next(iter(event_pids)))
                 if pid in pids:
                     errors.append(f'PID reused across actors {path.name}')
                 pids[pid] = path.name
@@ -179,8 +200,7 @@ def _active_map(summary, actors, errors, *, world=8):
             if not _int(device) or not d or device < 0 or device >= len(d['devices']):
                 errors.append(f'invalid active mapping {key}')
                 continue
-            full_dp = d['role'] == 'D' and d['generation'] > 0 and len(d['devices']) == world
-            if d['replica'] != replica or _logical_rank(d['role'], device, replica, full_dp, world=world) != rank:
+            if d['replica'] != replica or _actor_rank(d, device, world) != rank:
                 errors.append(f'active logical rank mismatch {key}')
             active[(replica, rank)] = (label, device)
     if len(value) != 2 * world:
@@ -212,7 +232,7 @@ def _initial_map(actors, errors, *, world=8):
     return result
 
 
-def _resource_check(root, errors):
+def _resource_check(root, errors, *, lab=False, actors=None):
     before = _read_json(root / 'resources_before.json', errors, 'resources_before unavailable')
     after = _read_json(root / 'resources_after.json', errors, 'resources_after unavailable')
     if len(before) not in (2, 3) or set(before) != set(after):
@@ -220,6 +240,15 @@ def _resource_check(root, errors):
         return
     for node in sorted(before):
         b, a = before[node], after[node]
+        if lab:
+            uid = b.get('pod_uid')
+            if (b.get('scope') != 'lab_pod' or a.get('scope') != 'lab_pod'
+                    or not isinstance(uid, str) or not uid or a.get('pod_uid') != uid
+                    or any(d.get('pod_uid') != uid for d in actors.values() if d.get('node') == node)):
+                errors.append(f'{node}: Lab Pod identity is inconsistent')
+            if b.get('extra_gpu') != [] or a.get('extra_gpu') != []:
+                errors.append(f'{node}: session-owned actor remained live')
+            continue
         bc, ac = b.get('company'), a.get('company')
         if not isinstance(bc, dict) or len(bc) != 8:
             errors.append(f'{node}: expected eight company PIDs before run')
@@ -229,6 +258,27 @@ def _resource_check(root, errors):
             errors.append(f'{node}: company PIDs changed')
         if b.get('extra_gpu') != [] or a.get('extra_gpu') != []:
             errors.append(f'{node}: extra GPU process present')
+
+
+def _lab_gpu_inventory(summary, actors, errors):
+    inventory = summary.get('runner_gpu_uuids')
+    if inventory is None:  # Older Lab evidence records only actor bindings.
+        return
+    if (not isinstance(inventory, dict) or set(inventory) != set(summary.get('nodes', ()))
+            or any(not isinstance(slots, list) or not slots
+                   or any(not isinstance(uid, str) or not uid for uid in slots)
+                   for slots in inventory.values())):
+        errors.append('invalid Lab runner GPU inventory')
+        return
+    all_devices = [uid for slots in inventory.values() for uid in slots]
+    if len(all_devices) != len(set(all_devices)):
+        errors.append('overlapping Lab runner GPU UUIDs')
+    for label, actor in actors.items():
+        devices = inventory.get(actor['node'], ())
+        indices = actor['devices']
+        if (any(not _int(index) or not 0 <= index < len(devices) for index in indices)
+                or [devices[index] for index in indices] != actor.get('gpu_uuids')):
+            errors.append(f'{label}: actor GPU binding differs from the runner inventory')
 
 
 def _event_index(flat):
@@ -353,17 +403,25 @@ def _verify_v4(cmdrec, before, after, rows, actors, flat, errors, boundary_mode,
         return
     cut_round = epoch
     width = world // 2
-    stage1 = range(width, world)
-    old_labels = {before[(0, r)][0] for r in stage1 if (0, r) in before}
+    try:
+        scope = SessionLayout(world).partial_scope(command.get('source_replica'), command.get('ranks') or ())
+    except (TypeError, ValueError):
+        errors.append('v4 transaction requires one complete stage')
+        return
+    stage_ranks = scope.ranks
+    old_labels = {before[(scope.replica, r)][0] for r in stage_ranks if (scope.replica, r) in before}
     old_roles = {actors[label]['role'] for label in old_labels if label in actors}
-    target_role = ({'B','C'} - old_roles).pop() if len(old_roles) == 1 and old_roles <= {'B','C'} else None
+    source_role, target_role = partial_roles(next(iter(old_roles))) if len(old_roles) == 1 else (None, None)
     target = cmdrec.get('target_actor')
     if not target or target not in actors:
         errors.append('v4 transaction: candidate actor missing')
         return
     td = actors[target]
-    if target_role is None or td.get('role') != target_role or td.get('replica') != 0 or len(td.get('devices', [])) != width:
-        errors.append(f'v4 candidate must replace the current B/C owner with {width} PP1 ranks')
+    if (target_role is None or td.get('role') != target_role or td.get('replica') != scope.replica or
+            len(td.get('devices', [])) != width or
+            tuple(_actor_rank(td, d, world) for d in range(width)) != stage_ranks or
+            cmdrec.get('source_role', source_role) != source_role or cmdrec.get('target_role', target_role) != target_role):
+        errors.append('v4 candidate does not match the selected stage and owner')
     def match(kind, pred):
         return [x for x in flat if x[2].get('kind') == kind and pred(x[2])]
     boundaries = [x for x in flat if x[2].get('kind') == 'boundary_selected' and
@@ -382,7 +440,14 @@ def _verify_v4(cmdrec, before, after, rows, actors, flat, errors, boundary_mode,
         cut = next(iter(cuts))
     if cut is not None and any(e.get('step') != cut for _,_,e in freezes):
         errors.append('v4 freeze cut mismatch')
-    decisions = match('switch_decision', lambda e: e.get('round') == cut_round and e.get('replica') == 0 and e.get('rank') == 0)
+    if 0 in stage_ranks:
+        retained = set(range(world)) - set(stage_ranks)
+        rebuilt = match('outer_rebuilt', lambda e: e.get('round') == cut_round and e.get('replica') == scope.replica
+                        and e.get('epoch') == epoch + 1 and (cut is None or e.get('step') == cut))
+        if (cmdrec.get('outer_store_service') != seq or len(rebuilt) != len(retained)
+                or {e.get('rank') for _,_,e in rebuilt} != retained):
+            errors.append('v4 PP0 lacks fresh Store and retained-stage Manager rebuild evidence')
+    decisions = match('switch_decision', lambda e: e.get('round') == cut_round and scope.coordinates(e.get('replica'), e.get('rank')))
     if len(decisions) != 1:
         errors.append('v4 switch decision missing')
     else:
@@ -392,12 +457,12 @@ def _verify_v4(cmdrec, before, after, rows, actors, flat, errors, boundary_mode,
         if de.get('epoch') != epoch + 1 or (cut is not None and de.get('step') != cut):
             errors.append('v4 switch decision epoch/cut mismatch')
         results = de.get('candidate_results')
-        if not isinstance(results, dict) or {str(k) for k in stage1} - set(results) or any(results.get(str(k)) is not True for k in stage1):
+        if not isinstance(results, dict) or set(results) != {str(k) for k in stage_ranks} or any(results.get(str(k)) is not True for k in stage_ranks):
             errors.append(f'v4 switch decision lacks {width} successful candidate results')
     validated = _actor_events(rows, target, 'candidate_validated')
     validated = [x for x in validated if x[2].get('round') == cut_round and
                  (cut is None or x[2].get('step') == cut)]
-    if sorted(x[2].get('rank') for x in validated) != list(stage1):
+    if sorted(x[2].get('rank') for x in validated) != list(stage_ranks):
         errors.append(f'v4 candidate validation missing for {width} ranks')
     for _, _, e in validated:
         if not _exact_readiness(e, epoch=epoch+1,
@@ -406,7 +471,7 @@ def _verify_v4(cmdrec, before, after, rows, actors, flat, errors, boundary_mode,
     activated = _actor_events(rows, target, 'candidate_activated')
     activated = [x for x in activated if x[2].get('round') == cut_round and
                  (cut is None or x[2].get('step') == cut)]
-    if sorted(x[2].get('rank') for x in activated) != list(stage1):
+    if sorted(x[2].get('rank') for x in activated) != list(stage_ranks):
         errors.append(f'v4 candidate activation missing for {width} ranks')
     for _, _, e in activated:
         if not _exact_readiness(e, epoch=epoch+1, rank=e.get('rank'), cut=cut, target=target_role):
@@ -414,11 +479,11 @@ def _verify_v4(cmdrec, before, after, rows, actors, flat, errors, boundary_mode,
     retired = [x for label in old_labels for x in _actor_events(rows, label, 'retired')]
     retired = [x for x in retired if x[2].get('round') == cut_round and
                (cut is None or x[2].get('step') == cut)]
-    if sorted(x[2].get('rank') for x in retired) != list(stage1):
+    if sorted(x[2].get('rank') for x in retired) != list(stage_ranks):
         errors.append(f'v4 old owner retirement missing for {width} ranks')
     # Packed state channels must connect each frozen source rank to its candidate.
-    for kind, label_set, want in (('state_sent', old_labels, list(stage1)),
-                                  ('state_received', {target}, list(stage1))):
+    for kind, label_set, want in (('state_sent', old_labels, list(stage_ranks)),
+                                  ('state_received', {target}, list(stage_ranks))):
         evs = [x for label in label_set for x in _actor_events(rows, label, kind)
                if x[2].get('round') == cut_round and (cut is None or x[2].get('step') == cut)]
         if sorted(x[2].get('rank') for x in evs) != want:
@@ -435,13 +500,13 @@ def _verify_v4(cmdrec, before, after, rows, actors, flat, errors, boundary_mode,
         if e.get('version_checked') is not True:
             errors.append(f'v4 peer source metadata was not version-checked rank {e.get("rank")}')
     for kind in ('peer_compute_ready', 'peer_compute_begin', 'peer_native_gradient_ready'):
-        evs = [x for x in flat if x[2].get('kind') == kind and x[2].get('replica') == 1 and
+        evs = [x for x in flat if x[2].get('kind') == kind and x[2].get('replica') == 1 - scope.replica and
                (cut is None or x[2].get('step') == cut)]
         if sorted(x[2].get('rank') for x in evs) != list(range(world)):
             errors.append(f'v4 peer continuation marker missing: {kind}')
     act_keys = set()
     for (replica, rank), (label, device) in after.items():
-        if replica != 0:
+        if replica != scope.replica:
             continue
         evs = [e for e in rows.get(label, {}).get(device, []) if e.get('kind') == 'activated' and
                e.get('round') == cut_round and (cut is None or e.get('step') == cut)]
@@ -452,15 +517,16 @@ def _verify_v4(cmdrec, before, after, rows, actors, flat, errors, boundary_mode,
         if e.get('decision') != 'replace' or e.get('owner') != target_role or e.get('epoch') != epoch+1:
             errors.append(f'v4 active owner metadata mismatch {replica}/{rank}')
         act_keys.add((replica, rank))
-    if act_keys != {(0,k) for k in range(world)}:
-        errors.append('v4 activated evidence must cover the new replica-0 cohort')
+    if act_keys != {(scope.replica,k) for k in range(world)}:
+        errors.append('v4 activated evidence must cover the affected replica')
     if td.get('generation') != seq:
         errors.append('v4 candidate generation mismatch')
-    if after and any(after.get((0, r)) != (target, r-width) for r in stage1):
-        errors.append('v4 candidate did not become replica-0 PP1 owner')
+    if after and any(after.get((scope.replica, rank)) != (target, device)
+                     for device, rank in enumerate(stage_ranks)):
+        errors.append('v4 candidate did not become owner of the selected stage')
 
 
-def _verify_v1(cmdrec, before, after, rows, actors, flat, errors, *, world=8):
+def _verify_v1(cmdrec, before, after, rows, actors, flat, errors, *, world=8, lab=False):
     command = cmdrec.get('command', {})
     seq = cmdrec.get('sequence')
     target = cmdrec.get('target_actor')
@@ -469,8 +535,9 @@ def _verify_v1(cmdrec, before, after, rows, actors, flat, errors, *, world=8):
         errors.append('v1 source replica must be 0 or 1')
         return
     healthy_replica = 1 - source_replica
-    if cmdrec.get('fault_kind') != 'SIGKILL':
-        errors.append('v1 recovery lacks SIGKILL fault evidence')
+    expected_kind = 'observed_exit' if lab else 'SIGKILL'
+    if cmdrec.get('fault_kind') != expected_kind:
+        errors.append(f'v1 recovery lacks {expected_kind} fault evidence')
     proof = cmdrec.get('fault_proof')
     old_pairs = {r: before.get((source_replica, r)) for r in range(world)}
     old_labels = {pair[0] for pair in old_pairs.values() if pair}
@@ -478,7 +545,8 @@ def _verify_v1(cmdrec, before, after, rows, actors, flat, errors, *, world=8):
     for label in old_labels:
         pids_by_label[label] = {e.get('pid') for events in rows.get(label, {}).values()
                                 for e in events if _int(e.get('pid'))}
-    expected_pids = set().union(*pids_by_label.values()) if pids_by_label else set()
+    expected_pids = {(actors.get(label, {}).get('pod_uid'), pid)
+                     for label, pids in pids_by_label.items() for pid in pids}
     if not isinstance(proof, list) or not proof:
         errors.append('v1 recovery lacks source death proof')
     else:
@@ -488,7 +556,8 @@ def _verify_v1(cmdrec, before, after, rows, actors, flat, errors, *, world=8):
         labels_by_unit = {unit: label for label, unit in units_by_label.items()
                           if isinstance(unit, str) and unit}
         for item in proof:
-            if (not isinstance(item, dict) or item.get('signal') != 'SIGKILL' or
+            if (not isinstance(item, dict) or (not lab and item.get('signal') != 'SIGKILL') or
+                    (lab and not _int(item.get('returncode'))) or
                     item.get('all_workers_dead') is not True or
                     not isinstance(item.get('worker_pids'), list) or
                     not _int(item.get('main_pid')) or item.get('main_pid') <= 0):
@@ -499,6 +568,11 @@ def _verify_v1(cmdrec, before, after, rows, actors, flat, errors, *, world=8):
             if not label or unit in proved_units:
                 errors.append('v1 source death proof unit does not uniquely match a source actor')
                 continue
+            if lab and item.get('pod_uid') != actors[label].get('pod_uid'):
+                errors.append('v1 source death proof is from a different Pod')
+                continue
+            if lab and cmdrec.get('normal_source_exit') is True and item.get('returncode') != 0:
+                errors.append('v1 source did not exit normally')
             proved_units.add(unit)
             pids = item['worker_pids']
             expected_actor_pids = pids_by_label.get(label, set())
@@ -508,7 +582,7 @@ def _verify_v1(cmdrec, before, after, rows, actors, flat, errors, *, world=8):
                 errors.append(f'v1 source death proof PID set mismatch for {label}')
             if len(pids) != len(set(pids)):
                 errors.append(f'v1 source death proof repeats worker PID for {label}')
-            proved_pids.update(pids)
+            proved_pids.update((actors[label].get('pod_uid'), pid) for pid in pids if _int(pid))
         if (proved_units != set(labels_by_unit) or proved_pids != expected_pids or
                 len(expected_pids) != world):
             errors.append('v1 source death proof PID set mismatch')
@@ -520,6 +594,11 @@ def _verify_v1(cmdrec, before, after, rows, actors, flat, errors, *, world=8):
         errors.append(f'v1 replacement must be a {world}-rank D actor on the source replica')
     if after and any(after.get((source_replica, r)) != (target, r) for r in range(world)):
         errors.append('v1 replacement did not become the full active replica')
+    if cmdrec.get('prepare_v1'):
+        prepared = _actor_events(rows, target, 'session_native_prepared')
+        if (cmdrec.get('candidate_prepared_before_exit') is not True
+                or sorted(event[2].get('rank') for event in prepared) != list(range(world))):
+            errors.append('v1 warm candidate lacks pre-exit readiness for all ranks')
     restores = _actor_events(rows, target, 'session_native_restored')
     if sorted(x[2].get('rank') for x in restores) != list(range(world)) or any(x[2].get('source_replica') != healthy_replica for x in restores):
         errors.append(f'v1 native source handoff missing across {world} ranks')
@@ -536,6 +615,12 @@ def _verify_v1(cmdrec, before, after, rows, actors, flat, errors, *, world=8):
                 errors.append(f'v1 killed source advanced past arrival rank {rank}')
             if any(e.get('kind') == 'session_done' for e in old_events):
                 errors.append(f'v1 killed source incorrectly finalized rank {rank}')
+            if lab and cmdrec.get('normal_source_exit') is True:
+                exits = [e for e in old_events if e.get('kind') == 'session_source_exit'
+                         and e.get('step') == command.get('at_step') and e.get('reason') == 'committed_boundary'
+                         and e.get('command_id') == command.get('id')]
+                if len(exits) != 1:
+                    errors.append(f'v1 source lacks committed-boundary exit evidence rank {rank}')
     # The opposite replica is healthy and must keep its mapping and process IDs.
     for rank in range(world):
         old, new = before.get((healthy_replica, rank)), after.get((healthy_replica, rank))
@@ -580,7 +665,10 @@ def _verify(root, expected_counts=None, *, world=8, tp=2):
             continue
         if label != f"g{d['generation']}_{d['role']}":
             errors.append(f'actor label mismatch {label}')
-        if d['role'] == 'D':
+        if 'ranks' in d:
+            allowed = (d['role'] in ('B', 'C') and d['generation'] > 0 and len(d['devices']) == width
+                       and all(_actor_rank(d, device, world) is not None for device in range(width)))
+        elif d['role'] == 'D':
             allowed = ((d['generation'] == 0 and d['replica'] == 1 and
                         d['devices'] == list(range(width))) or
                        (d['generation'] > 0 and d['replica'] in (0,1) and
@@ -601,7 +689,10 @@ def _verify(root, expected_counts=None, *, world=8, tp=2):
     rows = _event_rows(root, actors, errors, world=world, tp=tp)
     flat = _flatten(rows)
     final_active = _active_map(summary, actors, errors, world=world)
-    _resource_check(root, errors)
+    lab = summary.get('backend') == 'lab_pod'
+    _resource_check(root, errors, lab=lab, actors=actors)
+    if lab:
+        _lab_gpu_inventory(summary, actors, errors)
     if not actors:
         errors.append('no session actors')
     if summary.get('boundary_validation') not in (None, 'runtime', 'full'):
@@ -715,8 +806,7 @@ def _verify(root, expected_counts=None, *, world=8, tp=2):
             errors.append(f'{policy} command sequence/epoch mismatch')
         source_replica = c.get('source_replica')
         source_allowed = _int(source_replica) and (
-            source_replica in (0,1) if policy == 'v1' else
-            source_replica == (0 if policy == 'v4' else 1))
+            source_replica in (0,1) if policy in ('v1', 'v4') else source_replica == 1)
         if not source_allowed:
             errors.append(f'{policy} source replica mismatch')
         wanted_action = 'recover' if policy == 'v1' else 'migrate'
@@ -724,13 +814,18 @@ def _verify(root, expected_counts=None, *, world=8, tp=2):
             errors.append(f'{policy} action mismatch')
         if policy in ('v1','v2') and tuple(c.get('ranks') or range(world)) != tuple(range(world)):
             errors.append(f'{policy} command must replace the full DP replica')
-        if policy == 'v4' and tuple(c.get('ranks') or ()) != tuple(range(width,world)):
-            errors.append(f'v4 command must replace PP1 ranks {width}..{world-1}')
-        old_roles = {actors[label]['role'] for rank in range(width,world)
-                     if policy == 'v4' and (0,rank) in active
-                     for label in (active[(0,rank)][0],) if label in actors}
-        target_role = ({'B','C'} - old_roles).pop() if len(old_roles) == 1 and old_roles <= {'B','C'} else None
-        expected_role = target_role if policy == 'v4' else 'D'
+        source_ranks = range(world)
+        expected_role = 'D'
+        if policy == 'v4':
+            try:
+                scope = SessionLayout(world).partial_scope(source_replica, c.get('ranks') or ())
+                source_ranks = scope.ranks
+            except (TypeError, ValueError):
+                source_ranks = ()
+                errors.append('v4 command must replace one complete stage')
+            old_roles = {actors[pair[0]]['role'] for rank in source_ranks
+                         if (pair := active.get((source_replica, rank))) and pair[0] in actors}
+            expected_role = partial_roles(next(iter(old_roles)))[1] if len(old_roles) == 1 else None
         target_label = rec.get('target_actor')
         target_desc = actors.get(target_label)
         if (not target_desc or target_desc.get('role') != expected_role or
@@ -738,8 +833,6 @@ def _verify(root, expected_counts=None, *, world=8, tp=2):
                 target_desc.get('node') != c.get('target') or
                 rec.get('devices') != target_desc.get('devices')):
             errors.append(f'{policy} target actor descriptor does not match command')
-        source_replica = 0 if policy == 'v4' else c.get('source_replica')
-        source_ranks = range(width,world) if policy == 'v4' else range(world)
         source_map = {(source_replica, r): active.get((source_replica,r)) for r in source_ranks}
         source_labels = sorted({pair[0] for pair in source_map.values() if pair})
         source_manifest.append(dict(sequence=rec.get('sequence'), policy=policy,
@@ -770,7 +863,8 @@ def _verify(root, expected_counts=None, *, world=8, tp=2):
                 replace_replica = source_replica if policy == 'v1' else 1
                 for rank in range(world): wanted_common[(replace_replica,rank)] = (target_label,rank)
             elif policy == 'v4':
-                for rank in range(width,world): wanted_common[(0,rank)] = (target_label,rank-width)
+                for device, rank in enumerate(source_ranks):
+                    wanted_common[(source_replica,rank)] = (target_label,device)
             wanted_keys = {(replica,rank,label,device) for (replica,rank),(label,device) in wanted_common.items()}
             observed_rows = []
             for label, device, e in flat:
@@ -803,14 +897,15 @@ def _verify(root, expected_counts=None, *, world=8, tp=2):
             for r in range(world): expected_map[(replace_replica,r)] = (target,r)
         elif policy == 'v4':
             target = rec.get('target_actor')
-            for r in range(width,world): expected_map[(0,r)] = (target,r-width)
+            for device, rank in enumerate(source_ranks):
+                expected_map[(source_replica,rank)] = (target,device)
         if policy == 'v2':
             _verify_v2(rec, active, expected_map, rows, actors, flat, errors, world=world)
         elif policy == 'v4':
             _verify_v4(rec, active, expected_map, rows, actors, flat, errors,
                        boundary_mode, world=world)
         elif policy == 'v1':
-            _verify_v1(rec, active, expected_map, rows, actors, flat, errors, world=world)
+            _verify_v1(rec, active, expected_map, rows, actors, flat, errors, world=world, lab=lab)
         else:
             errors.append(f'unsupported session command policy {policy}')
         active = expected_map
@@ -856,9 +951,7 @@ def _verify(root, expected_counts=None, *, world=8, tp=2):
         else:
             phase = 'pre'
         d = actors.get(label, {})
-        rank = _logical_rank(d.get('role'), device, d.get('replica',0),
-            d.get('role') == 'D' and d.get('generation', 0) > 0 and
-            len(d.get('devices',[])) == world, world=world)
+        rank = _actor_rank(d, device, world)
         if _int(rank):
             phase_values[phase][(d.get('replica'),rank)].append(float(duration))
     timing = {}

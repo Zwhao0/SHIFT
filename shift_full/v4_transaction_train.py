@@ -7,7 +7,7 @@ import time
 from types import SimpleNamespace
 
 from .v4_transaction import OwnerGate, Transaction
-from .session_layout import SessionLayout
+from .session_layout import PartialScope, SessionLayout
 
 
 def run(context):
@@ -16,17 +16,27 @@ def run(context):
     role,rank,device,replica=s.role,s.rank,s.device,s.replica
     first=c.get('initial_round',0);cycles=c['cycles'];epoch=first
     source=c.get('source_role','B');target=c.get('target_role','C')
+    session_scope = getattr(s, 'partial_scope', None)
+    scope = session_scope or PartialScope(0, tuple(c.get('affected_ranks', layout.affected)), 0)
+    is_peer = replica != scope.replica
+    is_coordinator = scope.coordinates(replica, rank)
+    channel_ranks = c.get('channel_ranks', scope.ranks)
+    rebuild_outer = getattr(s, 'rebuild_outer', False)
+    candidate = getattr(s, 'partial_candidate', False) if session_scope else not replica and role == target
+    if session_scope:
+        if candidate and not scope.owns(replica, rank):
+            raise ValueError('candidate is outside the selected stage')
+        role = target if candidate else source if scope.owns(replica, rank) else 'A'
     from .v4_state import boundary_validation,boundary_descriptor,validate_candidate_state
     mode=boundary_validation(c);audit=mode=='full'
     def boundary_hashes(packet=None):
         return (packet['hashes'] if packet is not None else s.hashes()) if audit else None
-    candidate=not replica and role==target
     gate=s.ownership if getattr(s,'session_protocol',False) else OwnerGate(first,source)
     outer=getattr(s,'outer',None);groups=s.groups
     outer_factory=getattr(s,'outer_factory',None)
     identity=s.identity_preserved
     def bind(**kwargs):s.configure_runtime(**kwargs)
-    bind(ownership_value=gate,role_value='A' if replica else role)
+    bind(ownership_value=gate,role_value='A' if is_peer else role)
     if not candidate:
         from .v4_outer import Outer
         saved=s.rng()
@@ -51,8 +61,8 @@ def run(context):
             try:
                 torch.cuda.set_device(device)
                 if self.is_source:
-                    while not self.store.check([f'{self.kind}_channel_start/{device}']):time.sleep(.05)
-                else:self.store.set(f'{self.kind}_channel_start/{device}','1')
+                    while not self.store.check([f'{self.kind}_channel_start/{rank}']):time.sleep(.05)
+                else:self.store.set(f'{self.kind}_channel_start/{rank}','1')
                 stream=torch.cuda.Stream(device=device)
                 with torch.cuda.stream(stream):
                     pg=s.BlockingNCCL(timeout=s.timeout)
@@ -63,8 +73,8 @@ def run(context):
                     if value.item()!=2:raise RuntimeError('candidate channel warmup mismatch')
                 self.pg=pg
                 s.event('switch_channel_prepared',round=self.round_id,epoch=self.round_id+1,seconds=time.monotonic()-started)
-                if self.is_source:self.store.set(f'{self.kind}_channel_ready/{device}','1')
-                else:self.store.wait([f'{self.kind}_channel_ready/{device}'])
+                if self.is_source:self.store.set(f'{self.kind}_channel_ready/{rank}','1')
+                else:self.store.wait([f'{self.kind}_channel_ready/{rank}'])
             except BaseException as error:
                 self.error=error
                 if pg is not None:pg.shutdown()
@@ -132,7 +142,7 @@ def run(context):
             candidate=not replica and role==target
             requested=s.progress['updates']
         channel=None
-        if not replica and role in (source,target):
+        if not is_peer and role in (source,target):
             channel=Channel(store,round_id,role==source)
             if role==source:channel.start()
 
@@ -144,7 +154,7 @@ def run(context):
                 ready=False
                 if rank==0:
                     key=f'boundary_ready/{s.progress["updates"]}'
-                    if not replica:
+                    if not is_peer:
                         ready=store.check([f'prepared/{i}' for i in range(layout.width)])
                         store.set(key,str(int(ready)))
                     else:ready=bool(int(store.get(key)))
@@ -152,12 +162,12 @@ def run(context):
                 if flag.item():break
                 s.train(epoch,1,'before')
             cut=s.progress['updates'];plan=replace(plan,cut=cut);bind(plan_value=plan)
-            if rank==0 and not replica:store.set('actual_cut',str(cut))
+            if rank==0 and not is_peer:store.set('actual_cut',str(cut))
             s.event('boundary_selected',round=round_id,epoch=epoch,step=cut,requested_cut=requested)
-            # Replica 0 is frozen until activation/retirement. Its snapshot can
-            # borrow read-only tensors; peer 1 still needs an immutable copy
+            # The affected replica is frozen until activation/retirement. Its
+            # snapshot can borrow read-only tensors; the peer needs a copy
             # because it overlaps the next iteration and supplies fallback.
-            borrowed=bool(c.get('low_memory') and not replica)
+            borrowed=bool(c.get('low_memory') and not is_peer)
             anchor=s.snapshot(copy_state=False) if borrowed else s.snapshot()
             anchor.update(v4_epoch=next_epoch,v4_owner=target,switch_round=round_id)
             from torch.utils._pytree import tree_flatten
@@ -171,7 +181,7 @@ def run(context):
                 training_identity=boundary_training,manager_state=outer.state_dict())
             store.set(f'frozen/{replica}/{rank}','1')
             gate.fence()
-            if replica:
+            if is_peer:
                 relay_thread=None
                 if rank in c.get('affected_ranks',layout.affected):
                     relay_thread=threading.Thread(target=serve_peer,args=(anchor,store,round_id),daemon=True)
@@ -180,7 +190,7 @@ def run(context):
                 gate.advance(next_epoch,source)
                 s.event('outer_retained',round=round_id,step=cut,identity=outer.identity(),
                     training_identity=s.training_identity(),manager_state=outer.state_dict(),
-                    channel_reconnected=rank in c.get('affected_ranks',layout.affected))
+                    channel_reconnected=rank in channel_ranks)
                 s.event('peer_inner_groups_retained',round=round_id,identity_preserved=True)
                 s.event('peer_compute_ready',round=round_id,step=cut,hashes=boundary_hashes(),identity_preserved=identity())
                 store.set(f'active/{replica}/{rank}','1')
@@ -195,7 +205,7 @@ def run(context):
                     next_store=dist.PrefixStore(f'round/{round_id+1}/',s.base_store)
                     next_store.wait(['placement'])
                 continue
-            if rank==0:
+            if is_coordinator:
                 store.wait([f'frozen/{r}/{i}' for r in range(2) for i in range(layout.world)])
                 store.set('switch','1')
             store.wait(['switch'])
@@ -208,7 +218,7 @@ def run(context):
                     s.event('source_stalled',round=round_id,step=cut)
                     while True:time.sleep(.1)  # Exact owned unit is stopped by the controller.
                 store.set(f'source_ready/{device}','1')
-            if role=='A' and rank==0:
+            if is_coordinator:
                 until_source=time.monotonic()+c.get('source_deadline',2)
                 while not store.check([f'source_ready/{i}' for i in range(layout.width)]) and time.monotonic()<until_source:
                     time.sleep(.01)
@@ -251,7 +261,7 @@ def run(context):
                 try:
                     structure_started=time.monotonic()
                     validate_candidate_state(anchor,rank=rank,cut=cut,epoch=next_epoch,target=role,
-                        round_id=round_id,source_replica=1 if packet_source=='peer' else 0,
+                        round_id=round_id,source_replica=1 - scope.replica if packet_source=='peer' else scope.replica,
                         stage=s.stage,optimizer=s.optimizer,scheduler=s.scheduler,rng=s.rng(),progress=s.progress,
                         fixed_replicas=not c.get('unified_session',False))
                     s.event('candidate_structure_validated',step=cut,seconds=time.monotonic()-structure_started)
@@ -269,7 +279,7 @@ def run(context):
                 s.event('candidate_validated' if valid else 'candidate_rejected',round=round_id,
                     step=cut,hashes=actual,expected_hashes=boundary_hashes(anchor),reason=reason,readiness=readiness)
 
-        if role=='A' and rank==0:
+        if is_coordinator:
             ranks=tuple(c.get('affected_ranks',layout.affected))
             tx=Transaction(next_epoch,source,target,cut,ranks,validation=mode,world_size=layout.world)
             deadline=time.monotonic()+c['restore_deadline']
@@ -330,8 +340,10 @@ def run(context):
                 if any(isinstance(value,MetadataGroup) for owner in owners for value in vars(owner).values()):
                     raise RuntimeError('metadata-only group survived activation')
         else:s.event('inner_groups_retained_after_cancel',round=round_id,step=cut)
-        if candidate:
+        replaced_outer = bool(rebuild_outer and not is_peer and outcome['decision'] == 'replace')
+        if candidate or replaced_outer:
             from .v4_outer import Outer
+            if not candidate:outer.close()
             outer=(outer_factory or Outer)(c,replica,rank,next_epoch,s.event);outer.load_state_dict(anchor['outer_manager'])
             bind(outer_value=outer)
         else:outer.migrate(next_epoch)
@@ -340,10 +352,11 @@ def run(context):
         if (audit and validated_hashes!=anchor['hashes']) or not identity():raise RuntimeError('switch changed committed state')
         if not candidate and s.training_identity()!=boundary_training:raise RuntimeError('retained Adam/storage identity changed')
         gate.advance(next_epoch,selected);epoch=next_epoch
-        s.event('outer_retained' if not candidate else 'candidate_activated',round=round_id,step=cut,
+        event_kind = 'candidate_activated' if candidate else 'outer_rebuilt' if replaced_outer else 'outer_retained'
+        s.event(event_kind,round=round_id,step=cut,
             epoch=epoch,decision=outcome['decision'],owner=selected,hashes=validated_hashes,identity_preserved=identity(),
             identity=outer.identity(),training_identity=s.training_identity(),manager_state=outer.state_dict(),
-            channel_reconnected=rank in c.get('affected_ranks',layout.affected),
+            channel_reconnected=rank in channel_ranks,
             readiness=dict(schema=1,epoch=next_epoch,rank=rank,cut=cut,target=selected,restored=True) if candidate else None)
         active=dict(round=round_id,epoch=epoch,step=cut,hashes=validated_hashes,identity_preserved=identity(),
             owner=selected,decision=outcome['decision'],

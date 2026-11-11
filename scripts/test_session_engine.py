@@ -30,6 +30,7 @@ class NativeRecoveryTest(unittest.TestCase):
 
     def test_v4_peer_defers_quorum_until_replacement_ready_but_not_compute(self):
         from shift_full.session_outer import SessionOuter
+        from shift_full.session_layout import SessionLayout
         calls=[]
         r=SimpleNamespace(in_protocol=True,replica=1,phase='after',protocol_plan=SimpleNamespace(cut=10),
             progress={'updates':10},healing=False,protocol_store=SimpleNamespace(wait=lambda keys:calls.append(('ready',keys))))
@@ -42,6 +43,65 @@ class NativeRecoveryTest(unittest.TestCase):
         self.assertEqual(calls[1][1],['activated'])
         calls.clear();r.progress['updates']=11
         o.begin(11);self.assertEqual(calls[0][0],'start')
+        # DP0 becomes the overlapping peer when DP1 is moved.
+        calls.clear();r.progress['updates']=10;r.replica=0
+        r.protocol_scope=SessionLayout(4).partial_scope(1,(0,1))
+        o.begin(10);self.assertFalse(calls)
+        o.wait_quorum();self.assertEqual(calls[0],('ready',['activated']))
+
+    def test_partial_switch_only_changes_selected_stage_and_retires_its_source(self):
+        from shift_full.session_layout import SessionLayout
+        layout = SessionLayout(4)
+        for replica in (0, 1):
+            for stage in (0, 1):
+                ranks = layout.stage_ranks(stage)
+                retained = layout.stage_ranks(1 - stage)[0]
+                for kind, current_replica, rank, owner in (
+                    ('source', replica, ranks[0], 'B'),
+                    ('candidate', replica, ranks[0], 'C'),
+                    ('retained', replica, retained, 'A'),
+                    ('peer', 1 - replica, ranks[0], 'A'),
+                ):
+                    with self.subTest(replica=replica, stage=stage, worker=kind):
+                        r = self.runtime()
+                        r.replica, r.rank = current_replica, rank
+                        r.layout = layout
+                        r.gate = OwnerGate(0,'C')
+                        r.partial_owner = 'C'
+                        r.channel_epochs = [0] * layout.world
+                        r.store_services = {'0':0, '1':0}
+                        r.replica_hosts = {'0':'old0', '1':'old1'}
+                        r.protocol_owner_role = 'A'
+                        r.groups = object()
+                        r.s = SimpleNamespace(training_identity=lambda: {})
+                        r.event = lambda *args, **kwargs: None
+                        r.base_store = SimpleNamespace(set=lambda *args: None)
+                        command = SimpleNamespace(expected_epoch=0, source_replica=replica,
+                                                  ranks=ranks, at_step=5, target='node3')
+                        metadata = dict(source_role='B',target_role='C',outer_store_service=1)
+                        r.c = dict(plan={}, pending_command_metadata=metadata, session_command=metadata,
+                                   node_hosts={'node3':'new'})
+
+                        def switch(context):
+                            scope = context['partial_scope']
+                            self.assertEqual(scope.coordinator_rank,retained)
+                            self.assertEqual(r.protocol_owner_role,owner)
+                            self.assertEqual(r.gate.owner,'B')
+                            self.assertIs(context['rebuild_outer'],stage == 0)
+                            if kind == 'source':
+                                return {'retired':True}
+                            r.gate.advance(1,'C')
+                            return dict(outer=r.outer, groups=r.groups, gate=r.gate, epoch=1, owner='C')
+
+                        with patch('shift_full.v4_transaction_train.run',side_effect=switch):
+                            r.start_partial(command,candidate=kind=='candidate')
+                        self.assertEqual(r.protocol_owner_role,'A')
+                        if kind == 'source':
+                            self.assertTrue(r.retired)
+                        else:
+                            self.assertEqual(r.channel_epochs,[int(stage == 0 or i in ranks) for i in range(layout.world)])
+                            self.assertEqual(r.store_services[str(replica)], int(stage == 0))
+                            self.assertEqual(r.replica_hosts[str(replica)],'new' if stage == 0 else f'old{replica}')
 
     def runtime(self):
         r=SessionRuntime.__new__(SessionRuntime)
@@ -64,6 +124,37 @@ class NativeRecoveryTest(unittest.TestCase):
         self.assertEqual(context['step'],17)
         self.assertEqual(r.weight,42)
         self.assertFalse(r.at_committed_boundary)
+
+    def test_native_normal_exit_drains_only_the_selected_replica(self):
+        for replica in (0,1):
+            r = self.runtime();r.replica = replica
+            r.c = {'pending_command_metadata':{'normal_source_exit':True}}
+            calls = []
+            r.outer.close = lambda:calls.append('outer')
+            r.s = SimpleNamespace(disconnect=lambda:calls.append('inner'),
+                                  log=SimpleNamespace(close=lambda:calls.append('log')))
+            r.event = lambda kind, **fields:calls.append(kind)
+            r.base_store.wait = lambda keys:calls.append(keys[0])
+            r.start_native(SimpleNamespace(id='recover',source_replica=1))
+            if replica == 1:
+                self.assertEqual(calls,['outer','inner','session_source_exit','log'])
+                self.assertTrue(r.stopping and r.retired and r.gate.fenced)
+            else:
+                self.assertEqual(calls,['session/fault_released/1'])
+                self.assertFalse(r.gate.fenced)
+
+    def test_warm_native_source_waits_for_every_candidate_rank_before_fencing(self):
+        r = self.runtime()
+        r.c = {'pending_command_metadata': {'normal_source_exit': True, 'prepare_v1': True}}
+        r.outer.close = lambda: None
+        r.s = SimpleNamespace(disconnect=lambda: None, log=SimpleNamespace(close=lambda: None))
+        r.event = lambda *args, **kwargs: None
+        def ready(keys):
+            self.assertFalse(r.gate.fenced)
+            self.assertEqual(keys, [f'session/native_prepared/1/{rank}' for rank in range(r.layout.world)])
+        r.base_store.wait = ready
+        r.start_native(SimpleNamespace(id='recover', source_replica=1))
+        self.assertTrue(r.gate.fenced)
 
     def test_fenced_owner_cannot_start_an_attempt(self):
         r=self.runtime();r.replica=0;r.role='B';r.gate.fence()

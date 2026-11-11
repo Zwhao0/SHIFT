@@ -8,6 +8,7 @@ import sys
 import time
 from scripts.v41_control import command
 from shift_full.session_control import Command
+from shift_full.session_layout import SessionLayout
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -35,8 +36,13 @@ def main():
     p.add_argument('--nodes',nargs='+',choices=('node0','node1','node3'),default=['node0','node1','node3'])
     p.add_argument('--policy',choices=('v1','v2','v4'));p.add_argument('--source-replica',type=int)
     p.add_argument('--target');p.add_argument('--id');p.add_argument('--expected-epoch',type=int)
-    p.add_argument('--at-step',type=int);p.add_argument('--ranks')
+    p.add_argument('--at-step',type=int)
+    stage_options = p.add_mutually_exclusive_group()
+    stage_options.add_argument('--ranks')
+    stage_options.add_argument('--pp-stage', type=int, choices=(0, 1))
     a=p.parse_args()
+    if a.pp_stage is not None and (a.action != 'command' or a.policy != 'v4'):
+        p.error('--pp-stage requires a v4 command')
     if not a.session or not all(c.isalnum() or c in '_-' for c in a.session):p.error('invalid session')
     if a.action=='start':
         prepared=subprocess.run([sys.executable,'-m','scripts.prepare_v3_controller','--nodes',*a.nodes],cwd=ROOT,capture_output=True,text=True,timeout=150)
@@ -68,8 +74,9 @@ def main():
         payload.update(policy=a.policy,source_replica=a.source_replica if a.source_replica is not None else 0 if a.policy=='v4' else 1,target=a.target)
         if a.ranks:payload['ranks']=[int(x) for x in a.ranks.split(',')]
         elif a.policy=='v4':
-            world=state.get('configuration',{}).get('replica_world_size',8)
-            payload['ranks']=list(range(world//2,world))
+            layout = SessionLayout(payload['replica_world_size'])
+            stage = 1 if a.pp_stage is None else a.pp_stage
+            payload['ranks'] = list(layout.stage_ranks(stage))
     Command.from_dict(payload)
     path='/workspace/SHIFT/runtime/v3-reproduce/session_'+a.session+'/requests/'+identifier+'.json'
     code='from pathlib import Path;import json;p=Path('+repr(path)+');data='+repr(json.dumps(payload))+';p.parent.mkdir(parents=True,exist_ok=True);assert not p.exists() or json.loads(p.read_text())==json.loads(data),"command id payload conflict";tmp=p.with_suffix(".tmp");tmp.write_text(data);tmp.replace(p);print(json.dumps(dict(id='+repr(identifier)+',status="queued")))'

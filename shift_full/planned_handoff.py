@@ -26,7 +26,8 @@ class PlannedHandoff:
  def __init__(self,args,rank,event,export,load,progress,manifest,rng_snapshot):
   self.local_world=dist.get_world_size();self.args=args;self.rank=rank;self.device=torch.cuda.current_device();self.emit=event;self.export=export;self.load=load;self.progress=progress;self.role=args.planned_role;self.variant=args.planned_variant;self.source=args.planned_source;self.gate=EpochGate();self.threads=[];self.errors=[];self.channels={};self.candidate=None;self.cut=None;self.cancelled=False;self.request_seen=False;self.rng_snapshot=rng_snapshot;self.manifest=manifest;self.deferred=self.variant in ('p1d','p1f','p2');self.old_epoch_revoked=False;self.retired_pgs=[];self.cleanup_thread=None;self.cleanup_cancel=threading.Event()
   self.round=getattr(args,'planned_round',0);self.offset=20*self.round
-  self.hosts=role_hosts(args.planned_hosts,self.round,allow_colocated=getattr(args,'planned_allow_colocated',False));self.control_host=self.hosts['A']
+  self.hosts=role_hosts(args.planned_hosts,self.round,allow_colocated=getattr(args,'planned_allow_colocated',False),
+                       allow_source_target_colocated=getattr(args,'planned_allow_source_target_colocated',False));self.control_host=self.hosts['A']
   self.source_host=self.hosts['B']
   self.coord_prefix=f'round/{self.round}' if getattr(args,'planned_cycles',1)>1 else ''
   self.coord_raw=getattr(args,'_coord_raw',None)

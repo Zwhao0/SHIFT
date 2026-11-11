@@ -11,7 +11,8 @@ def export(root,two_each=False,rejected=False):
     import hashlib
     import json
     from collections import defaultdict
-    from scripts.verify_session import verify
+    from scripts import verify_session
+    from shift_full.latency import distribution
     summary=json.loads((root/'summary.json').read_text())
     configuration=summary.get('configuration')
     if not isinstance(configuration,dict):
@@ -19,9 +20,9 @@ def export(root,two_each=False,rejected=False):
     world=configuration.get('replica_world_size',8)
     if type(world) is not int or world not in (4,8):world=8
     width=world//2
-    result=verify(root,expected_counts=dict(v1=2,v2=2,v4=2) if two_each else None)
+    result=verify_session.verify(root,expected_counts=dict(v1=2,v2=2,v4=2) if two_each else None)
     result['source_manifest_sha256']=hashlib.sha256(json.dumps(result['source_manifest'],sort_keys=True).encode()).hexdigest()
-    result['verifier_sha256']=hashlib.sha256(Path('/workspace/SHIFT/scripts/verify_session.py').read_bytes()).hexdigest()
+    result['verifier_sha256']=hashlib.sha256(Path(verify_session.__file__).read_bytes()).hexdigest()
     if not rejected:assert result['pass_all'],result['errors']
     files=sorted(root.glob('raw/*/*.jsonl'))
     manifest={str(p.relative_to(root)):dict(bytes=p.stat().st_size,sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for p in files}
@@ -50,7 +51,9 @@ def export(root,two_each=False,rejected=False):
         values={str(step):max(sample.values()) for step,sample in sorted(steps.items()) if len(sample)==2*world}
         gap_values={str(step):max(sample.values()) for step,sample in sorted(gaps.items()) if len(sample)==2*world}
         return dict(steps=list(map(int,values)),max_worker_seconds=values,mean_seconds=sum(values.values())/len(values) if values else None,
-                    max_worker_commit_gap_seconds=gap_values,mean_commit_gap_seconds=sum(gap_values.values())/len(gap_values) if gap_values else None)
+                    step_seconds_distribution=distribution(values.values()),
+                    max_worker_commit_gap_seconds=gap_values,mean_commit_gap_seconds=sum(gap_values.values())/len(gap_values) if gap_values else None,
+                    commit_gap_seconds_distribution=distribution(gap_values.values()))
     initial_control=window(active,11,80)
     initial_short=window(active,11,32)
     initial_quick=window(active,5,16)
@@ -60,7 +63,8 @@ def export(root,two_each=False,rejected=False):
         if c['policy'] in ('v1','v2'):
             for i in range(world):after[c['source_replica'],i]=(label,i)
         else:
-            for i in range(width):after[0,width+i]=(label,i)
+            for device, rank in enumerate(c['ranks']):
+                after[c['source_replica'],rank] = (label,device)
         observed=record['first_common_observation'];first=observed['step']
         case=dict(sequence=record['sequence'],command=c,completed_step=record['completed_step'],
                   request_to_first_joint_seconds=observed['request_seconds'],fault_to_first_joint_seconds=observed['fault_seconds'],
@@ -68,11 +72,44 @@ def export(root,two_each=False,rejected=False):
                   windows=dict(before_route_last6=window(active,max(4,c['at_step']-5),c['at_step']),
                                first_joint=window(after,first,first,cid=c['id']),
                                post4=window(after,first+1,first+4,cid=c['id'])))
-        witness=(1-c['source_replica'],0) if c['policy'] in ('v1','v2') else (0,0)
+        if record.get('placement') is not None:
+            case['placement'] = record['placement']
+        target_devices = summary.get('actors', {}).get(label, {}).get('gpu_uuids')
+        if target_devices is not None:
+            case['target_gpu_uuids'] = target_devices
+            case['target_launch'] = record.get('target_launch')
+            case['released_actors'] = record.get('released_actors')
+            if record.get('prepare_v1'):
+                case['candidate_prepared_before_exit'] = record['candidate_prepared_before_exit']
+            startup = []
+            phases = ('worker_device_bound', 'standby_imported', 'standby_cpu_model_ready',
+                      'standby_gpu_model_ready', 'candidate_prepared', 'state_received',
+                      'candidate_validated', 'candidate_activated',
+                      'session_native_prepared', 'session_native_restored')
+            for device in range(len(target_devices)):
+                worker = rows[label+str(device)]
+                imported = next(event for event in worker if event['kind']=='worker_imported')
+                elapsed = {event['kind']:event['monotonic']-imported['monotonic']
+                           for event in worker if event['kind'] in phases}
+                load = next((event['seconds'] for event in worker
+                             if event['kind']=='standby_cpu_model_ready'), None)
+                prepared_bytes = next((event['allocated'] for event in worker
+                                       if event['kind']=='standby_gpu_model_ready'), None)
+                transfers = [dict(seconds=event['seconds'], gpu_bytes=event['gpu_bytes'])
+                             for event in worker if event['kind']=='transport_recv']
+                startup.append(dict(rank=imported['rank'], import_seconds=imported['seconds'],
+                                    model_load_seconds=load, prepared_gpu_bytes=prepared_bytes,
+                                    after_import_seconds=elapsed,
+                                    state_receives=transfers))
+            case['target_worker_startup'] = startup
+        if record.get('outer_store_service') is not None:
+            case['outer_store_service'] = record['outer_store_service']
+        witness = ((c['source_replica'], width if 0 in c['ranks'] else 0) if c['policy'] == 'v4'
+                   else (1-c['source_replica'], 0))
         witness_label,witness_device=active[witness]
         witness_rows=commits[witness_label+str(witness_device)]
         local=[e for e in witness_rows if c['at_step']<=e['step']<=record['completed_step']]
-        case['timing_witness']=dict(replica=witness[0],rank=0,actor=witness_label,device=witness_device)
+        case['timing_witness']=dict(replica=witness[0],rank=witness[1],actor=witness_label,device=witness_device)
         case['max_healthy_commit_gap_seconds']=max((b['monotonic']-a['monotonic'] for a,b in zip(local,local[1:])),default=None)
         case['a0_max_commit_gap_seconds']=case['max_healthy_commit_gap_seconds'] if witness_label=='g0_A' else None
         case['fault_proof']=record.get('fault_proof')
@@ -97,7 +134,9 @@ def export(root,two_each=False,rejected=False):
     resources={kind:json.loads((root/('resources_'+kind+'.json')).read_text()) for kind in ('before','after')}
     peaks={key:{field:max((e.get(field,0) for e in events),default=0)
         for field in ('cuda_peak_allocated_bytes','cuda_peak_reserved_bytes')} for key,events in rows.items()}
-    return dict(name=root.name,accepted=True,configuration=configuration,
+    return dict(name=root.name,accepted=True,configuration=configuration, physical_nodes=summary.get('physical_nodes'),
+                initial_spare_pool=summary.get('initial_spare_pool'), runner_gpu_uuids=summary.get('runner_gpu_uuids'),
+                verified_runner_sources=summary.get('verified_runner_sources'),
                 session=summary['session'],controller_pid=summary.get('controller_pid'),
                 epoch=summary['epoch'],final_step=summary['final_step'],cases=cases,independent_audit=result,
                 initial_native_11_to_80=initial_control if len(initial_control['steps'])==70 and (not summary['commands'] or summary['commands'][0]['command']['at_step']>=80) else None,

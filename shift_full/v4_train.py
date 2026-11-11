@@ -89,6 +89,9 @@ def main():
     initial_candidate=c.get('session_candidate',role==c.get('target_role','C'))
     replica = c.get('session_replica',int(role in ('D','E')))
     rank = Plan.logical_rank({'D':'A','E':'B'}.get(role,role),device,True) if c.get('cross_node_tp') else layout.rank(role,device,c.get('candidate_full_dp',False))
+    if 'session_actor_ranks' in c:
+        scope = layout.partial_scope(replica, c['session_actor_ranks'])
+        rank = scope.ranks[device]
     owner_role = 'A' if replica else role
     plan = Plan(**c['plan'])
     from .v4_state import boundary_validation
@@ -112,6 +115,11 @@ def main():
 
     event('worker_imported',seconds=time.monotonic()-worker_import_started)
     torch.cuda.set_device(device)
+    if 'session_gpu_uuids' in c:
+        gpu_uuid = str(torch.cuda.get_device_properties(device).uuid)
+        if gpu_uuid.removeprefix('GPU-') != c['session_gpu_uuids'][device].removeprefix('GPU-'):
+            raise RuntimeError('training worker received a different GPU than its reservation')
+        event('worker_device_bound', gpu_uuid=gpu_uuid)
     torch.cuda.set_per_process_memory_fraction(.12, device)
     if c.get('deterministic'):torch.use_deterministic_algorithms(True)
     torch.backends.cuda.matmul.allow_tf32 = False
@@ -310,12 +318,13 @@ def main():
                   scope='constructor metadata only; communication forbidden; no shadow training')
         elif c.get('gpu_prepare'):
             local_groups = connect('standby', local=True)
-            # Construct the eventual PP1 DDP bucket policy on the isolated C group.
+            # Construct the eventual stage's DDP buckets on its isolated group.
+            pp_rank = rank // layout.width
             if not c.get('candidate_full_dp'):
-                state.set_pipeline_model_parallel_rank(1)
+                state.set_pipeline_model_parallel_rank(pp_rank)
                 state.set_pipeline_model_parallel_world_size(2)
             build_started=time.monotonic()
-            prepared_stage = build(full, local_groups, rank//layout.width if c.get('candidate_full_dp') else 1)
+            prepared_stage = build(full, local_groups, pp_rank)
             event('standby_stage_built',seconds=time.monotonic()-build_started)
             del full
             prepared_old = (state.get_tensor_model_parallel_group(),local_groups[0],local_groups[2],local_groups[1])
@@ -335,26 +344,31 @@ def main():
                 started = time.monotonic()
                 warm_stage, warm_ddp, warm_opt, _ = prepared_stage
                 warm_opt.zero_grad(set_to_none=True); warm_ddp.zero_grad_buffer()
-                # This adapter-specific PP1 rehearsal uses synthetic upstream
-                # activations. TP/EP exchanges remain wholly inside standby C.
-                size = plan.seq_len + warm_stage.extra_positions(1)
-                activation = torch.randn(size,1,warm_stage.hf_config.hidden_size,device='cuda')
-                activation[plan.seq_len:] = 0
-                activation.requires_grad_(True)
-                warm_stage.set_input_tensor(activation)
                 tokens = (torch.arange(plan.seq_len+1,device='cuda').view(1,-1)%32+100)
-                logits, aux = warm_ddp(tokens[:,:-1].contiguous())
-                loss = torch.nn.functional.cross_entropy(logits.float().reshape(-1,logits.shape[-1]),
-                    tokens[:,1:].reshape(-1)) + warm_stage.hf_config.router_aux_loss_coef*aux
+                inputs = tokens[:,:-1].contiguous()
+                if pp_rank == 0:
+                    output = warm_ddp(inputs)
+                    loss = output[:plan.seq_len].float().square().mean()
+                else:
+                    size = plan.seq_len + warm_stage.extra_positions(1)
+                    activation = torch.randn(size,1,warm_stage.hf_config.hidden_size,device='cuda')
+                    activation[plan.seq_len:] = 0
+                    activation.requires_grad_(True)
+                    warm_stage.set_input_tensor(activation)
+                    logits, aux = warm_ddp(inputs)
+                    loss = torch.nn.functional.cross_entropy(logits.float().reshape(-1,logits.shape[-1]),
+                        tokens[:,1:].reshape(-1)) + warm_stage.hf_config.router_aux_loss_coef*aux
                 loss.backward(); warm_ddp.finish_grad_sync()
                 for parameter in warm_stage.parameters(): parameter.grad=parameter.main_grad
                 warm_opt.step()
                 warm_opt.zero_grad(set_to_none=True); warm_ddp.zero_grad_buffer()
                 warm_stage.input_tensor = None
-                del activation, logits, aux, loss, tokens
+                if pp_rank == 0:del output
+                else:del activation, logits, aux
+                del loss, tokens, inputs
                 torch.cuda.synchronize()
                 event('standby_gpu_warmed',seconds=time.monotonic()-started,
-                      scope='synthetic PP1 forward/backward/Adam; standby-local TP/EP',
+                      scope=f'synthetic PP{pp_rank} forward/backward/Adam with standby-local TP/EP',
                       allocated=torch.cuda.memory_allocated(),peak=torch.cuda.max_memory_allocated())
             torch.cuda.synchronize()
             event('standby_gpu_model_ready', allocated=torch.cuda.memory_allocated(),

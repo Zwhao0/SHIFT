@@ -25,7 +25,7 @@ class SessionOuter:
             timeout=timedelta(seconds=90),quorum_timeout=timedelta(seconds=180),
             connect_timeout=timedelta(seconds=20),rank=self.rank,world_size=SessionLayout.from_config(runtime.c).world,
             store_addr=host,store_port=port+100+runtime.store_services[str(self.replica)]*2+self.replica,
-            hostname=runtime.replica_hosts[str(self.replica)],
+            hostname=runtime.c.get('session_actor_host', runtime.replica_hosts[str(self.replica)]),
             lighthouse_addr=f"http://{host}:{runtime.c.get('lighthouse_port',port+60)+service}",replica_id=f'shift{self.replica}',
             checkpoint_transport=PackedGPUTransport(self.pg,torch.device('cuda',runtime.device),timedelta(seconds=90),runtime.event))
         self.manager._shift_epoch=runtime.epoch
@@ -66,7 +66,8 @@ class SessionOuter:
     def begin(self,step):
         r=self.runtime
         self.refresh_boundary()
-        self._defer_quorum=bool(getattr(r,'in_protocol',False) and r.replica==1 and
+        source_replica = getattr(getattr(r, 'protocol_scope', None), 'replica', 0)
+        self._defer_quorum=bool(getattr(r,'in_protocol',False) and r.replica!=source_replica and
             r.phase=='after' and r.protocol_plan and r.progress['updates']==r.protocol_plan.cut)
         # The healthy peer may compute while PP1 is restored. Starting its
         # quorum now could elect a transient singleton before PP1's Manager
@@ -120,7 +121,9 @@ class SessionOuter:
 
     def migrate(self,epoch):
         if self._step_started is not None:raise RuntimeError('cannot migrate a live session step')
-        if self.rank in SessionLayout.from_config(self.runtime.c).affected:
+        scope = getattr(self.runtime, 'protocol_scope', None)
+        ranks = self.runtime.c.get('channel_ranks', scope.ranks) if scope else SessionLayout.from_config(self.runtime.c).affected
+        if self.rank in ranks:
             self.pg.migration_epoch=epoch;self.manager._quorum_id=None
         self.epoch=epoch;self.manager._shift_epoch=epoch
 

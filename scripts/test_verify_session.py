@@ -159,5 +159,58 @@ class SessionVerifierTests(unittest.TestCase):
                             for e in result['errors']), result['errors'])
 
 
+class PartialScopeEvidenceTests(unittest.TestCase):
+    def test_dp1_pp0_requires_decision_from_retained_pp1(self):
+        from collections import defaultdict
+        from scripts.verify_session import _flatten, _verify_v4
+
+        rows = defaultdict(lambda: defaultdict(list))
+        actors = {
+            'old': dict(role='D', replica=1, devices=[0,1], generation=0),
+            'retained': dict(role='E', replica=1, devices=[2,3], generation=0),
+            'peer': dict(role='A', replica=0, devices=[0,1,2,3], generation=0),
+            'new': dict(role='C', replica=1, ranks=[0,1], devices=[0,1], generation=1),
+        }
+        before = {(replica, rank): ('peer', rank) if replica == 0 else
+                  ('old', rank) if rank < 2 else ('retained', rank - 2)
+                  for replica in (0, 1) for rank in range(4)}
+        after = before | {(1,0): ('new',0), (1,1): ('new',1)}
+        command = dict(sequence=1, source_role='B', target_role='C', target_actor='new', outer_store_service=1,
+                       command=dict(expected_epoch=0, source_replica=1, ranks=[0,1]))
+
+        def event(placement, replica, rank, kind, **fields):
+            actor, device = placement[replica,rank]
+            row = dict(kind=kind, rank=rank, replica=replica, round=0, step=10, **fields)
+            rows[actor][device].append(row)
+            return row
+
+        switched = dict(decision='replace', owner='C', epoch=1)
+        for replica, rank in before:
+            event(before,replica,rank,'boundary_selected')
+            event(before,replica,rank,'freeze')
+            if replica == 0:
+                for kind in ('peer_compute_ready', 'peer_compute_begin', 'peer_native_gradient_ready'):
+                    event(before,replica,rank,kind)
+            else:
+                event(after,replica,rank,'activated',**switched)
+                if rank >= 2:event(after,replica,rank,'outer_rebuilt',epoch=1)
+        decision = event(before,1,2,'switch_decision',validation='runtime',
+                         candidate_results={'0':True, '1':True},**switched)
+        transport = dict(transport='packed_gpu', packet_source='source', bytes=3, gpu_bytes=2, control_bytes=1)
+        for rank in (0,1):
+            event(before,1,rank,'retired')
+            event(before,1,rank,'state_sent',**transport)
+            event(after,1,rank,'state_received',**transport)
+            readiness = dict(schema=1,epoch=1,rank=rank,cut=10,target='C',restored=True)
+            event(after,1,rank,'candidate_validated',readiness=readiness)
+            event(after,1,rank,'candidate_activated',readiness=readiness)
+        errors = []
+        _verify_v4(command,before,after,rows,actors,_flatten(rows),errors,'runtime',world=4)
+        self.assertEqual(errors,[])
+        decision['rank'] = 0
+        _verify_v4(command,before,after,rows,actors,_flatten(rows),errors,'runtime',world=4)
+        self.assertIn('v4 switch decision missing',errors)
+
+
 if __name__ == '__main__':
     unittest.main()

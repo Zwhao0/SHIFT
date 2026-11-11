@@ -1,4 +1,10 @@
-# SHIFT — v4.3 两节点低显存验证
+# SHIFT — v5 自动恢复与迁移
+
+SHIFT 在运行中从 GPU 备用池自动选择目标，支持 v1 整副本恢复、v2 整副本迁移，以及 v4 的 DP0/DP1 × PP0/PP1 阶段迁移。Spare agent 上报设备和显存，控制器按 Pod 实例和 GPU UUID 核对预留与接管。
+
+Kubernetes 验收使用两台物理主机上的三个独立 runner，每个 runner 分配四张不同的 GPU。三个 runner 都实际接管了训练，并分别通过 CUDA 任务和重新入池检查。保留了共享负载下的原始性能波动、同设备对照和 v1 温备实验。 [设计与复现](docs/substitution_plane.md) · [验收与计时](evidence/spare_pool/v5_acceptance_20261111.json)
+
+## v4.3 两节点低显存验证
 
 完整 Qwen MoE 494,712,832 参数，短序列32、CPU AdamW 状态卸载。v1 使用16卡，验证两个副本各一次真实 SIGKILL 后原机重建；v2/v4 使用8卡训练并预留候选槽位，验证两次整副本迁移与两次 PP1 部分迁移。两种布局分别启动会话，不能在同一会话内动态改 TP。
 
