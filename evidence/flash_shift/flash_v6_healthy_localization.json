@@ -1,0 +1,290 @@
+{
+  "flash_v6_perf_p1": {
+    "alarm_rank": null,
+    "rank_order": [
+      {
+        "rank": 5,
+        "ratio": 1.4075179751690436,
+        "persistence": 8
+      },
+      {
+        "rank": 2,
+        "ratio": 1.3165702884562838,
+        "persistence": 7
+      },
+      {
+        "rank": 7,
+        "ratio": 1.1432580837028654,
+        "persistence": 0
+      },
+      {
+        "rank": 0,
+        "ratio": 1.1423636540771809,
+        "persistence": 0
+      },
+      {
+        "rank": 1,
+        "ratio": 0.8719128695823557,
+        "persistence": 0
+      },
+      {
+        "rank": 3,
+        "ratio": 0.7818185843692556,
+        "persistence": 0
+      },
+      {
+        "rank": 6,
+        "ratio": 0.7274429693025135,
+        "persistence": 0
+      },
+      {
+        "rank": 4,
+        "ratio": 0.6940980805311701,
+        "persistence": 0
+      }
+    ],
+    "abstention_reasons": [
+      "insufficient_slowdown_or_persistence",
+      "ambiguous_rank_margin"
+    ],
+    "iteration_ids": [
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18
+    ],
+    "coverage": {
+      "0": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "1": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "2": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "3": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "4": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "5": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "6": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "7": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "manual_integration_only": false,
+    "fault_labels_read": false,
+    "evidence": "flash_v4_gemm_regression"
+  },
+  "flash_v6_perf_p2": {
+    "alarm_rank": null,
+    "rank_order": [
+      {
+        "rank": 5,
+        "ratio": 1.3983915590864169,
+        "persistence": 8
+      },
+      {
+        "rank": 7,
+        "ratio": 1.1382180286519428,
+        "persistence": 0
+      },
+      {
+        "rank": 3,
+        "ratio": 1.1190081630825615,
+        "persistence": 0
+      },
+      {
+        "rank": 0,
+        "ratio": 1.0760607542741174,
+        "persistence": 0
+      },
+      {
+        "rank": 1,
+        "ratio": 0.9229370549198466,
+        "persistence": 0
+      },
+      {
+        "rank": 2,
+        "ratio": 0.8005517238730129,
+        "persistence": 0
+      },
+      {
+        "rank": 6,
+        "ratio": 0.7700031178936009,
+        "persistence": 0
+      },
+      {
+        "rank": 4,
+        "ratio": 0.6156297200494243,
+        "persistence": 0
+      }
+    ],
+    "abstention_reasons": [
+      "insufficient_slowdown_or_persistence",
+      "ambiguous_rank_margin"
+    ],
+    "iteration_ids": [
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18
+    ],
+    "coverage": {
+      "0": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "1": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "2": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "3": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "4": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "5": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "6": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "7": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "manual_integration_only": false,
+    "fault_labels_read": false,
+    "evidence": "flash_v4_gemm_regression"
+  }
+}

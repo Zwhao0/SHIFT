@@ -1,0 +1,554 @@
+[
+  {
+    "file": "flash_1112_bench_monitor.json",
+    "case": "v4",
+    "signal": "benchmark_monitor",
+    "accepted": true,
+    "error": null,
+    "controller_error": null,
+    "resources_clean": true,
+    "final_step": 40,
+    "train_step_seconds": 79.7011195300438,
+    "controller_wall_seconds": 109.75808243799838
+  },
+  {
+    "file": "flash_1112_bench_off.json",
+    "case": "v4",
+    "signal": "benchmark_off",
+    "accepted": true,
+    "error": null,
+    "controller_error": null,
+    "resources_clean": true,
+    "final_step": 40,
+    "train_step_seconds": 82.1486128430115,
+    "controller_wall_seconds": 111.29513715900248
+  },
+  {
+    "file": "flash_1112_bench_profile.json",
+    "case": "v4",
+    "signal": "benchmark_profile",
+    "accepted": true,
+    "error": null,
+    "controller_error": null,
+    "resources_clean": true,
+    "final_step": 40,
+    "train_step_seconds": 78.98066951404326,
+    "controller_wall_seconds": 109.2028529609961,
+    "profile": {
+      "status": "complete",
+      "localizer_sha256": "076dce6d35290d2c2c8ed2a07e8d2d1e196263aeb0af57ea2f61a5ec5a7d72db",
+      "first_step": 12,
+      "last_step": 19,
+      "output": "flash_reference.json",
+      "collection_and_score_seconds": 0.4397285229933914,
+      "detector_iteration": null,
+      "predicted_rank": null,
+      "abstention_reasons": null,
+      "first_two": []
+    }
+  },
+  {
+    "file": "flash_1112_final_v2.json",
+    "case": "v2",
+    "signal": "flash_live",
+    "accepted": false,
+    "error": "Traceback (most recent call last):\n  File \"/data/lab/shift-flash-1112/FLASH1022/deploy/lab/shift_gemm_profile.py\", line 139, in <module>\n    main()\n  File \"/data/lab/shift-flash-1112/FLASH1022/deploy/lab/shift_gemm_profile.py\", line 133, in main\n    result = localize(data, json.loads(args.reference.read_text())) if args.reference else calibrate(data)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/data/lab/shift-flash-1112/FLASH1022/deploy/lab/shift_gemm_profile.py\", line 104, in localize\n    raise ValueError(f'rank {rank} has insufficient shape overlap')\nValueError: rank 0 has insufficient shape overlap\n",
+    "controller_error": "KeyboardInterrupt: ",
+    "resources_clean": true,
+    "final_step": null,
+    "profile": {
+      "status": "error",
+      "localizer_sha256": "076dce6d35290d2c2c8ed2a07e8d2d1e196263aeb0af57ea2f61a5ec5a7d72db",
+      "reference_sha256": "aa0af1c1771d9e883f9e17bf6c48a174c76e00759b5db3c4a953230e3d65097d",
+      "first_step": 44,
+      "last_step": 51,
+      "monitor_request_wall_time": 1794492897.0774453,
+      "error": "Traceback (most recent call last):\n  File \"/data/lab/shift-flash-1112/FLASH1022/deploy/lab/shift_gemm_profile.py\", line 139, in <module>\n    main()\n  File \"/data/lab/shift-flash-1112/FLASH1022/deploy/lab/shift_gemm_profile.py\", line 133, in main\n    result = localize(data, json.loads(args.reference.read_text())) if args.reference else calibrate(data)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/data/lab/shift-flash-1112/FLASH1022/deploy/lab/shift_gemm_profile.py\", line 104, in localize\n    raise ValueError(f'rank {rank} has insufficient shape overlap')\nValueError: rank 0 has insufficient shape overlap\n",
+      "detector_iteration": 39,
+      "predicted_rank": null,
+      "abstention_reasons": null,
+      "first_two": []
+    }
+  },
+  {
+    "file": "flash_1112_final_v4.json",
+    "case": "v4",
+    "signal": "flash_live",
+    "accepted": false,
+    "error": "Traceback (most recent call last):\n  File \"/data/lab/shift-flash-1112/FLASH1022/deploy/lab/shift_gemm_profile.py\", line 139, in <module>\n    main()\n  File \"/data/lab/shift-flash-1112/FLASH1022/deploy/lab/shift_gemm_profile.py\", line 133, in main\n    result = localize(data, json.loads(args.reference.read_text())) if args.reference else calibrate(data)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/data/lab/shift-flash-1112/FLASH1022/deploy/lab/shift_gemm_profile.py\", line 104, in localize\n    raise ValueError(f'rank {rank} has insufficient shape overlap')\nValueError: rank 0 has insufficient shape overlap\n",
+    "controller_error": "KeyboardInterrupt: ",
+    "resources_clean": true,
+    "final_step": null,
+    "profile": {
+      "status": "error",
+      "localizer_sha256": "076dce6d35290d2c2c8ed2a07e8d2d1e196263aeb0af57ea2f61a5ec5a7d72db",
+      "reference_sha256": "aa0af1c1771d9e883f9e17bf6c48a174c76e00759b5db3c4a953230e3d65097d",
+      "first_step": 44,
+      "last_step": 51,
+      "monitor_request_wall_time": 1794492752.0583138,
+      "error": "Traceback (most recent call last):\n  File \"/data/lab/shift-flash-1112/FLASH1022/deploy/lab/shift_gemm_profile.py\", line 139, in <module>\n    main()\n  File \"/data/lab/shift-flash-1112/FLASH1022/deploy/lab/shift_gemm_profile.py\", line 133, in main\n    result = localize(data, json.loads(args.reference.read_text())) if args.reference else calibrate(data)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/data/lab/shift-flash-1112/FLASH1022/deploy/lab/shift_gemm_profile.py\", line 104, in localize\n    raise ValueError(f'rank {rank} has insufficient shape overlap')\nValueError: rank 0 has insufficient shape overlap\n",
+      "detector_iteration": 39,
+      "predicted_rank": null,
+      "abstention_reasons": null,
+      "first_two": []
+    }
+  },
+  {
+    "file": "flash_1112_live_ref.json",
+    "case": "v4",
+    "signal": "flash_calibration",
+    "accepted": true,
+    "error": null,
+    "controller_error": null,
+    "resources_clean": true,
+    "final_step": 41,
+    "profile": {
+      "status": "complete",
+      "localizer_sha256": "622a1d706862a916e5066e47705b591d7f6f6f7a2fc45be999feb9b7174684f6",
+      "first_step": 20,
+      "last_step": 27,
+      "output": "flash_reference.json",
+      "collection_and_score_seconds": 0.4356608719972428,
+      "detector_iteration": null,
+      "predicted_rank": null,
+      "abstention_reasons": null,
+      "first_two": []
+    }
+  },
+  {
+    "file": "flash_1112_live_strong_v2.json",
+    "case": "v2",
+    "signal": "flash_live",
+    "accepted": false,
+    "error": "FLASH prediction None differs from injected rank 6",
+    "controller_error": "KeyboardInterrupt: ",
+    "resources_clean": true,
+    "final_step": null,
+    "profile": {
+      "status": "complete",
+      "localizer_sha256": "c1938c14ea2c12fbb30b318573786ed5b5e2bd1826f30427850456a215f1164c",
+      "reference_sha256": "7b3be232abc0d23e331560688d1609bfc808d74b3b30c8e8eb5a12037136a9d2",
+      "first_step": 52,
+      "last_step": 59,
+      "monitor_request_wall_time": 1794492175.3508928,
+      "output": "flash_prediction.json",
+      "collection_and_score_seconds": 0.4730780470126774,
+      "detector_iteration": 39,
+      "predicted_rank": null,
+      "abstention_reasons": [
+        "insufficient_slowdown_or_persistence",
+        "ambiguous_rank_margin"
+      ],
+      "first_two": [
+        {
+          "rank": 2,
+          "ratio": 1.3059478895213046,
+          "persistence": 6
+        },
+        {
+          "rank": 0,
+          "ratio": 1.2638116186393753,
+          "persistence": 4
+        }
+      ]
+    }
+  },
+  {
+    "file": "flash_1112_live_strong_v4.json",
+    "case": "v4",
+    "signal": "flash_live",
+    "accepted": false,
+    "error": "FLASH prediction None differs from injected rank 4",
+    "controller_error": "KeyboardInterrupt: ",
+    "resources_clean": true,
+    "final_step": null,
+    "profile": {
+      "status": "complete",
+      "localizer_sha256": "c1938c14ea2c12fbb30b318573786ed5b5e2bd1826f30427850456a215f1164c",
+      "reference_sha256": "7b3be232abc0d23e331560688d1609bfc808d74b3b30c8e8eb5a12037136a9d2",
+      "first_step": 52,
+      "last_step": 59,
+      "monitor_request_wall_time": 1794492006.2457302,
+      "output": "flash_prediction.json",
+      "collection_and_score_seconds": 0.4451159249874763,
+      "detector_iteration": 39,
+      "predicted_rank": null,
+      "abstention_reasons": [
+        "insufficient_slowdown_or_persistence",
+        "ambiguous_rank_margin"
+      ],
+      "first_two": [
+        {
+          "rank": 6,
+          "ratio": 1.14395151809789,
+          "persistence": 0
+        },
+        {
+          "rank": 0,
+          "ratio": 1.119403143738362,
+          "persistence": 2
+        }
+      ]
+    }
+  },
+  {
+    "file": "flash_1112_live_v2.json",
+    "case": "v2",
+    "signal": "flash_live",
+    "accepted": false,
+    "error": "Traceback (most recent call last):\n  File \"/data/lab/shift-flash-1112/FLASH1022/deploy/lab/shift_gemm_profile.py\", line 103, in <module>\n    main()\n  File \"/data/lab/shift-flash-1112/FLASH1022/deploy/lab/shift_gemm_profile.py\", line 97, in main\n    result = localize(data, json.loads(args.reference.read_text())) if args.reference else calibrate(data)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/data/lab/shift-flash-1112/FLASH1022/deploy/lab/shift_gemm_profile.py\", line 68, in localize\n    raise ValueError(f'rank {rank} has insufficient shape overlap')\nValueError: rank 0 has insufficient shape overlap\n",
+    "controller_error": null,
+    "resources_clean": false,
+    "final_step": null,
+    "profile": {
+      "status": "error",
+      "localizer_sha256": "622a1d706862a916e5066e47705b591d7f6f6f7a2fc45be999feb9b7174684f6",
+      "reference_sha256": "7b3be232abc0d23e331560688d1609bfc808d74b3b30c8e8eb5a12037136a9d2",
+      "first_step": 52,
+      "last_step": 59,
+      "monitor_request_wall_time": 1794491348.051036,
+      "error": "Traceback (most recent call last):\n  File \"/data/lab/shift-flash-1112/FLASH1022/deploy/lab/shift_gemm_profile.py\", line 103, in <module>\n    main()\n  File \"/data/lab/shift-flash-1112/FLASH1022/deploy/lab/shift_gemm_profile.py\", line 97, in main\n    result = localize(data, json.loads(args.reference.read_text())) if args.reference else calibrate(data)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/data/lab/shift-flash-1112/FLASH1022/deploy/lab/shift_gemm_profile.py\", line 68, in localize\n    raise ValueError(f'rank {rank} has insufficient shape overlap')\nValueError: rank 0 has insufficient shape overlap\n",
+      "detector_iteration": 38,
+      "predicted_rank": null,
+      "abstention_reasons": null,
+      "first_two": []
+    }
+  },
+  {
+    "file": "flash_1112_live_v4.json",
+    "case": "v4",
+    "signal": "flash_live",
+    "accepted": false,
+    "error": "replay stage exceeded its deadline",
+    "controller_error": null,
+    "resources_clean": false,
+    "final_step": null,
+    "profile": {
+      "status": "waiting_for_monitor",
+      "localizer_sha256": "622a1d706862a916e5066e47705b591d7f6f6f7a2fc45be999feb9b7174684f6",
+      "reference_sha256": "7b3be232abc0d23e331560688d1609bfc808d74b3b30c8e8eb5a12037136a9d2",
+      "detector_iteration": null,
+      "predicted_rank": null,
+      "abstention_reasons": null,
+      "first_two": []
+    }
+  },
+  {
+    "file": "flash_1112_regression_v2.json",
+    "case": "v2",
+    "signal": "flash_live",
+    "accepted": true,
+    "error": null,
+    "controller_error": null,
+    "resources_clean": true,
+    "final_step": 106,
+    "profile": {
+      "status": "complete",
+      "localizer_sha256": "418511716db01454462c6ff7fedf2b036452fa36a7b993790a5e92b8a92fc6f2",
+      "reference_sha256": "82ffaf8b1a5b983568d63c2ddaf58a68dd693a96a9bf43032572625787efef12",
+      "first_step": 44,
+      "last_step": 51,
+      "monitor_request_wall_time": 1794493320.2388396,
+      "output": "flash_prediction.json",
+      "collection_and_score_seconds": 0.4285206049971748,
+      "stream_id": "1794493361348-0",
+      "published_wall_time": 1794493361.3484478,
+      "published_monotonic": 187809.786707508,
+      "detector_iteration": 38,
+      "predicted_rank": 6,
+      "abstention_reasons": [],
+      "first_two": [
+        {
+          "rank": 6,
+          "ratio": 41.25257855905289,
+          "persistence": 8
+        },
+        {
+          "rank": 2,
+          "ratio": 1.249240675058723,
+          "persistence": 4
+        }
+      ],
+      "detector_to_alert_seconds": 41.10960817337036
+    },
+    "replica": 1,
+    "ranks": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "request_to_joint_seconds": 32.83098980199429,
+    "observed_exit_to_joint_seconds": null,
+    "initial_step_seconds": 2.2132251054995735,
+    "steady_step_seconds": 2.146767563816287,
+    "independent_audit": true,
+    "replacement_bocd_samples": 41,
+    "replacement_bocd_trigger": false,
+    "source_host": "gpu-01",
+    "target_host": "gpu-03",
+    "alert_to_joint_seconds": 32.83201213600114,
+    "profile_delay_launches": [
+      64,
+      64,
+      64,
+      64,
+      64,
+      64,
+      64,
+      64
+    ]
+  },
+  {
+    "file": "flash_1112_regression_v4.json",
+    "case": "v4",
+    "signal": "flash_live",
+    "accepted": true,
+    "error": null,
+    "controller_error": null,
+    "resources_clean": true,
+    "final_step": 104,
+    "profile": {
+      "status": "complete",
+      "localizer_sha256": "418511716db01454462c6ff7fedf2b036452fa36a7b993790a5e92b8a92fc6f2",
+      "reference_sha256": "82ffaf8b1a5b983568d63c2ddaf58a68dd693a96a9bf43032572625787efef12",
+      "first_step": 44,
+      "last_step": 51,
+      "monitor_request_wall_time": 1794493058.3716304,
+      "output": "flash_prediction.json",
+      "collection_and_score_seconds": 0.47220021500834264,
+      "stream_id": "1794493093081-0",
+      "published_wall_time": 1794493093.0818512,
+      "published_monotonic": 187541.520111508,
+      "detector_iteration": 39,
+      "predicted_rank": 4,
+      "abstention_reasons": [],
+      "first_two": [
+        {
+          "rank": 4,
+          "ratio": 26.00119921916056,
+          "persistence": 8
+        },
+        {
+          "rank": 2,
+          "ratio": 1.042874056545982,
+          "persistence": 1
+        }
+      ],
+      "detector_to_alert_seconds": 34.71022081375122
+    },
+    "replica": 1,
+    "ranks": [
+      "4",
+      "5"
+    ],
+    "request_to_joint_seconds": 30.662614189990563,
+    "observed_exit_to_joint_seconds": null,
+    "initial_step_seconds": 2.079871210724708,
+    "steady_step_seconds": 2.0760287875441876,
+    "independent_audit": true,
+    "replacement_bocd_samples": 40,
+    "replacement_bocd_trigger": false,
+    "source_host": "gpu-01",
+    "target_host": "gpu-03",
+    "alert_to_joint_seconds": 30.66353877799702,
+    "profile_delay_launches": [
+      64,
+      64,
+      64,
+      64,
+      64,
+      64,
+      64,
+      64
+    ]
+  },
+  {
+    "file": "flash_1112_replay_alt_v1.json",
+    "case": "v1",
+    "signal": "shift_process_exit",
+    "accepted": true,
+    "error": null,
+    "controller_error": null,
+    "resources_clean": true,
+    "final_step": 101,
+    "replica": 0,
+    "ranks": [
+      "0",
+      "1",
+      "2",
+      "3"
+    ],
+    "request_to_joint_seconds": 37.999743355001556,
+    "observed_exit_to_joint_seconds": 25.730356581014348,
+    "initial_step_seconds": 2.183809678772708,
+    "steady_step_seconds": 2.3118940132712438,
+    "independent_audit": true,
+    "replacement_bocd_samples": 40,
+    "replacement_bocd_trigger": false,
+    "source_host": "gpu-01",
+    "target_host": "gpu-03"
+  },
+  {
+    "file": "flash_1112_replay_alt_v4.json",
+    "case": "v4",
+    "signal": "flash_replay",
+    "accepted": true,
+    "error": null,
+    "controller_error": null,
+    "resources_clean": true,
+    "final_step": 98,
+    "replica": 0,
+    "ranks": [
+      "0",
+      "1"
+    ],
+    "request_to_joint_seconds": 27.004700210993178,
+    "observed_exit_to_joint_seconds": null,
+    "initial_step_seconds": 2.2576136458625444,
+    "steady_step_seconds": 2.0437654744098173,
+    "independent_audit": true,
+    "replacement_bocd_samples": 40,
+    "replacement_bocd_trigger": false,
+    "source_host": "gpu-01",
+    "target_host": "gpu-03",
+    "alert_to_joint_seconds": 28.41933644999517,
+    "duplicate_fenced": true
+  },
+  {
+    "file": "flash_1112_replay_c_v1.json",
+    "case": "v1",
+    "signal": "shift_process_exit",
+    "accepted": false,
+    "error": "RuntimeError: confirmed Lab actor exit outside a recovery boundary: g0_A",
+    "controller_error": "RuntimeError: confirmed Lab actor exit outside a recovery boundary: g0_A",
+    "resources_clean": true,
+    "final_step": null
+  },
+  {
+    "file": "flash_1112_replay_c_v2.json",
+    "case": "v2",
+    "signal": "flash_replay",
+    "accepted": false,
+    "error": "RuntimeError: confirmed Lab actor exit outside a recovery boundary: g0_A",
+    "controller_error": "RuntimeError: confirmed Lab actor exit outside a recovery boundary: g0_A",
+    "resources_clean": true,
+    "final_step": null
+  },
+  {
+    "file": "flash_1112_replay_c_v4.json",
+    "case": "v4",
+    "signal": "flash_replay",
+    "accepted": false,
+    "error": "RuntimeError: confirmed Lab actor exit outside a recovery boundary: g0_A",
+    "controller_error": "RuntimeError: confirmed Lab actor exit outside a recovery boundary: g0_A",
+    "resources_clean": true,
+    "final_step": null
+  },
+  {
+    "file": "flash_1112_replay_d_v1.json",
+    "case": "v1",
+    "signal": "shift_process_exit",
+    "accepted": true,
+    "error": null,
+    "controller_error": null,
+    "resources_clean": true,
+    "final_step": 93,
+    "replica": 1,
+    "ranks": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "request_to_joint_seconds": 37.35535934998188,
+    "observed_exit_to_joint_seconds": 26.99572580200038,
+    "initial_step_seconds": 2.113853504178802,
+    "steady_step_seconds": 2.22908035518247,
+    "independent_audit": true,
+    "replacement_bocd_samples": 40,
+    "replacement_bocd_trigger": false,
+    "source_host": "gpu-01",
+    "target_host": "gpu-03"
+  },
+  {
+    "file": "flash_1112_replay_d_v2.json",
+    "case": "v2",
+    "signal": "flash_replay",
+    "accepted": true,
+    "error": null,
+    "controller_error": null,
+    "resources_clean": true,
+    "final_step": 94,
+    "replica": 1,
+    "ranks": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "request_to_joint_seconds": 29.40258640301181,
+    "observed_exit_to_joint_seconds": null,
+    "initial_step_seconds": 2.106104367365002,
+    "steady_step_seconds": 2.1180459169580983,
+    "independent_audit": true,
+    "replacement_bocd_samples": 41,
+    "replacement_bocd_trigger": false,
+    "source_host": "gpu-01",
+    "target_host": "gpu-03"
+  },
+  {
+    "file": "flash_1112_replay_d_v4.json",
+    "case": "v4",
+    "signal": "flash_replay",
+    "accepted": true,
+    "error": null,
+    "controller_error": null,
+    "resources_clean": true,
+    "final_step": 90,
+    "replica": 1,
+    "ranks": [
+      "6",
+      "7"
+    ],
+    "request_to_joint_seconds": 27.177955426013796,
+    "observed_exit_to_joint_seconds": null,
+    "initial_step_seconds": 2.1317674168623686,
+    "steady_step_seconds": 1.9872993384540842,
+    "independent_audit": true,
+    "replacement_bocd_samples": 41,
+    "replacement_bocd_trigger": false,
+    "source_host": "gpu-01",
+    "target_host": "gpu-03"
+  },
+  {
+    "file": "flash_1112_replay_v1.json",
+    "case": "v1",
+    "signal": "shift_process_exit",
+    "accepted": false,
+    "error": "TimeoutError: session store startup",
+    "controller_error": "TimeoutError: session store startup",
+    "resources_clean": true,
+    "final_step": null
+  },
+  {
+    "file": "flash_1112_replay_v2.json",
+    "case": "v2",
+    "signal": "flash_replay",
+    "accepted": false,
+    "error": "TimeoutError: session store startup",
+    "controller_error": "TimeoutError: session store startup",
+    "resources_clean": true,
+    "final_step": null
+  },
+  {
+    "file": "flash_1112_replay_v4.json",
+    "case": "v4",
+    "signal": "flash_replay",
+    "accepted": false,
+    "error": "TimeoutError: session store startup",
+    "controller_error": "TimeoutError: session store startup",
+    "resources_clean": true,
+    "final_step": null
+  }
+]

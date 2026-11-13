@@ -67,6 +67,10 @@ class SessionRuntime:
         self.gate=OwnerGate(self.epoch,self.c.get('partial_owner','B'))
         self.partial_owner=self.gate.owner
         self.boot=time.monotonic()
+        self.flash_profile = None
+        if self.c.get('flash_live'):
+            from .flash_live import RankProfile
+            self.flash_profile = RankProfile(self)
         self.s.configure_runtime(session_runtime_value=self,ownership_value=self.gate)
 
     def event(self,kind,**fields):
@@ -106,13 +110,20 @@ class SessionRuntime:
                 if retired:self.stopping=True;return
             self._complete_command()
             return
-        count=int(self.base_store.get('session/command_count'))
+        if self.flash_profile:
+            count, window = self.base_store.multi_get(['session/command_count', 'session/flash_window'])
+            self.flash_profile.note_window(window)
+            count = int(count)
+        else:
+            count = int(self.base_store.get('session/command_count'))
         if count<=self.sequence:return
         raw=json.loads(self.base_store.get(f'session/command/{self.sequence+1}'))
         command=Command.from_dict(raw['command'])
         if command.at_step is not None and self.progress['updates']<command.at_step:return
         if command.at_step is not None and self.progress['updates']!=command.at_step:
             raise RuntimeError('missed live command boundary')
+        if self.flash_profile:
+            self.flash_profile.interrupted(self.progress['updates'])
         self.sequence+=1;self.c['round_id']=self.sequence
         self.c['pending_command_metadata']=raw
         self._barrier(f'session/arrival/{self.sequence}')
@@ -237,6 +248,15 @@ class SessionRuntime:
             self.protocol_store.set(prefix+f'{self.replica}/{self.rank}','1')
             self.protocol_store.wait([prefix+f'{r}/{i}' for r in range(2) for i in range(self.layout.world)])
             self.event('switch_gradients_ready',step=self.progress['updates'])
+        if self.healing and self.outer.participants == 2:
+            # A survivor can finish local compute while TorchFT restores its
+            # peer. Start the short reduction deadline once both have gradients.
+            step = self.progress['updates']
+            quorum = self.outer.manager._quorum_id
+            started = time.monotonic()
+            self._barrier(f'session/native_gradients/{self.sequence}/{quorum}/{step}')
+            self.event('native_gradients_ready', step=step, quorum=quorum,
+                       wait_seconds=time.monotonic()-started)
         buckets=[b for buf in self.ddp.buffers+self.ddp.expert_parallel_buffers for b in buf.buckets]
         if relay:
             manager,retired=h.at_gradient(self.outer.manager,[b.grad_data for b in buckets],
@@ -264,11 +284,15 @@ class SessionRuntime:
             schedule=self.s.get_forward_backward_func()
             return schedule(forward_step_func=self.s.forward_step,data_iterator=iter(batches),model=self.ddp,
                 num_microbatches=len(batches),seq_length=self.c['plan']['seq_len']+self.stage.extra_positions(1),micro_batch_size=1)
-        return train_step(self.stage,self.ddp,self.optimizer,self.scheduler,self.progress,execute=execute)
+        schedule = execute
+        if self.flash_profile:
+            schedule = lambda: self.flash_profile.schedule(context['step'] + 1, execute)
+        return train_step(self.stage,self.ddp,self.optimizer,self.scheduler,self.progress,execute=schedule)
 
     def committed(self,context,computed,update):
         self.at_committed_boundary=True;self.skips=0
         if self.handoff:self.handoff.committed()
+        if self.flash_profile:self.flash_profile.committed(self.progress['updates'])
         now=time.monotonic()
         hashes=self.training_state.hashes() if self.audit else None
         self.event('session_commit',step=self.progress['updates'],sample_ids=self.current_samples,
@@ -281,6 +305,7 @@ class SessionRuntime:
 
     def skipped(self,context,computed):
         self.at_committed_boundary=True;self.skips+=1
+        if self.flash_profile:self.flash_profile.skipped(context['step']+1)
         self.event('session_skipped',step=self.progress['updates'],finite=computed.finite)
         if self.skips>=8:raise RuntimeError('session exceeded native retry bound')
 

@@ -1,0 +1,48 @@
+{
+  "configuration": {
+    "batch": 8,
+    "seq_len": 32,
+    "tp": 1,
+    "pp": 2,
+    "ep": 2,
+    "replica_world_size": 4,
+    "seed": 2026,
+    "memory_fraction": 0.12,
+    "gpu_warmup": false,
+    "low_memory": true,
+    "optimizer": "cpu_adamw"
+  },
+  "profile_window": [
+    12,
+    19
+  ],
+  "measurements": {
+    "off": {
+      "steps_4_to_40_seconds": 82.1486128430115,
+      "profile_matched_window_seconds": 18.326132913003676,
+      "controller_wall_seconds": 111.29513715900248
+    },
+    "monitor": {
+      "steps_4_to_40_seconds": 79.7011195300438,
+      "profile_matched_window_seconds": 17.63533452307456,
+      "controller_wall_seconds": 109.75808243799838
+    },
+    "profile": {
+      "steps_4_to_40_seconds": 78.98066951404326,
+      "profile_matched_window_seconds": 17.536155837064143,
+      "controller_wall_seconds": 109.2028529609961
+    }
+  },
+  "monitor_delta_vs_off_pct": {
+    "steps_4_to_40_seconds": -2.979,
+    "profile_matched_window_seconds": -3.769,
+    "controller_wall_seconds": -1.381
+  },
+  "profile_delta_vs_monitor_pct": {
+    "steps_4_to_40_seconds": -0.904,
+    "profile_matched_window_seconds": -0.562,
+    "controller_wall_seconds": -0.506
+  },
+  "conditions_per_mode": 1,
+  "interpretation": "Single shared-load trial per mode. Negative deltas are run-to-run observations and do not establish negative overhead or statistical compliance."
+}

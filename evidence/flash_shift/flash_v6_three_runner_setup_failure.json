@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "name": "flash-v6-leg-1-off",
+      "layout": "legacy",
+      "mode": "off",
+      "accepted": false,
+      "launcher_wall_seconds": 32.996787125,
+      "job_conditions": [
+        "FailureTarget",
+        "Failed",
+        "FailureTarget",
+        "Failed"
+      ],
+      "error": "incomplete Jobs ['FailureTarget', 'Failed', 'FailureTarget', 'Failed']"
+    },
+    {
+      "name": "flash-v6-leg-2-online",
+      "layout": "legacy",
+      "mode": "online",
+      "accepted": false
+    }
+  ],
+  "comparisons": []
+}

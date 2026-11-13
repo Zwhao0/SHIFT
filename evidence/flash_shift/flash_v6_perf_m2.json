@@ -1,0 +1,429 @@
+{
+  "case": "v4",
+  "signal": "benchmark_monitor",
+  "runners": 2,
+  "prepared": false,
+  "accepted": false,
+  "monitor_audit": {
+    "start": "2026-11-12T15:21:44.274247+00:00",
+    "end": "2026-11-12T15:23:01.836618+00:00",
+    "event": true,
+    "error": null,
+    "count": 36,
+    "finish_reason": "request"
+  },
+  "error": "healthy benchmark did not complete MONITOR without a trigger",
+  "summary": {
+    "name": "session_flash_v6_perf_m2",
+    "controller_pid": 1408865,
+    "session": "flash_v6_perf_m2",
+    "epoch": 0,
+    "command_count": 1,
+    "commands": [],
+    "done": true,
+    "error": null,
+    "audit": false,
+    "resources_clean": true,
+    "nodes": [
+      "node1",
+      "node0"
+    ],
+    "backend": "lab_pod",
+    "physical_nodes": {
+      "node0": "gpu-03",
+      "node1": "gpu-01"
+    },
+    "configuration": {
+      "batch": 8,
+      "seq_len": 32,
+      "tp": 1,
+      "pp": 2,
+      "ep": 2,
+      "replica_world_size": 4,
+      "seed": 2026,
+      "memory_fraction": 0.12,
+      "gpu_warmup": false,
+      "low_memory": true,
+      "optimizer": "cpu_adamw"
+    },
+    "source_sha256": {
+      "shift_full/compat.py": "8c68f770bd8f3ea99467d0b457d0e8d3f7d2952cce0f341bdca5635f9e304e76",
+      "shift_full/offloaded_adam.py": "ddce86e024a54d7200d271571455daf6f4be42a6b046369bb9da442538b974b1",
+      "shift_full/overlap_handoff.py": "abfda4bd48bb6231ef215569c34727b48e24973debd2171935373ded0fbc675e",
+      "shift_full/planned_handoff.py": "df8d56565d134ca02e551a6fa13f9d294582db49dfbee23bba25d36652be5a95",
+      "shift_full/planned_state.py": "1b3e96ba88617c66e06bf95de79af16876bce6422c55ca5da6d24790a4cd7b4b",
+      "shift_full/prepared_pg.py": "f0ed5eef8b9dbbf881609421574608f666d14d648e4579e7b2c6d0cc54124688",
+      "shift_full/reference_audit.py": "7e489ee2d66a4a8fc9168e7de2ce915ee956f1daeb7c846fbceb0fede09a49ce",
+      "shift_full/session_layout.py": "88b4c7ca65afcd34307970bfe17d82ecb69dd18d077434b7dbfd028914a09ed8",
+      "shift_full/state_digest.py": "fe2e8a941bef9dfe4b93c71c29c6245e609215fd7d12ac3d9891004f0b7d26b3",
+      "shift_full/state_inventory.py": "0eaa472d689bc83564e4d48c524ad5744297b227fb14e8fbb2575ef379edbe51",
+      "shift_full/train.py": "fe1c1b26ee9e8ed8d68407f07485ead7907c361dcb50a96e55e71ae7000cbfb3",
+      "shift_full/training_core.py": "82519423a37ac198823be504997d5975a6c8e22c25084bc239e88d0cc007b586",
+      "shift_full/transport.py": "68b76445411b3cf1e963e38f25f92082e9ce581941cd782e16239559f5137249",
+      "shift_full/v4_groups.py": "21577629bfb97a4993646f33fbc01cd9280de259cf4d2b4ef276fbd6313398c3",
+      "shift_full/v4_metadata.py": "27ae20fa5a1c3c266ce649e7d6ef3c88bbd8b0565fcfeef02bbc7e16af7bf3a9",
+      "shift_full/v4_outer.py": "e97a006188c6e630cb7ebdfa73eb30c9b0146ed99a8473b6ad49fd8c1011ad2f",
+      "shift_full/v4_protocol.py": "1c37d3b3fa65fd921620a2bd1034399e2c5dc3392d48dfbbc8c4e2a6399d89ad",
+      "shift_full/v4_reference.py": "51771156946fef3dcb1dba16d55ec1d2d5fef2b0f76bc0b75e929b7325062762",
+      "shift_full/v4_state.py": "570584487f7a7e6f265679f979103a668b7344b4a89324c1ea939feef2e4769c",
+      "shift_full/v4_train.py": "3b81617e4c729a8b7b858cc357d7c446c33221d815cc0a2dc56780502013f46e",
+      "shift_full/v4_transaction.py": "d7c3ad7b78b6bab82151ae171d131e8577b0c1c6ae7ee06a3c675624f816bd80",
+      "shift_full/v4_transaction_train.py": "6ddfba16ea64411b638d427cbc71a3bd47be03f1adf9b0b85557107ee5b58ca4",
+      "shift_full/session_engine.py": "a6836d6998c7a13de3b95f5d823a10a59f813696d1f409a9c7918285fda89667",
+      "shift_full/session_outer.py": "66777eb56d174c323f5e87c95686ee12c7bd5667473729518c9cd3f0dbea8d95",
+      "shift_full/session_control.py": "add05817e41b8e8e31b2f695f7b5b6adac53502ee5a04b4e63a23d090506c320",
+      "shift_full/training_loop.py": "c37532f1a74bfa5352f9191adeabc6fe2cb2967bdfc5c91339c9923df21eab68",
+      "scripts/session_remote.py": "1d2bedcd2f23e219c60c666005e2ffb5dbb204d705142c46d45066c0b1da7088",
+      "scripts/sessionctl.py": "44268b53de3d5c0c6536dc37d73dee387babe9886a7be141bd79bc3c30bd0565",
+      "scripts/lab_acceptance.py": "e6863ec1c366eb3e282421a430332a899a00eb8888527d859978c6d2818a677d",
+      "scripts/export_v42_session.py": "dde9e0c95f78d460a60031cb0a3c3a98b3f46a281311f1159d2a4832facfa86e",
+      "scripts/lab_actor.py": "19d2216cfc6cb1f86cff71994060ea059acdfdce21de9ec27d3c207ffaa7bb96",
+      "scripts/lab_session_backend.py": "24fc99baa58296d4afdee5082e70f97ae4dd5d265b5dd7513661d4455be6f0fa",
+      "shift_full/spare_agent.py": "888c5a4195359e9bfc7f39a50bb7400e30eb25ebc1a9500fb4537126b3a33836",
+      "shift_full/spare_pool.py": "3aed77b5ed6d22642e69b67147165bf4719990bda6aa508a2b7e645971fa03d4",
+      "shift_full/spare_selection.py": "7332dbe1f45c7c4056fae891e306aa5c6302ce61a182222fc9c88404d29f19e5",
+      "shift_full/flash_bridge.py": "09c8287bbc874cacdd291267a1426a48232e38bca1eafe7f8e0700c46496dc5f",
+      "shift_full/flash_monitor.py": "28dfa1307d3fa07062c16355f54474855280857497c86753577515ea4510a6f8"
+    },
+    "flash_alerts": [],
+    "flash_memberships": [
+      {
+        "schema": 1,
+        "session": "flash_v6_perf_m2",
+        "epoch": 0,
+        "first_step": 1,
+        "replica_world_size": 4,
+        "command_id": null,
+        "workers": {
+          "0": {
+            "replica": 0,
+            "rank": 0,
+            "actor": "g0_A",
+            "generation": 0,
+            "runner": "node0",
+            "physical_node": "gpu-03",
+            "pod_uid": "fe5a037b-eed2-43ba-9c9f-841c4c8dfb01",
+            "gpu_uuid": "478ad697-195c-b953-692c-9c2947152106"
+          },
+          "1": {
+            "replica": 0,
+            "rank": 1,
+            "actor": "g0_A",
+            "generation": 0,
+            "runner": "node0",
+            "physical_node": "gpu-03",
+            "pod_uid": "fe5a037b-eed2-43ba-9c9f-841c4c8dfb01",
+            "gpu_uuid": "e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388"
+          },
+          "2": {
+            "replica": 0,
+            "rank": 2,
+            "actor": "g0_B",
+            "generation": 0,
+            "runner": "node0",
+            "physical_node": "gpu-03",
+            "pod_uid": "fe5a037b-eed2-43ba-9c9f-841c4c8dfb01",
+            "gpu_uuid": "b8c56e78-c521-5176-4195-b4b17ba5b03b"
+          },
+          "3": {
+            "replica": 0,
+            "rank": 3,
+            "actor": "g0_B",
+            "generation": 0,
+            "runner": "node0",
+            "physical_node": "gpu-03",
+            "pod_uid": "fe5a037b-eed2-43ba-9c9f-841c4c8dfb01",
+            "gpu_uuid": "51626cd2-b802-0324-b21e-4a2c02542a58"
+          },
+          "4": {
+            "replica": 1,
+            "rank": 0,
+            "actor": "g0_D",
+            "generation": 0,
+            "runner": "node1",
+            "physical_node": "gpu-01",
+            "pod_uid": "f0e7966d-ddf9-4661-93f8-f92690faf019",
+            "gpu_uuid": "514342e8-d7fc-3a89-91fe-50c5289967ca"
+          },
+          "5": {
+            "replica": 1,
+            "rank": 1,
+            "actor": "g0_D",
+            "generation": 0,
+            "runner": "node1",
+            "physical_node": "gpu-01",
+            "pod_uid": "f0e7966d-ddf9-4661-93f8-f92690faf019",
+            "gpu_uuid": "a1e51276-ec8f-0f55-687c-a27c8ac3a14b"
+          },
+          "6": {
+            "replica": 1,
+            "rank": 2,
+            "actor": "g0_E",
+            "generation": 0,
+            "runner": "node1",
+            "physical_node": "gpu-01",
+            "pod_uid": "f0e7966d-ddf9-4661-93f8-f92690faf019",
+            "gpu_uuid": "6d230dde-62b7-e3bf-8673-903fae938ead"
+          },
+          "7": {
+            "replica": 1,
+            "rank": 3,
+            "actor": "g0_E",
+            "generation": 0,
+            "runner": "node1",
+            "physical_node": "gpu-01",
+            "pod_uid": "f0e7966d-ddf9-4661-93f8-f92690faf019",
+            "gpu_uuid": "b66ba04d-1c64-bea1-e881-2182804607f3"
+          }
+        }
+      }
+    ],
+    "flash_monitor": [
+      {
+        "epoch": 0,
+        "first_step": 1,
+        "samples": 40,
+        "worker_returncode": 0
+      }
+    ],
+    "verified_runner_sources": [
+      "node1",
+      "node0"
+    ],
+    "initial_spare_pool": {
+      "ranked": [
+        {
+          "node": "node0",
+          "instance": "fe5a037b-eed2-43ba-9c9f-841c4c8dfb01",
+          "slots": [
+            "1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+            "478ad697-195c-b953-692c-9c2947152106",
+            "e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+            "faf10164-853c-aace-b5dd-6fd736c390f4"
+          ]
+        },
+        {
+          "node": "node1",
+          "instance": "f0e7966d-ddf9-4661-93f8-f92690faf019",
+          "slots": [
+            "514342e8-d7fc-3a89-91fe-50c5289967ca",
+            "a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+            "6d230dde-62b7-e3bf-8673-903fae938ead",
+            "b66ba04d-1c64-bea1-e881-2182804607f3"
+          ]
+        }
+      ],
+      "rejected": []
+    },
+    "runner_gpu_uuids": {
+      "node1": [
+        "514342e8-d7fc-3a89-91fe-50c5289967ca",
+        "a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+        "6d230dde-62b7-e3bf-8673-903fae938ead",
+        "b66ba04d-1c64-bea1-e881-2182804607f3"
+      ],
+      "node0": [
+        "478ad697-195c-b953-692c-9c2947152106",
+        "e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+        "b8c56e78-c521-5176-4195-b4b17ba5b03b",
+        "51626cd2-b802-0324-b21e-4a2c02542a58",
+        "b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+        "af331a82-d0ba-fbdc-9fb0-edfd388b5681",
+        "1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+        "faf10164-853c-aace-b5dd-6fd736c390f4"
+      ]
+    },
+    "progress": {
+      "0": 40,
+      "1": 40
+    },
+    "ready": true,
+    "final_step": 40,
+    "cleanup_errors": [],
+    "actors": {
+      "g0_A": {
+        "node": "node0",
+        "role": "A",
+        "replica": 0,
+        "devices": [
+          0,
+          1
+        ],
+        "generation": 0,
+        "unit": "shift-session-flash_v6_perf_m2-g0_A",
+        "pod_uid": "fe5a037b-eed2-43ba-9c9f-841c4c8dfb01",
+        "gpu_uuids": [
+          "478ad697-195c-b953-692c-9c2947152106",
+          "e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388"
+        ],
+        "physical_node": "gpu-03"
+      },
+      "g0_B": {
+        "node": "node0",
+        "role": "B",
+        "replica": 0,
+        "devices": [
+          2,
+          3
+        ],
+        "generation": 0,
+        "unit": "shift-session-flash_v6_perf_m2-g0_B",
+        "pod_uid": "fe5a037b-eed2-43ba-9c9f-841c4c8dfb01",
+        "gpu_uuids": [
+          "b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "51626cd2-b802-0324-b21e-4a2c02542a58"
+        ],
+        "physical_node": "gpu-03"
+      },
+      "g0_D": {
+        "node": "node1",
+        "role": "D",
+        "replica": 1,
+        "devices": [
+          0,
+          1
+        ],
+        "generation": 0,
+        "unit": "shift-session-flash_v6_perf_m2-g0_D",
+        "pod_uid": "f0e7966d-ddf9-4661-93f8-f92690faf019",
+        "gpu_uuids": [
+          "514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "a1e51276-ec8f-0f55-687c-a27c8ac3a14b"
+        ],
+        "physical_node": "gpu-01"
+      },
+      "g0_E": {
+        "node": "node1",
+        "role": "E",
+        "replica": 1,
+        "devices": [
+          2,
+          3
+        ],
+        "generation": 0,
+        "unit": "shift-session-flash_v6_perf_m2-g0_E",
+        "pod_uid": "f0e7966d-ddf9-4661-93f8-f92690faf019",
+        "gpu_uuids": [
+          "6d230dde-62b7-e3bf-8673-903fae938ead",
+          "b66ba04d-1c64-bea1-e881-2182804607f3"
+        ],
+        "physical_node": "gpu-01"
+      }
+    },
+    "active": {
+      "0/0": [
+        "g0_A",
+        0
+      ],
+      "0/1": [
+        "g0_A",
+        1
+      ],
+      "0/2": [
+        "g0_B",
+        0
+      ],
+      "0/3": [
+        "g0_B",
+        1
+      ],
+      "1/0": [
+        "g0_D",
+        0
+      ],
+      "1/1": [
+        "g0_D",
+        1
+      ],
+      "1/2": [
+        "g0_E",
+        0
+      ],
+      "1/3": [
+        "g0_E",
+        1
+      ]
+    }
+  },
+  "steps": {
+    "4": 2.487801543000387,
+    "5": 2.603422223997768,
+    "6": 2.0474628859956283,
+    "7": 2.0630663399933837,
+    "8": 2.0497330380021594,
+    "9": 2.055763812008081,
+    "10": 2.199279591004597,
+    "11": 2.2151507750095334,
+    "12": 2.284802664013114,
+    "13": 2.3153352020017337,
+    "14": 2.278344649996143,
+    "15": 2.109370392980054,
+    "16": 2.2270870649954304,
+    "17": 2.2534209089935757,
+    "18": 2.1030641389952507,
+    "19": 2.1283888870093506,
+    "20": 2.436003545008134,
+    "21": 2.201033108023694,
+    "22": 2.1753073600120842,
+    "23": 2.2207741210004315,
+    "24": 2.2397066300036386,
+    "25": 2.219090808997862,
+    "26": 2.0815850399958435,
+    "27": 2.04937458501081,
+    "28": 2.3473829939903226,
+    "29": 2.2248274000012316,
+    "30": 2.0762712100113276,
+    "31": 1.9761086880171206,
+    "32": 1.8750378209806513,
+    "33": 2.2116410649905447,
+    "34": 2.1077530920156278,
+    "35": 2.382955013017636,
+    "36": 2.278434094012482,
+    "37": 2.177737744001206,
+    "38": 2.3461395400227048,
+    "39": 2.172935376991518,
+    "40": 1.9143474339798559
+  },
+  "commit_gaps": {
+    "4": 2.48921629198594,
+    "5": 2.604290688992478,
+    "6": 2.0482674459926784,
+    "7": 2.064097979979124,
+    "8": 2.0503027020022273,
+    "9": 2.056452051998349,
+    "10": 2.200056361994939,
+    "11": 2.2157581229985226,
+    "12": 2.285688222007593,
+    "13": 2.316058210999472,
+    "14": 2.2791776600060984,
+    "15": 2.110299394989852,
+    "16": 2.22779816298862,
+    "17": 2.254088607005542,
+    "18": 2.1036364079918712,
+    "19": 2.128940208000131,
+    "20": 2.4366918290033937,
+    "21": 2.2016795490053482,
+    "22": 2.1762714610085823,
+    "23": 2.2214259580068756,
+    "24": 2.2403755919949617,
+    "25": 2.220002457994269,
+    "26": 2.0824534179992042,
+    "27": 2.0504501160176005,
+    "28": 2.3480472619994543,
+    "29": 2.225518571009161,
+    "30": 2.0771511970087886,
+    "31": 1.9770509710069746,
+    "32": 1.8756992169946898,
+    "33": 2.2125601889856625,
+    "34": 2.1087592040130403,
+    "35": 2.3836604870157316,
+    "36": 2.2792407700035255,
+    "37": 2.178479938011151,
+    "38": 2.34700484899804,
+    "39": 2.1735852179990616,
+    "40": 1.9152505199890584
+  },
+  "train_step_seconds": 81.13594078808092,
+  "train_commit_gap_seconds": 81.16548729399801,
+  "timing_source": "post-run reconstruction from archived 8-rank commits"
+}

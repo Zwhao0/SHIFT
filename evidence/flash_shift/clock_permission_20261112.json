@@ -1,0 +1,46 @@
+{
+  "kind": "lab_clock_permission_probe",
+  "changed": false,
+  "restored": false,
+  "before": [
+    [
+      "GPU-478ad697-195c-b953-692c-9c2947152106",
+      "1980",
+      "1980",
+      "1980",
+      "0"
+    ],
+    [
+      "GPU-478ad697-195c-b953-692c-9c2947152106",
+      "1980",
+      "1980",
+      "1980",
+      "0"
+    ],
+    [
+      "GPU-478ad697-195c-b953-692c-9c2947152106",
+      "1980",
+      "1980",
+      "1980",
+      "0"
+    ],
+    [
+      "GPU-478ad697-195c-b953-692c-9c2947152106",
+      "1980",
+      "1980",
+      "1980",
+      "0"
+    ]
+  ],
+  "lower": {
+    "returncode": 4,
+    "stdout": "The current user does not have permission to change clocks for GPU 00000000:10:00.0.\nTerminating early due to previous errors.",
+    "stderr": ""
+  },
+  "server_dry_run": {
+    "capability": "SYS_ADMIN",
+    "accepted": false,
+    "policy": "lab-filesystem-jobs",
+    "reason": "Capabilities beyond the standard Docker set plus IPC_LOCK/SYS_RESOURCE are not allowed."
+  }
+}

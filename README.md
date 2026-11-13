@@ -1,4 +1,15 @@
-# SHIFT — v5 自动恢复与迁移
+# SHIFT — v6 FLASH 故障定位与恢复
+
+FLASH 定位计算慢的 rank，SHIFT 根据实验策略迁移 DP 副本或 PP 阶段。SHIFT 还处理受控的 v1 进程退出。替补在共同提交后进入新监控 epoch，可再次采集 PROFILE 和触发迁移。
+
+[联动协议、复现和实验数据](docs/flash_shift.md)
+
+v6 待完成
+
+- MONITOR 开销尚未稳定达到 1% 目标。
+- PROFILE 拒判后，同一 epoch 内尚未恢复检测。
+
+## v5 自动恢复与迁移
 
 SHIFT 在运行中从 GPU 备用池自动选择目标，支持 v1 整副本恢复、v2 整副本迁移，以及 v4 的 DP0/DP1 × PP0/PP1 阶段迁移。Spare agent 上报设备和显存，控制器按 Pod 实例和 GPU UUID 核对预留与接管。
 

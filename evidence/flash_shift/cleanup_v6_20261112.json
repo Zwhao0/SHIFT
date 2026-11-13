@@ -1,0 +1,33 @@
+{
+  "namespace": "lab",
+  "staged_unique_bytes_before": {
+    "gpu-01": {
+      "flash-v6-bench": 6759706624,
+      "shift-v6-repeat": 68825088
+    },
+    "gpu-03": {
+      "flash-v6-bench": 6726352896,
+      "shift-v6-repeat": 148819968
+    }
+  },
+  "stages_removed": {
+    "gpu-01": true,
+    "gpu-03": true
+  },
+  "remaining_experiment_resources": 0,
+  "verified_local_worker_trace_counts": {
+    "flash_v6_late_v4": 10,
+    "flash_v6_live_v2a": 12,
+    "flash_v6_live_v4b": 10,
+    "flash_v6_persistent_v2": 12,
+    "flash_v6_persistent_v4": 12,
+    "flash_v6_repeat_v4a": 12,
+    "flash_v6_two_v1p_retry": 12,
+    "flash_v6_two_v4m": 10
+  },
+  "mac_raw_storage_kib": {
+    "before": 65012,
+    "after_deduplication": 28576
+  },
+  "mac_recipes_archive": "tmp/flash-shift/v6_lab_recipes.tar.gz"
+}

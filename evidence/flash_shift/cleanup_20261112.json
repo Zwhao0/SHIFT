@@ -1,0 +1,15 @@
+{
+  "namespace": "lab",
+  "hosts": [
+    "gpu-01",
+    "gpu-03"
+  ],
+  "owned_jobs_and_pods_remaining": [],
+  "staging_paths_removed": [
+    "/data/lab/flash-shift-1112",
+    "/data/lab/shift-flash-1112"
+  ],
+  "initial_gpu_02_stage_removed": true,
+  "temporary_v1_runtime_removed": true,
+  "results_exported": true
+}

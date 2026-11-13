@@ -13,7 +13,7 @@ class NativeRecoveryTest(unittest.TestCase):
         for replica in (0,1):
             calls=[]
             r=SessionRuntime.__new__(SessionRuntime)
-            r.handoff=None;r.in_protocol=True;r.replica=replica;r.rank=0;r.phase='after'
+            r.handoff=None;r.in_protocol=True;r.healing=False;r.replica=replica;r.rank=0;r.phase='after'
             r.protocol_plan=SimpleNamespace(cut=10);r.progress={'updates':10};r.layout=SessionLayout(4)
             r.event=lambda *args,**kw:None
             r.protocol_store=SimpleNamespace(set=lambda key,value:calls.append(('set',key)),
@@ -27,6 +27,26 @@ class NativeRecoveryTest(unittest.TestCase):
             calls.clear();r.progress['updates']=11
             r.gradient_finalize(lambda:None)
             self.assertEqual(calls,[('reduce',None)])
+
+    def test_v1_recovery_waits_for_restored_peer_before_joint_reduce(self):
+        r = SessionRuntime.__new__(SessionRuntime)
+        r.handoff = None
+        r.in_protocol = False
+        r.healing = True
+        r.sequence = 1
+        r.progress = {'updates': 42}
+        r.ddp = SimpleNamespace(buffers=[], expert_parallel_buffers=[])
+        r.event = lambda *args, **kwargs: None
+        calls = []
+        r._barrier = lambda key: calls.append(key)
+        r.outer = SimpleNamespace(participants=1, manager=SimpleNamespace(_quorum_id=3),
+                                  reduce=lambda *args: calls.append('reduce'))
+        r.gradient_finalize(lambda: calls.append('native'))
+        self.assertEqual(calls, ['native', 'reduce'])
+        calls.clear()
+        r.outer.participants = 2
+        r.gradient_finalize(lambda: calls.append('native'))
+        self.assertEqual(calls, ['native', 'session/native_gradients/1/3/42', 'reduce'])
 
     def test_v4_peer_defers_quorum_until_replacement_ready_but_not_compute(self):
         from shift_full.session_outer import SessionOuter

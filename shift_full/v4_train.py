@@ -40,11 +40,22 @@ def main():
     if a.role == 'host':
         children, logs = [], []
         try:
+            if c.get('flash_live'):
+                layout = SessionLayout.from_config(c)
+                observations = out / 'flash_native' / f'{actor_prefix}{a.host_role}'
+                observations.mkdir(parents=True, exist_ok=True)
             for device in range(c.get('actor_devices',4)):
                 log = (out / f'{actor_prefix}{a.host_role}{device}.log').open('wb')
                 logs.append(log)
+                env = None
+                if c.get('flash_live'):
+                    ranks = c.get('session_actor_ranks')
+                    rank = ranks[device] if ranks else layout.rank(
+                        a.host_role, device, c.get('candidate_full_dp', False))
+                    env = dict(os.environ, RANK=str(c['session_replica'] * layout.world + rank),
+                               FLASH_V4_OUTPUT_DIR=str(observations))
                 children.append(subprocess.Popen([sys.executable, '-m', 'shift_full.v4_train', '--config', a.config,
-                    '--role', a.host_role, '--device', str(device)], stdout=log, stderr=subprocess.STDOUT))
+                    '--role', a.host_role, '--device', str(device)], stdout=log, stderr=subprocess.STDOUT, env=env))
             while any(child.poll() is None for child in children):
                 if any(child.poll() not in (None, 0) for child in children):
                     raise RuntimeError('owned worker failed')

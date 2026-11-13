@@ -1,5 +1,6 @@
 """One bounded persistent session controller; accepts live strategy commands."""
 import argparse
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict
 import fcntl
 import json
@@ -8,6 +9,7 @@ import os
 from pathlib import Path
 import socket
 import subprocess
+import sys
 import time
 
 from scripts import v1_acceptance_remote as remote
@@ -39,6 +41,15 @@ def main():
     p.add_argument('--normal-v1-exit', action='store_true', help='allow the Lab test source to exit at its committed boundary')
     p.add_argument('--prepare-v1', action='store_true', help='prepare the candidate before a controlled Lab source exit')
     p.add_argument('--lab-fixed-reference', type=Path, help='replay exact target GPU UUIDs from an accepted auto run')
+    p.add_argument('--flash-redis-socket', help='private FLASH Redis socket on the Lab controller host')
+    p.add_argument('--flash-slow-policy', choices=('v2', 'v4'))
+    p.add_argument('--flash-max-age-steps', type=int, default=32)
+    flash_mode = p.add_mutually_exclusive_group()
+    flash_mode.add_argument('--flash-calibrate', action='store_true')
+    flash_mode.add_argument('--flash-live-reference', type=Path)
+    p.add_argument('--flash-inject-epochs', type=int, default=1)
+    p.add_argument('--flash-inject-step', type=int, default=36)
+    p.add_argument('--flash-inject-rank', type=int, help='Lab-only bounded cuBLAS delay on this logical rank')
     a=p.parse_args()
     layout=SessionLayout(a.replica_world_size)
     if a.seq_len<2:p.error("seq-len must be at least two")
@@ -64,6 +75,25 @@ def main():
     if a.spare_min_mib < 1:p.error('spare memory threshold must be positive')
     if a.normal_v1_exit and not lab:p.error('--normal-v1-exit requires a Lab experiment')
     if a.prepare_v1 and not a.normal_v1_exit:p.error('--prepare-v1 requires --normal-v1-exit')
+    if bool(a.flash_redis_socket) != bool(a.flash_slow_policy) or (a.flash_redis_socket and not lab):
+        p.error('FLASH integration requires a Lab experiment, Redis socket and slow policy')
+    if a.flash_max_age_steps < 0:p.error('FLASH alert age must be nonnegative')
+    live_profile = None
+    live = a.flash_calibrate or a.flash_live_reference is not None
+    if live and not a.flash_redis_socket:p.error('live PROFILE requires the FLASH bridge')
+    if not 1 <= a.flash_inject_epochs <= 3 or (a.flash_inject_epochs > 1 and a.flash_inject_rank is None):
+        p.error('invalid FLASH injection epoch count')
+    if not 36 <= a.flash_inject_step <= 96 or (a.flash_inject_step != 36 and a.flash_inject_rank is None):
+        p.error('invalid FLASH injection start step')
+    if a.flash_inject_rank is not None and (not a.flash_live_reference or
+                                          a.flash_inject_rank not in range(2 * layout.world)):
+        p.error('compute delay requires a live reference and a valid logical rank')
+    bridge = None
+    if a.flash_redis_socket:
+        from redis.exceptions import RedisError
+        from shift_full.flash_bridge import Bridge, command as flash_command, connect, membership
+        from shift_full.flash_monitor import EpochSamples
+        bridge = Bridge(connect(a.flash_redis_socket), a.session)
     fixed_placements = {}
     if a.lab_fixed_reference:
         if not lab:p.error('--lab-fixed-reference requires a Lab experiment')
@@ -82,6 +112,9 @@ def main():
     report=dict(name=name,controller_pid=os.getpid(),session=a.session,epoch=0,command_count=0,commands=[],done=False,error=None,audit=a.audit,resources_clean=False,nodes=list(eps))
     if lab:report.update(backend='lab_pod', physical_nodes=lab.physical_nodes)
     requests=ROOT/'runtime/v3-reproduce'/name/'requests';requests.mkdir(parents=True,exist_ok=True)
+    flash_snapshot = None
+    flash_monitor = None
+    flash_monitors = []
     rootcfg=ROOT/'runtime/v3-reproduce'/(name+'.json')
     def ssh(node,code):
         return lab.python(node, code) if lab else s.ssh(eps[node],['sudo','-S','-p','','python3','-c',code],sudo_input=True)
@@ -109,6 +142,18 @@ def main():
         if a.low_memory:
             env['PYTORCH_ALLOC_CONF']='expandable_segments:True'
             env['SHIFT_CPU_ADAM']='1'
+        if devices and live:
+            libraries = ROOT / 'runtime/flash-libs'
+            site = ROOT / 'runtime/torch214/lib/python3.12/site-packages/nvidia'
+            cuda, nccl = site/'cu13/lib', site/'nccl/lib'
+            preload = [str(libraries/'libobserver.so')]
+            if a.flash_inject_rank is not None:
+                preload.append(str(libraries/'libgemm-delay.so'))
+            env.update(LD_PRELOAD=':'.join(preload), LD_LIBRARY_PATH=f'{cuda}:{nccl}',
+                       FLASH_V4_SAMPLE_STRIDE='64', FLASH_V4_PROFILE_REARM='1',
+                       FLASH_V4_CUBLAS_LIBRARY=str(cuda/'libcublas.so.13'),
+                       FLASH_V4_CUBLASLT_LIBRARY=str(cuda/'libcublasLt.so.13'),
+                       FLASH_V4_NCCL_LIBRARY=str(nccl/'libnccl.so.2'))
         if lab:
             indices = tuple(map(int, devices.split(','))) if devices else ()
             lab.launch(node, unit, command, env, out/(label+'.host.log'), indices)
@@ -156,7 +201,8 @@ def main():
         actors[label]=dict(node=node,role=role,replica=replica,devices=devices,generation=generation,unit='shift-session-'+a.session+'-'+label)
         if lab:
             cfg['session_gpu_uuids'] = list(chosen)
-            actors[label].update(pod_uid=inventory.instance, gpu_uuids=list(chosen))
+            actors[label].update(pod_uid=inventory.instance, gpu_uuids=list(chosen),
+                                 physical_node=lab.physical_nodes[node])
         if command and command['command']['policy'] == 'v4':
             cfg['session_actor_ranks'] = command['command']['ranks']
             actors[label]['ranks'] = cfg['session_actor_ranks']
@@ -204,7 +250,6 @@ print(json.dumps(out))
         return lab.indices(node) if lab else range(8)
 
     def select_target(cmd):
-        from concurrent.futures import ThreadPoolExecutor
         from dataclasses import replace
         from shift_full.spare_pool import SparePool
         from shift_full.spare_selection import Selection
@@ -270,6 +315,13 @@ print(json.dumps(out))
     report['configuration']=dict(batch=8,seq_len=a.seq_len,tp=layout.tp,pp=2,ep=2,replica_world_size=layout.world,seed=2026,memory_fraction=.12,gpu_warmup=not a.low_memory,low_memory=a.low_memory,optimizer='cpu_adamw' if a.low_memory else 'cuda_adamw')
     if a.lab_keep_dp_spread:
         report['configuration']['initial_replica_runners'] = [dp0_node, dp1_node]
+    if live:
+        from scripts.flash_live_controller import LiveProfile
+        base.update(flash_live=True, flash_inject_rank=a.flash_inject_rank,
+                    flash_inject_epochs=a.flash_inject_epochs, flash_inject_step=a.flash_inject_step)
+        live_profile = LiveProfile(out, flash_root, a.flash_live_reference, ssh, bridge)
+        report['flash_live_profile'] = live_profile.state
+        report['flash_live_profiles'] = live_profile.history
     from shift_full.v4_reference import training_sources
     report['source_sha256']=training_sources(ROOT)
     for file in ['shift_full/offloaded_adam.py','shift_full/session_layout.py','shift_full/session_engine.py','shift_full/session_outer.py','shift_full/session_control.py','shift_full/training_loop.py','scripts/session_remote.py','scripts/sessionctl.py']:
@@ -279,6 +331,86 @@ print(json.dumps(out))
                      'scripts/lab_actor.py', 'scripts/lab_session_backend.py', 'shift_full/spare_agent.py',
                      'shift_full/spare_pool.py', 'shift_full/spare_selection.py'):
             report['source_sha256'][file] = hashlib.sha256((ROOT/file).read_bytes()).hexdigest()
+    if bridge:
+        for file in ('shift_full/flash_bridge.py', 'shift_full/flash_monitor.py'):
+            report['source_sha256'][file] = hashlib.sha256((ROOT/file).read_bytes()).hexdigest()
+        report['flash_alerts'] = []
+        report['flash_memberships'] = []
+        report['flash_monitor'] = []
+    if live:
+        for file in ('scripts/flash_live_controller.py', 'shift_full/flash_live.py'):
+            report['source_sha256'][file] = hashlib.sha256((ROOT/file).read_bytes()).hexdigest()
+        libraries = ['runtime/flash-libs/libobserver.so']
+        if a.flash_inject_rank is not None:
+            libraries.append('runtime/flash-libs/libgemm-delay.so')
+        for file in libraries:
+            report['source_sha256'][file] = hashlib.sha256((ROOT/file).read_bytes()).hexdigest()
+        localizer = flash_root/'deploy/lab/shift_gemm_profile.py'
+        report['flash_live_profile']['localizer_sha256'] = hashlib.sha256(localizer.read_bytes()).hexdigest()
+        if a.flash_live_reference:
+            report['flash_live_profile']['reference_sha256'] = hashlib.sha256(
+                a.flash_live_reference.read_bytes()).hexdigest()
+
+    def monitor_flash(snapshot):
+        nonlocal flash_monitor
+        if flash_monitor:
+            flash_monitor['stop'].touch()
+        directory = out / f"flash_epoch_{snapshot['epoch']}"
+        directory.mkdir()
+        training_log = directory / 'train.jsonl'
+        training_log.touch()
+        stop = directory / 'monitor_stop'
+        env = dict(os.environ, CUDA_VISIBLE_DEVICES='', OMP_NUM_THREADS='1', OPENBLAS_NUM_THREADS='1',
+                   PYTHONPATH=f'{flash_root}:{os.environ.get("PYTHONPATH", "")}')
+        with (directory / 'worker.log').open('w') as log:
+            worker = subprocess.Popen([sys.executable, '-m', 'flash_v4.bocd_monitor',
+                '--training-log', str(training_log), '--request', str(directory/'profile_request.json'),
+                '--audit', str(directory/'bocd_audit.jsonl'), '--stop', str(stop),
+                '--max-seconds', str(a.seconds),
+                '--degradation', '0.1'], env=env, stdout=log, stderr=subprocess.STDOUT)
+        evidence = dict(epoch=snapshot['epoch'], first_step=snapshot['first_step'], samples=0)
+        report['flash_monitor'].append(evidence)
+        flash_monitor = dict(feed=EpochSamples(snapshot), log=training_log, stop=stop,
+                             worker=worker, evidence=evidence)
+        flash_monitors.append(flash_monitor)
+        if live_profile:
+            live_profile.begin_epoch(snapshot, store)
+
+    def collect_flash():
+        samples = list(flash_monitor['feed'].collect(rows))
+        if samples:
+            with flash_monitor['log'].open('a') as log:
+                log.writelines(json.dumps(sample) + '\n' for sample in samples)
+            flash_monitor['evidence']['samples'] += len(samples)
+        flash_monitor['evidence']['worker_returncode'] = flash_monitor['worker'].poll()
+
+    def poll_flash(progress):
+        try:
+            bridge.publish(flash_snapshot)
+            item = bridge.read()
+        except RedisError as error:
+            report['flash_redis_error'] = type(error).__name__
+            return
+        report.pop('flash_redis_error', None)
+        if item is None:
+            return
+        cursor, raw = item
+        try:
+            event = json.loads(raw)
+            payload = flash_command(flash_snapshot, event, a.flash_slow_policy,
+                                    min(progress.values()), a.flash_max_age_steps)
+        except (KeyError, TypeError, ValueError) as error:
+            report['flash_alerts'].append(dict(stream_id=cursor, error=str(error)))
+        else:
+            path = requests / (payload['id'] + '.json')
+            if not path.exists():
+                temporary = path.with_suffix('.flash-tmp')
+                temporary.write_text(json.dumps(payload))
+                temporary.replace(path)
+            report['flash_alerts'].append(dict(stream_id=cursor, id=payload['id'], event=event,
+                                              received_monotonic=time.monotonic()))
+        bridge.cursor = cursor
+
     save()
     try:
         if lab:
@@ -345,6 +477,8 @@ print(json.dumps(out))
             time.sleep(.1)
         store=dist.TCPStore(eps['node0'].ip,base['port'],None,False,timeout=__import__('datetime').timedelta(seconds=120),wait_for_workers=False)
         store.set('session/command_count','0')
+        if live_profile:
+            store.set('session/flash_window', '0 1 0')
         lighthouse(0)
         for role,node,replica,devices in [('A',dp0_node,0,list(range(layout.width))),('B',dp0_node,0,list(layout.affected)),('D',dp1_node,1,list(range(layout.width))),('E',dp1_node,1,list(layout.affected))]:
             label='g0_'+role;actor(label,node,role,replica,devices)
@@ -354,6 +488,10 @@ print(json.dumps(out))
         while time.monotonic()<deadline:
             collect();check()
             if not ready and store.check([f'session/ready/{r}/{i}' for r in range(2) for i in range(layout.world)]):
+                if bridge:
+                    flash_snapshot = membership(a.session, 0, 1, layout, active, actors)
+                    report['flash_memberships'].append(flash_snapshot)
+                    monitor_flash(flash_snapshot)
                 store.set('session/start','1');ready=True;report['ready']=True;save()
             progress={r:int(store.get(f'session/progress/{r}')) if store.check([f'session/progress/{r}']) else 0 for r in (0,1)}
             report['progress']=progress
@@ -469,8 +607,22 @@ print(json.dumps(dict(unit=unit,signal='SIGKILL',worker_pids=pids,main_pid=int(b
                             state['stores'][str(cmd['source_replica'])] = current['outer_store_service']
                         state['partial_owner'] = current['target_role']
                     current.update(status='completed',completed_step=done_steps.pop(),controller_seconds=time.monotonic()-current['requested_monotonic'])
-                    report['epoch']+=1;report['commands'].append(current);current=None;report['active_command']=None;save()
+                    report['epoch']+=1
+                    if bridge:
+                        flash_snapshot = membership(a.session, report['epoch'], current['completed_step'] + 1,
+                                                    layout, active, actors, cmd['id'])
+                        report['flash_memberships'].append(flash_snapshot)
+                        monitor_flash(flash_snapshot)
+                    report['commands'].append(current);current=None;report['active_command']=None;save()
             if ready and current is None:
+                if bridge:
+                    collect_flash()
+                    if live_profile:
+                        try:
+                            live_profile.poll(flash_snapshot, progress, flash_monitor['log'], rows, store)
+                        except RedisError as error:
+                            report['flash_redis_error'] = type(error).__name__
+                    poll_flash(progress)
                 if a.initial_steps and min(progress.values())>=a.initial_steps and not ref_stopped:
                     payload=dict(schema=1,session=a.session,id='reference-stop',expected_epoch=report['epoch'],action='stop',at_step=max(progress.values())+4,replica_world_size=layout.world)
                     (requests/'reference-stop.json').write_text(json.dumps(payload));ref_stopped=True
@@ -533,7 +685,12 @@ print(json.dumps(dict(unit=unit,signal='SIGKILL',worker_pids=pids,main_pid=int(b
                                 requested_monotonic=command_seen if lab else time.monotonic(),status='running')
                     if placement is not None:record['placement'] = placement
                     if a.normal_v1_exit and cmd.policy == 'v1':record['normal_source_exit'] = True
-                    if cmd.policy=='v2':lighthouse(seq);lighthouse(seq,planned_round=seq-1)
+                    if cmd.policy == 'v2':
+                        with ThreadPoolExecutor(max_workers=2) as executor:
+                            control = executor.submit(lighthouse, seq)
+                            precopy = executor.submit(lighthouse, seq, planned_round=seq-1)
+                            control.result()
+                            precopy.result()
                     # Choose the boundary after service preparation and publish before
                     # remote actor launch: slow control RPCs cannot consume the cut.
                     latest=max(int(store.get(f'session/progress/{r}')) if store.check([f'session/progress/{r}']) else 0 for r in (0,1))
@@ -574,6 +731,20 @@ print(json.dumps(dict(unit=unit,signal='SIGKILL',worker_pids=pids,main_pid=int(b
         for e in eps.values():report['error']=report['error'].replace(e.ip,'<private>')
     finally:
         cleanup=[]
+        for monitor in flash_monitors:
+            monitor['stop'].touch()
+            worker = monitor['worker']
+            try:
+                worker.wait(timeout=2)
+            except subprocess.TimeoutExpired:
+                worker.kill()
+                worker.wait(timeout=2)
+            monitor['evidence']['worker_returncode'] = worker.returncode
+        if bridge and bridge.published is not None:
+            try:
+                bridge.client.delete(bridge.membership_key)
+            except RedisError as error:
+                report['flash_redis_error'] = type(error).__name__
         for listener in reserved_lights.values():listener.close()
         for node,unit in reversed(units):
             try:

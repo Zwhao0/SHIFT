@@ -1,0 +1,449 @@
+{
+  "recoveries": {
+    "repeat_v4a": {
+      "accepted": true,
+      "runners": 3,
+      "runs": [
+        {
+          "policy": "v4",
+          "source_replica": 1,
+          "logical_ranks": [
+            "4",
+            "5"
+          ],
+          "request_to_common_seconds": 28.978,
+          "max_healthy_commit_gap_seconds": 11.92,
+          "command_complete_seconds": 36.127,
+          "source": "gpu-01",
+          "target": "gpu-03",
+          "fault_during_handoff_steps": [],
+          "rank": 4,
+          "injection_first_step": 36,
+          "trigger_step": 38,
+          "profile_steps": [
+            42,
+            49
+          ],
+          "monitor_request_to_schedule_seconds": 1.324,
+          "collection_and_score_seconds": 0.443,
+          "monitor_request_to_alert_seconds": 33.114,
+          "alert_to_command_seconds": 0.001,
+          "observed_degradation": 0.4533,
+          "monitor_request_to_common_seconds": 62.093,
+          "last_six_before_route_seconds": 3.022,
+          "steady_post_recovery_seconds": 2.073
+        },
+        {
+          "policy": "v4",
+          "source_replica": 1,
+          "logical_ranks": [
+            "4",
+            "5"
+          ],
+          "request_to_common_seconds": 26.386,
+          "max_healthy_commit_gap_seconds": 11.804,
+          "command_complete_seconds": 33.351,
+          "source": "gpu-03",
+          "target": "gpu-01",
+          "fault_during_handoff_steps": [],
+          "rank": 4,
+          "injection_first_step": 97,
+          "trigger_step": 100,
+          "profile_steps": [
+            104,
+            111
+          ],
+          "monitor_request_to_schedule_seconds": 1.595,
+          "collection_and_score_seconds": 0.604,
+          "monitor_request_to_alert_seconds": 34.573,
+          "alert_to_command_seconds": 0.001,
+          "observed_degradation": 0.5408,
+          "monitor_request_to_common_seconds": 60.96,
+          "last_six_before_route_seconds": 3.102,
+          "steady_post_recovery_seconds": 2.112
+        }
+      ],
+      "replacement_samples": 42,
+      "replacement_false_trigger": false,
+      "resources_clean": true
+    },
+    "live_v2a": {
+      "accepted": true,
+      "runners": 3,
+      "runs": [
+        {
+          "policy": "v2",
+          "source_replica": 1,
+          "logical_ranks": [
+            "4",
+            "5",
+            "6",
+            "7"
+          ],
+          "request_to_common_seconds": 27.397,
+          "max_healthy_commit_gap_seconds": 4.859,
+          "command_complete_seconds": 38.249,
+          "source": "gpu-01",
+          "target": "gpu-03",
+          "fault_during_handoff_steps": [],
+          "rank": 4,
+          "injection_first_step": 36,
+          "trigger_step": 38,
+          "profile_steps": [
+            42,
+            49
+          ],
+          "monitor_request_to_schedule_seconds": 1.45,
+          "collection_and_score_seconds": 0.444,
+          "monitor_request_to_alert_seconds": 33.275,
+          "alert_to_command_seconds": 0.002,
+          "observed_degradation": 0.4274,
+          "monitor_request_to_common_seconds": 60.674,
+          "last_six_before_route_seconds": 2.956,
+          "steady_post_recovery_seconds": 2.194
+        }
+      ],
+      "replacement_samples": 41,
+      "replacement_false_trigger": false,
+      "resources_clean": true
+    },
+    "two_v4m": {
+      "accepted": true,
+      "runners": 2,
+      "runs": [
+        {
+          "policy": "v4",
+          "source_replica": 1,
+          "logical_ranks": [
+            "6",
+            "7"
+          ],
+          "request_to_common_seconds": 26.351,
+          "max_healthy_commit_gap_seconds": 9.658,
+          "command_complete_seconds": 32.858,
+          "source": "gpu-01",
+          "target": "gpu-03",
+          "fault_during_handoff_steps": [],
+          "rank": 6,
+          "injection_first_step": 36,
+          "trigger_step": 41,
+          "profile_steps": [
+            45,
+            52
+          ],
+          "monitor_request_to_schedule_seconds": 1.475,
+          "collection_and_score_seconds": 0.47,
+          "monitor_request_to_alert_seconds": 27.254,
+          "alert_to_command_seconds": 0.002,
+          "observed_degradation": 0.239,
+          "monitor_request_to_common_seconds": 53.607,
+          "last_six_before_route_seconds": 2.774,
+          "steady_post_recovery_seconds": 2.036
+        }
+      ],
+      "replacement_samples": 41,
+      "replacement_false_trigger": false,
+      "resources_clean": true
+    },
+    "two_v1p": {
+      "accepted": false,
+      "error": "RuntimeError: confirmed Lab actor exit outside a recovery boundary: g1_D",
+      "resources_clean": true
+    },
+    "persistent_v4": {
+      "accepted": true,
+      "runners": 2,
+      "runs": [
+        {
+          "policy": "v4",
+          "source_replica": 1,
+          "logical_ranks": [
+            "4",
+            "5"
+          ],
+          "request_to_common_seconds": 27.968,
+          "max_healthy_commit_gap_seconds": 10.238,
+          "command_complete_seconds": 34.448,
+          "source": "gpu-01",
+          "target": "gpu-03",
+          "fault_during_handoff_steps": [
+            55,
+            56
+          ],
+          "rank": 4,
+          "injection_first_step": 36,
+          "trigger_step": 39,
+          "profile_steps": [
+            43,
+            50
+          ],
+          "monitor_request_to_schedule_seconds": 1.399,
+          "collection_and_score_seconds": 0.417,
+          "monitor_request_to_alert_seconds": 31.363,
+          "alert_to_command_seconds": 0.001,
+          "observed_degradation": 0.4897,
+          "monitor_request_to_common_seconds": 59.332,
+          "last_six_before_route_seconds": 3.08,
+          "steady_post_recovery_seconds": 2.046
+        },
+        {
+          "policy": "v4",
+          "source_replica": 1,
+          "logical_ranks": [
+            "4",
+            "5"
+          ],
+          "request_to_common_seconds": 27.304,
+          "max_healthy_commit_gap_seconds": 10.761,
+          "command_complete_seconds": 35.128,
+          "source": "gpu-03",
+          "target": "gpu-01",
+          "fault_during_handoff_steps": [
+            116,
+            117
+          ],
+          "rank": 4,
+          "injection_first_step": 97,
+          "trigger_step": 100,
+          "profile_steps": [
+            104,
+            111
+          ],
+          "monitor_request_to_schedule_seconds": 1.454,
+          "collection_and_score_seconds": 0.437,
+          "monitor_request_to_alert_seconds": 32.729,
+          "alert_to_command_seconds": 0.001,
+          "observed_degradation": 0.5648,
+          "monitor_request_to_common_seconds": 60.034,
+          "last_six_before_route_seconds": 3.156,
+          "steady_post_recovery_seconds": 2.013
+        }
+      ],
+      "replacement_samples": 40,
+      "replacement_false_trigger": false,
+      "resources_clean": true
+    },
+    "late_v4": {
+      "accepted": true,
+      "runners": 2,
+      "runs": [
+        {
+          "policy": "v4",
+          "source_replica": 1,
+          "logical_ranks": [
+            "6",
+            "7"
+          ],
+          "request_to_common_seconds": 28.035,
+          "max_healthy_commit_gap_seconds": 10.713,
+          "command_complete_seconds": 34.407,
+          "source": "gpu-01",
+          "target": "gpu-03",
+          "fault_during_handoff_steps": [
+            104,
+            105
+          ],
+          "rank": 6,
+          "injection_first_step": 85,
+          "trigger_step": 88,
+          "profile_steps": [
+            92,
+            99
+          ],
+          "monitor_request_to_schedule_seconds": 1.289,
+          "collection_and_score_seconds": 0.478,
+          "monitor_request_to_alert_seconds": 32.891,
+          "alert_to_command_seconds": 0.001,
+          "observed_degradation": 0.5403,
+          "monitor_request_to_common_seconds": 60.927,
+          "last_six_before_route_seconds": 3.095,
+          "steady_post_recovery_seconds": 1.96
+        }
+      ],
+      "replacement_samples": 41,
+      "replacement_false_trigger": false,
+      "resources_clean": true
+    },
+    "live_v4b": {
+      "accepted": true,
+      "runners": 3,
+      "runs": [
+        {
+          "policy": "v4",
+          "source_replica": 1,
+          "logical_ranks": [
+            "6",
+            "7"
+          ],
+          "request_to_common_seconds": 27.116,
+          "max_healthy_commit_gap_seconds": 9.918,
+          "command_complete_seconds": 34.376,
+          "source": "gpu-01",
+          "target": "gpu-03",
+          "fault_during_handoff_steps": [],
+          "rank": 6,
+          "injection_first_step": 36,
+          "trigger_step": 39,
+          "profile_steps": [
+            43,
+            50
+          ],
+          "monitor_request_to_schedule_seconds": 1.324,
+          "collection_and_score_seconds": 0.454,
+          "monitor_request_to_alert_seconds": 34.293,
+          "alert_to_command_seconds": 0.001,
+          "observed_degradation": 0.4751,
+          "monitor_request_to_common_seconds": 61.41,
+          "last_six_before_route_seconds": 3.241,
+          "steady_post_recovery_seconds": 2.22
+        }
+      ],
+      "replacement_samples": 41,
+      "replacement_false_trigger": false,
+      "resources_clean": true
+    },
+    "two_v1p_retry": {
+      "accepted": true,
+      "runners": 2,
+      "runs": [
+        {
+          "policy": "v1",
+          "source_replica": 1,
+          "logical_ranks": [
+            "4",
+            "5",
+            "6",
+            "7"
+          ],
+          "request_to_common_seconds": 31.274,
+          "max_healthy_commit_gap_seconds": 13.705,
+          "command_complete_seconds": 40.105,
+          "source": "gpu-01",
+          "target": "gpu-03",
+          "fault_during_handoff_steps": [],
+          "candidate_prepared": true,
+          "exit_observation_to_common_seconds": 12.564,
+          "last_six_before_route_seconds": 1.951,
+          "steady_post_recovery_seconds": 2.158
+        }
+      ],
+      "replacement_samples": 41,
+      "replacement_false_trigger": false,
+      "resources_clean": true
+    },
+    "persistent_v2": {
+      "accepted": true,
+      "runners": 2,
+      "runs": [
+        {
+          "policy": "v2",
+          "source_replica": 1,
+          "logical_ranks": [
+            "4",
+            "5",
+            "6",
+            "7"
+          ],
+          "request_to_common_seconds": 29.113,
+          "max_healthy_commit_gap_seconds": 4.97,
+          "command_complete_seconds": 39.01,
+          "source": "gpu-01",
+          "target": "gpu-03",
+          "fault_during_handoff_steps": [
+            56,
+            57,
+            58,
+            59
+          ],
+          "rank": 4,
+          "injection_first_step": 36,
+          "trigger_step": 39,
+          "profile_steps": [
+            43,
+            50
+          ],
+          "monitor_request_to_schedule_seconds": 1.358,
+          "collection_and_score_seconds": 0.445,
+          "monitor_request_to_alert_seconds": 31.559,
+          "alert_to_command_seconds": 0.001,
+          "observed_degradation": 0.4407,
+          "monitor_request_to_common_seconds": 60.673,
+          "last_six_before_route_seconds": 3.033,
+          "steady_post_recovery_seconds": 2.119
+        }
+      ],
+      "replacement_samples": 41,
+      "replacement_false_trigger": false,
+      "resources_clean": true
+    }
+  },
+  "shift_performance": {
+    "perf_o1": {
+      "accepted": true,
+      "error": null,
+      "controller_wall_seconds": 108.353,
+      "train_step_seconds": 77.444,
+      "train_commit_gap_seconds": 77.477,
+      "controller_wall_seconds_delta_pct": 0.466,
+      "train_step_seconds_delta_pct": -0.205,
+      "train_commit_gap_seconds_delta_pct": -0.203
+    },
+    "perf_m1": {
+      "accepted": true,
+      "error": null,
+      "controller_wall_seconds": 109.142,
+      "train_step_seconds": 80.486,
+      "train_commit_gap_seconds": 80.519,
+      "controller_wall_seconds_delta_pct": 1.197,
+      "train_step_seconds_delta_pct": 3.715,
+      "train_commit_gap_seconds_delta_pct": 3.715
+    },
+    "perf_p1": {
+      "accepted": true,
+      "error": null,
+      "controller_wall_seconds": 109.666,
+      "train_step_seconds": 79.467,
+      "train_commit_gap_seconds": 79.496,
+      "controller_wall_seconds_delta_pct": 1.683,
+      "train_step_seconds_delta_pct": 2.402,
+      "train_commit_gap_seconds_delta_pct": 2.397,
+      "profile_window_commit_gap_delta_pct": 1.978,
+      "outside_profile_commit_gap_delta_pct": 2.516
+    },
+    "perf_p2": {
+      "accepted": true,
+      "error": null,
+      "controller_wall_seconds": 104.803,
+      "train_step_seconds": 74.41,
+      "train_commit_gap_seconds": 74.442,
+      "controller_wall_seconds_delta_pct": -2.826,
+      "train_step_seconds_delta_pct": -4.115,
+      "train_commit_gap_seconds_delta_pct": -4.113,
+      "profile_window_commit_gap_delta_pct": -4.617,
+      "outside_profile_commit_gap_delta_pct": -3.97
+    },
+    "perf_m2": {
+      "accepted": false,
+      "error": "healthy benchmark did not complete MONITOR without a trigger",
+      "train_step_seconds": 81.136,
+      "train_commit_gap_seconds": 81.165,
+      "train_step_seconds_delta_pct": 4.552,
+      "train_commit_gap_seconds_delta_pct": 4.548
+    },
+    "perf_o2": {
+      "accepted": true,
+      "error": null,
+      "controller_wall_seconds": 107.349,
+      "train_step_seconds": 77.762,
+      "train_commit_gap_seconds": 77.792,
+      "controller_wall_seconds_delta_pct": -0.466,
+      "train_step_seconds_delta_pct": 0.205,
+      "train_commit_gap_seconds_delta_pct": 0.203
+    },
+    "off_drift_pct": {
+      "controller_wall_seconds": -0.927,
+      "train_step_seconds": 0.41,
+      "train_commit_gap_seconds": 0.407
+    }
+  }
+}

@@ -1,0 +1,4684 @@
+{
+  "cases": [
+    {
+      "case": "flash-1112-leg-delay-a",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 9.838,
+          "first_error": "RuntimeError: private actuation directory permissions are too broad"
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 9.411,
+          "first_error": "RuntimeError: private actuation directory permissions are too broad"
+        }
+      ],
+      "observations": [
+        {
+          "rank": 0,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 1,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 2,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 3,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 4,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 5,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 6,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 7,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 8,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 9,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 10,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 11,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 12,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 13,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 14,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 15,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        }
+      ],
+      "injections": [],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "4594822fcbc79b420f5f164dfacab8ca2f26cba1057fe0413185807013fe48ad",
+        "node1.tar.gz": "eab66c60ea47eaac03eaf6369474fdc37b45b267ba3faa5c6f81e6b8aa007e00"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-leg-delay-a-0",
+          "succeeded": 0,
+          "failed": 1
+        },
+        {
+          "name": "flash-1112-leg-delay-a-1",
+          "succeeded": 0,
+          "failed": 1
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03"
+      ],
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true
+    },
+    {
+      "case": "flash-1112-leg-delay-b",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 76.611,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 76.58,
+          "first_error": null
+        }
+      ],
+      "observations": [
+        {
+          "rank": 0,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 358
+        },
+        {
+          "rank": 1,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 358
+        },
+        {
+          "rank": 2,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 377
+        },
+        {
+          "rank": 3,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 377
+        },
+        {
+          "rank": 4,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 382
+        },
+        {
+          "rank": 5,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 382
+        },
+        {
+          "rank": 6,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 373
+        },
+        {
+          "rank": 7,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 373
+        },
+        {
+          "rank": 8,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 459
+        },
+        {
+          "rank": 9,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 459
+        },
+        {
+          "rank": 10,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 451
+        },
+        {
+          "rank": 11,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 451
+        },
+        {
+          "rank": 12,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 444
+        },
+        {
+          "rank": 13,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 444
+        },
+        {
+          "rank": 14,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 449
+        },
+        {
+          "rank": 15,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 449
+        }
+      ],
+      "injections": [
+        {
+          "actor": "stream_delay_rank_12",
+          "rank": 12,
+          "delay_launches": 0,
+          "window": []
+        }
+      ],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "dffe0fbf8f755d335fc6b903203f64e7ccd0137a077f815bd0171e528c9ace81",
+        "node1.tar.gz": "c4123ebdf35389ac29f234664708394253d677db9b92ff83b2a12adf4b868c27"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-leg-delay-b-0",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-leg-delay-b-1",
+          "succeeded": 1,
+          "failed": 0
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03"
+      ],
+      "formal_steps": 72,
+      "finite_losses": true,
+      "median_step_ms": 609.828,
+      "total_step_ms": 45477.552,
+      "p95_step_ms": 778.236,
+      "iterations_4_11_total_ms": 5113.764,
+      "train_wall_seconds": 53.40764236450195,
+      "delay_window_step_ms": 620.53,
+      "profile_request": {
+        "schema": "flash_v4.monitor_request.v1",
+        "event": {
+          "cp": 21,
+          "cp_index": 17,
+          "probability": 1.0,
+          "recovery_ratio": -0.07229081097322593,
+          "baseline_mean": 625.3525125731747,
+          "degraded_mean": 758.6940756640009,
+          "recent_mean": 768.3334453962743,
+          "degradation": 0.21322623705813193,
+          "iteration": 33,
+          "window_start": 4,
+          "window_end": 33,
+          "filtered_iterations": [],
+          "profile_seconds": 20.0,
+          "method": "Rbeast"
+        },
+        "iteration": 33,
+        "method": "flash_v1_Rbeast",
+        "degradation_threshold": 0.1
+      },
+      "monitor": {
+        "start": "2026-11-12T13:10:00.713083+00:00",
+        "end": "2026-11-12T13:10:28.282756+00:00",
+        "event": true,
+        "error": null,
+        "count": 33,
+        "finish_reason": "request"
+      },
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true,
+      "gemm_diagnostic": {
+        "alarm_rank": null,
+        "iteration_ids": [
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43
+        ],
+        "abstention_reasons": [
+          "within_healthy_strength_envelope",
+          "ambiguous_rank_margin"
+        ]
+      }
+    },
+    {
+      "case": "flash-1112-leg-off-a",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 56.13,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 56.184,
+          "first_error": null
+        }
+      ],
+      "observations": [],
+      "injections": [],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "60585b4737bbc813d6ea697f9f8b2f38158c52845a100e49eb6ed3d7b25197a2",
+        "node1.tar.gz": "24e58df7580e0bccb4136a86420cecba18cbb53af394b3b480334fdfbfe74391"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-leg-off-a-0",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-leg-off-a-1",
+          "succeeded": 1,
+          "failed": 0
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03"
+      ],
+      "formal_steps": 40,
+      "finite_losses": true,
+      "median_step_ms": 609.475,
+      "total_step_ms": 25068.692,
+      "p95_step_ms": 659.065,
+      "iterations_4_11_total_ms": 5090.032,
+      "train_wall_seconds": 32.976482629776,
+      "delay_window_step_ms": 620.047,
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true
+    },
+    {
+      "case": "flash-1112-leg-off4",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 46.368,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 46.562,
+          "first_error": null
+        }
+      ],
+      "observations": [],
+      "injections": [],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "cf11f0cdfcf48d49432880e00c6f6047f12826a1231c69d2d542c92c3a2ccacd"
+      },
+      "formal_steps": 24,
+      "finite_losses": true,
+      "median_step_ms": 621.261,
+      "total_step_ms": 14964.862,
+      "p95_step_ms": 657.44,
+      "iterations_4_11_total_ms": 5031.954,
+      "train_wall_seconds": 22.805376768112183,
+      "delay_window_step_ms": null,
+      "unique_gpus_observed": 8,
+      "device_slots_distinct": false
+    },
+    {
+      "case": "flash-1112-leg-online-a",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 21.985,
+          "first_error": "[rank6]: ValueError: Store control requires a unique supervised run identity"
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 22.028,
+          "first_error": "[rank9]: ValueError: Store control requires a unique supervised run identity"
+        }
+      ],
+      "observations": [
+        {
+          "rank": 0,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 1,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 2,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 3,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 4,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 5,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 6,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 7,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        }
+      ],
+      "injections": [],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "0df1b33f0e84d03fb7a55bef07b0cd4c757ad32ff871e440f62a0dd376707595"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-leg-online-a-0",
+          "succeeded": 0,
+          "failed": 1
+        },
+        {
+          "name": "flash-1112-leg-online-a-1",
+          "succeeded": 0,
+          "failed": 1
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03"
+      ],
+      "unique_gpus_observed": 8,
+      "device_slots_distinct": false
+    },
+    {
+      "case": "flash-1112-leg-online-b",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 57.235,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 57.108,
+          "first_error": null
+        }
+      ],
+      "observations": [
+        {
+          "rank": 0,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 1,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 2,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 3,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 4,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 5,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 6,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 7,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 8,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 9,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 10,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 11,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 12,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 13,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 14,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 15,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        }
+      ],
+      "injections": [],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "6444c28ffaf2846b6e42ee7734c6338f7b570cfd41e75d234eb64cda7e579a5c",
+        "node1.tar.gz": "745a6a42d411068b3e634f38bac18597bd990a89d6658ce9a9845ed1298dd2f2"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-leg-online-b-0",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-leg-online-b-1",
+          "succeeded": 1,
+          "failed": 0
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03"
+      ],
+      "formal_steps": 40,
+      "finite_losses": true,
+      "median_step_ms": 619.648,
+      "total_step_ms": 25285.534,
+      "p95_step_ms": 683.344,
+      "iterations_4_11_total_ms": 5166.917,
+      "train_wall_seconds": 33.21374821662903,
+      "delay_window_step_ms": 638.875,
+      "monitor": {
+        "start": "2026-11-12T13:07:38.058892+00:00",
+        "end": "2026-11-12T13:08:12.623375+00:00",
+        "event": false,
+        "error": null,
+        "count": 43,
+        "finish_reason": "stop"
+      },
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true
+    },
+    {
+      "case": "flash-1112-leg-profile-a",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 22.877,
+          "first_error": "FLASH v4: cannot resolve real cublasLtMatmul"
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 26.719,
+          "first_error": null
+        }
+      ],
+      "observations": [],
+      "injections": [],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "c034dda81533cf954e69e7272c36e621ae348d016445b2f25a0228624fbcd0c9"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-leg-profile-a-0",
+          "succeeded": 0,
+          "failed": 1
+        },
+        {
+          "name": "flash-1112-leg-profile-a-1",
+          "succeeded": 0,
+          "failed": 0
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03"
+      ],
+      "unique_gpus_observed": 8,
+      "device_slots_distinct": false
+    },
+    {
+      "case": "flash-1112-leg-profile-b",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 56.854,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 56.51,
+          "first_error": null
+        }
+      ],
+      "observations": [
+        {
+          "rank": 0,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 487
+        },
+        {
+          "rank": 1,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 487
+        },
+        {
+          "rank": 2,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 484
+        },
+        {
+          "rank": 3,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 484
+        },
+        {
+          "rank": 4,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 488
+        },
+        {
+          "rank": 5,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 488
+        },
+        {
+          "rank": 6,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 474
+        },
+        {
+          "rank": 7,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 474
+        },
+        {
+          "rank": 8,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 562
+        },
+        {
+          "rank": 9,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 562
+        },
+        {
+          "rank": 10,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 562
+        },
+        {
+          "rank": 11,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 562
+        },
+        {
+          "rank": 12,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 541
+        },
+        {
+          "rank": 13,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 541
+        },
+        {
+          "rank": 14,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 575
+        },
+        {
+          "rank": 15,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 575
+        }
+      ],
+      "injections": [],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "4274c875e989ed8879f55531d26d56f9e11aefdf0d6f881aca2975532cd10de7",
+        "node1.tar.gz": "eadcdf37eef4d08f50ce0e7a864b4aaf7403b0b31a118c8e6523b99fe59c6eef"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-leg-profile-b-0",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-leg-profile-b-1",
+          "succeeded": 1,
+          "failed": 0
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03"
+      ],
+      "formal_steps": 40,
+      "finite_losses": true,
+      "median_step_ms": 614.463,
+      "total_step_ms": 25493.84,
+      "p95_step_ms": 722.153,
+      "iterations_4_11_total_ms": 5199.386,
+      "train_wall_seconds": 33.355358839035034,
+      "delay_window_step_ms": 637.457,
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true
+    },
+    {
+      "case": "flash-1112-pp-delay-a",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 76.199,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 76.033,
+          "first_error": null
+        }
+      ],
+      "observations": [
+        {
+          "rank": 0,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 1,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 2,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 3,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 4,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 5,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 6,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 7,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 8,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 9,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 10,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 11,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 12,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 13,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 14,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 15,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        }
+      ],
+      "injections": [
+        {
+          "actor": "stream_delay_rank_12",
+          "rank": 12,
+          "delay_launches": 0,
+          "window": []
+        }
+      ],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "a087eef8507565c31d0374d1720cec92dd150a02c75d3a4f6545b8a92b5ac3c6",
+        "node1.tar.gz": "91db2f5020ce0e81cb95c4c461bfbaa0cca0b89c9c7d4ce15733f121d8eb0b51"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-pp-delay-a-0",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-pp-delay-a-1",
+          "succeeded": 1,
+          "failed": 0
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03"
+      ],
+      "formal_steps": 72,
+      "finite_losses": true,
+      "median_step_ms": 627.881,
+      "total_step_ms": 45911.373,
+      "p95_step_ms": 705.116,
+      "iterations_4_11_total_ms": 5231.668,
+      "train_wall_seconds": 52.67390251159668,
+      "delay_window_step_ms": 629.15,
+      "monitor": {
+        "start": "2026-11-12T13:06:08.871911+00:00",
+        "end": "2026-11-12T13:07:02.911372+00:00",
+        "event": false,
+        "error": null,
+        "count": 75,
+        "finish_reason": "stop"
+      },
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true
+    },
+    {
+      "case": "flash-1112-pp-off-a",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 56.485,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 56.2,
+          "first_error": null
+        }
+      ],
+      "observations": [],
+      "injections": [],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "bc466e358dec83711204ce2c9f7040efa9066f5742c75e70c44eeee436e5a79e",
+        "node1.tar.gz": "88b7f5f092600d9eee0092863227f288d442fef452afadf0bc7a8df92291a7b2"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-pp-off-a-0",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-pp-off-a-1",
+          "succeeded": 1,
+          "failed": 0
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03"
+      ],
+      "formal_steps": 40,
+      "finite_losses": true,
+      "median_step_ms": 621.917,
+      "total_step_ms": 25631.449,
+      "p95_step_ms": 665.646,
+      "iterations_4_11_total_ms": 5149.785,
+      "train_wall_seconds": 32.671486616134644,
+      "delay_window_step_ms": 639.318,
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true
+    },
+    {
+      "case": "flash-1112-pp-online-a",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 22.899,
+          "first_error": "FLASH v4: cannot resolve real cublasLtMatmul"
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 22.789,
+          "first_error": "FLASH v4: cannot resolve real cublasLtMatmul"
+        }
+      ],
+      "observations": [],
+      "injections": [],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "9d1d340c4558fd70ecd2a9b17d831b4d5a932f280fd419ca5c7fa4dc39d1805b",
+        "node1.tar.gz": "8a6031c5d3dac27ced331c8a6f8b184bdb4a4746ca15828707f90400f195935a"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-pp-online-a-0",
+          "succeeded": 0,
+          "failed": 1
+        },
+        {
+          "name": "flash-1112-pp-online-a-1",
+          "succeeded": 0,
+          "failed": 1
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03"
+      ],
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true
+    },
+    {
+      "case": "flash-1112-pp-online-b",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 56.6,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 56.534,
+          "first_error": null
+        }
+      ],
+      "observations": [
+        {
+          "rank": 0,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 1,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 2,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 3,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 4,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 5,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 6,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 7,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 8,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 9,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 10,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 11,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 12,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 13,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 14,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 15,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        }
+      ],
+      "injections": [],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "6ce79c399eea02f33a73a289f0c72ccc13d53182947fbc6434a4e46bf29e8dbe",
+        "node1.tar.gz": "c11e7e62c2c3ccf394bbdb0a0d2b73b39cf48cf7b363efeb90cd3600676b1066"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-pp-online-b-0",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-pp-online-b-1",
+          "succeeded": 1,
+          "failed": 0
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03"
+      ],
+      "formal_steps": 40,
+      "finite_losses": true,
+      "median_step_ms": 648.821,
+      "total_step_ms": 26423.512,
+      "p95_step_ms": 691.68,
+      "iterations_4_11_total_ms": 5287.133,
+      "train_wall_seconds": 32.94054460525513,
+      "delay_window_step_ms": 658.368,
+      "monitor": {
+        "start": "2026-11-12T13:11:29.123724+00:00",
+        "end": "2026-11-12T13:12:03.681174+00:00",
+        "event": false,
+        "error": null,
+        "count": 43,
+        "finish_reason": "stop"
+      },
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true
+    },
+    {
+      "case": "flash-1112-pp-profile-a",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 56.101,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 56.08,
+          "first_error": null
+        }
+      ],
+      "observations": [
+        {
+          "rank": 0,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 494
+        },
+        {
+          "rank": 1,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 494
+        },
+        {
+          "rank": 2,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 454
+        },
+        {
+          "rank": 3,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 454
+        },
+        {
+          "rank": 4,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 571
+        },
+        {
+          "rank": 5,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 571
+        },
+        {
+          "rank": 6,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 551
+        },
+        {
+          "rank": 7,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 551
+        },
+        {
+          "rank": 8,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 464
+        },
+        {
+          "rank": 9,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 464
+        },
+        {
+          "rank": 10,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 481
+        },
+        {
+          "rank": 11,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 481
+        },
+        {
+          "rank": 12,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 555
+        },
+        {
+          "rank": 13,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 555
+        },
+        {
+          "rank": 14,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 563
+        },
+        {
+          "rank": 15,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 563
+        }
+      ],
+      "injections": [],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "941c6365625f2a7ebafabfffc5774d6ef089c95f9e7fdbfb61c2aa9374171571",
+        "node1.tar.gz": "2fbdc8612b6f9030fc353b26fc368a158a039beccb78c7009883c4833f53ab4b"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-pp-profile-a-0",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-pp-profile-a-1",
+          "succeeded": 1,
+          "failed": 0
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03"
+      ],
+      "formal_steps": 40,
+      "finite_losses": true,
+      "median_step_ms": 630.462,
+      "total_step_ms": 25998.89,
+      "p95_step_ms": 695.343,
+      "iterations_4_11_total_ms": 5301.598,
+      "train_wall_seconds": 32.91494393348694,
+      "delay_window_step_ms": 644.619,
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true
+    },
+    {
+      "case": "flash-1112-three-leg-gemm",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": null,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": null,
+          "first_error": null
+        },
+        {
+          "name": "node2",
+          "wall_seconds": 3.132,
+          "first_error": null
+        }
+      ],
+      "observations": [],
+      "injections": [],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node2": [
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "53effeb6623f656b7d32d45783333731a0763708ac6782cffd5d0fea2053ed90",
+        "node2.tar.gz": "63aca5e4a6f79dcb2f73a4dfa984c805bddac410286f85e6f25a899e19dd7de4"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-three-leg-gemm-0",
+          "succeeded": 0,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-three-leg-gemm-1",
+          "succeeded": 0,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-three-leg-gemm-2",
+          "succeeded": 0,
+          "failed": 1
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03",
+        "gpu-03"
+      ],
+      "unique_gpus_observed": 12,
+      "device_slots_distinct": false
+    },
+    {
+      "case": "flash-1112-three-leg-gemm-b",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 92.313,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 92.292,
+          "first_error": null
+        },
+        {
+          "name": "node2",
+          "wall_seconds": 92.304,
+          "first_error": null
+        }
+      ],
+      "observations": [
+        {
+          "rank": 0,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 460
+        },
+        {
+          "rank": 1,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 460
+        },
+        {
+          "rank": 2,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 480
+        },
+        {
+          "rank": 3,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 480
+        },
+        {
+          "rank": 4,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 506
+        },
+        {
+          "rank": 5,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 506
+        },
+        {
+          "rank": 6,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 502
+        },
+        {
+          "rank": 7,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 502
+        },
+        {
+          "rank": 8,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 507
+        },
+        {
+          "rank": 9,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 507
+        },
+        {
+          "rank": 10,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 544
+        },
+        {
+          "rank": 11,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 544
+        },
+        {
+          "rank": 12,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 504,
+          "samples": 533
+        },
+        {
+          "rank": 13,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 525
+        },
+        {
+          "rank": 14,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 529
+        },
+        {
+          "rank": 15,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 529
+        }
+      ],
+      "injections": [
+        {
+          "actor": "gemm_delay",
+          "rank": 12,
+          "delay_launches": 2304,
+          "window": [
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67
+          ]
+        }
+      ],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ],
+        "node2": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "8f09981a30c757999b38be12a372d17714e5feb7fd820be2d19bb4f575582779",
+        "node1.tar.gz": "c1ee5991781d5b9b8fafcd35277c684a9b2a2c81c20616794f1ec2b153a4361e",
+        "node2.tar.gz": "6a517b0fd9f547912e8666498193b612f01fbd486298629259a3fd03ed95916e"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-three-leg-gemm-b-0",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-three-leg-gemm-b-1",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-three-leg-gemm-b-2",
+          "succeeded": 1,
+          "failed": 0
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03",
+        "gpu-03"
+      ],
+      "formal_steps": 72,
+      "finite_losses": true,
+      "median_step_ms": 871.832,
+      "total_step_ms": 61848.341,
+      "p95_step_ms": 953.358,
+      "iterations_4_11_total_ms": 6791.983,
+      "train_wall_seconds": 70.55024862289429,
+      "delay_window_step_ms": 905.743,
+      "profile_request": {
+        "schema": "flash_v4.monitor_request.v1",
+        "event": {
+          "cp": 34,
+          "cp_index": 24,
+          "probability": 0.9431250095367432,
+          "recovery_ratio": 0.15708731287303704,
+          "baseline_mean": 812.4031193741151,
+          "degraded_mean": 898.9660324004944,
+          "recent_mean": 885.3680969987181,
+          "degradation": 0.10655167485455791,
+          "iteration": 38,
+          "window_start": 9,
+          "window_end": 38,
+          "filtered_iterations": [
+            28
+          ],
+          "profile_seconds": 20.0,
+          "method": "Rbeast"
+        },
+        "iteration": 38,
+        "method": "flash_v1_Rbeast",
+        "degradation_threshold": 0.1
+      },
+      "monitor": {
+        "start": "2026-11-12T14:29:54.798120+00:00",
+        "end": "2026-11-12T14:30:32.953640+00:00",
+        "event": true,
+        "error": null,
+        "count": 38,
+        "finish_reason": "request"
+      },
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true,
+      "gemm_diagnostic": {
+        "alarm_rank": 12,
+        "iteration_ids": [
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51
+        ],
+        "abstention_reasons": []
+      },
+      "live_gemm_regression": {
+        "alarm_rank": 12,
+        "iteration_ids": [
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51
+        ],
+        "abstention_reasons": [],
+        "evidence": "flash_v4_gemm_regression",
+        "iteration_after_inference": 55,
+        "later_iteration": 58,
+        "training_advanced": true,
+        "collection_and_inference_seconds": 1.5331354589870898
+      },
+      "frozen_error": "flash_v4.offline_localizer.InputError: candidate requires kernel evidence on every rank/iteration"
+    },
+    {
+      "case": "flash-1112-three-leg-off",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 180.01,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 180.007,
+          "first_error": null
+        },
+        {
+          "name": "node2",
+          "wall_seconds": 180.007,
+          "first_error": null
+        }
+      ],
+      "observations": [],
+      "injections": [],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681"
+        ],
+        "node2": [
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "87108a5a65b3896f0bff8989ab274f48b15775b39d3784894b543f541a88726e",
+        "node1.tar.gz": "508acf133ccfa8badf4a38523a8719a4de60d2eb5ce7ea209bc6c9314f38e16e",
+        "node2.tar.gz": "57154a09610587a68e567d8a459bffe7678797faa07c64426626db653f81da31"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-three-leg-off-0",
+          "succeeded": 0,
+          "failed": 1
+        },
+        {
+          "name": "flash-1112-three-leg-off-1",
+          "succeeded": 0,
+          "failed": 1
+        },
+        {
+          "name": "flash-1112-three-leg-off-2",
+          "succeeded": 0,
+          "failed": 1
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03",
+        "gpu-03"
+      ],
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true
+    },
+    {
+      "case": "flash-1112-three-leg-off-b",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 62.495,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 62.285,
+          "first_error": null
+        },
+        {
+          "name": "node2",
+          "wall_seconds": 62.285,
+          "first_error": null
+        }
+      ],
+      "observations": [],
+      "injections": [],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681"
+        ],
+        "node2": [
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "01adfb7fe7ede0bcd6277ab54d9b00c1578cd7e8748d807e31a503fdb589978c",
+        "node1.tar.gz": "457edc0601fb965b89812e28bb61eba61d827cd4e1b4460d24d38d3169453a4c",
+        "node2.tar.gz": "518dc3cb25d762c782fbe37ceb69af3bc61d13b7849c4583496bb61c1e9acab3"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-three-leg-off-b-0",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-three-leg-off-b-1",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-three-leg-off-b-2",
+          "succeeded": 1,
+          "failed": 0
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03",
+        "gpu-03"
+      ],
+      "formal_steps": 40,
+      "finite_losses": true,
+      "median_step_ms": 798.321,
+      "total_step_ms": 32372.869,
+      "p95_step_ms": 851.217,
+      "iterations_4_11_total_ms": 6483.297,
+      "train_wall_seconds": 41.00163269042969,
+      "delay_window_step_ms": 807.839,
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true
+    },
+    {
+      "case": "flash-1112-three-leg-online",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 64.097,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 64.288,
+          "first_error": null
+        },
+        {
+          "name": "node2",
+          "wall_seconds": 64.286,
+          "first_error": null
+        }
+      ],
+      "observations": [
+        {
+          "rank": 0,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 1,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 2,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 3,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 4,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 5,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 6,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 7,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 8,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 9,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 10,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 11,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 12,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 13,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 14,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 15,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        }
+      ],
+      "injections": [],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae"
+        ],
+        "node2": [
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "d145331913574ad4a33c7b8de8c38f368b2dc43a4ba288a6172a73f093b70436",
+        "node1.tar.gz": "ea27bc689b9321db561ab358ff43778518f2cb3f263d3f9151297636dae9646a",
+        "node2.tar.gz": "a74012e536cf43afc0e12b329375466db4653e76df7fd9c9446a7e0ea91e7309"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-three-leg-online-0",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-three-leg-online-1",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-three-leg-online-2",
+          "succeeded": 1,
+          "failed": 0
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03",
+        "gpu-03"
+      ],
+      "formal_steps": 40,
+      "finite_losses": true,
+      "median_step_ms": 816.508,
+      "total_step_ms": 33266.188,
+      "p95_step_ms": 1014.551,
+      "iterations_4_11_total_ms": 6634.886,
+      "train_wall_seconds": 41.96498942375183,
+      "delay_window_step_ms": 820.31,
+      "monitor": {
+        "start": "2026-11-12T13:33:15.334703+00:00",
+        "end": "2026-11-12T13:33:59.364094+00:00",
+        "event": false,
+        "error": null,
+        "count": 43,
+        "finish_reason": "stop"
+      },
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true
+    },
+    {
+      "case": "flash-1112-three-leg-profile",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 62.5,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 62.688,
+          "first_error": null
+        },
+        {
+          "name": "node2",
+          "wall_seconds": 62.688,
+          "first_error": null
+        }
+      ],
+      "observations": [
+        {
+          "rank": 0,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 487
+        },
+        {
+          "rank": 1,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 487
+        },
+        {
+          "rank": 2,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 484
+        },
+        {
+          "rank": 3,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 484
+        },
+        {
+          "rank": 4,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 488
+        },
+        {
+          "rank": 5,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 488
+        },
+        {
+          "rank": 6,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 474
+        },
+        {
+          "rank": 7,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 474
+        },
+        {
+          "rank": 8,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 562
+        },
+        {
+          "rank": 9,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 562
+        },
+        {
+          "rank": 10,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 562
+        },
+        {
+          "rank": 11,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 562
+        },
+        {
+          "rank": 12,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 541
+        },
+        {
+          "rank": 13,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 541
+        },
+        {
+          "rank": 14,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 575
+        },
+        {
+          "rank": 15,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 575
+        }
+      ],
+      "injections": [],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681"
+        ],
+        "node2": [
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "dc1ed3da1b8827aac5399d6409848b95dacaf2d104734dc5ae9ae0b575cac984",
+        "node1.tar.gz": "770eb0171877c571b8aba7df39cb5ee3aba898b8433d66c5846553e56ed90f4a",
+        "node2.tar.gz": "1f750bc0380bcf3cdb291acc1e2d782c87cc03bca3ee6080c3d65d83c5b916de"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-three-leg-profile-0",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-three-leg-profile-1",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-three-leg-profile-2",
+          "succeeded": 1,
+          "failed": 0
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03",
+        "gpu-03"
+      ],
+      "formal_steps": 40,
+      "finite_losses": true,
+      "median_step_ms": 818.162,
+      "total_step_ms": 33645.649,
+      "p95_step_ms": 1002.837,
+      "iterations_4_11_total_ms": 6880.777,
+      "train_wall_seconds": 42.3672833442688,
+      "delay_window_step_ms": 829.126,
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true
+    },
+    {
+      "case": "flash-1112-three-pp-gemm",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": null,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": null,
+          "first_error": null
+        },
+        {
+          "name": "node2",
+          "wall_seconds": 3.172,
+          "first_error": null
+        }
+      ],
+      "observations": [],
+      "injections": [],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node2": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "53b3b59faac1af5ae32e970e40cb659ce8f85ad41addb26ea9a1e25cf0e78d27",
+        "node2.tar.gz": "74e8e25b10a8fe810834ac161d298fba4612c88d1d06d494c9131108cf034155"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-three-pp-gemm-0",
+          "succeeded": 0,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-three-pp-gemm-1",
+          "succeeded": 0,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-three-pp-gemm-2",
+          "succeeded": 0,
+          "failed": 1
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03",
+        "gpu-03"
+      ],
+      "unique_gpus_observed": 12,
+      "device_slots_distinct": false
+    },
+    {
+      "case": "flash-1112-three-pp-gemm-b",
+      "pods": [
+        {
+          "name": "node1",
+          "wall_seconds": 92.69,
+          "first_error": null
+        },
+        {
+          "name": "node2",
+          "wall_seconds": 92.893,
+          "first_error": null
+        }
+      ],
+      "observations": [
+        {
+          "rank": 0,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 460
+        },
+        {
+          "rank": 1,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 460
+        },
+        {
+          "rank": 2,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 480
+        },
+        {
+          "rank": 3,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 480
+        },
+        {
+          "rank": 4,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 507
+        },
+        {
+          "rank": 5,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 507
+        },
+        {
+          "rank": 6,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 544
+        },
+        {
+          "rank": 7,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 544
+        },
+        {
+          "rank": 8,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 506
+        },
+        {
+          "rank": 9,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 506
+        },
+        {
+          "rank": 10,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 502
+        },
+        {
+          "rank": 11,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 502
+        },
+        {
+          "rank": 12,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 504,
+          "samples": 533
+        },
+        {
+          "rank": 13,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 525
+        },
+        {
+          "rank": 14,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 529
+        },
+        {
+          "rank": 15,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 529
+        }
+      ],
+      "injections": [
+        {
+          "actor": "gemm_delay",
+          "rank": 12,
+          "delay_launches": 2304,
+          "window": [
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67
+          ]
+        }
+      ],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681"
+        ],
+        "node2": [
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "ea51fd74b8260a9834e67dce7425a01579d5684cd9eca9ef271e97de76337f8c",
+        "node1.tar.gz": "3f5b74c01fae9d8982623e6bff62a3aba2e65d8205e6a4cb19bfba54d2422458",
+        "node2.tar.gz": "870e35df9485f282dfa5db43ed4d44dc5ef4cf2ebbe9c7ddef42bc50083af820"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-three-pp-gemm-b-1",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-three-pp-gemm-b-2",
+          "succeeded": 1,
+          "failed": 0
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03",
+        "gpu-03"
+      ],
+      "formal_steps": 72,
+      "finite_losses": true,
+      "median_step_ms": 899.553,
+      "total_step_ms": 63210.888,
+      "p95_step_ms": 942.24,
+      "iterations_4_11_total_ms": 6873.392,
+      "train_wall_seconds": 71.8839213848114,
+      "delay_window_step_ms": 931.244,
+      "profile_request": {
+        "schema": "flash_v4.monitor_request.v1",
+        "event": {
+          "cp": 34,
+          "cp_index": 21,
+          "probability": 0.999416708946228,
+          "recovery_ratio": 0.04078512373332908,
+          "baseline_mean": 796.3124108719057,
+          "degraded_mean": 906.3400394483729,
+          "recent_mean": 901.8525490027969,
+          "degradation": 0.13817143507281854,
+          "iteration": 42,
+          "window_start": 13,
+          "window_end": 42,
+          "filtered_iterations": [],
+          "profile_seconds": 20.0,
+          "method": "Rbeast"
+        },
+        "iteration": 42,
+        "method": "flash_v1_Rbeast",
+        "degradation_threshold": 0.1
+      },
+      "monitor": {
+        "start": "2026-11-12T14:31:39.051877+00:00",
+        "end": "2026-11-12T14:32:20.941505+00:00",
+        "event": true,
+        "error": null,
+        "count": 42,
+        "finish_reason": "request"
+      },
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true,
+      "gemm_diagnostic": {
+        "alarm_rank": 12,
+        "iteration_ids": [
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51
+        ],
+        "abstention_reasons": []
+      },
+      "frozen_error": "flash_v4.offline_localizer.InputError: candidate requires kernel evidence on every rank/iteration"
+    },
+    {
+      "case": "flash-1112-three-pp-off",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": null,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 12.925,
+          "first_error": "[rank10]: ValueError: node-local layout requires world size 16 and LOCAL_WORLD_SIZE=8"
+        },
+        {
+          "name": "node2",
+          "wall_seconds": 12.853,
+          "first_error": "[rank15]: ValueError: node-local layout requires world size 16 and LOCAL_WORLD_SIZE=8"
+        }
+      ],
+      "observations": [],
+      "injections": [],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae"
+        ],
+        "node2": [
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "62f6716c83e68f084e5726ee9ff055155f8a2c5c864dda4e839c42961fb2ccf0",
+        "node1.tar.gz": "e4baf0809eca19e285d17c2a124e4412d9b140772c3ce9fdda3f19b06b4515ef",
+        "node2.tar.gz": "e97d04b76c59a1f1642ad44874c083b47ae6caaa7dfcc6287e582cee86b40157"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-three-pp-off-0",
+          "succeeded": 0,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-three-pp-off-1",
+          "succeeded": 0,
+          "failed": 1
+        },
+        {
+          "name": "flash-1112-three-pp-off-2",
+          "succeeded": 0,
+          "failed": 1
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03",
+        "gpu-03"
+      ],
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true
+    },
+    {
+      "case": "flash-1112-three-pp-off-b",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 63.088,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 63.29,
+          "first_error": null
+        },
+        {
+          "name": "node2",
+          "wall_seconds": 63.284,
+          "first_error": null
+        }
+      ],
+      "observations": [],
+      "injections": [],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49"
+        ],
+        "node2": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "c3a50a7da897117c9a3be2f63125ea9264bfbbf8f37fd47e4b8b8ee9334e7e7d",
+        "node1.tar.gz": "7f24b3cfaea6c581a9f4c8cb03e4b8b27cd1f24b1630c1d51c88b6cf48c95ed8",
+        "node2.tar.gz": "8f23e88a3a9be08060b16afedcaa97ed9b423baebc3f311385205ba23d2d670b"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-three-pp-off-b-0",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-three-pp-off-b-1",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-three-pp-off-b-2",
+          "succeeded": 1,
+          "failed": 0
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03",
+        "gpu-03"
+      ],
+      "formal_steps": 40,
+      "finite_losses": true,
+      "median_step_ms": 816.854,
+      "total_step_ms": 33267.757,
+      "p95_step_ms": 925.82,
+      "iterations_4_11_total_ms": 6982.624,
+      "train_wall_seconds": 41.810837507247925,
+      "delay_window_step_ms": 797.385,
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true
+    },
+    {
+      "case": "flash-1112-three-pp-online",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 62.894,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 62.487,
+          "first_error": null
+        },
+        {
+          "name": "node2",
+          "wall_seconds": 62.287,
+          "first_error": null
+        }
+      ],
+      "observations": [
+        {
+          "rank": 0,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 1,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 2,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 3,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 4,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 5,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 6,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 7,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 8,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 9,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 10,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 11,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 12,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 13,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 14,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 15,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        }
+      ],
+      "injections": [],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ],
+        "node2": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "63b832325859080d2d5391721a2845f35b001495c279e902fdf2c6af9fc2dbd3",
+        "node1.tar.gz": "0ed39703392246a2ad85117eeb1e9c1783c8655ef29ea7d9aa587429716d79a2",
+        "node2.tar.gz": "09f97bb4416a57b776e9473463b9c8d66d4b0bed502ca0e001374ba27ae4148b"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-three-pp-online-0",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-three-pp-online-1",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-three-pp-online-2",
+          "succeeded": 1,
+          "failed": 0
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03",
+        "gpu-03"
+      ],
+      "formal_steps": 40,
+      "finite_losses": true,
+      "median_step_ms": 805.108,
+      "total_step_ms": 32849.691,
+      "p95_step_ms": 918.325,
+      "iterations_4_11_total_ms": 6675.748,
+      "train_wall_seconds": 41.575413942337036,
+      "delay_window_step_ms": 815.709,
+      "monitor": {
+        "start": "2026-11-12T13:35:43.428207+00:00",
+        "end": "2026-11-12T13:36:26.927034+00:00",
+        "event": false,
+        "error": null,
+        "count": 43,
+        "finish_reason": "stop"
+      },
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true
+    },
+    {
+      "case": "flash-1112-three-pp-profile",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 64.292,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 64.29,
+          "first_error": null
+        },
+        {
+          "name": "node2",
+          "wall_seconds": 64.078,
+          "first_error": null
+        }
+      ],
+      "observations": [
+        {
+          "rank": 0,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 487
+        },
+        {
+          "rank": 1,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 487
+        },
+        {
+          "rank": 2,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 484
+        },
+        {
+          "rank": 3,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 484
+        },
+        {
+          "rank": 4,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 562
+        },
+        {
+          "rank": 5,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 562
+        },
+        {
+          "rank": 6,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 562
+        },
+        {
+          "rank": 7,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 562
+        },
+        {
+          "rank": 8,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 488
+        },
+        {
+          "rank": 9,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 488
+        },
+        {
+          "rank": 10,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 474
+        },
+        {
+          "rank": 11,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 474
+        },
+        {
+          "rank": 12,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 541
+        },
+        {
+          "rank": 13,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 541
+        },
+        {
+          "rank": 14,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 575
+        },
+        {
+          "rank": 15,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 575
+        }
+      ],
+      "injections": [],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ],
+        "node2": [
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "4909ea5871b84f944d2c0eb661af563999204be3540911789a9d5f8575d08114",
+        "node1.tar.gz": "c3a6dee54960c927aed7b254f487b083b431c335c5685c0e43fac8d847f3a966",
+        "node2.tar.gz": "d1672eb413d449449a879c8dfef36f1a464bf90ccb8420872ca3be171cf15002"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-three-pp-profile-0",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-three-pp-profile-1",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-three-pp-profile-2",
+          "succeeded": 1,
+          "failed": 0
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03",
+        "gpu-03"
+      ],
+      "formal_steps": 40,
+      "finite_losses": true,
+      "median_step_ms": 840.969,
+      "total_step_ms": 34482.658,
+      "p95_step_ms": 970.099,
+      "iterations_4_11_total_ms": 7215.129,
+      "train_wall_seconds": 43.27790975570679,
+      "delay_window_step_ms": 869.619,
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true
+    },
+    {
+      "case": "flash-1112-two-leg-gemm",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 73.501,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 73.501,
+          "first_error": null
+        }
+      ],
+      "observations": [
+        {
+          "rank": 0,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 1,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 2,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 3,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 4,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 5,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 6,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 7,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 8,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 9,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 10,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 11,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 12,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 13,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 14,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 15,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        }
+      ],
+      "injections": [
+        {
+          "actor": "gemm_delay",
+          "rank": 12,
+          "delay_launches": 2304,
+          "window": [
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67
+          ]
+        }
+      ],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "8002e208edd1cd67616ef725b059612b69473d27bdaa8eaab40cdbfd79429951",
+        "node1.tar.gz": "558cad4c0722dbad03c316753f8b092eaab831f393ee088a6bf884c001910b58"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-two-leg-gemm-0",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-two-leg-gemm-1",
+          "succeeded": 1,
+          "failed": 0
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03"
+      ],
+      "formal_steps": 72,
+      "finite_losses": true,
+      "median_step_ms": 618.178,
+      "total_step_ms": 45224.337,
+      "p95_step_ms": 740.127,
+      "iterations_4_11_total_ms": 5085.122,
+      "train_wall_seconds": 53.17637825012207,
+      "delay_window_step_ms": 626.772,
+      "monitor": {
+        "start": "2026-11-12T13:38:10.934374+00:00",
+        "end": "2026-11-12T13:39:05.611189+00:00",
+        "event": false,
+        "error": null,
+        "count": 75,
+        "finish_reason": "stop"
+      },
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true
+    },
+    {
+      "case": "flash-1112-two-leg-gemm-b",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 79.101,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 79.099,
+          "first_error": null
+        }
+      ],
+      "observations": [
+        {
+          "rank": 0,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 460
+        },
+        {
+          "rank": 1,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 460
+        },
+        {
+          "rank": 2,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 480
+        },
+        {
+          "rank": 3,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 480
+        },
+        {
+          "rank": 4,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 506
+        },
+        {
+          "rank": 5,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 506
+        },
+        {
+          "rank": 6,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 502
+        },
+        {
+          "rank": 7,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 502
+        },
+        {
+          "rank": 8,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 507
+        },
+        {
+          "rank": 9,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 507
+        },
+        {
+          "rank": 10,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 544
+        },
+        {
+          "rank": 11,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 544
+        },
+        {
+          "rank": 12,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 504,
+          "samples": 533
+        },
+        {
+          "rank": 13,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 525
+        },
+        {
+          "rank": 14,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 529
+        },
+        {
+          "rank": 15,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 529
+        }
+      ],
+      "injections": [
+        {
+          "actor": "gemm_delay",
+          "rank": 12,
+          "delay_launches": 2304,
+          "window": [
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67
+          ]
+        }
+      ],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "42a4d37d6d5d8b384088c2d0bfa43544c694944dae332a1ca12c1ff2bce4be80",
+        "node1.tar.gz": "3814230bfd5c1dfd68ed4fed69f761764e2c29adeb77025573eb935623c428c2"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-two-leg-gemm-b-0",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-two-leg-gemm-b-1",
+          "succeeded": 1,
+          "failed": 0
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03"
+      ],
+      "formal_steps": 72,
+      "finite_losses": true,
+      "median_step_ms": 662.152,
+      "total_step_ms": 50501.686,
+      "p95_step_ms": 791.524,
+      "iterations_4_11_total_ms": 5148.068,
+      "train_wall_seconds": 58.405686140060425,
+      "delay_window_step_ms": 780.733,
+      "profile_request": {
+        "schema": "flash_v4.monitor_request.v1",
+        "event": {
+          "cp": 36,
+          "cp_index": 26,
+          "probability": 0.9999998211860657,
+          "recovery_ratio": 0.02096870496947012,
+          "baseline_mean": 634.2973255780705,
+          "degraded_mean": 772.0958450033019,
+          "recent_mean": 769.2063885042444,
+          "degradation": 0.21724594108866513,
+          "iteration": 38,
+          "window_start": 9,
+          "window_end": 38,
+          "filtered_iterations": [
+            28
+          ],
+          "profile_seconds": 20.0,
+          "method": "Rbeast"
+        },
+        "iteration": 38,
+        "method": "flash_v1_Rbeast",
+        "degradation_threshold": 0.1
+      },
+      "monitor": {
+        "start": "2026-11-12T14:34:58.497011+00:00",
+        "end": "2026-11-12T14:35:29.283408+00:00",
+        "event": true,
+        "error": null,
+        "count": 38,
+        "finish_reason": "request"
+      },
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true,
+      "gemm_diagnostic": {
+        "alarm_rank": 12,
+        "iteration_ids": [
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51
+        ],
+        "abstention_reasons": []
+      },
+      "live_gemm_regression": {
+        "alarm_rank": 12,
+        "iteration_ids": [
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51
+        ],
+        "abstention_reasons": [],
+        "evidence": "flash_v4_gemm_regression",
+        "iteration_after_inference": 55,
+        "later_iteration": 58,
+        "training_advanced": true,
+        "collection_and_inference_seconds": 1.2035775420081336
+      },
+      "frozen_error": "flash_v4.offline_localizer.InputError: candidate requires kernel evidence on every rank/iteration"
+    },
+    {
+      "case": "flash-1112-two-pp-gemm",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 72.902,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 72.695,
+          "first_error": null
+        }
+      ],
+      "observations": [
+        {
+          "rank": 0,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 1,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 2,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 3,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 4,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 5,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 6,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 7,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 8,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 9,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 10,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 11,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 12,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 13,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 14,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        },
+        {
+          "rank": 15,
+          "complete": false,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 0
+        }
+      ],
+      "injections": [
+        {
+          "actor": "gemm_delay",
+          "rank": 12,
+          "delay_launches": 2304,
+          "window": [
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67
+          ]
+        }
+      ],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "6575364eb388886c402452c3769ee2d010b6e2611eaf7184ea3ba7b6069cf499",
+        "node1.tar.gz": "807e2a6e24e54d35c08dd23fc637fb81e39ef7a83128167f7854eec097fb0d18"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-two-pp-gemm-0",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-two-pp-gemm-1",
+          "succeeded": 1,
+          "failed": 0
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03"
+      ],
+      "formal_steps": 72,
+      "finite_losses": true,
+      "median_step_ms": 621.553,
+      "total_step_ms": 45750.52,
+      "p95_step_ms": 711.812,
+      "iterations_4_11_total_ms": 5125.136,
+      "train_wall_seconds": 52.719314098358154,
+      "delay_window_step_ms": 633.249,
+      "monitor": {
+        "start": "2026-11-12T13:39:38.870380+00:00",
+        "end": "2026-11-12T13:40:33.036793+00:00",
+        "event": false,
+        "error": null,
+        "count": 75,
+        "finish_reason": "stop"
+      },
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true
+    },
+    {
+      "case": "flash-1112-two-pp-gemm-b",
+      "pods": [
+        {
+          "name": "node0",
+          "wall_seconds": 76.5,
+          "first_error": null
+        },
+        {
+          "name": "node1",
+          "wall_seconds": 76.298,
+          "first_error": null
+        }
+      ],
+      "observations": [
+        {
+          "rank": 0,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 491
+        },
+        {
+          "rank": 1,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 491
+        },
+        {
+          "rank": 2,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 486
+        },
+        {
+          "rank": 3,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 486
+        },
+        {
+          "rank": 4,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 566
+        },
+        {
+          "rank": 5,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 566
+        },
+        {
+          "rank": 6,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 579
+        },
+        {
+          "rank": 7,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 579
+        },
+        {
+          "rank": 8,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 480
+        },
+        {
+          "rank": 9,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 480
+        },
+        {
+          "rank": 10,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 460
+        },
+        {
+          "rank": 11,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 460
+        },
+        {
+          "rank": 12,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 504,
+          "samples": 556
+        },
+        {
+          "rank": 13,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 548
+        },
+        {
+          "rank": 14,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 568
+        },
+        {
+          "rank": 15,
+          "complete": true,
+          "dropped": 0,
+          "kernel_candidates": 0,
+          "samples": 568
+        }
+      ],
+      "injections": [
+        {
+          "actor": "gemm_delay",
+          "rank": 12,
+          "delay_launches": 2304,
+          "window": [
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67
+          ]
+        }
+      ],
+      "devices": {
+        "node0": [
+          "GPU-514342e8-d7fc-3a89-91fe-50c5289967ca",
+          "GPU-a1e51276-ec8f-0f55-687c-a27c8ac3a14b",
+          "GPU-6d230dde-62b7-e3bf-8673-903fae938ead",
+          "GPU-b66ba04d-1c64-bea1-e881-2182804607f3",
+          "GPU-e457c3f5-32d8-1444-7af0-24f7db939712",
+          "GPU-3d359ec0-4de6-9360-8faf-eb1d70685d4b",
+          "GPU-054b90ab-93bd-a0ab-15e1-1e54202ede83",
+          "GPU-9b8794c0-638b-8da7-f071-5b11f3b54cb0"
+        ],
+        "node1": [
+          "GPU-478ad697-195c-b953-692c-9c2947152106",
+          "GPU-e8f8ae8f-1909-36cd-9f1b-dd78bf2c8388",
+          "GPU-b8c56e78-c521-5176-4195-b4b17ba5b03b",
+          "GPU-51626cd2-b802-0324-b21e-4a2c02542a58",
+          "GPU-b6b21c91-2c4e-c9e2-b809-18afd66178ae",
+          "GPU-af331a82-d0ba-fbdc-9fb0-edfd388b5681",
+          "GPU-1fee5d05-7b36-6a5f-4974-e0f9a5b48a49",
+          "GPU-faf10164-853c-aace-b5dd-6fd736c390f4"
+        ]
+      },
+      "artifacts": {
+        "node0.tar.gz": "6fe0f1a4f4ad958a78a0f6e5a9d31a0f6214fd1ea8c54c3582a487ff8d2dc259",
+        "node1.tar.gz": "4586c658ff37b449575f89207f16e379a145f30e49850c9b8ee39ea76faa8db2"
+      },
+      "jobs": [
+        {
+          "name": "flash-1112-two-pp-gemm-b-0",
+          "succeeded": 1,
+          "failed": 0
+        },
+        {
+          "name": "flash-1112-two-pp-gemm-b-1",
+          "succeeded": 1,
+          "failed": 0
+        }
+      ],
+      "physical_nodes": [
+        "gpu-01",
+        "gpu-03"
+      ],
+      "formal_steps": 72,
+      "finite_losses": true,
+      "median_step_ms": 669.189,
+      "total_step_ms": 49312.251,
+      "p95_step_ms": 769.712,
+      "iterations_4_11_total_ms": 5188.485,
+      "train_wall_seconds": 56.288445711135864,
+      "delay_window_step_ms": 748.573,
+      "profile_request": {
+        "schema": "flash_v4.monitor_request.v1",
+        "event": {
+          "cp": 36,
+          "cp_index": 26,
+          "probability": 1.0,
+          "recovery_ratio": 0.0668507732350061,
+          "baseline_mean": 621.6162859614437,
+          "degraded_mean": 752.2466696779398,
+          "recent_mean": 743.5139275185065,
+          "degradation": 0.21014633410778844,
+          "iteration": 38,
+          "window_start": 9,
+          "window_end": 38,
+          "filtered_iterations": [
+            34
+          ],
+          "profile_seconds": 20.0,
+          "method": "Rbeast"
+        },
+        "iteration": 38,
+        "method": "flash_v1_Rbeast",
+        "degradation_threshold": 0.1
+      },
+      "monitor": {
+        "start": "2026-11-12T14:36:32.299866+00:00",
+        "end": "2026-11-12T14:37:02.061091+00:00",
+        "event": true,
+        "error": null,
+        "count": 38,
+        "finish_reason": "request"
+      },
+      "unique_gpus_observed": 16,
+      "device_slots_distinct": true,
+      "gemm_diagnostic": {
+        "alarm_rank": 12,
+        "iteration_ids": [
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51
+        ],
+        "abstention_reasons": []
+      },
+      "live_gemm_regression": {
+        "alarm_rank": 12,
+        "iteration_ids": [
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51
+        ],
+        "abstention_reasons": [],
+        "evidence": "flash_v4_gemm_regression",
+        "iteration_after_inference": 53,
+        "later_iteration": 56,
+        "training_advanced": true,
+        "collection_and_inference_seconds": 1.0255227499874309
+      },
+      "frozen_error": "flash_v4.offline_localizer.InputError: candidate requires kernel evidence on every rank/iteration"
+    }
+  ],
+  "comparisons": [
+    {
+      "runner_count": "two",
+      "layout": "legacy",
+      "case_ids": [
+        "flash-1112-leg-off-a",
+        "flash-1112-leg-online-b",
+        "flash-1112-leg-profile-b"
+      ],
+      "monitor_total_step_delta_pct": 0.86,
+      "profile_window_delta_pct": 2.15,
+      "profile_window_delta_vs_monitor_pct": 0.63,
+      "profile_total_step_delta_pct": 1.7,
+      "monitor_train_wall_delta_pct": 0.72,
+      "profile_train_wall_delta_pct": 1.15,
+      "monitor_launcher_wall_delta_pct": 1.97,
+      "profile_launcher_wall_delta_pct": 1.29
+    },
+    {
+      "runner_count": "two",
+      "layout": "node_local_pp",
+      "case_ids": [
+        "flash-1112-pp-off-a",
+        "flash-1112-pp-online-b",
+        "flash-1112-pp-profile-a"
+      ],
+      "monitor_total_step_delta_pct": 3.09,
+      "profile_window_delta_pct": 2.95,
+      "profile_window_delta_vs_monitor_pct": 0.27,
+      "profile_total_step_delta_pct": 1.43,
+      "monitor_train_wall_delta_pct": 0.82,
+      "profile_train_wall_delta_pct": 0.75,
+      "monitor_launcher_wall_delta_pct": 0.2,
+      "profile_launcher_wall_delta_pct": -0.68
+    },
+    {
+      "runner_count": "three",
+      "layout": "legacy",
+      "case_ids": [
+        "flash-1112-three-leg-off-b",
+        "flash-1112-three-leg-online",
+        "flash-1112-three-leg-profile"
+      ],
+      "monitor_total_step_delta_pct": 2.76,
+      "profile_window_delta_pct": 6.13,
+      "profile_window_delta_vs_monitor_pct": 3.71,
+      "profile_total_step_delta_pct": 3.93,
+      "monitor_train_wall_delta_pct": 2.35,
+      "profile_train_wall_delta_pct": 3.33,
+      "monitor_launcher_wall_delta_pct": 2.56,
+      "profile_launcher_wall_delta_pct": 0.01
+    },
+    {
+      "runner_count": "three",
+      "layout": "node_local_pp",
+      "case_ids": [
+        "flash-1112-three-pp-off-b",
+        "flash-1112-three-pp-online",
+        "flash-1112-three-pp-profile"
+      ],
+      "monitor_total_step_delta_pct": -1.26,
+      "profile_window_delta_pct": 3.33,
+      "profile_window_delta_vs_monitor_pct": 8.08,
+      "profile_total_step_delta_pct": 3.65,
+      "monitor_train_wall_delta_pct": -0.56,
+      "profile_train_wall_delta_pct": 3.51,
+      "monitor_launcher_wall_delta_pct": -0.31,
+      "profile_launcher_wall_delta_pct": 1.91
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+--- a/flash_v4/native/observer.cpp
++++ b/flash_v4/native/observer.cpp
+@@ -133,6 +133,9 @@
+   std::atomic<const char*> stop_reason{nullptr};
+   std::atomic<uint64_t> iteration{0};
+   std::atomic<uint64_t> seen{0}, sampled{0}, dropped{0}, skipped{0}, heavy_sampled{0};
++#ifdef FLASH_LAB_GEMM_DELAY
++  std::atomic<uint64_t> lab_lt_ordinal{0};
++#endif
+   std::atomic<uint64_t> kernel_sequence{0}, kernel_candidates{0}, kernel_sampled{0}, kernel_emitted{0}, kernel_dropped{0}, kernel_skipped{0};
+   std::atomic<uint64_t> kernel_nccl_excluded{0}, kernel_unknown_excluded{0}, kernel_blas_excluded{0}, kernel_nested_excluded{0};
+   std::mutex mu, output_mu, begin_mu, comm_mu, shape_mu;
+@@ -152,11 +155,37 @@
+   Clock::time_point start;
+   int fd = -1, rank = -1;
+   bool kernel_enabled = false;
++  bool rearm = false;
++  std::string output_directory;
+   std::atomic<uint64_t> allreduce_profile_calls{0};
+   Observer() {
+     if (const char* s = std::getenv("RANK")) rank = std::atoi(s);
+     if (const char* s = std::getenv("FLASH_V4_SAMPLE_STRIDE")) stride = std::max(1, std::atoi(s));
+     if (const char* s = std::getenv("FLASH_V4_KERNEL_PROFILE")) kernel_enabled = std::strcmp(s,"1") == 0;
++    if (const char* s = std::getenv("FLASH_V4_PROFILE_REARM")) rearm = std::strcmp(s,"1") == 0;
++  }
++  int prepare_window(const char* directory) {
++    if (!rearm || !directory || !*directory) return -1;
++    std::scoped_lock lock(begin_mu, mu, output_mu, shape_mu);
++    if (enabled.load() || iteration_open || worker.joinable() || (started && !flushed)
++        || !pending.empty() || in_flight || fd >= 0 || output_buffer.buffered_bytes())
++      return -1;
++    if (flushed && !clear_cached()) return -1;
++    output_directory = directory;
++    started = closing = flushed = output_failed = false;
++    stopped.store(false);
++    stop_reason.store(nullptr);
++    last_iteration = ~uint64_t(0);
++    iterations = completed_iterations = 0;
++    peak = bytes = 0;
++    seen = sampled = dropped = skipped = heavy_sampled = emitted = 0;
++#ifdef FLASH_LAB_GEMM_DELAY
++    lab_lt_ordinal = 0;
++#endif
++    kernel_sequence = kernel_candidates = kernel_sampled = kernel_emitted = kernel_dropped = kernel_skipped = 0;
++    kernel_nccl_excluded = kernel_unknown_excluded = kernel_blas_excluded = kernel_nested_excluded = 0;
++    allreduce_profile_calls = event_pairs_reused = event_pairs_cached = event_pool_high_water = 0;
++    return 0;
+   }
+   void stop(const char* reason) {
+     const char* expected = nullptr;
+@@ -171,7 +200,7 @@
+       stop(length > 1024 ? "event_byte_budget" : "byte_budget"); ++dropped; return false;
+     }
+     if (fd < 0) {
+-      const char* dir = std::getenv("FLASH_V4_OUTPUT_DIR");
++      const char* dir = output_directory.empty() ? std::getenv("FLASH_V4_OUTPUT_DIR") : output_directory.c_str();
+       std::string path = std::string(dir ? dir : "/tmp") + "/rank_" + std::to_string(rank) + ".jsonl";
+       // Never silently append separate runs into one evidence file.
+       fd = open(path.c_str(), O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC, 0600);
+@@ -382,6 +411,7 @@
+   auto& o = observer();
+   if (o.rank < 0) return;
+   { std::lock_guard<std::mutex> lock(o.comm_mu); o.comms[*ptr] = info; }
++  if (o.rearm) return;
+   char line[512];
+   std::snprintf(line, sizeof(line), "{\"kind\":\"communicator\",\"rank\":%d,\"comm_id\":\"%016llx\",\"comm_rank\":%d,\"members\":%d,\"blocking\":%s,\"mapping\":\"join_global_rank_records_by_comm_id\"}\n", o.rank, (unsigned long long)info.id, info.local_rank, info.members, info.blocking ? "true" : "false");
+   o.write_line(line);
+@@ -409,10 +439,16 @@
+ std::atomic<uint64_t> group_sequence{0};
+ thread_local uint64_t current_group = 0;
+ thread_local bool inside_blas = false;
+-struct BlasGuard { BlasGuard() { inside_blas = true; } ~BlasGuard() { inside_blas = false; } };
++struct BlasGuard {
++  bool& flag;
++  bool previous;
++  explicit BlasGuard(bool& value = inside_blas) : flag(value), previous(value) { flag = true; }
++  ~BlasGuard() { flag = previous; }
++};
+ } // namespace
+
+ extern "C" void flash_v4_begin_iteration(uint64_t iteration, int profile_enabled) { observer().begin(iteration, profile_enabled != 0); }
++extern "C" int flash_v4_prepare_window(const char* directory) { return observer().prepare_window(directory); }
+ extern "C" void flash_v4_end_iteration(uint64_t iteration) { observer().end(iteration); }
+ extern "C" void flash_v4_flush() { observer().flush(); }
+
+@@ -436,8 +472,26 @@
+
+ extern "C" cublasStatus_t cublasLtMatmul(cublasLtHandle_t handle, cublasLtMatmulDesc_t desc, const void* alpha, const void* a, cublasLtMatrixLayout_t al, const void* b, cublasLtMatrixLayout_t bl, const void* beta, const void* c, cublasLtMatrixLayout_t cl, void* d, cublasLtMatrixLayout_t dl, const cublasLtMatmulAlgo_t* algo, void* workspace, size_t workspace_bytes, cudaStream_t stream) {
+   static auto fn = real<decltype(&cublasLtMatmul)>("cublasLtMatmul", Lib::Lt);
+-  auto call = [&]{ return fn(handle, desc, alpha, a, al, b, bl, beta, c, cl, d, dl, algo, workspace, workspace_bytes, stream); };
+-  auto& o = observer(); if (!o.active() || inside_blas) return call();
++  auto call = [&]{
++#ifdef FLASH_LAB_GEMM_DELAY
++    using Delay = cudaError_t (*)(cudaStream_t);
++    static const auto delay = reinterpret_cast<Delay>(dlsym(RTLD_DEFAULT, "flash_lab_before_gemm"));
++    if (delay && delay(stream) != cudaSuccess) return CUBLAS_STATUS_EXECUTION_FAILED;
++#endif
++    return fn(handle, desc, alpha, a, al, b, bl, beta, c, cl, d, dl, algo, workspace, workspace_bytes, stream);
++  };
++  auto& o = observer();
++#ifdef FLASH_LAB_GEMM_DELAY
++  static thread_local bool inside_lt = false;
++  if (!o.active() || inside_lt) return call();
++  BlasGuard lt_guard(inside_lt);
++  const auto ordinal = o.lab_lt_ordinal.fetch_add(1);
++  ++o.seen;
++  if (ordinal % 8 != 0) return call();
++  ++o.sampled;
++#else
++  if (!o.active() || inside_blas) return call();
++#endif
+   BlasGuard guard;
+   gemm_group_mark();
+   static auto layout_attr = real<decltype(&cublasLtMatrixLayoutGetAttribute)>("cublasLtMatrixLayoutGetAttribute", Lib::Lt);
+@@ -466,6 +520,10 @@
+   }
+   // Descriptor reads precede shape-local sampling, so their PROFILE overhead
+   // must be included in measured end-to-end overhead even for unsampled calls.
++#ifdef FLASH_LAB_GEMM_DELAY
++  r.sequence = ordinal;
++#else
+   if (!o.select_blas(r)) return call();
++#endif
+   return timed_blas(r, stream, !ok ? "lt_shape_unknown" : (batch != 1 || abatch != 1 || bbatch != 1 || cbatch != 1 ? "lt_batched_layout_unsupported" : nullptr), call);
+ }
